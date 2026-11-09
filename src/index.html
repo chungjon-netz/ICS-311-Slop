@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ICS 311 · Algorithms Study Hub</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("ics311-theme")||"dark"}catch(e){}</script>
+<style>
+/*__CSS__*/
+</style>
+</head>
+<body>
+<button class="btn sm menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menu</button>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">⟡</div><div>ICS 311 Lab<small>ALGORITHMS STUDY HUB</small></div></div>
+  <div class="theme-seg" id="theme-seg" role="group" aria-label="Color theme"><button data-theme="dark" title="Dark mode">🌙 Dark</button><button data-theme="light" title="Light mode">☀️ Light</button><button data-theme="green" title="White and green mode">🌿 Green</button></div>
+  <nav class="nav" id="nav"></nav>
+  <label class="eli5-toggle" title="Explain everything as if to an elementary student">
+    <span class="eli5-text"><b>🧒 Dummy mode</b><small>Explain it like I'm in grade school</small></span>
+    <input type="checkbox" id="eli5-switch"><span class="switch"></span>
+  </label>
+  <div class="foot">Content based on the ICS 311 notes (Sitchinava / Suthers), CLRS and the UHMICSAlgorithms screencasts. Progress is saved in your browser.</div>
+</aside>
+
+<main>
+<!-- ============ HOME ============ -->
+<section class="page" id="page-home">
+  <span class="eyebrow">⚡ Study hub</span>
+  <h1>ICS 311 <span class="grad">Algorithms Study Hub</span></h1>
+  <p class="lead">Every topic from Week 1 onward, grouped by midterm: interactive notes, all the course screencasts, diagrams, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
+  <div class="row" style="margin:22px 0 30px">
+    <a class="btn primary" href="#practice">🎯 Start random practice</a>
+    <a class="btn" href="#t01">📘 Start at Week 1</a><a class="btn" href="#mt1">1️⃣ Midterm 1</a><a class="btn" href="#mt2">2️⃣ Midterm 2</a><a class="btn" href="#mt3">3️⃣ Midterm 3</a><a class="btn" href="#mt4">4️⃣ Midterm 4</a><a class="btn" href="#final">🎓 Final</a>
+  </div>
+  <div class="grid g3" id="home-stats"></div>
+  <h2>Topics by midterm</h2>
+  <div id="topic-cards"></div>
+  <h2>Topics 16–17: how it all connects</h2>
+  <div class="card">
+    <div class="grid g3">
+      <div><h3>1 · Union-Find</h3><p class="lead" style="font-size:.95rem">A forest of trees with <b>union by rank</b> + <b>path compression</b> gives near-constant <span class="math">O(α(n))</span> amortized operations.</p></div>
+      <div><h3>2 · Safe Edge Theorem</h3><p class="lead" style="font-size:.95rem">A light edge crossing any cut that respects <span class="math">A</span> is safe — the engine behind every greedy MST algorithm.</p></div>
+      <div><h3>3 · Kruskal vs. Prim</h3><p class="lead" style="font-size:.95rem">Kruskal grows a <b>forest</b> using Union-Find; Prim grows a <b>single tree</b> using a priority queue. Both run in <span class="math">O(E lg V)</span>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DISJOINT SETS ============ -->
+<section class="page" id="page-ds">
+  <span class="eyebrow" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.08)">Topic 16 · CLRS Ch. 19</span>
+  <h1>Disjoint Sets &amp; Union-Find</h1>
+  <p class="lead">Group <span class="math">n</span> distinct elements into a dynamic collection of non-overlapping sets, each identified by a <b>representative</b> member.</p>
+
+  <h2>A quick note on amortized analysis</h2>
+  <p>The amortized cost of an operation is the <b>average</b> time per operation over a sequence of operations. Example: a stack backed by an array that doubles when full. Most pushes are <span class="math">O(1)</span>, an occasional push costs <span class="math">O(k)</span> to copy, but <span class="math">n</span> pushes total about <span class="math">O(3n)</span> — so each push is <span class="math">O(1)</span> amortized.</p>
+
+  <h2>Operations</h2>
+  <div class="grid g3">
+    <div class="card"><h3><code>MAKE-SET(x)</code></h3><p>Create a new set <span class="math">{x}</span>; <span class="math">x</span> is its representative.</p></div>
+    <div class="card"><h3><code>UNION(x, y)</code></h3><p>Replace <span class="math">S<sub>x</sub></span> and <span class="math">S<sub>y</sub></span> with <span class="math">S<sub>x</sub> ∪ S<sub>y</sub></span> (old sets are destroyed so sets stay disjoint).</p></div>
+    <div class="card"><h3><code>FIND-SET(x)</code></h3><p>Return the representative of the set containing <span class="math">x</span>.</p></div>
+  </div>
+  <div class="callout cyan">Analysis uses <b>n</b> = number of MAKE-SET operations and <b>m</b> = total operations. Always <span class="math">m ≥ n</span>, and there can be at most <span class="math">n − 1</span> UNIONs (after that only one set remains).</div>
+
+  <h2>Application: connected components</h2>
+  <pre><code><span class="fn">CONNECTED-COMPONENTS</span>(G)
+  <span class="kw">for each</span> vertex v ∈ G.V
+      <span class="fn">MAKE-SET</span>(v)
+  <span class="kw">for each</span> edge (u, v) ∈ G.E
+      <span class="kw">if</span> <span class="fn">FIND-SET</span>(u) ≠ <span class="fn">FIND-SET</span>(v)
+          <span class="fn">UNION</span>(u, v)
+
+<span class="fn">SAME-COMPONENT</span>(u, v)
+  <span class="kw">return</span> <span class="fn">FIND-SET</span>(u) == <span class="fn">FIND-SET</span>(v)</code></pre>
+  <p>For a <b>static</b> undirected graph, DFS is faster. Union-Find wins when edges are <b>added dynamically</b> — no need to re-run DFS. (Directed graphs need the SCC algorithm instead.)</p>
+
+  <h2>Linked-list representation <span class="pill">optional</span></h2>
+  <ul class="clean">
+    <li>Each set is a list with <code>head</code> (the representative) and <code>tail</code>; each node points back to its list object.</li>
+    <li>MAKE-SET and FIND-SET are <span class="math">O(1)</span>; UNION must update the back-pointer of every node in the appended list.</li>
+    <li>Naively, <span class="math">n</span> MAKE-SETs + <span class="math">n</span> UNIONs can cost <span class="math">O(n)</span> amortized per operation.</li>
+    <li><b>Weighted-union heuristic</b> (append smaller onto larger): <span class="math">m</span> operations take <span class="math">O(m + n lg n)</span>, because each element's pointer is updated ≤ lg n times (its set at least doubles each time).</li>
+  </ul>
+
+  <h2>Forest representation (Tarjan, 1975)</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Representation</h3>
+      <ul class="clean"><li>Each tree is a set; the <b>root</b> is the representative.</li><li>Nodes point only to their <b>parent</b>; the root points to itself.</li></ul>
+      <h3>Heuristics</h3>
+      <ul class="clean">
+        <li><b>Union by rank:</b> rank is an upper bound on node height. Lower-rank root becomes the child (ranks unchanged). Equal ranks: pick one as parent and <b>increment</b> its rank.</li>
+        <li><b>Path compression:</b> during FIND-SET, every node on the path is re-pointed directly to the root.</li>
+      </ul>
+    </div>
+<pre><code><span class="fn">MAKE-SET</span>(x)
+  x.p = x
+  x.rank = 0
+
+<span class="fn">UNION</span>(x, y)
+  <span class="fn">LINK</span>(<span class="fn">FIND-SET</span>(x), <span class="fn">FIND-SET</span>(y))
+
+<span class="fn">LINK</span>(x, y)        <span class="cm">// union by rank</span>
+  <span class="kw">if</span> x.rank > y.rank
+      y.p = x
+  <span class="kw">else</span> x.p = y
+      <span class="kw">if</span> x.rank == y.rank
+          y.rank = y.rank + <span class="nu">1</span>
+
+<span class="fn">FIND-SET</span>(x)      <span class="cm">// path compression</span>
+  <span class="kw">if</span> x ≠ x.p
+      x.p = <span class="fn">FIND-SET</span>(x.p)
+  <span class="kw">return</span> x.p</code></pre>
+  </div>
+  <p>FIND-SET is a two-pass method: it recurses up to find the root, then updates each node as the recursion unwinds (so it is not tail-recursive).</p>
+
+  <h2>Time complexity</h2>
+  <p>With both heuristics, a sequence of <span class="math">m</span> operations takes <span class="math">O(m α(n))</span>, where <span class="math">α(n) = min{k : A<sub>k</sub>(1) ≥ n}</span> is the inverse of an Ackermann-like function. <span class="math">A<sub>4</sub>(1)</span> already dwarfs the number of atoms in the universe (10<sup>80</sup>), so in practice <span class="math">α(n) ≤ 4</span>, giving effectively <b>O(1) amortized</b> per operation.</p>
+  <table class="tbl"><tr><th>n</th><td>0–2</td><td>3</td><td>4–7</td><td>8–2047</td><td>2048 – A<sub>4</sub>(1)</td></tr><tr><th>α(n)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></table>
+
+  <div class="card qa" data-topic="ds"></div>
+</section>
+
+<!-- ============ MST ============ -->
+<section class="page" id="page-mst">
+  <span class="eyebrow" style="color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.08)">Topic 17A · CLRS Ch. 21</span>
+  <h1>Minimum Spanning Trees &amp; the Safe Edge Theorem</h1>
+  <p class="lead">Find the cheapest way to connect every vertex of a weighted, connected graph — the core problem behind wiring circuits, laying cable, and building road networks.</p>
+  <div class="grid g2" style="margin-top:20px">
+    <div>
+      <h3>The problem</h3>
+      <p>Given <span class="math">G = (V, E)</span> with weight function <span class="math">w(u,v)</span>, find <span class="math">T ⊆ E</span> that connects all of <span class="math">V</span> and minimizes <span class="math">w(T) = Σ<sub>(u,v)∈T</sub> w(u,v)</span>.</p>
+      <ul class="clean">
+        <li>A spanning tree includes every vertex (BFS and DFS trees are spanning trees).</li>
+        <li><span class="math">G</span> must be connected; otherwise we find a <b>minimum spanning forest</b>.</li>
+        <li>A minimum-cost connecting subgraph is always a <b>tree</b>: any cycle has an edge you could remove to save cost.</li>
+        <li>An MST has exactly <b>|V| − 1</b> edges, has no cycles, and one unique path between any two vertices.</li>
+        <li>MSTs are <b>not necessarily unique</b> (ties in weights). With distinct weights, the MST is unique.</li>
+      </ul>
+    </div>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/Mx-dvvSE4Qc" title="Topic 17 A MST" allowfullscreen loading="lazy"></iframe></div>
+  </div>
+
+  <h2>Generic greedy algorithm</h2>
+  <div class="grid g2">
+<pre><code><span class="fn">GENERIC-MST</span>(G, w)
+  A = ∅
+  <span class="kw">while</span> A does not form a spanning tree
+      find an edge (u, v) that is safe for A
+      A = A ∪ {(u, v)}
+  <span class="kw">return</span> A</code></pre>
+    <div>
+      <p><b>Loop invariant:</b> <span class="math">A</span> is a subset of some MST.</p>
+      <ul class="clean">
+        <li><b>Initialization:</b> ∅ trivially satisfies it.</li>
+        <li><b>Maintenance:</b> only safe edges are added.</li>
+        <li><b>Termination:</b> stop when <span class="math">|A| = |V| − 1</span>; A is a spanning tree and an MST.</li>
+      </ul>
+      <p>An edge <span class="math">(u,v)</span> is <b>safe</b> for <span class="math">A</span> iff <span class="math">A ∪ {(u,v)}</span> is also a subset of some MST.</p>
+    </div>
+  </div>
+
+  <h2>Cuts &amp; light edges</h2>
+  <div class="grid g2">
+    <div class="card"><ul class="clean">
+      <li>A <b>cut</b> <span class="math">(S, V − S)</span> partitions the vertices.</li>
+      <li>An edge <b>crosses</b> the cut if one endpoint is in <span class="math">S</span> and the other in <span class="math">V − S</span>.</li>
+      <li>A cut <b>respects</b> <span class="math">A</span> iff no edge of <span class="math">A</span> crosses it.</li>
+      <li>A <b>light edge</b> has minimum weight among all edges crossing the cut (there may be ties).</li>
+    </ul></div>
+    <div class="callout" style="margin:0"><b>Safe Edge Theorem.</b> Let <span class="math">A</span> be a subset of some MST, <span class="math">(S, V − S)</span> a cut that respects <span class="math">A</span>, and <span class="math">(u,v)</span> a light edge crossing it. Then <span class="math">(u,v)</span> is safe for <span class="math">A</span>.</div>
+  </div>
+  <h3>Proof sketch (cut-and-paste)</h3>
+  <ol>
+    <li>Let <span class="math">T</span> be an MST containing <span class="math">A</span>. If <span class="math">(u,v) ∈ T</span>, done.</li>
+    <li>Otherwise <span class="math">T</span> has a unique path <span class="math">p</span> from <span class="math">u</span> to <span class="math">v</span>, which must cross the cut at some edge <span class="math">(x,y)</span>. Because the cut respects <span class="math">A</span>, <span class="math">(x,y) ∉ A</span>.</li>
+    <li>Form <span class="math">T' = T − {(x,y)} ∪ {(u,v)}</span>: removing <span class="math">(x,y)</span> splits <span class="math">T</span> in two; adding <span class="math">(u,v)</span> reconnects it.</li>
+    <li><span class="math">w(T') = w(T) − w(x,y) + w(u,v) ≤ w(T)</span> since <span class="math">(u,v)</span> is light ⇒ <span class="math">T'</span> is an MST.</li>
+    <li><span class="math">A ⊆ T'</span> (we only removed an edge not in <span class="math">A</span>), so <span class="math">A ∪ {(u,v)} ⊆ T'</span>. ∎</li>
+  </ol>
+  <div class="callout cyan"><b>Corollary.</b> If <span class="math">C</span> is a connected component of the forest <span class="math">G<sub>A</sub> = (V, A)</span> and <span class="math">(u,v)</span> is a light edge connecting <span class="math">C</span> to another component, then <span class="math">(u,v)</span> is safe (take <span class="math">S = V<sub>C</sub></span>). Each safe edge merges two components; after <span class="math">|V| − 1</span> merges one tree remains. This component view leads to <b>Kruskal</b>.</div>
+
+  <div class="card qa" data-topic="mst"></div>
+</section>
+
+<!-- ============ KRUSKAL ============ -->
+<section class="page" id="page-kruskal">
+  <span class="eyebrow" style="color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08)">Topic 17B</span>
+  <h1>Kruskal's Algorithm</h1>
+  <p class="lead">Start with every vertex as its own component. Scan edges in non-decreasing weight order and keep each edge that joins two <b>different</b> components — detected with Union-Find.</p>
+  <div class="grid g2" style="margin-top:20px">
+<pre><code><span class="fn">MST-KRUSKAL</span>(G, w)
+  A = ∅
+  <span class="kw">for each</span> vertex v ∈ G.V
+      <span class="fn">MAKE-SET</span>(v)
+  sort G.E into non-decreasing order by weight w
+  <span class="kw">for each</span> edge (u, v) ∈ G.E, in sorted order
+      <span class="kw">if</span> <span class="fn">FIND-SET</span>(u) ≠ <span class="fn">FIND-SET</span>(v)
+          A = A ∪ {(u, v)}
+          <span class="fn">UNION</span>(u, v)
+  <span class="kw">return</span> A</code></pre>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/1BnpXYm7LKY" title="Topic 17 B MST Kruskal" allowfullscreen loading="lazy"></iframe></div>
+  </div>
+  <p>Kruskal mirrors CONNECTED-COMPONENTS, but processes edges cheapest-first. It can "hop" around the graph growing several fragments at once, and on a disconnected graph it returns a <b>minimum spanning forest</b>.</p>
+
+  <h2>Step-through visualizer</h2>
+  <div class="card"><div id="viz-kruskal"></div></div>
+
+  <h2>Analysis</h2>
+  <table class="tbl">
+    <tr><th>Step</th><th>Cost</th></tr>
+    <tr><td>Initialize A</td><td>O(1)</td></tr>
+    <tr><td>|V| MAKE-SET operations</td><td>O(V α(V))</td></tr>
+    <tr><td>Sort E</td><td>O(E lg E)</td></tr>
+    <tr><td>O(E) FIND-SETs and UNIONs</td><td>O(E α(V))</td></tr>
+  </table>
+  <ul class="clean">
+    <li>Total <span class="math">O((V + E) α(V)) + O(E lg E)</span>. Connected ⇒ <span class="math">|E| ≥ |V| − 1</span>, so this is <span class="math">O(E α(V)) + O(E lg E)</span>.</li>
+    <li><span class="math">α(V) = O(lg V) = O(lg E)</span> ⇒ total <span class="math">O(E lg E)</span> — sorting dominates.</li>
+    <li><span class="math">|E| ≤ |V|<sup>2</sup></span> ⇒ <span class="math">lg E ≤ 2 lg V</span> ⇒ <b>O(E lg V)</b>.</li>
+  </ul>
+
+  <div class="card qa" data-topic="kruskal"></div>
+</section>
+
+<!-- ============ PRIM ============ -->
+<section class="page" id="page-prim">
+  <span class="eyebrow" style="color:#22d3ee;border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.08)">Topic 17C</span>
+  <h1>Prim's Algorithm</h1>
+  <p class="lead">Grow a <b>single tree</b> from a root <span class="math">r</span>. At each step add a light edge crossing the cut <span class="math">(V<sub>A</sub>, V − V<sub>A</sub>)</span>, found quickly with a min-priority queue.</p>
+  <div class="grid g2" style="margin-top:20px">
+<pre><code><span class="fn">MST-PRIM</span>(G, w, r)
+  Q = ∅
+  <span class="kw">for each</span> u ∈ G.V
+      u.key = ∞
+      u.π = NIL
+      <span class="fn">INSERT</span>(Q, u)
+  <span class="fn">DECREASE-KEY</span>(Q, r, 0)     <span class="cm">// r.key = 0</span>
+  <span class="kw">while</span> Q ≠ ∅
+      u = <span class="fn">EXTRACT-MIN</span>(Q)
+      <span class="kw">for each</span> v ∈ G.Adj[u]
+          <span class="kw">if</span> v ∈ Q <span class="kw">and</span> w(u, v) < v.key
+              v.π = u
+              <span class="fn">DECREASE-KEY</span>(Q, v, w(u, v))</code></pre>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/qegY0R78QMQ" title="Topic 17 C MST Prim" allowfullscreen loading="lazy"></iframe></div>
+  </div>
+  <ul class="clean">
+    <li>Queue holds vertices not yet in the tree; <b>key</b> = min weight of any edge connecting <span class="math">v</span> to the tree (∞ if none).</li>
+    <li><span class="math">v.π</span> is <span class="math">v</span>'s parent; <span class="math">A = {(v, v.π) : v ∈ V − {r} − Q}</span>. When <span class="math">Q</span> is empty, <span class="math">A</span> is an MST.</li>
+    <li>A vertex's key may be lowered <b>multiple times</b> before it is extracted.</li>
+    <li>Only spans the component containing <span class="math">r</span> (needs a connected graph). Very similar to <b>Dijkstra</b>, except the key is a single edge weight, not a total path length.</li>
+  </ul>
+
+  <h2>Step-through visualizer</h2>
+  <div class="card"><div id="viz-prim"></div></div>
+
+  <h2>Analysis (binary heap)</h2>
+  <table class="tbl">
+    <tr><th>Step</th><th>Cost</th></tr>
+    <tr><td>|V| INSERTs</td><td>O(V lg V) (or O(V) via build-heap)</td></tr>
+    <tr><td>|V| EXTRACT-MINs</td><td>O(V lg V)</td></tr>
+    <tr><td>Θ(E) adjacency checks (aggregate analysis), O(E) DECREASE-KEYs</td><td>O(E lg V)</td></tr>
+  </table>
+  <p>Total <span class="math">O(V lg V + E lg V) = </span><b>O(E lg V)</b> for connected graphs — the same as Kruskal. With <b>Fibonacci heaps</b> (O(1) amortized DECREASE-KEY) it improves to <b>O(E + V lg V)</b>, though they are harder to implement.</p>
+
+  <div class="card qa" data-topic="prim"></div>
+</section>
+
+<!-- ============ FIB ============ -->
+<section class="page" id="page-fib">
+  <span class="eyebrow" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08)">Supplement · not in the CLRS 4e print book</span>
+  <h1>Fibonacci Heaps: Bounding the Maximum Degree</h1>
+  <p class="lead">For <code>FIB-HEAP-EXTRACT-MIN</code> to run in <span class="math">O(lg n)</span> amortized time, the maximum degree <span class="math">D(n)</span> of any node must be <span class="math">O(lg n)</span>. That is what makes Prim's algorithm hit <span class="math">O(E + V lg V)</span>.</p>
+
+  <h2>Structure &amp; cascading cuts</h2>
+  <div class="grid g2">
+    <div class="card"><ul class="clean">
+      <li>Each node keeps <code>degree</code> (number of children), <code>mark</code>, and pointers <code>p</code>, <code>child</code>, <code>left</code>, <code>right</code>.</li>
+      <li><code>mark</code> = true iff the node has lost a child since it last became the child of another node.</li>
+      <li>When a marked node loses a <b>second</b> child, it is cut and moved to the root list — and the cut cascades upward.</li>
+    </ul></div>
+<pre><code><span class="fn">CUT</span>(H, x, y)
+  remove x from y's child list
+  y.degree = y.degree - <span class="nu">1</span>
+  add x to H's root list
+  x.p = NIL
+  x.mark = FALSE
+
+<span class="fn">CASCADING-CUT</span>(H, y)
+  z = y.p
+  <span class="kw">if</span> z ≠ NIL
+      <span class="kw">if</span> y.mark == FALSE
+          y.mark = TRUE
+      <span class="kw">else</span> <span class="fn">CUT</span>(H, y, z)
+           <span class="fn">CASCADING-CUT</span>(H, z)</code></pre>
+  </div>
+
+  <h2>The chain of results</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Lemma 1 · Child degree ordering</h3>
+      <p>If <span class="math">x.degree = k</span> with children <span class="math">y<sub>1</sub>, …, y<sub>k</sub></span> in the order linked, then <span class="math">y<sub>1</sub>.degree ≥ 0</span> and <span class="math">y<sub>i</sub>.degree ≥ i − 2</span> for <span class="math">i ≥ 2</span>.</p>
+      <p class="stat-label">Why: when <span class="math">y<sub>i</sub></span> was linked, <span class="math">x</span> had ≥ <span class="math">i − 1</span> children, and linking requires equal degree. <span class="math">y<sub>i</sub></span> can lose at most one child before being cut.</p></div>
+    <div class="card"><h3>Lemma 2 · Fibonacci lower bound</h3>
+      <p>For any node with degree <span class="math">k</span>: <span class="math">size(x) ≥ F<sub>k+2</sub> ≥ φ<sup>k</sup></span>.</p>
+      <p class="stat-label">Let <span class="math">s<sub>k</sub></span> be the minimum size of a degree-<span class="math">k</span> tree: <span class="math">s<sub>0</sub> = 1, s<sub>1</sub> = 2</span>, and <span class="math">s<sub>k</sub> ≥ 1 + s<sub>0</sub> + Σ<sub>i=2..k</sub> s<sub>i−2</sub></span>; induction gives <span class="math">s<sub>k</sub> ≥ F<sub>k+2</sub></span>.</p></div>
+    <div class="card"><h3>Lemma 3 · Golden ratio inequality</h3>
+      <p>For all <span class="math">k ≥ 0</span>: <span class="math">F<sub>k+2</sub> ≥ φ<sup>k</sup></span>, where <span class="math">φ = (1 + √5)/2 ≈ 1.618</span>.</p>
+      <p class="stat-label">Induction using <span class="math">φ<sup>2</sup> = φ + 1</span>.</p></div>
+    <div class="card"><h3>Theorem · Max degree</h3>
+      <p><span class="math">D(n) ≤ ⌊log<sub>φ</sub> n⌋ = O(lg n)</span>.</p>
+      <p class="stat-label"><span class="math">n ≥ size(x) ≥ φ<sup>k</sup></span> ⇒ <span class="math">k ≤ log<sub>φ</sub> n</span>.</p></div>
+  </div>
+  <table class="tbl" style="margin-top:16px"><tr><th>k</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><th>F<sub>k+2</sub> (min subtree size)</th><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>13</td><td>21</td><td>34</td></tr><tr><th>φ<sup>k</sup></th><td>1</td><td>1.62</td><td>2.62</td><td>4.24</td><td>6.85</td><td>11.09</td><td>17.94</td><td>29.03</td></tr></table>
+
+  <div class="card qa" data-topic="fib"></div>
+</section>
+
+<!-- ============ VIDEOS ============ -->
+<section class="page" id="page-videos">
+  <span class="eyebrow">🎬 UHM ICS Algorithms</span>
+  <h1>Screencasts</h1>
+  <p class="lead">All course screencasts, grouped by midterm. Click a thumbnail to play it here. Partial clips start and stop at the times listed in the schedule.</p>
+  <div style="margin-top:10px" id="video-grid"></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section class="page" id="page-practice">
+  <span class="eyebrow">🎯 Randomized</span>
+  <h1>Practice Arena</h1>
+  <p class="lead">Every session draws a fresh random mix. Multiple-choice options are shuffled and many questions are generated from random graphs, so you'll never see the exact same quiz twice.</p>
+  <div id="practice-root"></div>
+</section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+/*__JS__*/
+</script>
+</body>
+</html>
