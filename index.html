@@ -15,9 +15,10 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
   background-image:radial-gradient(1200px 600px at 10% -10%,rgba(139,92,246,.18),transparent 60%),
-  radial-gradient(900px 500px at 110% 10%,rgba(34,211,238,.12),transparent 60%);background-attachment:fixed}
+  radial-gradient(900px 500px at 110% 10%,rgba(34,211,238,.12),transparent 60%)}
 a{color:var(--accent2);text-decoration:none}
 a:hover{text-decoration:underline}
 code,pre,textarea{font-family:var(--mono)}
@@ -28,7 +29,7 @@ pre code{background:none;padding:0}
 
 /* layout */
 .app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
-.sidebar{position:sticky;top:0;height:100vh;padding:24px 18px;border-right:1px solid var(--border);background:rgba(10,13,22,.7);backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:6px;overflow:auto}
+.sidebar{position:sticky;top:0;height:100vh;padding:24px 18px;border-right:1px solid var(--border);background:rgba(10,13,22,.92);display:flex;flex-direction:column;gap:6px;overflow:auto}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem;margin:0 6px 18px}
 .brand .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-size:1rem;box-shadow:0 6px 20px rgba(139,92,246,.4)}
 .brand small{display:block;font-weight:500;color:var(--muted);font-size:.72rem;letter-spacing:.04em}
@@ -51,7 +52,7 @@ p{margin:8px 0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);padding:4px 10px;border-radius:999px;margin-bottom:14px}
 
 /* cards */
-.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px;backdrop-filter:blur(8px)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
@@ -289,8 +290,8 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 /* light + white/green themes */
 [data-theme=light]{--bg:#f5f6fb;--bg2:#ffffff;--panel:rgba(15,23,42,.035);--panel2:rgba(15,23,42,.07);--border:rgba(15,23,42,.13);--text:#111827;--muted:#475569;--dim:#64748b;--accent:#7c3aed;--accent2:#0e7490;--good:#059669;--bad:#dc2626;--warn:#b45309}
 [data-theme=green]{--bg:#ffffff;--bg2:#f0fdf4;--panel:rgba(22,101,52,.04);--panel2:rgba(22,101,52,.08);--border:rgba(22,101,52,.2);--text:#11261a;--muted:#3d5a47;--dim:#5f7d69;--accent:#16a34a;--accent2:#15803d;--good:#15803d;--bad:#dc2626;--warn:#b45309}
-[data-theme=light] body{background-image:radial-gradient(1200px 600px at 10% -10%,rgba(139,92,246,.10),transparent 60%),radial-gradient(900px 500px at 110% 10%,rgba(34,211,238,.10),transparent 60%)}
-[data-theme=green] body{background-image:radial-gradient(1200px 600px at 10% -10%,rgba(34,197,94,.10),transparent 60%),radial-gradient(900px 500px at 110% 10%,rgba(21,128,61,.06),transparent 60%)}
+[data-theme=light] body::before{background-image:radial-gradient(1200px 600px at 10% -10%,rgba(139,92,246,.10),transparent 60%),radial-gradient(900px 500px at 110% 10%,rgba(34,211,238,.10),transparent 60%)}
+[data-theme=green] body::before{background-image:radial-gradient(1200px 600px at 10% -10%,rgba(34,197,94,.10),transparent 60%),radial-gradient(900px 500px at 110% 10%,rgba(21,128,61,.06),transparent 60%)}
 :is([data-theme=light],[data-theme=green]) .sidebar{background:rgba(255,255,255,.8)}
 [data-theme=green] .sidebar{background:#f0fdf4;border-right-color:rgba(22,101,52,.18)}
 :is([data-theme=light],[data-theme=green]) :is(.nav a.active,.seg button.on,.callout b){color:var(--text)}
@@ -351,6 +352,9 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .tl-today::before,.tl-today::after{content:"";flex:1;height:2px;background:var(--accent2);opacity:.6}
 @media(max-width:600px){.tl-ev{grid-template-columns:78px 12px 1fr}.tl-label{display:none}}
 @media(max-width:600px){#home-cal{padding:14px 10px}.cal-g{gap:2px}.cal-d{padding:2px;min-height:40px}.cal-ev{font-size:.54rem;padding:0 2px;text-overflow:clip}}
+
+/* perf: skip rendering off-screen blocks */
+.page>.card,.page>.qa,.page>.grid,.home-group,.vcard{content-visibility:auto;contain-intrinsic-size:auto 420px}
 
 </style>
 </head>
@@ -485,7 +489,7 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
         <li>MSTs are <b>not necessarily unique</b> (ties in weights). With distinct weights, the MST is unique.</li>
       </ul>
     </div>
-    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/Mx-dvvSE4Qc" title="Topic 17 A MST" allowfullscreen loading="lazy"></iframe></div>
+    <div class="video lite" data-yt="Mx-dvvSE4Qc" data-start="" data-end="" title="Topic 17 A MST"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/Mx-dvvSE4Qc/hqdefault.jpg" alt=""><span class="play">▶</span></div>
   </div>
 
   <h2>Generic greedy algorithm</h2>
@@ -546,7 +550,7 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
           A = A ∪ {(u, v)}
           <span class="fn">UNION</span>(u, v)
   <span class="kw">return</span> A</code></pre>
-    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/1BnpXYm7LKY" title="Topic 17 B MST Kruskal" allowfullscreen loading="lazy"></iframe></div>
+    <div class="video lite" data-yt="1BnpXYm7LKY" data-start="" data-end="" title="Topic 17 B MST Kruskal"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/1BnpXYm7LKY/hqdefault.jpg" alt=""><span class="play">▶</span></div>
   </div>
   <p>Kruskal mirrors CONNECTED-COMPONENTS, but processes edges cheapest-first. It can "hop" around the graph growing several fragments at once, and on a disconnected graph it returns a <b>minimum spanning forest</b>.</p>
 
@@ -589,7 +593,7 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
           <span class="kw">if</span> v ∈ Q <span class="kw">and</span> w(u, v) < v.key
               v.π = u
               <span class="fn">DECREASE-KEY</span>(Q, v, w(u, v))</code></pre>
-    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/qegY0R78QMQ" title="Topic 17 C MST Prim" allowfullscreen loading="lazy"></iframe></div>
+    <div class="video lite" data-yt="qegY0R78QMQ" data-start="" data-end="" title="Topic 17 C MST Prim"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/qegY0R78QMQ/hqdefault.jpg" alt=""><span class="play">▶</span></div>
   </div>
   <ul class="clean">
     <li>Queue holds vertices not yet in the tree; <b>key</b> = min weight of any edge connecting <span class="math">v</span> to the tree (∞ if none).</li>
@@ -3246,7 +3250,7 @@ COURSE.forEach(t => {
   TMETA[id] = {id, num, when, short: TOPICS[id].name, icon: TOPICS[id].icon, color: TOPICS[id].color, blurb: TOPICS[id].blurb});
 const EXIST_VIDS = {mst: [['Mx-dvvSE4Qc', '17A · Minimum Spanning Trees'], ['FPEMBWg_WlY', 'MIT Lecture 16 (from 23:26)', 1406]], kruskal: [['1BnpXYm7LKY', '17B · MST: Kruskal']], prim: [['qegY0R78QMQ', '17C · MST: Prim']]};
 
-const ytLite = (id, title, start, end) => `<div class="vcard"><div class="video lite" data-yt="${id}" data-start="${start || ''}" data-end="${end || ''}" title="${esc(title)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="play">▶</span></div><div class="vt">${title}</div></div>`;
+const ytLite = (id, title, start, end) => `<div class="vcard"><div class="video lite" data-yt="${id}" data-start="${start || ''}" data-end="${end || ''}" title="${esc(title)}"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="play">▶</span></div><div class="vt">${title}</div></div>`;
 const pkey = x => x.replace(/&amp;/g, '&').toLowerCase().replace(/[^a-z0-9]/g, '');
 const prereqChip = p => { const u = SCHED.prereq[pkey(p)]; return u ? `<a class="chip link" href="${u}" target="_blank" rel="noopener">📄 ${p} ↗</a>` : `<span class="chip">${p}</span>`; };
 document.addEventListener('click', e => {
