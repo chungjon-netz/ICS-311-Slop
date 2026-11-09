@@ -650,7 +650,7 @@ const PS_CODE = PSETS.flatMap(s => s.probs.map(q => Object.assign(q, {ps: s.id})
 
 const PS_TOPICS = {ps01:['t01','t03'], ps02:['t02','t07'], ps03:['t08','t09'], ps04:['t05a','t11'], ps05:['t05b','t06'], ps06:['t10a'], ps07:['t10b','t12s'], ps08:['t12a','t12b'], ps09:['t13'], ps10:['t14a','t14b'], ps11:['ds','mst','kruskal','prim']};
 const PS_COLORS = ['#60a5fa','#38bdf8','#22d3ee','#34d399','#a3e635','#facc15','#fb923c','#f87171','#f472b6','#c084fc','#818cf8'];
-const psChips = s => (PS_TOPICS[s.id] || []).filter(id => TMETA[id]).map(id => `<a class="pill" href="#${id}" style="color:${TMETA[id].color}">#${TMETA[id].num} ${TMETA[id].short}</a>`).join(' ');
+const psChips = s => (PS_TOPICS[s.id] || []).filter(id => TMETA[id]).map(id => `<a class="pill" href="#${id}" style="color:${TMETA[id].color}">${TMETA[id].num} ${TMETA[id].short}</a>`).join(' ');
 function psCard(s){
   return `<div class="card ps-card"><div class="row" style="justify-content:space-between"><h3 style="margin:0">📄 Problem Set ${s.num}</h3><span class="pill">${s.covers}</span></div>
     <div class="row" style="gap:6px;margin:10px 0">${psChips(s)}</div>
@@ -671,8 +671,8 @@ document.getElementById('page-videos').insertAdjacentHTML('beforebegin',
     <div class="callout cyan" style="margin-top:14px">Graded like the Practice Arena: <b>Correctness</b> 40% · <b>Modularity</b> 30% · <b>Efficiency</b> 30%. Plan in a comment, write from memory, then use the feedback.</div>
     ${s.probs.map((q, i) => `<div class="card ps-prob" id="psq-${q.id}"><div class="row" style="justify-content:space-between"><span class="pill">Problem ${i + 1} of ${s.probs.length} · based on PS ${s.num}, ${q.from}</span><span class="ps-best" data-best="${q.id}"></span></div><div class="ps-q" data-q="${q.id}"></div></div>`).join('')}
     <div class="row" style="justify-content:space-between;margin-top:16px">${k ? `<a class="btn ghost" href="#${PSETS[k - 1].id}">← Problem Set ${k}</a>` : '<span></span>'}${k < PSETS.length - 1 ? `<a class="btn ghost" href="#${PSETS[k + 1].id}">Problem Set ${k + 2} →</a>` : ''}</div></section>`).join(''));
-document.querySelector('#nav .nav-label').insertAdjacentHTML('beforebegin',
-  `<details class="nav-group" data-group="ps"><summary><span>📂 Problem Sets</span><span class="gdate">${PS_CODE.length} problems</span></summary><a href="#ps" data-page="ps" class="gover"><span class="dot" style="background:linear-gradient(135deg,#60a5fa,#c084fc)"></span>All problem sets</a>` +
+document.getElementById('nav').insertAdjacentHTML('beforeend',
+  `<details class="nav-group" data-group="ps"><summary><span>📂 Problem Sets</span><span class="gdate">${PS_CODE.length}</span></summary><a href="#ps" data-page="ps" class="gover"><span class="dot" style="background:linear-gradient(135deg,#60a5fa,#c084fc)"></span>All problem sets</a>` +
   PSETS.map((s, k) => `<a href="#${s.id}" data-page="${s.id}"><span class="dot" style="background:${PS_COLORS[k]}"></span><span class="nnum">PS${s.num}</span><span class="nlabel">${s.covers.replace(/^Topics? /, 'T ')}</span></a>`).join('') + `</details>`);
 function psBest(){
   document.querySelectorAll('.ps-best[data-best]').forEach(el => { const v = store.code[el.dataset.best]; el.innerHTML = v == null ? '' : `<span class="pill" style="color:${v >= 90 ? 'var(--good)' : v >= 70 ? 'var(--warn)' : 'var(--bad)'}">best ${v}%</span>`; });

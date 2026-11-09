@@ -189,6 +189,13 @@ function route(){
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
-mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS();
+mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
 document.querySelectorAll('.qa[data-topic]').forEach(mountQA);
 route();
+
+function mountTheme(){
+  const seg = document.getElementById('theme-seg');
+  const set = t => { document.documentElement.dataset.theme = t; seg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.theme === t)); try { localStorage.setItem('ics311-theme', t); } catch (e) {} };
+  seg.querySelectorAll('button').forEach(b => b.onclick = () => set(b.dataset.theme));
+  set(document.documentElement.dataset.theme || 'dark');
+}

@@ -114,10 +114,11 @@ ELI5.home = {title: 'What is this site?', pts: ['📚 It is a study buddy for IC
 ['ds','mst','kruskal','prim','fib'].forEach(id => { const pg = document.getElementById('page-' + id), rr = pg && pg.querySelector(':scope > .res-row'); if (rr) rr.insertAdjacentHTML('afterend', learnBlock(id)); });
 // ---- render pages & nav ----
 document.getElementById('page-videos').insertAdjacentHTML('beforebegin', GROUPS.map(g => groupPage(g) + g.topics.filter(id => COURSE.some(t => t.id === id)).map(id => topicPage(TMETA[id])).join('')).join(''));
+const NAV_SHORT = {t01:'Intro & Data Structures', t09:'Heaps & PQs', t11:'2-3-4 & RB Trees', t10a:'Selection & Order Stats', t10b:'Lower Bounds & Sorts', t13:'Greedy & Huffman', t18:'Single-Source Paths', t25:'Approximation Algs'};
 function buildNav(){
-  const link = id => { const t = TMETA[id]; return `<a href="#${id}" data-page="${id}"><span class="dot" style="background:${t.color}"></span><span class="nnum">${t.num}</span><span class="nlabel">${t.short}</span></a>`; };
+  const link = id => { const t = TMETA[id]; return `<a href="#${id}" data-page="${id}"><span class="dot" style="background:${t.color}"></span><span class="nnum">${t.num}</span><span class="nlabel" title="${t.short}">${NAV_SHORT[id] || t.short}</span></a>`; };
   document.getElementById('nav').innerHTML = `<a href="#home" data-page="home"><span class="dot" style="background:#e5e7eb"></span>Overview</a>` +
-    GROUPS.map(g => `<details class="nav-group" data-group="${g.id}"><summary><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0]}</span></summary><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.final ? 'Final exam overview' : 'Exam overview'}</a>${g.topics.map(link).join('')}</details>`).join('') +
+    GROUPS.map(g => `<details class="nav-group" data-group="${g.id}"><summary><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0].replace(/–[\d:]+(am|pm)$/i, '$1')}</span></summary><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.final ? 'Final exam overview' : 'Exam overview'}</a>${g.topics.map(link).join('')}</details>`).join('') +
     `<div class="nav-label">Watch &amp; Practice</div><a href="#videos" data-page="videos"><span class="dot" style="background:#f87171"></span>All screencasts</a><a href="#practice" data-page="practice"><span class="dot" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)"></span>Practice Arena</a>`;
 }
 buildNav();
