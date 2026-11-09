@@ -274,7 +274,7 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .ps-list{margin:6px 0 12px;padding-left:18px;font-size:.9rem;color:var(--dim)}.ps-list li{margin:3px 0}.ps-steps{margin:6px 0;padding-left:20px}.ps-steps li{margin:4px 0}.ps-prob{margin-top:16px}.ps-prob .ps-q h3{margin-top:10px}
 
 /* sidebar: one line per entry */
-.app{grid-template-columns:290px 1fr}
+@media(min-width:901px){.app{grid-template-columns:290px 1fr}}
 .sidebar{padding:22px 14px}
 .nav a,.nav-group summary{white-space:nowrap;min-width:0}
 .nav a{gap:8px}
@@ -312,6 +312,46 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 :is([data-theme=light],[data-theme=green]) :is(.fig,pre,.editor-wrap,.viz .log){--text:#e5e7eb;--muted:#9ca3af;--dim:#94a3b8;--border:rgba(255,255,255,.1);color:var(--text)}
 .nav-group a{font-size:.86rem}
 
+/* sidebar: midterm headers + week folders */
+.nav-head{display:flex;align-items:center;gap:8px;margin:16px 6px 2px;padding:0 6px 6px;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text);white-space:nowrap;box-shadow:0 1px 0 0 color-mix(in srgb,var(--c) 45%,transparent)}
+.nav-head .gdate{margin-left:auto}
+.nav-week summary{text-transform:none;letter-spacing:0;font-size:.86rem;font-weight:600;padding:7px 12px}
+.nav-week a{padding-left:16px}
+/* overview weeks */
+.wk-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0 10px}
+.wk-empty{color:var(--dim);font-size:.9rem;margin:0 0 6px}
+/* calendar + timeline */
+#home-cal{margin:26px 0 8px}
+.cal-legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:.8rem;color:var(--muted);margin:12px 0 16px}
+.cal-legend .cal-ev{display:inline-block;font-size:.66rem;padding:1px 6px;margin-left:6px}
+.cal-months{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:18px}
+.cal-mh{font-weight:700;margin-bottom:6px}
+.cal-g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cal-w{font-size:.66rem;color:var(--dim);text-align:center;font-weight:700}
+.cal-d{min-height:46px;border-radius:8px;background:var(--panel);border:1px solid transparent;padding:3px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.cal-d.empty{background:none}
+.cal-d.wkend{opacity:.4}
+.cal-d.today{border-color:var(--accent2);box-shadow:0 0 0 1px var(--accent2) inset}
+.cal-n{font-size:.66rem;color:var(--dim);line-height:1.1}
+.cal-ev{display:block;font-size:.6rem;font-weight:700;line-height:1.4;padding:0 3px;border-radius:4px;color:var(--c);background:color-mix(in srgb,var(--c) 18%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev.exam{background:var(--c);color:#fff}
+.cal-ev:hover{text-decoration:none;filter:brightness(1.15)}
+.cal-more{font-size:.56rem;color:var(--muted);white-space:nowrap;overflow:hidden}
+.tl{margin-top:4px}
+.tl-week{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+.tl-week span{font-weight:600;letter-spacing:0;text-transform:none;color:var(--dim);margin-left:8px}
+.tl-ev{display:grid;grid-template-columns:96px 12px 64px 1fr;align-items:center;gap:10px;padding:7px 10px;margin-left:6px;border-left:2px solid var(--border);border-radius:0 10px 10px 0;color:var(--text)}
+.tl-ev:hover{background:var(--panel2);text-decoration:none}
+.tl-ev.past{opacity:.5}
+.tl-date{font-family:var(--mono);font-size:.76rem;color:var(--muted)}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
+.tl-label{font-weight:800;font-size:.8rem;color:var(--c)}
+.tl-ev.exam .tl-title,.tl-ev.review .tl-title{font-weight:700}
+.tl-today{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--accent2);font-size:.78rem;font-weight:800}
+.tl-today::before,.tl-today::after{content:"";flex:1;height:2px;background:var(--accent2);opacity:.6}
+@media(max-width:600px){.tl-ev{grid-template-columns:78px 12px 1fr}.tl-label{display:none}}
+@media(max-width:600px){#home-cal{padding:14px 10px}.cal-g{gap:2px}.cal-d{padding:2px;min-height:40px}.cal-ev{font-size:.54rem;padding:0 2px;text-overflow:clip}}
+
 </style>
 </head>
 <body>
@@ -333,13 +373,14 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 <section class="page" id="page-home">
   <span class="eyebrow">⚡ Study hub</span>
   <h1>ICS 311 <span class="grad">Algorithms Study Hub</span></h1>
-  <p class="lead">Every topic from Week 1 onward, grouped by midterm: interactive notes, all the course screencasts, diagrams, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
+  <p class="lead">Every topic from Week 1 onward, organized by week: interactive notes, all the course screencasts, diagrams, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
   <div class="row" style="margin:22px 0 30px">
     <a class="btn primary" href="#practice">🎯 Start random practice</a>
     <a class="btn" href="#t01">📘 Start at Week 1</a><a class="btn" href="#mt1">1️⃣ Midterm 1</a><a class="btn" href="#mt2">2️⃣ Midterm 2</a><a class="btn" href="#mt3">3️⃣ Midterm 3</a><a class="btn" href="#mt4">4️⃣ Midterm 4</a><a class="btn" href="#final">🎓 Final</a>
   </div>
   <div class="grid g3" id="home-stats"></div>
-  <h2>Topics by midterm</h2>
+  <div class="card" id="home-cal"></div>
+  <h2>Topics by week</h2>
   <div id="topic-cards"></div>
   <h2>Topics 16–17: how it all connects</h2>
   <div class="card">
@@ -3303,11 +3344,63 @@ ELI5.home = {title: 'What is this site?', pts: ['📚 It is a study buddy for IC
 ['ds','mst','kruskal','prim','fib'].forEach(id => { const pg = document.getElementById('page-' + id), rr = pg && pg.querySelector(':scope > .res-row'); if (rr) rr.insertAdjacentHTML('afterend', learnBlock(id)); });
 // ---- render pages & nav ----
 document.getElementById('page-videos').insertAdjacentHTML('beforebegin', GROUPS.map(g => groupPage(g) + g.topics.filter(id => COURSE.some(t => t.id === id)).map(id => topicPage(TMETA[id])).join('')).join(''));
+const YEAR = 2026;
+const WEEK_OF_STATIC = {ds: 12, mst: 12, kruskal: 12, prim: 12, fib: 12};
+const weekOf = id => WEEK_OF_STATIC[id] || +((TMETA[id].when || '').match(/Week (\d+)/) || [])[1];
+const mdDate = md => { const [m, d] = md.split('/').map(Number); return new Date(YEAR, m - 1, d); };
+const WEEK_START = n => new Date(YEAR, 7, 24 + 7 * (n - 1));
+const weekNum = d => Math.floor(Math.round((d - WEEK_START(1)) / 864e5) / 7) + 1;
+const fmtD = d => d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+const weekRange = n => { const st = WEEK_START(n), e = new Date(YEAR, st.getMonth(), st.getDate() + 4); return `${fmtD(st)}–${st.getMonth() === e.getMonth() ? e.getDate() : fmtD(e)}`; };
+const sameDay = (a, b) => a.toDateString() === b.toDateString();
+const groupWeeks = g => { const W = []; g.topics.forEach(id => { const w = weekOf(id); let o = W.find(x => x.w === w); if (!o) W.push(o = {w, ids: []}); o.ids.push(id); }); return W.sort((a, b) => a.w - b.w); };
+const CAL_EVENTS = (() => {
+  const ev = [], lec = (id, md) => ev.push({d: mdDate(md), type: 'lecture', id, label: TMETA[id].num, title: TMETA[id].short, color: TMETA[id].color});
+  COURSE.forEach(t => { const m = (t.when || '').match(/\d\d\/\d\d/); if (m) lec(t.id, m[0]); });
+  ['ds', 'mst', 'kruskal', 'prim'].forEach(id => lec(id, '11/09'));
+  [['09/07', 'Labor Day'], ['11/11', 'Veterans Day']].forEach(([md, n]) => ev.push({d: mdDate(md), type: 'holiday', label: 'Off', title: n + ' (no class)', color: '#94a3b8'}));
+  [['09/09', 'mt1'], ['10/07', 'mt2'], ['10/28', 'mt3'], ['11/25', 'mt4']].forEach(([md, id]) => { const g = GROUPS.find(x => x.id === id); ev.push({d: mdDate(md), type: 'exam', id, label: 'MT' + id.slice(2), title: `${g.name} · ${g.covers}`, color: '#ef4444'}); });
+  ev.push({d: mdDate('12/09'), type: 'review', id: 'final', label: 'Review', title: 'Course review', color: '#f59e0b'});
+  ev.push({d: mdDate('12/18'), type: 'exam', id: 'final', label: 'Final', title: 'Final exam 9:45–11:45am · cumulative', color: '#ef4444'});
+  return ev.sort((a, b) => a.d - b.d);
+})();
+function calHTML(){
+  const today = new Date(), chip = e => `<a class="cal-ev ${e.type}" href="#${e.id || 'home'}" title="${e.title}" style="--c:${e.color}">${e.label}</a>`;
+  const month = m => {
+    const first = new Date(YEAR, m, 1), days = new Date(YEAR, m + 1, 0).getDate(); let cells = '<div class="cal-d empty"></div>'.repeat((first.getDay() + 6) % 7);
+    for (let d = 1; d <= days; d++) {
+      const dt = new Date(YEAR, m, d), evs = CAL_EVENTS.filter(e => sameDay(e.d, dt));
+      cells += `<div class="cal-d${dt.getDay() % 6 === 0 ? ' wkend' : ''}${sameDay(dt, today) ? ' today' : ''}"><span class="cal-n">${d}</span>${evs.slice(0, 3).map(chip).join('')}${evs.length > 3 ? `<span class="cal-more" title="${evs.slice(3).map(e => e.title).join(', ')}">+${evs.length - 3}</span>` : ''}</div>`;
+    }
+    return `<div class="cal-m"><div class="cal-mh">${first.toLocaleDateString('en-US', {month: 'long'})} ${YEAR}</div><div class="cal-g">${['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(x => `<div class="cal-w">${x}</div>`).join('')}${cells}</div></div>`;
+  };
+  return `<div class="cal-months">${[7, 8, 9, 10, 11].map(month).join('')}</div>`;
+}
+function timelineHTML(){
+  const today = new Date(); let out = '', lastW = 0, marked = false;
+  CAL_EVENTS.forEach(e => {
+    const w = weekNum(e.d), past = e.d < today && !sameDay(e.d, today);
+    if (!marked && !past) { out += `<div class="tl-today"><span>Today · ${fmtD(today)}</span></div>`; marked = true; }
+    if (w !== lastW) { out += `<div class="tl-week">${w > 16 ? 'Finals week' : 'Week ' + w}<span>${weekRange(w)}</span></div>`; lastW = w; }
+    out += `<a class="tl-ev ${e.type}${past ? ' past' : ''}" href="#${e.id || 'home'}" style="--c:${e.color}"><span class="tl-date">${e.d.toLocaleDateString('en-US', {weekday: 'short', month: '2-digit', day: '2-digit'})}</span><span class="tl-dot"></span><span class="tl-label">${e.label}</span><span class="tl-title">${e.title}</span></a>`;
+  });
+  return `<div class="tl">${out}</div>`;
+}
+function renderCalendar(){
+  const el = document.getElementById('home-cal'); if (!el) return;
+  let view = 'cal'; try { view = localStorage.getItem('ics311-calview') || 'cal'; } catch (e) {}
+  el.innerHTML = `<div class="row" style="justify-content:space-between"><h2 style="margin:0">📅 Semester ${view === 'cal' ? 'calendar' : 'timeline'}</h2><div class="seg" id="cal-seg"><button data-v="cal" class="${view === 'cal' ? 'on' : ''}">🗓️ Calendar</button><button data-v="tl" class="${view === 'tl' ? 'on' : ''}">🕒 Timeline</button></div></div>
+    <div class="cal-legend"><span class="cal-ev lecture" style="--c:#8b5cf6">#9</span>Lecture topic<span class="cal-ev exam" style="--c:#ef4444">MT</span>Exam<span class="cal-ev review" style="--c:#f59e0b">Review</span>Course review<span class="cal-ev holiday" style="--c:#94a3b8">Off</span>No class · click any event to open it</div>
+    ${view === 'cal' ? calHTML() : timelineHTML()}`;
+  el.querySelectorAll('#cal-seg button').forEach(b => b.onclick = () => { try { localStorage.setItem('ics311-calview', b.dataset.v); } catch (e) {} renderCalendar(); });
+}
 const NAV_SHORT = {t01:'Intro & Data Structures', t09:'Heaps & PQs', t11:'2-3-4 & RB Trees', t10a:'Selection & Order Stats', t10b:'Lower Bounds & Sorts', t13:'Greedy & Huffman', t18:'Single-Source Paths', t25:'Approximation Algs'};
 function buildNav(){
   const link = id => { const t = TMETA[id]; return `<a href="#${id}" data-page="${id}"><span class="dot" style="background:${t.color}"></span><span class="nnum">${t.num}</span><span class="nlabel" title="${t.short}">${NAV_SHORT[id] || t.short}</span></a>`; };
+  const cw = weekNum(new Date());
   document.getElementById('nav').innerHTML = `<a href="#home" data-page="home"><span class="dot" style="background:#e5e7eb"></span>Overview</a>` +
-    GROUPS.map(g => `<details class="nav-group" data-group="${g.id}"><summary><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0].replace(/–[\d:]+(am|pm)$/i, '$1')}</span></summary><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.final ? 'Final exam overview' : 'Exam overview'}</a>${g.topics.map(link).join('')}</details>`).join('') +
+    GROUPS.map(g => `<div class="nav-head" style="--c:${g.color}"><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0].replace(/–[\d:]+(am|pm)$/i, '$1')}</span></div><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.final ? 'Final exam overview' : 'Exam overview'}</a>` +
+      groupWeeks(g).map(o => `<details class="nav-group nav-week" data-week="${o.w}"${o.w === cw ? ' open' : ''}><summary><span>Week ${o.w}</span><span class="gdate">${weekRange(o.w)}</span></summary>${o.ids.map(link).join('')}</details>`).join('')).join('') +
     `<div class="nav-label">Watch &amp; Practice</div><a href="#videos" data-page="videos"><span class="dot" style="background:#f87171"></span>All screencasts</a><a href="#practice" data-page="practice"><span class="dot" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)"></span>Practice Arena</a>`;
 }
 buildNav();
@@ -3318,7 +3411,16 @@ function renderHome(){
   if (hs) hs.innerHTML = [[a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'], [`${codes.length}/${CODE.length + PS_CODE.length}`, 'Pseudocode challenges attempted'], [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']]
     .map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('');
   const tc = document.getElementById('topic-cards');
-  if (tc) tc.innerHTML = GROUPS.map(g => `<div class="home-group"><div class="hg-head"><h3>${g.icon} ${g.name}</h3><span class="pill">${g.date}</span><span class="pill">${g.covers}</span><a class="btn sm ghost" href="#${g.id}">Overview →</a></div><div class="grid g3">${g.topics.map(topicCard).join('')}</div></div>`).join('');
+  if (tc) tc.innerHTML = GROUPS.map(g => {
+    const W = groupWeeks(g), ew = +(g.date.match(/Week (\d+)/) || [])[1];
+    if (ew && !W.some(o => o.w === ew)) W.push({w: ew, ids: []});
+    W.sort((x, y) => x.w - y.w);
+    return `<div class="home-group"><div class="hg-head"><h3>${g.icon} ${g.name}</h3><span class="pill">${g.date}</span><span class="pill">${g.covers}</span><a class="btn sm ghost" href="#${g.id}">Overview →</a></div>` + W.map(o => {
+      const evs = CAL_EVENTS.filter(e => e.type !== 'lecture' && weekNum(e.d) === o.w);
+      return `<div class="wk-head"><b>📅 Week ${o.w}</b><span class="stat-label">${weekRange(o.w)}</span>${evs.map(e => `<span class="pill" style="color:${e.color}">${e.d.toLocaleDateString('en-US', {weekday: 'short'})} ${fmtD(e.d)} · ${e.title}</span>`).join('')}</div>` + (o.ids.length ? `<div class="grid g3">${o.ids.map(topicCard).join('')}</div>` : `<p class="wk-empty">No new ${g.name} topics this week.</p>`);
+    }).join('') + '</div>';
+  }).join('');
+  renderCalendar();
   document.querySelectorAll('.group-cards[data-group]').forEach(el => { el.innerHTML = GROUPS.find(x => x.id === el.dataset.group).topics.map(topicCard).join(''); });
 }
 function renderVideos(){
