@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ICS 311 · Disjoint Sets & Minimum Spanning Trees</title>
+<title>ICS 311 · Algorithms Study Hub</title>
 <style>
 :root{
   --bg:#0b0f1a; --bg2:#111827; --panel:rgba(255,255,255,.04); --panel2:rgba(255,255,255,.07);
@@ -205,46 +205,76 @@ body.eli5 figcaption .pro-only{display:none}
 @media (min-width:1800px){html{font-size:17px}.app{grid-template-columns:280px 1fr}}
 @media (min-width:2400px){html{font-size:18px}}
 
+/* ---------- Midterm-grouped nav ---------- */
+.nav-group{margin:2px 0}
+.nav-group summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);user-select:none}
+.nav-group summary::-webkit-details-marker{display:none}
+.nav-group summary::after{content:"▸";color:var(--dim);transition:.2s}
+.nav-group[open] summary::after{transform:rotate(90deg)}
+.nav-group summary:hover{background:var(--panel2);color:var(--text)}
+.gdate{margin-left:auto;font-size:.68rem;color:var(--dim);font-weight:600;letter-spacing:0;text-transform:none}
+.nav-group a{padding-left:18px;font-size:.87rem}
+.nav .nnum{font-family:var(--mono);font-size:.66rem;font-weight:700;color:var(--dim);min-width:40px}
+.nav a.active .nnum{color:var(--accent2)}
+.nav a.gover{font-weight:600;color:var(--text)}
+.nav .nlabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ---------- Topic resources ---------- */
+.res-row{gap:8px;margin:18px 0}
+.res{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--border);font-size:.86rem;color:var(--muted)}
+.res b{color:var(--text)}
+a.res.link{color:var(--accent2)}
+a.eyebrow.mt-tag{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--border);font-size:.82rem;color:var(--muted)}
+pre .cm{color:#6b7280;font-style:italic}
+/* ---------- Lightweight YouTube embeds ---------- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;margin:12px 0}
+.vt{font-size:.88rem;margin-top:8px;font-weight:600}
+.video.lite{cursor:pointer}
+.video.lite img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:.2s}
+.video.lite:hover img{opacity:1;transform:scale(1.02)}
+.video.lite .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:44px;border-radius:12px;background:rgba(239,68,68,.92);display:grid;place-items:center;color:#fff;font-size:1.15rem;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vtopic{margin:14px 0}
+/* ---------- Home & practice groups ---------- */
+.home-group{margin:10px 0 28px}
+.hg-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hg-head h3{margin:0}
+.tnum{font-family:var(--mono);font-size:.8rem;font-weight:700}
+.pgroup{margin:10px 0 16px}
+.pg-head{margin-bottom:8px}
+.nav .nnum{white-space:nowrap;min-width:48px}
+.nav .nlabel{white-space:normal;overflow:visible;line-height:1.3}
+
 </style>
 </head>
 <body>
 <button class="btn sm menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menu</button>
 <div class="app">
 <aside class="sidebar">
-  <div class="brand"><div class="logo">⟡</div><div>MST Lab<small>ICS 311 · TOPICS 16–17</small></div></div>
-  <nav class="nav">
-    <a href="#home" data-page="home"><span class="dot" style="background:#e5e7eb"></span>Overview</a>
-    <div class="nav-label">Learn</div>
-    <a href="#ds" data-page="ds"><span class="dot" style="background:#f472b6"></span>Disjoint Sets</a>
-    <a href="#mst" data-page="mst"><span class="dot" style="background:#a78bfa"></span>MSTs &amp; Safe Edges</a>
-    <a href="#kruskal" data-page="kruskal"><span class="dot" style="background:#34d399"></span>Kruskal's Algorithm</a>
-    <a href="#prim" data-page="prim"><span class="dot" style="background:#22d3ee"></span>Prim's Algorithm</a>
-    <a href="#fib" data-page="fib"><span class="dot" style="background:#fbbf24"></span>Fibonacci Heap Bounds</a>
-    <div class="nav-label">Watch &amp; Practice</div>
-    <a href="#videos" data-page="videos"><span class="dot" style="background:#f87171"></span>Screencasts</a>
-    <a href="#practice" data-page="practice"><span class="dot" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)"></span>Practice Arena</a>
-  </nav>
+  <div class="brand"><div class="logo">⟡</div><div>ICS 311 Lab<small>ALGORITHMS STUDY HUB</small></div></div>
+  <nav class="nav" id="nav"></nav>
   <label class="eli5-toggle" title="Explain everything as if to an elementary student">
     <span class="eli5-text"><b>🧒 Dummy mode</b><small>Explain it like I'm in grade school</small></span>
     <input type="checkbox" id="eli5-switch"><span class="switch"></span>
   </label>
-  <div class="foot">Content based on ICS 311 notes #16–#17 (Sitchinava / Suthers) and CLRS. Progress is saved in your browser.</div>
+  <div class="foot">Content based on the ICS 311 notes (Sitchinava / Suthers), CLRS and the UHMICSAlgorithms screencasts. Progress is saved in your browser.</div>
 </aside>
 
 <main>
 <!-- ============ HOME ============ -->
 <section class="page" id="page-home">
   <span class="eyebrow">⚡ Study hub</span>
-  <h1>Disjoint Sets &amp; <span class="grad">Minimum Spanning Trees</span></h1>
-  <p class="lead">Interactive notes, the three course screencasts, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
+  <h1>ICS 311 <span class="grad">Algorithms Study Hub</span></h1>
+  <p class="lead">Every topic from Week 1 onward, grouped by midterm: interactive notes, all the course screencasts, diagrams, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
   <div class="row" style="margin:22px 0 30px">
     <a class="btn primary" href="#practice">🎯 Start random practice</a>
-    <a class="btn" href="#ds">📘 Begin with Disjoint Sets</a>
+    <a class="btn" href="#t01">📘 Start at Week 1</a><a class="btn" href="#mt1">1️⃣ Midterm 1</a><a class="btn" href="#mt2">2️⃣ Midterm 2</a><a class="btn" href="#mt3">3️⃣ Midterm 3</a>
   </div>
   <div class="grid g3" id="home-stats"></div>
-  <h2>Topics</h2>
-  <div class="grid g3" id="topic-cards"></div>
-  <h2>How it all connects</h2>
+  <h2>Topics by midterm</h2>
+  <div id="topic-cards"></div>
+  <h2>Topics 16–17: how it all connects</h2>
   <div class="card">
     <div class="grid g3">
       <div><h3>1 · Union-Find</h3><p class="lead" style="font-size:.95rem">A forest of trees with <b>union by rank</b> + <b>path compression</b> gives near-constant <span class="math">O(α(n))</span> amortized operations.</p></div>
@@ -528,8 +558,8 @@ body.eli5 figcaption .pro-only{display:none}
 <section class="page" id="page-videos">
   <span class="eyebrow">🎬 UHM ICS Algorithms</span>
   <h1>Screencasts</h1>
-  <p class="lead">Dan Suthers' screencasts, filmed while touring Laysan Island in Papahānaumokuākea — "an island with a minimum of trees."</p>
-  <div class="grid g2" style="margin-top:20px" id="video-grid"></div>
+  <p class="lead">All course screencasts, grouped by midterm. Click a thumbnail to play it here. Partial clips start and stop at the times listed in the schedule.</p>
+  <div style="margin-top:10px" id="video-grid"></div>
 </section>
 
 <!-- ============ PRACTICE ============ -->
@@ -1340,6 +1370,324 @@ function gradeCode(q, src){
 }
 function safe(f){ try { return !!f(); } catch (e) { return false; } }
 
+// ======================= PSEUDOCODE CHALLENGES & GENERATORS FOR WEEKS 1–11 =======================
+COMPOUNDS.push('insertion sort','merge sort','max heapify','build max heap','tree insert','tree search','randomized partition','randomized quicksort','counting sort','lcs length');
+const fnBody = (P, n) => { const f = P.funcs.find(f => f.norm === n); return f ? f.body : ''; };
+
+CODE.push(
+ {id:'ins-sort', topic:'t02', title:'Insertion sort',
+  prompt:'Write <code>INSERTION-SORT(A, n)</code> that sorts A[1..n] <b>in place</b>. Add a comment stating the loop invariant.',
+  starter:'INSERTION-SORT(A, n)\n    \n', define:['insertionsort'], call:[], maxLoop:2,
+  correctness:[
+   {label:'Outer loop over positions 2..n', w:2, test:t=>/\b(for|foreach)\b[^\n]*\b\w+\s*(=|in)\s*(2|1)\b|\bfor\b[^\n]*range\s*\(\s*1/.test(t), hint:'for i = 2 to n'},
+   {label:'Saves the current element as key', w:2, test:t=>/\bkey\s*=\s*a\s*\[/.test(t), hint:'key = A[i]'},
+   {label:'Inner loop scans left while elements are larger than key', w:2, test:t=>/\bwhile\b[^\n]*>\s*key|\bwhile\b[^\n]*key\s*</.test(t), hint:'while j > 0 and A[j] > key'},
+   {label:'Shifts larger elements one position right', w:2, test:t=>/a\s*\[\s*\w+\s*\+\s*1\s*\]\s*=\s*a\s*\[\s*\w+\s*\]/.test(t), hint:'A[j + 1] = A[j]'},
+   {label:'Drops key into the gap', w:2, test:t=>/a\s*\[\s*\w+\s*\+\s*1\s*\]\s*=\s*key/.test(t), hint:'A[j + 1] = key'}
+  ],
+  efficiency:[
+   {label:'Sorts in place (no extra array)', w:5, test:t=>!/=\s*(\[\s*\]|new\s|array\s*\(|list\s*\(|copy)/.test(t), hint:'Shift within A: O(1) extra space.'},
+   {label:'Inner loop stops as soon as key fits (Θ(n) on sorted input)', w:5, test:t=>/\bwhile\b/.test(t) || /\bbreak\b/.test(t), hint:'Use a while loop that stops at the first element ≤ key.'}
+  ],
+  penalties:[{label:'Swaps on every step instead of shifting (extra writes)', p:1, test:t=>/\b(swap|exchange)\b/.test(t), hint:'Shift elements and write key once.'}],
+  model:`INSERTION-SORT(A, n)
+    // invariant: A[1..i-1] is the sorted original prefix
+    for i = 2 to n
+        key = A[i]
+        j = i - 1
+        while j > 0 and A[j] > key
+            A[j + 1] = A[j]
+            j = j - 1
+        A[j + 1] = key`},
+
+ {id:'merge-sort', topic:'t07', title:'Merge sort',
+  prompt:'Write <code>MERGE-SORT(A, p, r)</code> and a helper <code>MERGE(A, p, q, r)</code> that merges the sorted subarrays A[p..q] and A[q+1..r].',
+  starter:'MERGE-SORT(A, p, r)\n    \n\nMERGE(A, p, q, r)\n    \n', define:['mergesort','merge'], call:['merge','mergesort'], maxLoop:1,
+  correctness:[
+   {label:'Base case: only recurse when p < r', w:2, test:(t,P)=>/\bif\b[^\n]*p\s*<\s*r|\bif\b[^\n]*r\s*>\s*p|\bif\b[^\n]*p\s*>=\s*r[^\n]*return/.test(P.body('mergesort')), hint:'if p < r'},
+   {label:'Splits at the midpoint', w:2, test:(t,P)=>/q\s*=\s*[^\n]*p\s*\+\s*r/.test(P.body('mergesort')), hint:'q = ⌊(p + r) / 2⌋'},
+   {label:'Two recursive calls on the halves', w:2, test:(t,P)=>(P.body('mergesort').match(/mergesort\s*\(/g)||[]).length>=2, hint:'MERGE-SORT(A, p, q) and MERGE-SORT(A, q + 1, r)'},
+   {label:'Calls MERGE to combine', w:1, test:(t,P)=>/\bmerge\s*\(/.test(P.body('mergesort')), hint:'MERGE(A, p, q, r)'},
+   {label:'MERGE compares the fronts of the two halves', w:2, test:(t,P)=>/(l|left)\s*\[[^\n]*<=?\s*(r|right)\s*\[|(r|right)\s*\[[^\n]*>=?\s*(l|left)\s*\[/.test(fnBody(P,'merge')), hint:'if L[i] ≤ R[j] then A[k] = L[i] …'},
+   {label:'MERGE writes back into A', w:1, test:(t,P)=>/a\s*\[[^\]]*\]\s*=/.test(fnBody(P,'merge')), hint:'A[k] = L[i]'}
+  ],
+  efficiency:[
+   {label:'MERGE is a single linear pass (no nested loops)', w:5, test:(t,P)=>{const f=P.funcs.find(f=>f.norm==='merge'); return f && (f.maxLoop||0)<=1;}, hint:'Each element is moved once: Θ(n).'},
+   {label:'Divides in half (Θ(n lg n) total)', w:5, test:(t,P)=>/\/\s*2|floor|\/\/\s*2/.test(P.body('mergesort')), hint:'Split at the midpoint.'}
+  ],
+  penalties:[{label:'Sorts inside MERGE instead of merging', p:3, test:(t,P)=>/\bsort\s*\(/.test(fnBody(P,'merge')), hint:'MERGE should exploit that the halves are already sorted.'}],
+  model:`MERGE-SORT(A, p, r)
+    if p < r                       // base case: 0 or 1 element
+        q = floor((p + r) / 2)
+        MERGE-SORT(A, p, q)
+        MERGE-SORT(A, q + 1, r)
+        MERGE(A, p, q, r)
+
+MERGE(A, p, q, r)
+    L = copy of A[p..q] followed by sentinel ∞
+    R = copy of A[q+1..r] followed by sentinel ∞
+    i = 1
+    j = 1
+    for k = p to r
+        if L[i] <= R[j]
+            A[k] = L[i]
+            i = i + 1
+        else
+            A[k] = R[j]
+            j = j + 1`},
+
+ {id:'heapify', topic:'t09', title:'MAX-HEAPIFY and BUILD-MAX-HEAP',
+  prompt:'Write <code>MAX-HEAPIFY(A, i)</code> (assume both subtrees of i are max-heaps) and <code>BUILD-MAX-HEAP(A, n)</code> for a 1-indexed array with field <code>A.heap-size</code>.',
+  starter:'MAX-HEAPIFY(A, i)\n    \n\nBUILD-MAX-HEAP(A, n)\n    \n', define:['maxheapify','buildmaxheap'], call:['maxheapify'], maxLoop:1,
+  correctness:[
+   {label:'Computes the children 2i and 2i + 1', w:2, test:(t,P)=>/2\s*\*?\s*i\b/.test(P.body('maxheapify'))||/left\s*\(/.test(P.body('maxheapify')), hint:'l = 2i, r = 2i + 1'},
+   {label:'Checks children are within the heap', w:2, test:(t,P)=>/(heapsize|heap-size|heap_size|size|\bn\b)/.test(P.body('maxheapify')) && /<=|</.test(P.body('maxheapify')), hint:'if l ≤ A.heap-size and A[l] > A[i]'},
+   {label:'Finds the largest of node and children', w:2, test:(t,P)=>/largest/.test(P.body('maxheapify'))||/max\s*\(/.test(P.body('maxheapify')), hint:'largest = i, then compare with l and r'},
+   {label:'Swaps and continues downward', w:2, test:(t,P)=>{const b=P.body('maxheapify');return /(exchange|swap|,\s*a\s*\[[^\n]*=\s*a\s*\[)/.test(b) && (/maxheapify\s*\(/.test(b)||/\bwhile\b/.test(b));}, hint:'exchange A[i] with A[largest]; MAX-HEAPIFY(A, largest)'},
+   {label:'BUILD loops from ⌊n/2⌋ down to 1 calling MAX-HEAPIFY', w:2, test:(t,P)=>{const b=P.body('buildmaxheap');return /maxheapify\s*\(/.test(b) && /(downto|down to|-1\s*\)|-\s*1\s*,\s*-1|reversed|step\s*-1)/.test(b);}, hint:'for i = ⌊n/2⌋ downto 1: MAX-HEAPIFY(A, i)'}
+  ],
+  efficiency:[
+   {label:'BUILD skips the leaves (starts at n/2): O(n) total', w:5, test:(t,P)=>/(\/\s*2|\/\/\s*2|floor|half)/.test(P.body('buildmaxheap')), hint:'Leaves are already heaps; start at ⌊n/2⌋.'},
+   {label:'MAX-HEAPIFY follows one path: O(lg n)', w:5, test:(t,P)=>{const f=P.fn('maxheapify');return f && (f.maxLoop||0)<=1 && !/\bfor\b/.test(f.body);}, hint:'Only descend into the larger child.'}
+  ],
+  penalties:[{label:'Builds the heap with a sort or n inserts (O(n lg n))', p:2, test:t=>/\bsort\s*\(|\binsert\s*\(/.test(t), hint:'Bottom-up heapify is O(n).'}],
+  model:`MAX-HEAPIFY(A, i)
+    l = 2 * i
+    r = 2 * i + 1
+    largest = i
+    if l <= A.heap-size and A[l] > A[largest]
+        largest = l
+    if r <= A.heap-size and A[r] > A[largest]
+        largest = r
+    if largest != i
+        exchange A[i] with A[largest]
+        MAX-HEAPIFY(A, largest)        // float down one level
+
+BUILD-MAX-HEAP(A, n)
+    A.heap-size = n
+    for i = floor(n / 2) downto 1      // leaves are already heaps
+        MAX-HEAPIFY(A, i)`},
+
+ {id:'bst', topic:'t08', title:'BST search and insert',
+  prompt:'Write <code>TREE-SEARCH(x, k)</code> and <code>TREE-INSERT(T, z)</code>. Nodes have <code>key</code>, <code>left</code>, <code>right</code>, <code>p</code>; the tree has <code>T.root</code>.',
+  starter:'TREE-SEARCH(x, k)\n    \n\nTREE-INSERT(T, z)\n    \n', define:['treesearch','treeinsert'], call:[], maxLoop:1,
+  correctness:[
+   {label:'SEARCH stops at NIL or a matching key', w:2, test:(t,P)=>/(nil|null|none)/.test(P.body('treesearch')) && /(==|!=)\s*\w*\.?key|key\s*(==|!=)/.test(P.body('treesearch')), hint:'while x ≠ NIL and k ≠ x.key'},
+   {label:'SEARCH goes left when k < x.key, else right', w:2, test:(t,P)=>{const b=P.body('treesearch');return /k\s*<\s*\w+\.key|\w+\.key\s*>\s*k/.test(b) && /\.left/.test(b) && /\.right/.test(b);}, hint:'if k < x.key then x = x.left else x = x.right'},
+   {label:'INSERT walks down keeping a trailing parent pointer', w:2, test:(t,P)=>/\by\s*=\s*x\b/.test(P.body('treeinsert'))||/\bparent\s*=\s*\w+/.test(P.body('treeinsert')), hint:'y = x before moving x down'},
+   {label:'INSERT sets z.p', w:1, test:(t,P)=>/z\.(p|parent)\s*=/.test(P.body('treeinsert')), hint:'z.p = y'},
+   {label:'INSERT handles an empty tree', w:1, test:(t,P)=>/root\s*=\s*z/.test(P.body('treeinsert')), hint:'if y == NIL then T.root = z'},
+   {label:'INSERT attaches z as a left or right child', w:2, test:(t,P)=>{const b=P.body('treeinsert');return /\.left\s*=\s*z/.test(b) && /\.right\s*=\s*z/.test(b);}, hint:'y.left = z or y.right = z depending on z.key < y.key'}
+  ],
+  efficiency:[
+   {label:'Follows a single root-to-leaf path: O(h)', w:6, test:(t,P)=>P.maxLoop<=1 && !/\b(inorder|preorder|postorder)/.test(t), hint:'Never visit both subtrees.'},
+   {label:'No extra data structures', w:4, test:t=>!/=\s*(\[\s*\]|new\s+(list|array|queue|stack))/.test(t) && !/\b(enqueue|push)\s*\(/.test(t), hint:'O(1) extra space.'}
+  ],
+  penalties:[],
+  model:`TREE-SEARCH(x, k)
+    while x != NIL and k != x.key
+        if k < x.key
+            x = x.left
+        else
+            x = x.right
+    return x
+
+TREE-INSERT(T, z)
+    y = NIL                 // trailing parent pointer
+    x = T.root
+    while x != NIL
+        y = x
+        if z.key < x.key
+            x = x.left
+        else
+            x = x.right
+    z.p = y
+    if y == NIL
+        T.root = z          // tree was empty
+    elseif z.key < y.key
+        y.left = z
+    else
+        y.right = z`},
+
+ {id:'rqs', topic:'t05b', title:'Randomized quicksort',
+  prompt:'Write <code>PARTITION(A, p, r)</code> (Lomuto, pivot A[r]), <code>RANDOMIZED-PARTITION(A, p, r)</code>, and <code>RANDOMIZED-QUICKSORT(A, p, r)</code>.',
+  starter:'PARTITION(A, p, r)\n    \n\nRANDOMIZED-PARTITION(A, p, r)\n    \n\nRANDOMIZED-QUICKSORT(A, p, r)\n    \n', define:['partition','randomizedpartition','randomizedquicksort'], call:['random','partition','randomizedpartition'], maxLoop:1,
+  correctness:[
+   {label:'PARTITION uses A[r] as the pivot', w:1, test:(t,P)=>/=\s*a\s*\[\s*r\s*\]/.test(fnBody(P,'partition')), hint:'x = A[r]'},
+   {label:'PARTITION scans j from p to r − 1 comparing with the pivot', w:2, test:(t,P)=>{const b=fnBody(P,'partition');return /\bfor\b[^\n]*\bp\b[^\n]*r/.test(b) && /a\s*\[\s*j\s*\]\s*<=?\s*\w+/.test(b);}, hint:'for j = p to r − 1: if A[j] ≤ x'},
+   {label:'Grows the ≤-pivot region with swaps', w:2, test:(t,P)=>{const b=fnBody(P,'partition');return /i\s*=\s*i\s*\+\s*1|i\s*\+=\s*1|i\+\+/.test(b) && /(exchange|swap)/.test(b);}, hint:'i = i + 1; exchange A[i] with A[j]'},
+   {label:'Places the pivot and returns its index', w:2, test:(t,P)=>/\breturn\b/.test(fnBody(P,'partition')) && /i\s*\+\s*1/.test(fnBody(P,'partition')), hint:'exchange A[i + 1] with A[r]; return i + 1'},
+   {label:'RANDOMIZED-PARTITION swaps a random element into A[r]', w:2, test:(t,P)=>/random\s*\(/.test(P.body('randomizedpartition')) && /(exchange|swap)/.test(P.body('randomizedpartition')), hint:'i = RANDOM(p, r); exchange A[r] with A[i]'},
+   {label:'QUICKSORT recurses on both sides of the pivot', w:1, test:(t,P)=>{const b=P.body('randomizedquicksort');return (b.match(/randomizedquicksort\s*\(/g)||[]).length>=2 && /q\s*-\s*1/.test(b) && /q\s*\+\s*1/.test(b);}, hint:'RANDOMIZED-QUICKSORT(A, p, q − 1) and (A, q + 1, r)'}
+  ],
+  efficiency:[
+   {label:'Random pivot ⇒ expected O(n lg n) on every input', w:4, test:t=>/random\s*\(/.test(t), hint:'Choose the pivot uniformly at random.'},
+   {label:'Partitions in place (no new lists)', w:3, test:t=>!/=\s*(\[\s*\]|new\s|list\s*\()/.test(t) && !/\.(append|push)\s*\(/.test(t), hint:'Swap within A instead of building new lists.'},
+   {label:'PARTITION is a single linear pass', w:3, test:(t,P)=>{const f=P.funcs.find(f=>f.norm==='partition');return f && (f.maxLoop||0)<=1;}, hint:'Θ(n) per partition.'}
+  ],
+  penalties:[{label:'Never randomizes the pivot (sorted input costs Θ(n²))', p:3, test:t=>!/random/.test(t), hint:'Pick the pivot with RANDOM(p, r).'}],
+  model:`PARTITION(A, p, r)
+    x = A[r]                       // pivot
+    i = p - 1
+    for j = p to r - 1
+        if A[j] <= x
+            i = i + 1
+            exchange A[i] with A[j]
+    exchange A[i + 1] with A[r]
+    return i + 1
+
+RANDOMIZED-PARTITION(A, p, r)
+    i = RANDOM(p, r)
+    exchange A[r] with A[i]
+    return PARTITION(A, p, r)
+
+RANDOMIZED-QUICKSORT(A, p, r)
+    if p < r
+        q = RANDOMIZED-PARTITION(A, p, r)
+        RANDOMIZED-QUICKSORT(A, p, q - 1)
+        RANDOMIZED-QUICKSORT(A, q + 1, r)`},
+
+ {id:'counting', topic:'t10b', title:'Counting sort',
+  prompt:'Write <code>COUNTING-SORT(A, B, n, k)</code> that <b>stably</b> sorts A[1..n] (integer keys 0..k) into the output array B.',
+  starter:'COUNTING-SORT(A, B, n, k)\n    \n', define:['countingsort'], call:[], maxLoop:1,
+  correctness:[
+   {label:'Initializes counts C[0..k] to 0', w:2, test:t=>/c\s*\[[^\]]*\]\s*=\s*0|zeros|=\s*\[\s*0\s*\]\s*\*|new array[^\n]*0/.test(t), hint:'C[i] = 0 for i = 0..k'},
+   {label:'Counts occurrences of each key', w:2, test:t=>/c\s*\[\s*a\s*\[\s*\w+\s*\]\s*\]\s*(=\s*c\s*\[\s*a\s*\[\s*\w+\s*\]\s*\]\s*\+\s*1|\+=\s*1)/.test(t), hint:'C[A[j]] = C[A[j]] + 1'},
+   {label:'Prefix sums: C[i] = number of keys ≤ i', w:2, test:t=>/c\s*\[\s*i\s*\]\s*(=\s*c\s*\[\s*i\s*\]\s*\+|\+=)\s*c\s*\[\s*i\s*-\s*1\s*\]/.test(t), hint:'C[i] = C[i] + C[i − 1]'},
+   {label:'Places each element at B[C[A[j]]]', w:2, test:t=>/b\s*\[\s*c\s*\[\s*a\s*\[\s*\w+\s*\]\s*\]\s*\]\s*=\s*a\s*\[/.test(t), hint:'B[C[A[j]]] = A[j]'},
+   {label:'Decrements the count after placing', w:2, test:t=>/c\s*\[\s*a\s*\[\s*\w+\s*\]\s*\]\s*(=\s*c\s*\[\s*a\s*\[\s*\w+\s*\]\s*\]\s*-\s*1|-=\s*1)/.test(t), hint:'C[A[j]] = C[A[j]] − 1'}
+  ],
+  efficiency:[
+   {label:'Final pass goes from n down to 1 (stable)', w:4, test:t=>/downto|down to|reversed|step\s*-1|-1\s*,\s*-1/.test(t), hint:'for j = n downto 1 keeps equal keys in order.'},
+   {label:'No key comparisons and no nested loops: Θ(n + k)', w:6, test:(t,P)=>P.maxLoop<=1 && !/\bif\b[^\n]*a\s*\[[^\n]*[<>]\s*a\s*\[/.test(t), hint:'Counting sort beats Ω(n lg n) by never comparing keys.'}
+  ],
+  penalties:[{label:'Calls a comparison sort', p:3, test:t=>/\bsort\s*\(/.test(t), hint:'Use counts, not a comparison sort.'}],
+  model:`COUNTING-SORT(A, B, n, k)
+    let C[0..k] be a new array
+    for i = 0 to k
+        C[i] = 0
+    for j = 1 to n
+        C[A[j]] = C[A[j]] + 1          // count each key
+    for i = 1 to k
+        C[i] = C[i] + C[i - 1]         // C[i] = number of keys <= i
+    for j = n downto 1                 // backwards keeps it stable
+        B[C[A[j]]] = A[j]
+        C[A[j]] = C[A[j]] - 1`},
+
+ {id:'lcs', topic:'t12b', title:'LCS length (bottom-up DP)',
+  prompt:'Write <code>LCS-LENGTH(X, Y, m, n)</code> that returns the length of a longest common subsequence of X[1..m] and Y[1..n] using a bottom-up table c.',
+  starter:'LCS-LENGTH(X, Y, m, n)\n    \n', define:['lcslength'], call:[], maxLoop:2,
+  correctness:[
+   {label:'Base cases: row 0 and column 0 are 0', w:2, test:t=>/c\s*\[\s*(i\s*,\s*0|0\s*,\s*j|i\s*\]\s*\[\s*0|0\s*\]\s*\[\s*j)\s*\]\s*=\s*0|zeros|=\s*\[\s*\[?\s*0/.test(t), hint:'c[i, 0] = 0 and c[0, j] = 0'},
+   {label:'Nested loops over i = 1..m and j = 1..n', w:2, test:(t,P)=>P.maxLoop>=2, hint:'for i = 1 to m: for j = 1 to n'},
+   {label:'Compares X[i] with Y[j]', w:2, test:t=>/x\s*\[\s*i\s*\]\s*==\s*y\s*\[\s*j\s*\]|y\s*\[\s*j\s*\]\s*==\s*x\s*\[\s*i\s*\]/.test(t), hint:'if X[i] == Y[j]'},
+   {label:'Match: c[i, j] = c[i−1, j−1] + 1', w:2, test:t=>/c\s*\[\s*i\s*-\s*1\s*(,|\]\s*\[)\s*j\s*-\s*1\s*\]\s*\+\s*1/.test(t), hint:'diagonal + 1'},
+   {label:'Otherwise take the max of top and left', w:2, test:t=>/max\s*\(/.test(t) || (/c\s*\[\s*i\s*-\s*1\s*(,|\]\s*\[)\s*j\s*\]/.test(t) && /c\s*\[\s*i\s*(,|\]\s*\[)\s*j\s*-\s*1\s*\]/.test(t)), hint:'c[i, j] = max(c[i−1, j], c[i, j−1])'}
+  ],
+  efficiency:[
+   {label:'Bottom-up table, no plain recursion: Θ(mn) time', w:6, test:(t,P)=>!/lcslength\s*\(/.test(P.body('lcslength')), hint:'Fill the table iteratively instead of recursing.'},
+   {label:'Returns c[m, n] directly', w:4, test:t=>/return\s+c\s*\[\s*m\s*(,|\]\s*\[)\s*n\s*\]|return\s+c\b/.test(t), hint:'return c[m, n]'}
+  ],
+  penalties:[{label:'Enumerates all subsequences (exponential)', p:4, test:t=>/(all|every)\s+subsequences?|2\s*\^\s*m|powerset/.test(t), hint:'There are 2^m subsequences of X.'}],
+  model:`LCS-LENGTH(X, Y, m, n)
+    let c[0..m, 0..n] be a new table
+    for i = 0 to m
+        c[i, 0] = 0
+    for j = 0 to n
+        c[0, j] = 0
+    for i = 1 to m
+        for j = 1 to n
+            if X[i] == Y[j]
+                c[i, j] = c[i - 1, j - 1] + 1     // extend the diagonal
+            else
+                c[i, j] = max(c[i - 1, j], c[i, j - 1])
+    return c[m, n]`},
+
+ {id:'bfs', topic:'t14a', title:'Breadth-first search',
+  prompt:'Write <code>BFS(G, s)</code> that computes v.d (distance in edges from s) and v.π for every vertex, using a FIFO queue and adjacency lists <code>G.Adj</code>.',
+  starter:'BFS(G, s)\n    \n', define:['bfs'], call:['enqueue|insert|append|push','dequeue|popleft|pop'], maxLoop:2,
+  correctness:[
+   {label:'Initializes every vertex (d = ∞, π = NIL / unvisited)', w:2, test:t=>/\b(for|foreach)\b[^\n]*(g\.v|vertex|vertices|\bu\b|\bv\b)/.test(t) && /(=\s*inf|white|visited)/.test(t), hint:'for each u ∈ G.V: u.d = ∞, u.π = NIL, u.color = WHITE'},
+   {label:'Source gets distance 0 and is enqueued', w:2, test:t=>/s\.d\s*=\s*0|d\s*\[\s*s\s*\]\s*=\s*0|dist\s*\[\s*s\s*\]\s*=\s*0/.test(t) && /(enqueue|append|push|insert)\s*\(\s*\w*\s*,?\s*s\s*\)/.test(t), hint:'s.d = 0; ENQUEUE(Q, s)'},
+   {label:'Loops while the queue is not empty, dequeuing u', w:2, test:t=>/\bwhile\b/.test(t) && /(dequeue|popleft|pop)\s*\(/.test(t), hint:'while Q ≠ ∅: u = DEQUEUE(Q)'},
+   {label:'Scans u\'s adjacency list', w:2, test:t=>/\b(for|foreach)\b[^\n]*(adj|neighbors?|neighbours?)/.test(t), hint:'for each v ∈ G.Adj[u]'},
+   {label:'Sets v.d = u.d + 1 and v.π = u for undiscovered v', w:2, test:t=>/(v\.d|d\s*\[\s*v\s*\]|dist\s*\[\s*v\s*\])\s*=\s*(u\.d|d\s*\[\s*u\s*\]|dist\s*\[\s*u\s*\])\s*\+\s*1/.test(t) && /(v\.pi|pi\s*\[\s*v\s*\]|v\.p\b|parent\s*\[\s*v\s*\]|v\.parent)\s*=\s*u/.test(t), hint:'v.d = u.d + 1; v.π = u'}
+  ],
+  efficiency:[
+   {label:'Marks vertices when discovered so each is enqueued once: O(V + E)', w:6, test:t=>/\bif\b[^\n]*(white|==\s*inf|not\s+visited|!\s*visited|visited\s*\[\s*v\s*\]\s*==\s*false|not\s+in\s+visited)/.test(t), hint:'Only enqueue WHITE (undiscovered) vertices.'},
+   {label:'Uses adjacency lists, not a scan of all vertices per dequeue', w:4, test:t=>/(adj|neighbors?|neighbours?)/.test(t), hint:'Scanning G.V for each u makes it O(V²).'}
+  ],
+  penalties:[{label:'Scans all vertices for each dequeued vertex (O(V²))', p:3, test:(t,P)=>P.lines.some(l=>l.loopDepth>=1 && /\b(for|foreach)\b[^\n]*(g\.v|vertices)/.test(l.t)), hint:'Iterate over G.Adj[u] instead.'}],
+  model:`BFS(G, s)
+    for each vertex u in G.V
+        u.color = WHITE
+        u.d = ∞
+        u.π = NIL
+    s.color = GRAY
+    s.d = 0
+    Q = ∅
+    ENQUEUE(Q, s)
+    while Q ≠ ∅
+        u = DEQUEUE(Q)
+        for each v in G.Adj[u]
+            if v.color == WHITE          // first discovery
+                v.color = GRAY
+                v.d = u.d + 1
+                v.π = u
+                ENQUEUE(Q, v)
+        u.color = BLACK`}
+);
+
+// ---- randomized generators ----
+function opts4(correct, cands){
+  const c = String(correct), out = [];
+  for (const x of cands){ const s = String(x); if (s !== c && !out.includes(s)) out.push(s); if (out.length === 3) break; }
+  for (let k = 1; out.length < 3 && k < 50; k++){ const d = Math.ceil(k / 2) * (k % 2 ? 1 : -1); const s = isNaN(+c) ? c + "'".repeat(k) : String(+c + d); if (s !== c && !out.includes(s)) out.push(s); }
+  return {options: [c, ...out], answer: 0};
+}
+const SUP = {2:'²', 3:'³', 4:'⁴'};
+const npow = e => e === 0 ? '1' : e === 1 ? 'n' : 'n' + (SUP[e] || '^' + e);
+GEN.push(
+ {topic:'t07', gen(){
+   const [a, b] = pick([[1,2],[2,2],[4,2],[8,2],[3,3],[9,3],[2,4],[4,4],[16,4],[3,2],[7,2]]), d = rnd(0, 3);
+   const L = Math.log(a) / Math.log(b), Li = Math.abs(L - Math.round(L)) < 1e-9 ? Math.round(L) : null;
+   const nL = Li !== null ? npow(Li) : `n^(log${b === 2 ? '₂' : b === 3 ? '₃' : '₄'}${a}) ≈ n^${L.toFixed(2)}`;
+   const f = d === 0 ? 'Θ(1)' : `Θ(${npow(d)})`;
+   let ans, why;
+   if (Li !== null && Li === d){ ans = `Θ(${npow(d)} lg n)`; why = `Case 2: f(n) = Θ(n^log_b a) = ${f}.`; }
+   else if (L > d){ ans = `Θ(${nL})`; why = `Case 1: n^(log_b a) = ${nL} grows polynomially faster than f(n) = ${f}.`; }
+   else { ans = `Θ(${npow(d)})`; why = `Case 3: f(n) = ${f} dominates n^(log_b a) = ${nL} (and the regularity condition holds).`; }
+   const cands = [`Θ(${npow(d)} lg n)`, `Θ(${nL})`, `Θ(${npow(d)})`, `Θ(${npow(d + 1)})`, `Θ(${nL} lg n)`, 'Θ(n lg n)'];
+   return {q:`Use the master method to solve <b>T(n) = ${a === 1 ? '' : a}T(n/${b}) + ${f}</b>.`, ...opts4(ans, cands), explain:`n^(log_${b} ${a}) = ${nL}. ${why}`};
+ }},
+ {topic:'t09', gen(){
+   const i = rnd(2, 60), kind = pick(['parent', 'left child', 'right child']);
+   const ans = kind === 'parent' ? Math.floor(i / 2) : kind === 'left child' ? 2 * i : 2 * i + 1;
+   return {q:`In a 1-indexed binary heap stored in an array, what is the index of the <b>${kind}</b> of index <b>${i}</b>?`, ...opts4(ans, [Math.floor(i / 2), 2 * i, 2 * i + 1, i + 1, Math.ceil(i / 2), 2 * i - 1]), explain:'PARENT(i) = ⌊i/2⌋, LEFT(i) = 2i, RIGHT(i) = 2i + 1.'};
+ }},
+ {topic:'t06', gen(){
+   const m = pick([7, 11, 13]), keys = []; while (keys.length < 5){ const k = rnd(1, 80); if (!keys.includes(k)) keys.push(k); }
+   const T = Array(m).fill(null); let slot = 0, probes = 0;
+   keys.forEach(k => { let j = k % m, p = 1; while (T[j] !== null){ j = (j + 1) % m; p++; } T[j] = k; slot = j; probes = p; });
+   const last = keys[4];
+   return {q:`Insert the keys <b>${keys.join(', ')}</b> (in order) into an empty table of size m = ${m} using <b>linear probing</b> with h(k) = k mod ${m}. In which slot does <b>${last}</b> end up?`, ...opts4(slot, [last % m, (slot + 1) % m, (slot + m - 1) % m, (last % m + 2) % m]), explain:`h(${last}) = ${last % m}. ${probes > 1 ? `That slot is taken, so it probes ${probes - 1} more slot(s) and lands in slot ${slot}.` : 'That slot is free.'} Final table: [${T.map(x => x === null ? '–' : x).join(', ')}].`};
+ }},
+ {topic:'t12b', gen(){
+   const s = n => Array.from({length: n}, () => pick(['A', 'B', 'C', 'D'])).join('');
+   const X = s(rnd(4, 6)), Y = s(rnd(4, 6)), c = [];
+   for (let i = 0; i <= X.length; i++){ c[i] = []; for (let j = 0; j <= Y.length; j++) c[i][j] = i && j ? (X[i - 1] === Y[j - 1] ? c[i - 1][j - 1] + 1 : Math.max(c[i - 1][j], c[i][j - 1])) : 0; }
+   const L = c[X.length][Y.length];
+   return {q:`What is the length of a longest common subsequence of <b>X = ${X}</b> and <b>Y = ${Y}</b>?`, ...opts4(L, [L + 1, L - 1, L + 2, Math.min(X.length, Y.length)].filter(v => v >= 0)), explain:`Filling the LCS table gives c[${X.length}, ${Y.length}] = ${L}.`};
+ }},
+ {topic:'t14a', gen(){
+   const g = randomGraph(), adj = {}; g.nodes.forEach(n => adj[n.id] = []); g.edges.forEach(e => { adj[e.u].push(e.v); adj[e.v].push(e.u); });
+   const s = g.nodes[0].id, d = {[s]: 0}, Q = [s];
+   while (Q.length){ const u = Q.shift(); adj[u].sort().forEach(v => { if (d[v] === undefined){ d[v] = d[u] + 1; Q.push(v); } }); }
+   const far = Object.keys(d).filter(v => d[v] >= 1); const t = pick(far);
+   return {q:`Run <b>BFS from vertex ${s}</b> on this undirected graph (ignore the weights). What is <b>${t}.d</b>, the number of edges on a shortest path from ${s} to ${t}?`, graph: renderGraph(g), ...opts4(d[t], [d[t] + 1, d[t] - 1, d[t] + 2].filter(v => v >= 0)), explain:`BFS layers from ${s}: ${Object.entries(d).sort((a, b) => a[1] - b[1]).map(([v, x]) => `${v}=${x}`).join(', ')}.`};
+ }}
+);
+
 // ======================= DIAGRAM PRIMITIVES =======================
 const C = {acc: '#8b5cf6', cy: '#22d3ee', good: '#34d399', bad: '#f87171', warn: '#fbbf24', pink: '#f472b6', txt: '#e5e7eb', mut: '#9ca3af', dim: '#4b5563', bg: '#0f1424'};
 let dgN = 0;
@@ -1559,6 +1907,807 @@ function mountExtras(){
   });
 }
 
+// ======================= COURSE DATA · MIDTERM 1 =======================
+const COURSE = [];
+COURSE.push(
+{id:'t01', num:'#1 & #4', short:'Intro & Basic Data Structures', title:'Course Intro &amp;', grad:'Basic Data Structures', when:'Week 1 · Mon 08/24', icon:'📦', color:'#60a5fa',
+ blurb:'What an algorithm is, plus stacks, queues, linked lists, trees and dynamic sets.',
+ lead:'An <b>algorithm</b> is a well-defined procedure that turns input into output. We analyze algorithms for <b>correctness</b> and <b>efficiency</b>, and we build them on top of basic data structures: stacks, queues, linked lists and rooted trees.',
+ reading:'CLRS Chapters 1 &amp; 10', notes:'Topic 01, Topic 04',
+ videos:[['86QY8mBX7Ks','04A · Stacks, Queues, Lists'],['eECZ_lKXsHs','04B · Trees and Dynamic Sets']],
+ extra:[['Appendix I of Jeff Erickson\'s textbook','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ prereq:['ICS 141 Ch 1.7: Introduction to Proofs','ICS 141 Ch 1.8: Proof Methods and Strategy','ICS 141 Ch 2.4: Sequences and Summations','ICS 141 Appendix 2: Exponential and Logarithmic Functions','ICS 141 Ch 3.1: Algorithms','ICS 141 Ch 5.1 &amp; 5.2: Mathematical Induction','ICS 241 Ch 11.1: Introduction to Trees','ICS 211: Stacks','ICS 211: Queues','ICS 211: Lists','ICS 211: Trees'],
+ html:`<h2>Algorithms and problems</h2>
+ <div class="grid g2"><div class="card"><h3>What is an algorithm?</h3><ul class="clean"><li>A finite sequence of unambiguous steps that solves a <b>computational problem</b> (input → required output).</li><li>An <b>instance</b> is one particular input. An algorithm is <b>correct</b> if it halts with the right output on <i>every</i> instance.</li><li>We compare algorithms by how their running time grows with input size <span class="math">n</span>, independent of hardware.</li></ul></div>
+ <div class="card"><h3>Abstract Data Types (ADTs)</h3><ul class="clean"><li>An ADT says <b>what</b> operations do (e.g. PUSH, POP), not <b>how</b>.</li><li>A <b>data structure</b> is a concrete implementation (array, linked list…) with specific costs.</li><li><b>Dynamic sets</b> support SEARCH, INSERT, DELETE, MINIMUM, MAXIMUM, SUCCESSOR, PREDECESSOR.</li></ul></div></div>
+ <h2>Stacks, queues and linked lists</h2>
+ <table class="tbl"><tr><th>Structure</th><th>Policy</th><th>Key operations</th><th>Cost</th></tr>
+ <tr><td>Stack</td><td>LIFO (last in, first out)</td><td>PUSH, POP, STACK-EMPTY</td><td>O(1)</td></tr>
+ <tr><td>Queue</td><td>FIFO (first in, first out)</td><td>ENQUEUE, DEQUEUE (head/tail indices wrap around)</td><td>O(1)</td></tr>
+ <tr><td>Doubly linked list</td><td>prev / next pointers</td><td>LIST-INSERT O(1), LIST-DELETE O(1) given node, LIST-SEARCH O(n)</td><td>varies</td></tr>
+ <tr><td>Sentinel list</td><td>dummy node L.nil</td><td>removes boundary special cases</td><td>same</td></tr></table>
+ <pre><code><span class="fn">PUSH</span>(S, x)              <span class="fn">ENQUEUE</span>(Q, x)
+  S.top = S.top + 1        Q[Q.tail] = x
+  S[S.top] = x             <span class="kw">if</span> Q.tail == Q.length
+                               Q.tail = 1
+<span class="fn">POP</span>(S)                    <span class="kw">else</span> Q.tail = Q.tail + 1
+  <span class="kw">if</span> STACK-EMPTY(S) <span class="kw">error</span> "underflow"
+  S.top = S.top - 1
+  <span class="kw">return</span> S[S.top + 1]</code></pre>
+ <h2>Rooted trees</h2>
+ <div class="card"><ul class="clean"><li>Binary tree nodes store <code>p</code>, <code>left</code>, <code>right</code>.</li><li>Unbounded branching can use the <b>left-child, right-sibling</b> representation: O(n) space for any rooted tree.</li><li><b>Depth</b> = edges from the root; <b>height</b> = longest downward path to a leaf.</li></ul></div>`,
+ eli5:{title:'Data structures are containers with rules', pts:['🍽️ A <b>stack</b> is a pile of plates: you add and remove from the top.','🎢 A <b>queue</b> is a line at a ride: first person in line goes first.','🔗 A <b>linked list</b> is a chain of paper clips: each one holds on to the next.','🌳 A <b>tree</b> is like a family tree: one person at the top, children below.','🧾 An <b>algorithm</b> is a recipe: clear steps that always give the right answer.']},
+ diagram:()=>fig(D.svg(720,200,
+   D.text(110,24,'Stack (LIFO)',13,C.txt,'middle',700)+[0,1,2,3].map(i=>`<rect x="70" y="${150-i*30}" width="80" height="26" rx="6" fill="${C.acc}${i==3?'66':'22'}" stroke="${C.acc}"/>`+D.text(110,168-i*30,['a','b','c','d'][i],13,'#fff')).join('')+D.arrow(175,75,155,75,'acc')+D.text(205,79,'top',12,C.acc)+
+   D.text(380,24,'Queue (FIFO)',13,C.txt,'middle',700)+[0,1,2,3].map(i=>`<rect x="${280+i*50}" y="90" width="44" height="34" rx="6" fill="${C.cy}22" stroke="${C.cy}"/>`+D.text(302+i*50,112,['a','b','c','d'][i],13,'#fff')).join('')+D.text(302,150,'head ↑ out',11.5,C.cy)+D.text(452,150,'in ↑ tail',11.5,C.cy)+
+   D.text(620,24,'Linked list',13,C.txt,'middle',700)+[0,1,2].map(i=>D.node(550+i*65,105,['3','8','5'][i],C.good,18)+(i<2?D.arrow(570+i*65,105,593+i*65,105,'good'):'')).join('')+D.text(620,150,'head → … → NIL',11.5,C.good)),
+   'Stacks remove the newest item, queues remove the oldest, and linked lists chain nodes with pointers.','Plates (stack), a lunch line (queue), and a paper-clip chain (linked list).'),
+ mc:[
+  ['Which data structure follows a LIFO policy?','Stack',['Queue','Priority queue','Hash table'],'Last in, first out: POP removes the most recently pushed item.'],
+  ['What is the worst-case time of LIST-SEARCH on an unsorted linked list of n elements?','Θ(n)',['Θ(1)','Θ(lg n)','Θ(n lg n)'],'You may have to walk every node.'],
+  ['Given a pointer to node x in a doubly linked list, LIST-DELETE runs in:','O(1)',['O(lg n)','O(n)','O(n²)'],'Just relink x.prev.next and x.next.prev.'],
+  ['Why use a sentinel L.nil in a linked list?','To eliminate boundary-condition special cases',['To make search O(1)','To save memory','To keep the list sorted'],'The dummy node makes head/tail cases look like interior cases.'],
+  ['The left-child, right-sibling representation of a rooted tree with n nodes uses:','O(n) space',['O(n²) space','O(lg n) space','O(n lg n) space'],'Each node stores just two child-related pointers regardless of degree.'],
+  ['An algorithm is correct if:','It halts with the correct output on every input instance',['It works on the sample inputs','It runs in polynomial time','It never uses recursion'],'Correctness must hold for all instances.'],
+  ['A queue implemented in an array of length n with head/tail wrap-around supports ENQUEUE in:','O(1)',['O(n)','O(lg n)','Amortized O(n)'],'Write at Q.tail and advance it modulo the array length.']
+ ]},
+
+{id:'t03', num:'#3', short:'Growth of Functions', title:'Growth of Functions &amp;', grad:'Asymptotic Notation', when:'Week 1 · Wed 08/26', icon:'📈', color:'#a3e635',
+ blurb:'O, Ω, Θ, o, ω and how to compare running times.',
+ lead:'Asymptotic notation describes how running time grows for large <span class="math">n</span>, ignoring constant factors and lower-order terms.',
+ reading:'CLRS Chapter 3', notes:'Topic 03',
+ videos:[['y86z2OrIYQQ','03A · Asymptotic Notations'],['4IL2Ir_O_vI','03B · Omega and Theta'],['uaqLI449XQw','03C · little-o, little-omega, properties'],['f2czg61AtQw','03D · Functions and Identities for Analysis']],
+ mit:[['whjt_N9uYFI','MIT Lecture 02 (beginning–16:50)',0,1010]],
+ prereq:['ICS 141 Ch 3.2: Growth of Functions'],
+ html:`<h2>The five notations</h2>
+ <table class="tbl"><tr><th>Notation</th><th>Meaning</th><th>Definition (∃ c, n₀ &gt; 0, ∀ n ≥ n₀)</th><th>Analogy</th></tr>
+ <tr><td>f = O(g)</td><td>upper bound</td><td>0 ≤ f(n) ≤ c·g(n)</td><td>≤</td></tr>
+ <tr><td>f = Ω(g)</td><td>lower bound</td><td>0 ≤ c·g(n) ≤ f(n)</td><td>≥</td></tr>
+ <tr><td>f = Θ(g)</td><td>tight bound</td><td>c₁g(n) ≤ f(n) ≤ c₂g(n)</td><td>=</td></tr>
+ <tr><td>f = o(g)</td><td>strictly smaller</td><td>for <i>every</i> c &gt; 0: f(n) &lt; c·g(n)</td><td>&lt;</td></tr>
+ <tr><td>f = ω(g)</td><td>strictly larger</td><td>for <i>every</i> c &gt; 0: f(n) &gt; c·g(n)</td><td>&gt;</td></tr></table>
+ <div class="callout"><b>Limit test:</b> if lim f(n)/g(n) = 0 then f = o(g); if it is a positive constant then f = Θ(g); if ∞ then f = ω(g).</div>
+ <h2>Common growth rates</h2>
+ <p class="lead" style="font-size:1rem">1 &lt; lg lg n &lt; lg n &lt; √n &lt; n &lt; n lg n &lt; n² &lt; n³ &lt; 2ⁿ &lt; n! &lt; nⁿ</p>
+ <div class="grid g2"><div class="card"><h3>Useful facts</h3><ul class="clean"><li>Θ(g) = O(g) ∩ Ω(g).</li><li>Any polynomial of degree d is Θ(n^d).</li><li>log bases differ by a constant: log_a n = Θ(log_b n).</li><li>Any positive polynomial grows slower than any exponential: n^k = o(aⁿ) for a &gt; 1.</li><li>Any polylog grows slower than any polynomial: lg^k n = o(n^ε).</li><li>lg(n!) = Θ(n lg n) (Stirling).</li></ul></div>
+ <div class="card"><h3>Properties</h3><ul class="clean"><li><b>Transitivity:</b> f = O(g), g = O(h) ⇒ f = O(h) (same for Ω, Θ, o, ω).</li><li><b>Reflexivity:</b> f = Θ(f).</li><li><b>Symmetry:</b> f = Θ(g) ⇔ g = Θ(f).</li><li><b>Transpose symmetry:</b> f = O(g) ⇔ g = Ω(f).</li><li>Not every pair is comparable (e.g. n and n^(1+sin n)).</li></ul></div></div>`,
+ eli5:{title:'Big-O is about who wins a race in the long run',pts:['🏃 Imagine two runners. One starts faster, but the other speeds up more and more. Who wins a really long race?','📏 <b>Big-O</b> means "at most about this fast-growing" (like ≤).','🧱 <b>Big-Omega</b> means "at least this much" (like ≥).','🎯 <b>Big-Theta</b> means "exactly this kind of growth" (like =).','🐢🚀 Order from slow-growing to super fast-growing: log n, n, n log n, n², 2ⁿ.']},
+ diagram:()=>fig(D.svg(720,260,(()=>{const X=x=>60+x*6.2,Y=y=>225-y*1.9;const f=(fn)=>{let p='';for(let x=1;x<=100;x+=1){const y=Math.min(105,fn(x));p+=(p?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1);if(fn(x)>105)break;}return p;};
+   const L=[['lg n',x=>Math.log2(x)*4,C.good],['n',x=>x,C.cy],['n lg n',x=>x*Math.log2(x)/4,C.acc],['n²',x=>x*x/40,C.warn],['2ⁿ',x=>Math.pow(2,x/6),C.bad]];
+   return D.line(60,225,690,225,C.dim,1.5)+D.line(60,225,60,20,C.dim,1.5)+D.text(690,245,'input size n →',12,C.mut,'end')+D.text(70,20,'time',12,C.mut,'start')+L.map(([l,fn,c],i)=>`<path d="${f(fn)}" fill="none" stroke="${c}" stroke-width="3"/>`+D.text(600,40+i*20,l,13,c,'start',700)).join('');})()),
+   'For large n the ordering lg n &lt; n &lt; n lg n &lt; n² &lt; 2ⁿ always wins out, no matter the constants.','The red line (2ⁿ) shoots up like a rocket. The green line (log n) barely moves. We want slow-growing lines!'),
+ mc:[
+  ['If f(n) = 3n² + 10n + 7, then f(n) is:','Θ(n²)',['Θ(n)','Θ(n³)','Θ(n² lg n)'],'Drop lower-order terms and constants.'],
+  ['Which statement is true?','n lg n = o(n²)',['n² = O(n lg n)','2ⁿ = O(n¹⁰⁰)','lg n = ω(n)'],'lim (n lg n)/n² = lim lg n / n = 0.'],
+  ['f(n) = Θ(g(n)) if and only if:','f = O(g) and f = Ω(g)',['f = O(g) only','f = o(g) and f = ω(g)','f(n) = g(n) for all n'],'Θ is the intersection of O and Ω.'],
+  ['log₂ n and log₁₀ n are related by:','They are Θ of each other (differ by a constant factor)',['log₂ n = o(log₁₀ n)','log₂ n = ω(log₁₀ n)','They are incomparable'],'log_a n = log_b n / log_b a.'],
+  ['lg(n!) is:','Θ(n lg n)',['Θ(n)','Θ(n²)','Θ(lg n)'],'Stirling’s approximation.'],
+  ['Which grows fastest?','n!',['2ⁿ','n³','n lg n'],'n! eventually dominates any cⁿ with constant c.'],
+  ['If lim f(n)/g(n) = 5 as n → ∞, then:','f = Θ(g)',['f = o(g)','f = ω(g)','No conclusion'],'A positive finite limit means the same growth rate.'],
+  ['f = O(g) is equivalent to:','g = Ω(f)',['g = O(f)','f = Ω(g)','g = o(f)'],'Transpose symmetry.']
+ ]},
+
+{id:'t02', num:'#2', short:'Correctness & Analysis', title:'Proving Correctness &amp;', grad:'Analyzing Algorithms', when:'Week 2 · Mon 08/31', icon:'✅', color:'#4ade80',
+ blurb:'Loop invariants, insertion sort, best/worst-case analysis.',
+ lead:'A <b>loop invariant</b> proves an iterative algorithm correct, and counting the cost of each line gives its running time. Insertion sort is the running example.',
+ reading:'CLRS Chapters 2.1–2.2', notes:'Topic 02',
+ videos:[['euEquYjVVcQ','02A · Insertion Sort'],['t1ranlQmofQ','02B · Loop Invariant of Insertion Sort'],['UtEMLcKHcGc','02C · Detailed Analysis of Insertion Sort']],
+ mit:[['JPyuH4qXLZ0','MIT Lecture 01 (17:00–1:03:30)',1020,3810]],
+ prereq:['ICS 141 Ch 2.4: Sequences and Summations','ICS 141 Ch 3.3: Complexity of Algorithms','ICS 141 Ch 5.5: Program Correctness','ICS 211: Simple Sorting Algorithms'],
+ html:`<h2>Insertion sort</h2>
+ <div class="grid g2"><pre><code><span class="fn">INSERTION-SORT</span>(A, n)
+  <span class="kw">for</span> i = 2 <span class="kw">to</span> n
+      key = A[i]
+      <span class="cm">// insert A[i] into sorted A[1..i-1]</span>
+      j = i - 1
+      <span class="kw">while</span> j &gt; 0 <span class="kw">and</span> A[j] &gt; key
+          A[j + 1] = A[j]
+          j = j - 1
+      A[j + 1] = key</code></pre>
+ <div class="card"><h3>Loop invariant</h3><p>At the start of each iteration of the <b>for</b> loop, <code>A[1..i-1]</code> consists of the original first i−1 elements, in sorted order.</p><ul class="clean"><li><b>Initialization:</b> true before the first iteration (A[1..1] is trivially sorted).</li><li><b>Maintenance:</b> if true before an iteration, it stays true after it (key is shifted into place).</li><li><b>Termination:</b> when the loop ends (i = n+1), the invariant says A[1..n] is sorted.</li></ul></div></div>
+ <h2>Analysis</h2>
+ <table class="tbl"><tr><th>Case</th><th>Input</th><th>Inner loop runs</th><th>Time</th></tr>
+ <tr><td>Best</td><td>already sorted</td><td>0 shifts per i</td><td>Θ(n)</td></tr>
+ <tr><td>Worst</td><td>reverse sorted</td><td>i−1 shifts per i: Σ(i−1) = n(n−1)/2</td><td>Θ(n²)</td></tr>
+ <tr><td>Average</td><td>random order</td><td>≈ (i−1)/2 shifts</td><td>Θ(n²)</td></tr></table>
+ <div class="callout cyan">We use the <b>RAM model</b>: each primitive step costs constant time. We usually report the <b>worst case</b> because it is a guarantee, it happens often, and the average is frequently as bad.</div>`,
+ eli5:{title:'Sorting cards in your hand',pts:['🃏 Insertion sort is how you sort playing cards: pick up one card at a time and slide it into the right spot.','✋ The cards already in your hand are always in order. That promise is the <b>loop invariant</b>.','✅ If the promise is true at the start, stays true each step, and is true at the end, the algorithm is correct!','⏱️ If the cards are already in order, it is super fast. If they are backwards, you slide every card all the way, which is slow (n²).']},
+ diagram:()=>fig(D.svg(720,180,[5,2,4,6,1,3].map((v,i)=>{const sorted=i<3,key=i===3;return `<rect x="${60+i*80}" y="60" width="66" height="56" rx="10" fill="${key?C.warn+'44':sorted?C.good+'33':C.dim+'33'}" stroke="${key?C.warn:sorted?C.good:C.dim}" stroke-width="2"/>`+D.text(93+i*80,96,[2,4,5,6,1,3][i],20,'#fff','middle',700);}).join('')+D.text(170,48,'sorted prefix A[1..i−1]',12.5,C.good)+D.text(333,48,'key = A[i]',12.5,C.warn)+D.text(493,48,'not yet processed',12.5,C.mut)+`<path d="M333 125 Q 250 168 170 125" fill="none" stroke="${C.warn}" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#ar-warn)"/>`+D.text(250,170,'shift larger items right, drop key into the gap',12,C.txt)),
+  'Insertion sort grows a sorted prefix: each new key is shifted left past larger elements.','Green cards are already sorted. The yellow card slides left until it fits.'),
+ mc:[
+  ['What is the loop invariant of insertion sort?','A[1..i−1] holds the original first i−1 elements in sorted order',['A[i..n] is sorted','A[1..i−1] holds the i−1 smallest elements of A','The key is always the minimum'],'It is the prefix that is sorted, not necessarily the smallest elements.'],
+  ['Which part of a loop-invariant proof uses the loop condition becoming false?','Termination',['Initialization','Maintenance','Induction basis'],'Termination combines the invariant with the exit condition.'],
+  ['Best-case running time of insertion sort:','Θ(n)',['Θ(1)','Θ(n lg n)','Θ(n²)'],'Sorted input: the while loop test fails immediately each time.'],
+  ['Worst-case input for insertion sort:','Reverse-sorted array',['Sorted array','All equal keys','Random order'],'Every key must shift past all earlier elements.'],
+  ['Σ_{i=2}^{n} (i − 1) equals:','n(n − 1)/2',['n²','n(n + 1)/2','n − 1'],'Arithmetic series 1 + 2 + … + (n−1).'],
+  ['Why do we usually analyze the worst case?','It gives a guarantee on running time for every input',['It is always equal to the average case','It is easiest to measure experimentally','It ignores constant factors'],'Upper bound on any input; also often typical.'],
+  ['Insertion sort is:','Stable and in place',['Stable but needs Θ(n) extra space','Unstable and in place','Unstable and not in place'],'It only uses O(1) extra space and never jumps equal keys past each other.']
+ ]},
+
+{id:'t07', num:'#7', short:'Divide & Conquer', title:'Divide &amp; Conquer and', grad:'Recurrences', when:'Week 2 · Wed 09/02', icon:'✂️', color:'#f97316',
+ blurb:'Merge sort, recurrences, substitution, recursion trees, master method.',
+ lead:'<b>Divide</b> the problem into subproblems, <b>conquer</b> them recursively, <b>combine</b> the results. The running time is a recurrence, which we solve with substitution, recursion trees, or the master method.',
+ reading:'CLRS Sections 2.3, 4.1 &amp; 4.3–4.5', notes:'Topic 07',
+ videos:[['9BI0Lw1kzkE','02D · Merge Sort'],['1JbqqmK7e5s','02E · Analysis of Merge Sort'],['W7rChliGE5M','07A · Divide & Conquer'],['X2D80jsS3sY','07B · Substitution'],['8F2OvQIlGiU','07C · Recursion Trees'],['h4Avr0byu1g','07D · Master Method']],
+ mit:[['whjt_N9uYFI','MIT Lecture 02 (16:51–end)',1011],['-EQTVuAhSFY','MIT Lecture 03 (through ~13:07)',0,787]],
+ prereq:['ICS 141 Ch 5.4: Recursive Algorithms','ICS 241 Ch 8.3: Divide-and-Conquer Algorithms and Recurrence Relations','ICS 211: Complex Sorting Algorithms'],
+ html:`<h2>Merge sort</h2>
+ <div class="grid g2"><pre><code><span class="fn">MERGE-SORT</span>(A, p, r)
+  <span class="kw">if</span> p &lt; r
+      q = ⌊(p + r) / 2⌋
+      <span class="fn">MERGE-SORT</span>(A, p, q)
+      <span class="fn">MERGE-SORT</span>(A, q + 1, r)
+      <span class="fn">MERGE</span>(A, p, q, r)    <span class="cm">// Θ(n)</span></code></pre>
+ <div class="card"><h3>Recurrence</h3><p class="math">T(n) = 2T(n/2) + Θ(n) ⇒ T(n) = Θ(n lg n)</p><p>MERGE copies the halves into L and R, then repeatedly moves the smaller front element into A. Each element is moved once, so MERGE is Θ(n). Merge sort is <b>stable</b> but needs Θ(n) extra space.</p></div></div>
+ <h2>Solving recurrences</h2>
+ <div class="grid g3"><div class="card"><h3>Substitution</h3><p>Guess the form (e.g. T(n) ≤ c n lg n), then prove it by induction, choosing constants that make it work. Watch out: you must prove the <i>exact</i> form of the hypothesis.</p></div>
+ <div class="card"><h3>Recursion tree</h3><p>Draw the tree of costs: sum each level, then sum the levels. For 2T(n/2)+cn each of the lg n + 1 levels costs cn → Θ(n lg n). Often used to make a guess for substitution.</p></div>
+ <div class="card"><h3>Master method</h3><p>For T(n) = aT(n/b) + f(n), compare f(n) with n^(log_b a):</p><ul class="clean"><li><b>Case 1:</b> f = O(n^(log_b a − ε)) ⇒ Θ(n^(log_b a))</li><li><b>Case 2:</b> f = Θ(n^(log_b a)) ⇒ Θ(n^(log_b a) lg n)</li><li><b>Case 3:</b> f = Ω(n^(log_b a + ε)) and af(n/b) ≤ cf(n) ⇒ Θ(f(n))</li></ul></div></div>
+ <table class="tbl"><tr><th>Recurrence</th><th>n^(log_b a)</th><th>Case</th><th>Solution</th></tr>
+ <tr><td>T(n) = 9T(n/3) + n</td><td>n²</td><td>1</td><td>Θ(n²)</td></tr>
+ <tr><td>T(n) = T(2n/3) + 1</td><td>1</td><td>2</td><td>Θ(lg n)</td></tr>
+ <tr><td>T(n) = 3T(n/4) + n lg n</td><td>n^0.79</td><td>3</td><td>Θ(n lg n)</td></tr>
+ <tr><td>T(n) = 2T(n/2) + n lg n</td><td>n</td><td>none (gap)</td><td>Θ(n lg² n) by other methods</td></tr></table>`,
+ eli5:{title:'Split the job, then glue the answers',pts:['🧹 Cleaning a huge messy room? Split it into halves, give each half to a helper, and they split again…','🧩 When the pieces are tiny, they are easy. Then you glue the answers back together.','📚 <b>Merge sort</b>: split the pile of cards in half, sort each half, then merge the two sorted piles by always taking the smaller top card.','🌲 A <b>recursion tree</b> is a drawing of all the helpers and how much work each one does.','⚡ Merge sort takes about n × log n steps, much faster than n² for big piles.']},
+ diagram:()=>fig(D.svg(720,240,(()=>{let s='';const lv=[[1,'n'],[2,'n/2'],[4,'n/4'],[8,'n/8']];lv.forEach(([k,l],d)=>{for(let i=0;i<k;i++){const w=560/k,x=60+w*i+w/2,y=30+d*52;s+=`<rect x="${x-Math.min(30,w/2-4)}" y="${y}" width="${2*Math.min(30,w/2-4)}" height="28" rx="7" fill="${C.warn}22" stroke="${C.warn}"/>`+D.text(x,y+19,l,11.5,'#fff','middle',700);if(d<3){const w2=560/(2*k);[0,1].forEach(c=>{const x2=60+w2*(2*i+c)+w2/2;s+=D.line(x,y+28,x2,y+52,C.dim,1.5);});}}s+=D.text(680,49+d*52,'cn',13,C.good,'middle',700);});return s+D.text(360,232,'lg n + 1 levels × cn per level = Θ(n lg n)',13,C.txt,'middle',700)+D.text(680,20,'level cost',11.5,C.mut);})()),
+  'Recursion tree for T(n) = 2T(n/2) + cn: every level costs cn and there are lg n + 1 levels.','Each row of helpers does the same total amount of work. There are only about log n rows, so it is fast.'),
+ mc:[
+  ['Solve T(n) = 2T(n/2) + Θ(n):','Θ(n lg n)',['Θ(n)','Θ(n²)','Θ(lg n)'],'Master case 2 with n^(log₂2) = n.'],
+  ['Solve T(n) = 9T(n/3) + n:','Θ(n²)',['Θ(n)','Θ(n² lg n)','Θ(n³)'],'n^(log₃9) = n² dominates f(n) = n: case 1.'],
+  ['Solve T(n) = T(n/2) + 1:','Θ(lg n)',['Θ(1)','Θ(n)','Θ(n lg n)'],'Binary search recurrence: case 2 with n⁰ = 1.'],
+  ['Solve T(n) = 3T(n/4) + n lg n:','Θ(n lg n)',['Θ(n^log₄3)','Θ(n lg² n)','Θ(n)'],'Case 3: f dominates and the regularity condition holds.'],
+  ['The master method does NOT directly apply to:','T(n) = 2T(n/2) + n lg n',['T(n) = 4T(n/2) + n','T(n) = T(n/2) + n','T(n) = 8T(n/2) + n²'],'n lg n is larger than n but not polynomially larger: it falls in the gap.'],
+  ['The MERGE step of merge sort on n elements takes:','Θ(n)',['Θ(1)','Θ(lg n)','Θ(n²)'],'Each element is copied and placed once.'],
+  ['Which is a drawback of merge sort compared with insertion sort?','It needs Θ(n) extra space',['It is unstable','Its worst case is Θ(n²)','It cannot sort integers'],'MERGE copies into auxiliary arrays.'],
+  ['In the substitution method you must:','Prove the exact form of the inductive hypothesis',['Only check small n','Guess the answer from the master method','Ignore constants entirely'],'Proving a weaker or different form is a classic error.']
+ ]}
+);
+
+// ======================= COURSE DATA · MIDTERM 2 =======================
+COURSE.push(
+{id:'t09', num:'#9', short:'Heaps & Priority Queues', title:'Heaps, Heapsort &amp;', grad:'Priority Queues', when:'Week 4 · Mon 09/14', icon:'⛰️', color:'#fb7185',
+ blurb:'Max-heap property, MAX-HEAPIFY, BUILD-MAX-HEAP, heapsort, priority queues.',
+ lead:'A binary <b>heap</b> is a nearly complete binary tree stored in an array. It gives an O(n lg n) in-place sort and an efficient <b>priority queue</b>.',
+ reading:'CLRS Chapter 6', notes:'Topic 09',
+ videos:[['0zh4IiKaVN0','09A · Heap Properties'],['oAfSx7aRkZM','09B · Building Heaps'],['gMwtzAPDupI','09C · Analyzing Heap Building'],['8O5iBigvDIw','09D · Applications of Heaps']],
+ prereq:['ICS 211: Complex Sorting Algorithms'],
+ html:`<h2>Heap structure</h2>
+ <div class="grid g2"><div class="card"><h3>Array layout (1-indexed)</h3><ul class="clean"><li>PARENT(i) = ⌊i/2⌋, LEFT(i) = 2i, RIGHT(i) = 2i + 1</li><li><b>Max-heap property:</b> A[PARENT(i)] ≥ A[i], so the max is at the root A[1].</li><li>Height of an n-element heap is ⌊lg n⌋.</li><li>Leaves are at indices ⌊n/2⌋+1 … n.</li></ul></div>
+ <pre><code><span class="fn">MAX-HEAPIFY</span>(A, i)        <span class="cm">// O(lg n)</span>
+  l = LEFT(i); r = RIGHT(i)
+  largest = i
+  <span class="kw">if</span> l ≤ A.heap-size <span class="kw">and</span> A[l] &gt; A[largest]
+      largest = l
+  <span class="kw">if</span> r ≤ A.heap-size <span class="kw">and</span> A[r] &gt; A[largest]
+      largest = r
+  <span class="kw">if</span> largest ≠ i
+      exchange A[i] with A[largest]
+      <span class="fn">MAX-HEAPIFY</span>(A, largest)
+
+<span class="fn">BUILD-MAX-HEAP</span>(A, n)      <span class="cm">// O(n)</span>
+  A.heap-size = n
+  <span class="kw">for</span> i = ⌊n/2⌋ <span class="kw">downto</span> 1
+      <span class="fn">MAX-HEAPIFY</span>(A, i)</code></pre></div>
+ <h2>Costs</h2>
+ <table class="tbl"><tr><th>Operation</th><th>Time</th><th>Why</th></tr>
+ <tr><td>MAX-HEAPIFY</td><td>O(lg n)</td><td>floats one value down one path</td></tr>
+ <tr><td>BUILD-MAX-HEAP</td><td>O(n)</td><td>Σ (nodes at height h)·O(h) = O(n Σ h/2^h) = O(n)</td></tr>
+ <tr><td>HEAPSORT</td><td>O(n lg n)</td><td>build, then n−1 times swap root to end and heapify</td></tr>
+ <tr><td>MAXIMUM / EXTRACT-MAX</td><td>O(1) / O(lg n)</td><td>root; move last to root and heapify</td></tr>
+ <tr><td>INCREASE-KEY / INSERT</td><td>O(lg n)</td><td>bubble up toward the root</td></tr></table>
+ <div class="callout">Heapsort is <b>in place</b> but <b>not stable</b>. Priority queues power Prim, Dijkstra, event simulation and job scheduling.</div>`,
+ eli5:{title:'A heap is a pyramid where bosses are bigger',pts:['🏔️ Picture a pyramid of people. Every boss is taller than the people right under them.','👑 So the tallest person is always at the very top. Finding them is instant!','⬇️ If someone short ends up on top, they swap with their taller helper and keep sinking until they fit (MAX-HEAPIFY).','📋 We can store the whole pyramid in a simple list: the kids of spot i live at 2i and 2i+1.','🎟️ A <b>priority queue</b> is like an ER waiting room: the most urgent patient goes first, not the first one who arrived.']},
+ diagram:()=>fig(D.svg(720,240,(()=>{const v=[16,14,10,8,7,9,3,2,4,1];const pos=i=>{const d=Math.floor(Math.log2(i)),k=i-2**d,w=320/2**d;return [20+w*k+w/2,40+d*55];};let s='';for(let i=2;i<=10;i++){const [x,y]=pos(i),[px,py]=pos(i>>1);s+=D.line(x,y,px,py,C.dim);}for(let i=1;i<=10;i++){const [x,y]=pos(i);s+=D.node(x,y,v[i-1],i===1?C.warn:C.pink,17);s+=D.text(x+20,y-14,i,10,C.mut);}
+   s+=D.text(530,40,'same heap as an array',12.5,C.txt,'middle',700);v.forEach((x,i)=>{s+=`<rect x="${370+i*32}" y="60" width="30" height="34" rx="6" fill="${(i===0?C.warn:C.pink)}22" stroke="${i===0?C.warn:C.pink}"/>`+D.text(385+i*32,82,x,12.5,'#fff','middle',700)+D.text(385+i*32,110,i+1,10.5,C.mut);});
+   return s+D.text(530,150,'children of i: 2i and 2i + 1',13,C.cy,'middle',700)+D.text(530,175,'parent of i: ⌊i / 2⌋',13,C.cy,'middle',700)+D.text(530,205,'every parent ≥ its children',12.5,C.good);})()),
+  'A max-heap drawn as a tree and stored as an array; index arithmetic replaces pointers.','The biggest number sits on top. Each parent is bigger than its kids. The list on the right is the same pyramid written in a row.'),
+ mc:[
+  ['In a 1-indexed heap array, the left child of index i is at:','2i',['2i + 1','⌊i/2⌋','i + 1'],'LEFT(i) = 2i, RIGHT(i) = 2i+1.'],
+  ['The running time of BUILD-MAX-HEAP on n elements is:','O(n)',['O(n lg n)','O(lg n)','O(n²)'],'Most nodes are near the bottom, so the sum of heights is O(n).'],
+  ['MAX-HEAPIFY on a node of height h takes:','O(h)',['O(1)','O(n)','O(h²)'],'It follows a single downward path.'],
+  ['Why does BUILD-MAX-HEAP loop from ⌊n/2⌋ down to 1?','Nodes ⌊n/2⌋+1..n are leaves, already trivial heaps',['To visit nodes in sorted order','Because the root must be heapified first','To make heapsort stable'],'Heapify children before parents, skipping leaves.'],
+  ['Heapsort is:','In place but not stable',['Stable and in place','Stable but not in place','Neither in place nor Θ(n lg n)'],'Swaps across the array break stability.'],
+  ['EXTRACT-MAX on a max-heap of n elements costs:','O(lg n)',['O(1)','O(n)','O(n lg n)'],'Move the last element to the root, then MAX-HEAPIFY.'],
+  ['Where can the smallest element of a max-heap be?','In any leaf',['At the root','At index 2','At index ⌊n/2⌋ always'],'It must have no children, so it is a leaf.'],
+  ['The height of an n-element heap is:','⌊lg n⌋',['n/2','√n','⌈n/2⌉'],'A nearly complete binary tree.']
+ ]},
+
+{id:'t08', num:'#8', short:'Binary Search Trees', title:'Binary', grad:'Search Trees', when:'Week 4 · Wed 09/16', icon:'🌲', color:'#2dd4bf',
+ blurb:'BST property, traversals, search, min/max, successor, insert, delete.',
+ lead:'A <b>binary search tree</b> keeps keys ordered: everything in the left subtree is ≤ the node and everything in the right subtree is ≥ it. All dynamic-set operations take O(h) time, where h is the height.',
+ reading:'CLRS Chapter 12', notes:'Topic 08',
+ videos:[['bAxzRuu3Uy4','08A · Trees, Binary Trees, and basic facts'],['LDncFcNOr_I','08B · BST Queries'],['qJ7TyaKSf_0','08C · Modifying BST'],['vx0uWYHIRes','08D · Analyzing BST']],
+ prereq:['ICS 241 Ch 11.2: Applications of Trees','ICS 241 Ch 11.3: Tree Traversal','ICS 211: Trees'],
+ html:`<h2>Queries</h2>
+ <div class="grid g2"><pre><code><span class="fn">TREE-SEARCH</span>(x, k)
+  <span class="kw">while</span> x ≠ NIL <span class="kw">and</span> k ≠ x.key
+      <span class="kw">if</span> k &lt; x.key  x = x.left
+      <span class="kw">else</span> x = x.right
+  <span class="kw">return</span> x
+
+<span class="fn">INORDER-TREE-WALK</span>(x)      <span class="cm">// Θ(n), sorted order</span>
+  <span class="kw">if</span> x ≠ NIL
+      INORDER-TREE-WALK(x.left)
+      print x.key
+      INORDER-TREE-WALK(x.right)</code></pre>
+ <div class="card"><h3>Other queries, all O(h)</h3><ul class="clean"><li><b>MINIMUM:</b> follow left pointers. <b>MAXIMUM:</b> follow right pointers.</li><li><b>SUCCESSOR(x):</b> if x has a right subtree, its minimum; otherwise go up until you come from a left child.</li><li>Preorder / postorder walks visit root before / after the subtrees.</li></ul></div></div>
+ <h2>Modifying the tree</h2>
+ <div class="grid g2"><div class="card"><h3>TREE-INSERT(T, z)</h3><p>Walk down from the root keeping a trailing pointer y, as if searching for z.key. Attach z as the left or right child of y (or as the root if the tree is empty). O(h).</p></div>
+ <div class="card"><h3>TREE-DELETE(T, z)</h3><ul class="clean"><li>No left child: replace z by its right child (TRANSPLANT).</li><li>No right child: replace z by its left child.</li><li>Two children: find successor y = MINIMUM(z.right), splice y out, and put y in z's place.</li></ul></div></div>
+ <div class="callout cyan">Height ranges from ⌊lg n⌋ (balanced) to n − 1 (a chain, e.g. inserting sorted keys). The expected height of a randomly built BST is O(lg n). Balanced trees (Topic 11) guarantee it.</div>`,
+ eli5:{title:'A BST is a guessing game: higher or lower?',pts:['🔢 Think of the "guess my number" game. Each guess tells you to go higher or lower.','🌲 In a BST, smaller numbers go to the left, bigger numbers go to the right.','🔍 To find a number, start at the top and keep going left or right. You skip half the tree each time if it is bushy.','📏 Reading left-to-right (in-order) gives all numbers sorted!','⚠️ If you add numbers already in order, the tree becomes a long skinny line, and searching becomes slow.']},
+ diagram:()=>fig(D.svg(720,230,(()=>{const N={15:[360,35],6:[230,95],18:[490,95],3:[160,155],7:[300,155],17:[440,155],20:[560,155],2:[120,210],4:[200,210],13:[340,210]};const E=[[15,6],[15,18],[6,3],[6,7],[18,17],[18,20],[3,2],[3,4],[7,13]];const path=['15-6','6-7','7-13'];return E.map(([a,b])=>D.line(...N[a],...N[b],path.includes(a+'-'+b)?C.warn:C.dim,path.includes(a+'-'+b)?4:2.5)).join('')+Object.entries(N).map(([k,[x,y]])=>D.node(x,y,k,[15,6,7,13].includes(+k)?C.warn:C.cy,17)).join('')+D.text(620,40,'search 13:',13,C.txt,'start',700)+D.text(620,62,'13 < 15 → left',12,C.mut,'start')+D.text(620,82,'13 > 6 → right',12,C.mut,'start')+D.text(620,102,'13 > 7 → right',12,C.mut,'start')+D.text(620,122,'found ✓',12.5,C.good,'start',700);})()),
+  'TREE-SEARCH follows one root-to-leaf path, so it costs O(h).','To find 13: go left (smaller than 15), then right, then right. Found it in 4 steps!'),
+ mc:[
+  ['An inorder walk of a BST visits the keys in:','Sorted (non-decreasing) order',['Reverse sorted order','Level order','Random order'],'Left subtree, node, right subtree.'],
+  ['TREE-SEARCH, MINIMUM, SUCCESSOR and INSERT all run in:','O(h) where h is the tree height',['O(1)','O(n lg n)','O(lg n) always'],'They follow a single path; h can be as large as n−1.'],
+  ['Inserting 1, 2, 3, …, n into an empty BST produces a tree of height:','n − 1',['⌊lg n⌋','n/2','√n'],'Each new key becomes the right child of the previous: a chain.'],
+  ['If node x has a right subtree, SUCCESSOR(x) is:','The minimum of x.right',['x.p','The maximum of x.left','The root'],'The smallest key larger than x lies in its right subtree.'],
+  ['Deleting a node z with two children replaces z by:','Its successor (the minimum of z.right)',['Its left child','Its parent','Any leaf'],'The successor has no left child, so it is easy to splice out.'],
+  ['The expected height of a randomly built BST on n distinct keys is:','O(lg n)',['O(n)','O(√n)','O(1)'],'CLRS 12.4.'],
+  ['INORDER-TREE-WALK on n nodes takes:','Θ(n)',['Θ(lg n)','Θ(n lg n)','Θ(h)'],'Each node is visited exactly once.'],
+  ['Where is the minimum key in a BST?','Follow left pointers from the root until NIL',['At the root','At the deepest leaf','Follow right pointers from the root'],'Everything smaller is always to the left.']
+ ]},
+
+{id:'t11', num:'#11', short:'2-3-4 & Red-Black Trees', title:'2-3-4 Trees &amp;', grad:'Red-Black Trees', when:'Week 5 · Mon 09/21', icon:'🔴', color:'#ef4444',
+ blurb:'Balanced search trees: 2-3-4 nodes, splits, red-black properties, rotations.',
+ lead:'Balanced search trees guarantee O(lg n) height. A <b>2-3-4 tree</b> keeps all leaves at the same depth, and a <b>red-black tree</b> is a binary encoding of a 2-3-4 tree.',
+ reading:'Sedgewick Chapter 15: Balanced Trees (Google Drive Resources folder) &amp; CLRS Chapter 13', notes:'Topic 11', warn:'Allow extra time for this material!',
+ videos:[['N-Sot-yf3As','11A · Balanced and 2-4 Trees'],['W49P7wqdIuE','11B · 2-4 Tree Mutation'],['a6LaiKa3ES0','11C · Red-Black Trees'],['HlwQ_n56MHQ','11D · RBT Mutation']],
+ mit:[['O3hI9FdxFOM','MIT Lecture 10 (read Sedgewick first)']],
+ prereq:[],
+ html:`<h2>2-3-4 trees</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>Nodes hold 1, 2 or 3 keys (2-, 3- or 4-nodes) with 2, 3 or 4 children.</li><li><b>All leaves have the same depth</b>, so height is Θ(lg n).</li><li><b>Insert:</b> on the way down, split every 4-node you meet: the middle key moves up to the parent. The tree only grows taller when the root splits.</li><li>Search, insert and delete are O(lg n).</li></ul></div>
+ <div class="card"><h3>Red-black properties</h3><ol><li>Every node is red or black.</li><li>The root is black.</li><li>Every leaf (NIL) is black.</li><li>A red node has two black children (no red-red).</li><li>Every path from a node to its descendant leaves has the same number of black nodes (<b>black-height</b>).</li></ol><p>⇒ height ≤ 2 lg(n + 1).</p></div></div>
+ <h2>Correspondence and fix-ups</h2>
+ <table class="tbl"><tr><th>2-3-4 tree</th><th>Red-black tree</th></tr>
+ <tr><td>2-node (1 key)</td><td>a black node</td></tr>
+ <tr><td>3-node (2 keys)</td><td>black node with one red child</td></tr>
+ <tr><td>4-node (3 keys)</td><td>black node with two red children</td></tr>
+ <tr><td>splitting a 4-node</td><td>color flip: children → black, parent → red</td></tr></table>
+ <div class="callout"><b>RB-INSERT:</b> insert as in a BST and color the new node red, then fix red-red violations with recoloring (uncle red) or one or two <b>rotations</b> (uncle black). Rotations are O(1) and keep the BST order. Insert does at most 2 rotations; delete at most 3.</div>`,
+ eli5:{title:'Keeping the tree from getting lopsided',pts:['⚖️ A plain BST can get lopsided like a leaning tower. Balanced trees keep it even.','📦 In a <b>2-3-4 tree</b>, a box can hold up to 3 numbers. When a box gets too full, it splits and sends the middle number up.','📏 Every bottom box is at the same level, so the tree never gets too tall.','🔴⚫ A <b>red-black tree</b> is the same idea using red and black colors on a normal binary tree.','🔄 When colors break the rules, we recolor or <b>rotate</b> (twist) a few nodes to fix it.']},
+ diagram:()=>fig(D.svg(720,220,
+   D.text(170,24,'2-3-4 tree: a 4-node',13,C.txt,'middle',700)+`<rect x="95" y="45" width="150" height="40" rx="10" fill="${C.acc}22" stroke="${C.acc}" stroke-width="2"/>`+D.text(130,71,'10',14,'#fff','middle',700)+D.text(170,71,'20',14,'#fff','middle',700)+D.text(210,71,'30',14,'#fff','middle',700)+[0,1,2,3].map(i=>D.line(105+i*43,85,75+i*63,140,C.dim)+`<rect x="${55+i*63}" y="140" width="40" height="28" rx="7" fill="${C.dim}33" stroke="${C.dim}"/>`).join('')+
+   D.arrow(300,100,370,100,'mut',3)+D.text(335,90,'same as',11.5,C.mut)+
+   D.text(540,24,'red-black encoding',13,C.txt,'middle',700)+D.line(540,60,470,130,C.dim)+D.line(540,60,610,130,C.dim)+D.node(540,60,'20','#9ca3af',20,'#111827')+D.node(470,130,'10',C.bad,20)+D.node(610,130,'30',C.bad,20)+D.text(540,200,'black parent + two red children = one 4-node',12,C.txt)),
+  'A 4-node {10, 20, 30} corresponds to a black node with two red children; splitting = color flip.','One box with three numbers is the same as one black dot holding hands with two red dots.'),
+ mc:[
+  ['In a 2-3-4 tree, all leaves:','Have the same depth',['Are red','Hold exactly 3 keys','Are at most 2 levels apart'],'Perfect balance is what bounds the height.'],
+  ['The height of a red-black tree with n internal nodes is at most:','2 lg(n + 1)',['lg n','n/2','√n'],'Black-height argument (CLRS Lemma 13.1).'],
+  ['Which is NOT a red-black property?','Every red node has a red parent',['The root is black','Every NIL leaf is black','All root-to-leaf paths have the same number of black nodes'],'Actually a red node must have black children: no two reds in a row.'],
+  ['A 3-node in a 2-3-4 tree corresponds in a red-black tree to:','A black node with one red child',['A red node with two black children','Two black nodes','A black node with two red children'],'4-node = black with two red children.'],
+  ['A newly inserted node in RB-INSERT is colored:','Red',['Black','The color of its parent','Red only if it is a left child'],'Red keeps black-heights equal; only red-red may need fixing.'],
+  ['A rotation in a BST:','Takes O(1) time and preserves the BST property',['Takes O(lg n) time','Can break the inorder ordering','Changes the set of keys'],'It only relinks a constant number of pointers.'],
+  ['When does a 2-3-4 tree grow in height?','Only when the root splits',['On every insertion','When a leaf becomes a 3-node','When a key is deleted'],'Height grows at the top, keeping leaves level.']
+ ]},
+
+{id:'t05a', num:'#5A', short:'Probabilistic Analysis', title:'Probabilistic', grad:'Analysis', when:'Week 5 · Wed 09/23', icon:'🎲', color:'#c084fc',
+ blurb:'Hiring problem, indicator random variables, expected value, linearity.',
+ lead:'<b>Probabilistic analysis</b> averages the running time over a distribution of inputs. <b>Indicator random variables</b> plus <b>linearity of expectation</b> turn hard counting problems into easy sums.',
+ reading:'CLRS Chapter 5.1–5.3', notes:'Topic 05A',
+ videos:[['MgnvWTZgqcA','05A · Indicator Random Variables'],['k-jusEhrRik','05B · Example: Expected Inversions']],
+ prereq:['ICS 141 Ch 6.1: The Basics of Counting','ICS 141 Ch 6.2: The Pigeonhole Principle','ICS 141 Ch 6.3: Permutations and Combinations','ICS 141 Ch 6.5: Generalized Permutations and Combinations','ICS 141 Ch 7.1: Introduction to Discrete Probability','ICS 141 Ch 7.2: Probability Theory','ICS 141 Ch 7.4: Expected Value and Variance'],
+ html:`<h2>The hiring problem</h2>
+ <div class="grid g2"><pre><code><span class="fn">HIRE-ASSISTANT</span>(n)
+  best = 0     <span class="cm">// dummy candidate</span>
+  <span class="kw">for</span> i = 1 <span class="kw">to</span> n
+      interview candidate i
+      <span class="kw">if</span> candidate i is better than best
+          best = i
+          hire candidate i</code></pre>
+ <div class="card"><h3>Expected number of hires</h3><p>Let X_i = I{candidate i is hired}. In random order, candidate i is the best of the first i with probability 1/i, so E[X_i] = 1/i.</p><p class="math">E[X] = Σ E[X_i] = Σ 1/i = H_n = ln n + O(1)</p><p>Worst case: n hires (candidates arrive in increasing quality).</p></div></div>
+ <h2>Tools</h2>
+ <div class="grid g3"><div class="card"><h3>Indicator variable</h3><p>I{A} = 1 if event A occurs, else 0. Key lemma: <b>E[I{A}] = Pr{A}</b>.</p></div>
+ <div class="card"><h3>Linearity of expectation</h3><p>E[X + Y] = E[X] + E[Y] for <i>any</i> random variables, even dependent ones.</p></div>
+ <div class="card"><h3>Randomize the input</h3><p>Shuffle first (RANDOMIZE-IN-PLACE swaps A[i] with A[RANDOM(i, n)]), so no specific input is always bad: expected cost holds for every input.</p></div></div>
+ <div class="callout cyan"><b>Expected inversions</b> in a random permutation: there are C(n,2) pairs and each pair is inverted with probability 1/2, so E = n(n−1)/4.</div>`,
+ eli5:{title:'Using "on average" thinking',pts:['🎲 Sometimes we can\'t know exactly what will happen, but we can guess what happens <b>on average</b>.','👔 Hiring game: you interview people in random order and hire anyone better than everyone before.','🤔 How many hires? The 1st person is always the best so far, the 2nd has a 1-in-2 chance, the 3rd a 1-in-3 chance…','➕ Add them up: 1 + 1/2 + 1/3 + … ≈ ln n. With 100 people, you only hire about 5!','💡 An <b>indicator</b> is a light switch: 1 if something happened, 0 if not. Averages of switches are easy to add up.']},
+ diagram:()=>fig(D.svg(720,190,(()=>{const q=[3,1,5,2,7,4,6,9,8];let best=0;return q.map((v,i)=>{const hire=v>best;if(hire)best=v;const h=v*13;return `<rect x="${60+i*68}" y="${150-h}" width="44" height="${h}" rx="6" fill="${hire?C.good:C.dim}" opacity="${hire?.9:.5}"/>`+D.text(82+i*68,143-h,v,12,'#fff','middle',700)+(hire?D.text(82+i*68,172,'hire',11.5,C.good,'middle',700):D.text(82+i*68,172,'skip',11,C.mut));}).join('')+D.text(360,20,'candidate quality in arrival order: green = new best (hired)',12.5,C.txt);})()),
+  'Only candidates better than everyone before them are hired: expected H_n ≈ ln n hires.','Green bars are new champions, so they get hired. Most people are skipped.'),
+ mc:[
+  ['For an indicator random variable X_A = I{A}, E[X_A] equals:','Pr{A}',['1','1 − Pr{A}','Pr{A}²'],'E[I{A}] = 1·Pr{A} + 0·Pr{not A}.'],
+  ['Expected number of hires in the hiring problem with a random order of n candidates:','H_n = Θ(ln n)',['n/2','1','√n'],'Σ 1/i.'],
+  ['Linearity of expectation requires the random variables to be:','Nothing: it holds even for dependent variables',['Independent','Identically distributed','Indicator variables only'],'That is what makes it so powerful.'],
+  ['Expected number of inversions in a uniformly random permutation of n distinct elements:','n(n − 1)/4',['n(n − 1)/2','n/2','n lg n'],'C(n,2) pairs each inverted with probability 1/2.'],
+  ['Candidate i (in random order) is hired with probability:','1/i',['1/n','i/n','1/2'],'They must be the best of the first i.'],
+  ['Why randomize the input order (e.g. RANDOMIZE-IN-PLACE)?','So no particular input reliably triggers the worst case',['To make the algorithm deterministic','To reduce space usage','To guarantee the best case'],'The expectation then holds for every input.'],
+  ['Worst-case number of hires in the hiring problem:','n',['1','ln n','n/2'],'If candidates arrive in increasing order of quality, everyone is hired.']
+ ]},
+
+{id:'t05b', num:'#5B', short:'Randomized Quicksort', title:'Randomized Algorithms &amp;', grad:'Quicksort', when:'Week 6 · Mon 09/28', icon:'⚡', color:'#facc15',
+ blurb:'PARTITION, worst/best cases, randomized pivot, expected O(n lg n).',
+ lead:'Quicksort partitions around a pivot and recurses on both sides. It sorts in place, is very fast in practice, and with a <b>random pivot</b> runs in expected O(n lg n) on every input.',
+ reading:'CLRS Chapter 7 (all)', notes:'Topic 05B',
+ videos:[['v1ghdc_hwMI','10A · Quicksort'],['qS9oMz4_kTU','10B · Quicksort Random Analysis']],
+ prereq:[],
+ html:`<h2>Algorithm</h2>
+ <div class="grid g2"><pre><code><span class="fn">QUICKSORT</span>(A, p, r)
+  <span class="kw">if</span> p &lt; r
+      q = <span class="fn">PARTITION</span>(A, p, r)
+      <span class="fn">QUICKSORT</span>(A, p, q - 1)
+      <span class="fn">QUICKSORT</span>(A, q + 1, r)
+
+<span class="fn">PARTITION</span>(A, p, r)          <span class="cm">// Lomuto, Θ(n)</span>
+  x = A[r]                       <span class="cm">// pivot</span>
+  i = p - 1
+  <span class="kw">for</span> j = p <span class="kw">to</span> r - 1
+      <span class="kw">if</span> A[j] ≤ x
+          i = i + 1
+          exchange A[i] with A[j]
+  exchange A[i + 1] with A[r]
+  <span class="kw">return</span> i + 1
+
+<span class="fn">RANDOMIZED-PARTITION</span>(A, p, r)
+  i = RANDOM(p, r)
+  exchange A[r] with A[i]
+  <span class="kw">return</span> <span class="fn">PARTITION</span>(A, p, r)</code></pre>
+ <div class="card"><h3>Running time</h3><table class="tbl"><tr><th>Case</th><th>Split</th><th>Time</th></tr><tr><td>Worst</td><td>0 : n−1 (e.g. sorted input, last-element pivot)</td><td>Θ(n²)</td></tr><tr><td>Best</td><td>n/2 : n/2</td><td>Θ(n lg n)</td></tr><tr><td>Any constant split (9:1)</td><td>still O(lg n) depth</td><td>O(n lg n)</td></tr><tr><td>Randomized (expected)</td><td>random pivot</td><td>O(n lg n)</td></tr></table>
+ <h3>Expected-time idea</h3><p>Count comparisons. z_i and z_j (the i-th and j-th smallest) are compared only if one of them is the first pivot chosen from {z_i..z_j}: probability 2/(j−i+1). Summing gives E[X] = O(n lg n).</p></div></div>
+ <div class="callout">Quicksort is <b>in place</b> and <b>not stable</b>. Its loop invariant: A[p..i] ≤ x, A[i+1..j−1] &gt; x, A[r] = x.</div>`,
+ eli5:{title:'Pick a leader, split into two teams',pts:['🙋 Pick one kid as the "pivot". Everyone shorter goes left, everyone taller goes right.','🔁 Now do the same thing inside each team, again and again, until every team has one kid.','✅ Now everyone is lined up from shortest to tallest!','😬 If you always pick the shortest kid as pivot, one team is empty every time. That is slow.','🎲 Picking the pivot <b>randomly</b> makes the bad case super unlikely, so it is fast on average.']},
+ diagram:()=>fig(D.svg(720,190,(()=>{const a=[2,1,3,8,7,5,6,4];const col=i=>i<=2?C.good:i<=6?C.bad:i===7?C.warn:C.dim;return a.map((v,i)=>`<rect x="${70+i*72}" y="60" width="62" height="54" rx="10" fill="${col(i)}33" stroke="${col(i)}" stroke-width="2"/>`+D.text(101+i*72,94,v,19,'#fff','middle',700)).join('')+D.text(170,48,'≤ pivot (A[p..i])',12.5,C.good)+D.text(422,48,'> pivot (A[i+1..j−1])',12.5,C.bad)+D.text(605,48,'pivot x',12.5,C.warn)+D.text(360,150,'after the loop, swap the pivot into position i + 1, between the two regions',12.5,C.txt)+D.text(360,175,'then recurse on each side',12,C.mut);})()),
+  'PARTITION maintains a ≤-pivot region and a >-pivot region, then drops the pivot between them.','Green numbers are smaller than the yellow leader, red ones are bigger. The leader goes in the middle.'),
+ mc:[
+  ['Worst-case running time of (deterministic) quicksort:','Θ(n²)',['Θ(n lg n)','Θ(n)','Θ(n³)'],'Happens with maximally unbalanced partitions.'],
+  ['Expected running time of randomized quicksort on any input:','O(n lg n)',['O(n²)','O(n)','O(lg n)'],'Random pivots make bad splits unlikely.'],
+  ['PARTITION on a subarray of n elements takes:','Θ(n)',['Θ(lg n)','Θ(n lg n)','Θ(1)'],'One pass over the subarray.'],
+  ['With last-element pivot, which input gives deterministic quicksort its worst case?','An already sorted array',['A random array','An array with all distinct keys in random order','An array of size 2'],'Every split is 0 : n−1.'],
+  ['A split that is always 9-to-1 gives running time:','O(n lg n)',['Θ(n²)','Θ(n)','O(n^1.5)'],'Depth is log_{10/9} n = O(lg n), with O(n) per level.'],
+  ['In randomized quicksort, z_i and z_j are compared with probability:','2/(j − i + 1)',['1/n','1/2','1/(j − i)'],'One of them must be the first pivot among z_i..z_j.'],
+  ['Quicksort is:','In place but not stable',['Stable and in place','Stable but not in place','Not in place and not stable'],'Swaps move equal keys past each other.']
+ ]},
+
+{id:'t06', num:'#6', short:'Hash Tables', title:'Hash', grad:'Tables', when:'Week 6 · Wed 09/30', icon:'#️⃣', color:'#38bdf8',
+ blurb:'Direct addressing, chaining, load factor, hash functions, open addressing.',
+ lead:'A <b>hash table</b> maps keys to slots with a hash function h, giving O(1) average-time INSERT, SEARCH and DELETE for dictionaries.',
+ reading:'CLRS Sections 11.1–11.4', notes:'Topic 06',
+ videos:[['NMm1BKomO_Y','06A · Hash Tables: Chaining'],['ei7T9Y97u0M','06B · Analysis of Chaining'],['jW4wCfz3DwE','06C · Hash Functions'],['SGGP_HJNUts','06D · Open Addressing']],
+ mit:[['JZHBa-rLrBA','MIT Lecture 07'],['s7QSM_hlS1U','MIT Lecture 08 (through 11:02)',0,662]],
+ prereq:['ICS 211: Hash Tables'],
+ html:`<h2>Chaining</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>Slot j holds a linked list of all keys with h(k) = j.</li><li>INSERT at the head: O(1). DELETE with a doubly linked list given the node: O(1).</li><li><b>Load factor</b> α = n/m (keys per slot).</li><li>Under <b>simple uniform hashing</b>, a search (hit or miss) takes Θ(1 + α) expected time. If m = Θ(n), that is O(1).</li></ul></div>
+ <div class="card"><h3>Hash functions</h3><ul class="clean"><li><b>Division:</b> h(k) = k mod m. Pick m prime, not near a power of 2.</li><li><b>Multiplication:</b> h(k) = ⌊m (kA mod 1)⌋, 0 &lt; A &lt; 1 (Knuth: A ≈ 0.618).</li><li><b>Universal hashing:</b> pick h at random from a family so that Pr[collision] ≤ 1/m for any two keys. Defeats adversarial inputs.</li></ul></div></div>
+ <h2>Open addressing</h2>
+ <table class="tbl"><tr><th>Probe sequence</th><th>h(k, i)</th><th>Issue</th></tr>
+ <tr><td>Linear probing</td><td>(h′(k) + i) mod m</td><td>primary clustering</td></tr>
+ <tr><td>Quadratic probing</td><td>(h′(k) + c₁i + c₂i²) mod m</td><td>secondary clustering</td></tr>
+ <tr><td>Double hashing</td><td>(h₁(k) + i·h₂(k)) mod m</td><td>best of the three; h₂(k) must be coprime to m</td></tr></table>
+ <div class="callout">All keys live in the table itself, so α ≤ 1. Expected probes for an unsuccessful search are at most <b>1/(1 − α)</b> (uniform hashing). Deletion needs a special DELETED marker.</div>`,
+ eli5:{title:'A hash table is a wall of mailboxes',pts:['📬 Imagine a wall of numbered mailboxes. A magic rule (the <b>hash function</b>) tells you which box each name goes into.','⚡ To find someone\'s mail, use the rule and go straight to that box. No searching!','💥 Sometimes two names go to the same box. That is a <b>collision</b>.','🔗 <b>Chaining:</b> that box just holds a little list of letters.','🚶 <b>Open addressing:</b> if the box is full, try the next box, and the next, until one is empty.']},
+ diagram:()=>fig(D.svg(720,230,(()=>{const T={0:[],1:[22,8],2:[],3:[17],4:[11,4,25],5:[],6:[13]};let s=D.text(80,22,'h(k) = k mod 7',13,C.cy,'start',700);Object.entries(T).forEach(([j,l])=>{const y=40+j*26;s+=`<rect x="80" y="${y}" width="44" height="22" rx="5" fill="${C.cy}22" stroke="${C.cy}"/>`+D.text(102,y+16,j,12,'#fff','middle',700);let x=150;l.forEach(k=>{s+=D.arrow(x-22,y+11,x-3,y+11,'mut',1.8)+`<rect x="${x}" y="${y}" width="40" height="22" rx="11" fill="${C.acc}33" stroke="${C.acc}"/>`+D.text(x+20,y+16,k,12,'#fff','middle',700);x+=64;});if(!l.length)s+=D.text(150,y+16,'NIL',11,C.dim,'start');});
+   return s+D.text(520,70,'chaining',14,C.txt,'middle',700)+D.text(520,98,'α = n / m = 7 / 7 = 1',13,C.mut)+D.text(520,126,'expected search: Θ(1 + α)',13,C.good,'middle',700)+D.text(520,160,'colliding keys share a list',12,C.mut);})()),
+  'Chaining: each slot points to a list of keys that hash there; expected search time Θ(1 + α).','Each mailbox (number) holds a little chain of letters that landed in that same box.'),
+ mc:[
+  ['With chaining and simple uniform hashing, expected search time is:','Θ(1 + α)',['Θ(α²)','Θ(lg n)','Θ(n)'],'Compute h(k), then scan a list of expected length α.'],
+  ['The load factor α of a hash table with n keys and m slots is:','n/m',['m/n','n·m','n − m'],'Average number of keys per slot.'],
+  ['In open addressing, the load factor satisfies:','α ≤ 1',['α can exceed 1','α = 0 always','α ≥ 1'],'Every key occupies its own slot.'],
+  ['Primary clustering is a problem of:','Linear probing',['Double hashing','Chaining','Universal hashing'],'Long runs of occupied slots grow.'],
+  ['For the division method h(k) = k mod m, a good choice of m is:','A prime not too close to a power of 2',['A power of 2','A power of 10','Any even number'],'Powers of 2 just keep the low-order bits.'],
+  ['Expected probes in an unsuccessful search with open addressing (uniform hashing) are at most:','1/(1 − α)',['1 + α','lg(1/α)','α/2'],'CLRS Theorem 11.6.'],
+  ['Universal hashing guarantees that for any two distinct keys:','Pr[h(k) = h(l)] ≤ 1/m over the random choice of h',['They never collide','h is a bijection','The table never needs resizing'],'Randomizing the function defeats adversarial inputs.'],
+  ['Worst-case search time in a hash table with chaining:','Θ(n)',['Θ(1)','Θ(lg n)','Θ(α)'],'All keys might hash to one slot.']
+ ]}
+);
+
+// ======================= COURSE DATA · MIDTERM 3 =======================
+COURSE.push(
+{id:'t10a', num:'#10A', short:'Selection & Order Statistics', title:'Selection &amp;', grad:'Order Statistics', when:'Week 7 · Mon 10/05', icon:'🎯', color:'#f59e0b',
+ blurb:'Min/max, RANDOMIZED-SELECT, worst-case linear SELECT (median of medians).',
+ lead:'The <b>i-th order statistic</b> is the i-th smallest element. We can find it, including the median, in linear time, without sorting.',
+ reading:'CLRS Chapter 9 (all)', notes:null,
+ videos:[], mit:[['mR_RUjsJnV8','MIT Lecture 06: Order Statistics, Median']],
+ prereq:[],
+ html:`<h2>Minimum and maximum</h2>
+ <div class="card"><ul class="clean"><li>Finding the min (or max) needs exactly n − 1 comparisons, and that is optimal.</li><li>Finding <b>both</b> min and max: process elements in pairs, compare the pair, then compare the smaller with min and the larger with max → at most 3⌊n/2⌋ comparisons.</li></ul></div>
+ <h2>Selection</h2>
+ <div class="grid g2"><pre><code><span class="fn">RANDOMIZED-SELECT</span>(A, p, r, i)
+  <span class="kw">if</span> p == r  <span class="kw">return</span> A[p]
+  q = <span class="fn">RANDOMIZED-PARTITION</span>(A, p, r)
+  k = q - p + 1          <span class="cm">// rank of pivot</span>
+  <span class="kw">if</span> i == k  <span class="kw">return</span> A[q]
+  <span class="kw">elseif</span> i &lt; k
+      <span class="kw">return</span> RANDOMIZED-SELECT(A, p, q - 1, i)
+  <span class="kw">else</span> <span class="kw">return</span> RANDOMIZED-SELECT(A, q + 1, r, i - k)</code></pre>
+ <div class="card"><h3>Costs</h3><table class="tbl"><tr><th>Algorithm</th><th>Expected</th><th>Worst</th></tr><tr><td>Sort then index</td><td>Θ(n lg n)</td><td>Θ(n lg n)</td></tr><tr><td>RANDOMIZED-SELECT</td><td>Θ(n)</td><td>Θ(n²)</td></tr><tr><td>SELECT (median of medians)</td><td>Θ(n)</td><td>Θ(n)</td></tr></table><p>Unlike quicksort, selection recurses on <b>only one side</b>, so the expected work is a geometric series.</p></div></div>
+ <h2>Worst-case linear SELECT</h2>
+ <div class="card"><ol><li>Divide the n elements into groups of 5 and find each group's median (insertion sort on 5 items).</li><li>Recursively SELECT the median x of those ⌈n/5⌉ medians.</li><li>Partition around x. At least about 3n/10 elements are smaller than x and about 3n/10 are larger.</li><li>Recurse into the side that contains the i-th element, which has at most about 7n/10 elements.</li></ol><p class="math">T(n) ≤ T(n/5) + T(7n/10 + 6) + O(n) = O(n), because 1/5 + 7/10 &lt; 1.</p></div>`,
+ eli5:{title:'Finding the middle kid without lining everyone up',pts:['📏 Want the kid of middle height in a class? You could line everyone up (sorting), but that is a lot of work.','🎲 Trick: pick a random kid, split into shorter and taller groups, then only look in the group that must contain the middle kid.','🙅 You throw away the other group, so the work keeps shrinking fast.','🖐️ The super-safe version makes groups of 5, finds each group\'s middle, then the middle of those middles, to pick a good leader every time.']},
+ diagram:()=>fig(D.svg(720,230,(()=>{let s='';const cols=7;for(let c=0;c<cols;c++){for(let r=0;r<5;r++){const med=r===2,isX=c===3&&r===2;const small=(c<3&&r<=2)||(c===3&&r<2),big=(c>3&&r>=2)||(c===3&&r>2);s+=`<circle cx="${130+c*70}" cy="${40+r*36}" r="13" fill="${isX?C.warn:small?C.good+'66':big?C.bad+'66':C.dim+'44'}" stroke="${med?C.warn:C.dim}" stroke-width="${med?3:1.5}"/>`;}}
+   return s+D.text(360,225,'columns = groups of 5 (sorted). yellow ring = group median, gold = median of medians x',12,C.txt)+D.text(60,70,'≤ x',13,C.good,'middle',700)+D.text(660,150,'≥ x',13,C.bad,'middle',700);})()),
+  'Median of medians: x is guaranteed to have about 3n/10 elements on each side, so the recursion shrinks by a constant fraction.','Each column is a team of 5. The middle of the middles is a "pretty good" leader, never too short or too tall.'),
+ mc:[
+  ['Expected running time of RANDOMIZED-SELECT:','Θ(n)',['Θ(n lg n)','Θ(lg n)','Θ(n²)'],'It recurses on one side only.'],
+  ['Worst-case running time of RANDOMIZED-SELECT:','Θ(n²)',['Θ(n)','Θ(n lg n)','Θ(n³)'],'Unlucky pivots each remove only one element.'],
+  ['The median-of-medians SELECT algorithm runs in worst-case:','O(n)',['O(n lg n)','O(n²)','O(lg n)'],'T(n) ≤ T(n/5) + T(7n/10) + O(n).'],
+  ['Minimum number of comparisons to find the minimum of n elements:','n − 1',['n','n/2','lg n'],'Every non-minimum element must lose at least one comparison.'],
+  ['Finding both min and max simultaneously needs at most about:','3n/2 comparisons',['2n − 2 comparisons','n lg n comparisons','n comparisons'],'Compare in pairs first.'],
+  ['Why does SELECT use groups of 5?','So that the recursion sizes n/5 + 7n/10 sum to less than n',['Because 5 is prime','So each group can be hashed','To make it stable'],'Groups of 3 would not give linear time with this analysis.'],
+  ['How does selection differ from quicksort after partitioning?','It recurses into only one side',['It recurses into both sides','It never partitions','It sorts each side'],'That is why it is linear instead of n lg n.']
+ ]},
+
+{id:'t10b', num:'#10B', short:'Lower Bounds & O(n) Sorts', title:'Theoretical Limits &amp;', grad:'O(n) Sorts', when:'Week 8 · Mon 10/12', icon:'📉', color:'#84cc16',
+ blurb:'Decision trees, Ω(n lg n) comparison bound, counting sort, radix sort, bucket sort.',
+ lead:'Every <b>comparison sort</b> needs Ω(n lg n) comparisons in the worst case. Sorts that use the <b>values</b> of keys (counting, radix, bucket) can beat that bound under extra assumptions.',
+ reading:'CLRS Chapter 8', notes:'Topic 10',
+ videos:[['gZmEYyqHefk','10C · Bounds on Sorting']], mit:[['0VqawRl3Xzs','MIT Lecture 05']],
+ prereq:[],
+ html:`<h2>The decision-tree lower bound</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>Any comparison sort can be drawn as a <b>decision tree</b>: internal nodes compare a<sub>i</sub> : a<sub>j</sub>, leaves are permutations.</li><li>It must have at least <b>n!</b> reachable leaves (one per possible ordering).</li><li>A binary tree of height h has ≤ 2^h leaves, so 2^h ≥ n! ⇒ h ≥ lg(n!) = Ω(n lg n).</li><li>⇒ Merge sort and heapsort are <b>asymptotically optimal</b> comparison sorts.</li></ul></div>
+ <pre><code><span class="fn">COUNTING-SORT</span>(A, B, n, k)   <span class="cm">// keys in 0..k</span>
+  let C[0..k] be a new array of zeros
+  <span class="kw">for</span> j = 1 <span class="kw">to</span> n
+      C[A[j]] = C[A[j]] + 1     <span class="cm">// counts</span>
+  <span class="kw">for</span> i = 1 <span class="kw">to</span> k
+      C[i] = C[i] + C[i - 1]    <span class="cm">// # keys ≤ i</span>
+  <span class="kw">for</span> j = n <span class="kw">downto</span> 1          <span class="cm">// backwards: stable</span>
+      B[C[A[j]]] = A[j]
+      C[A[j]] = C[A[j]] - 1</code></pre></div>
+ <h2>Linear-time sorts</h2>
+ <table class="tbl"><tr><th>Sort</th><th>Assumption</th><th>Time</th><th>Notes</th></tr>
+ <tr><td>Counting sort</td><td>integer keys in 0..k</td><td>Θ(n + k)</td><td>stable; linear when k = O(n)</td></tr>
+ <tr><td>Radix sort</td><td>d digits, each in 0..k</td><td>Θ(d(n + k))</td><td>sort by least significant digit first with a <b>stable</b> sort</td></tr>
+ <tr><td>Bucket sort</td><td>keys uniform on [0, 1)</td><td>Θ(n) expected</td><td>n buckets, insertion sort each, concatenate</td></tr></table>`,
+ eli5:{title:'The speed limit for sorting, and how to cheat it',pts:['❓ If you can only ask "is this one bigger than that one?", there is a speed limit: about n × log n questions.','🌳 That is because there are so many possible orders (n!), and each question only splits the possibilities in two.','🧮 But if you know keys are small numbers, you can just <b>count</b> them! "Three 2s, one 5…" Then write them out in order.','🔢 <b>Radix sort</b> sorts by the ones digit, then the tens digit, then the hundreds…','🪣 <b>Bucket sort</b> drops numbers into buckets by range, like sorting mail by zip code.']},
+ diagram:()=>fig(D.svg(720,240,(()=>{const n=(x,y,l,c)=>`<rect x="${x-34}" y="${y-15}" width="68" height="30" rx="15" fill="${c}22" stroke="${c}" stroke-width="2"/>`+D.text(x,y+5,l,12,'#fff','middle',700);let s='';const L=[[360,30,'a₁ : a₂'],[200,95,'a₂ : a₃'],[520,95,'a₁ : a₃']];[[360,30,200,95],[360,30,520,95],[200,95,110,160],[200,95,290,160],[520,95,430,160],[520,95,610,160],[290,160,240,215],[290,160,340,215],[430,160,380,215],[430,160,480,215]].forEach(([a,b,c,d])=>s+=D.line(a,b+15,c,d-15,C.dim,2));L.forEach(([x,y,l])=>s+=n(x,y,l,C.acc));s+=n(290,160,'a₁ : a₃',C.acc)+n(430,160,'a₂ : a₃',C.acc);[[110,160,'⟨1,2,3⟩'],[610,160,'⟨3,2,1⟩'],[240,215,'⟨1,3,2⟩'],[340,215,'⟨3,1,2⟩'],[380,215,'⟨2,1,3⟩'],[480,215,'⟨2,3,1⟩']].forEach(([x,y,l])=>s+=n(x,y,l,C.good));return s+D.text(650,40,'3! = 6 leaves',13,C.good,'middle',700)+D.text(650,62,'height ≥ lg 6',12,C.mut);})()),
+  'A decision tree for sorting 3 elements needs n! = 6 leaves, so its height is at least ⌈lg 6⌉ = 3.','Every question splits the possibilities in two. With 6 possible orders you need at least 3 questions.'),
+ mc:[
+  ['Any comparison sort requires, in the worst case:','Ω(n lg n) comparisons',['Ω(n) comparisons','Ω(n²) comparisons','Ω(lg n) comparisons'],'Decision tree with n! leaves has height ≥ lg(n!).'],
+  ['A decision tree for sorting n elements must have at least:','n! leaves',['2ⁿ leaves','n² leaves','n leaves'],'One leaf per permutation.'],
+  ['Counting sort on n keys in the range 0..k runs in:','Θ(n + k)',['Θ(n lg n)','Θ(nk)','Θ(k lg n)'],'Two passes over A and one over C.'],
+  ['Why does counting sort place elements by iterating j from n down to 1?','To make it stable',['To make it in place','To reduce time to Θ(n)','To handle negative keys'],'Equal keys keep their relative order.'],
+  ['Radix sort requires the per-digit sort to be:','Stable',['In place','Comparison based','Randomized'],'Otherwise earlier digit orderings are destroyed.'],
+  ['Bucket sort runs in expected linear time when:','Inputs are uniformly distributed over [0, 1)',['Inputs are integers in 0..k','Inputs are already sorted','There are at most lg n distinct keys'],'Each bucket then has O(1) expected elements.'],
+  ['Which sorts are asymptotically optimal comparison sorts?','Merge sort and heapsort',['Insertion sort and quicksort','Counting sort and radix sort','Bubble sort and selection sort'],'They achieve O(n lg n) worst case, matching the lower bound.'],
+  ['Radix sort on n d-digit numbers with digits in 0..k takes:','Θ(d(n + k))',['Θ(n lg n)','Θ(dn lg n)','Θ(n + k + d)'],'d passes of counting sort.']
+ ]},
+
+{id:'t12s', num:'#12*', short:'Backtracking', title:'Backtracking &amp;', grad:'Recursion Review', when:'Week 8 · Wed 10/14', icon:'🧭', color:'#e879f9',
+ blurb:'Recursive search: make a choice, recurse, undo. N-Queens, subset sum.',
+ lead:'<b>Backtracking</b> builds a solution one decision at a time, recursing on each choice and <b>undoing</b> it when it leads to a dead end. It is the brute-force starting point for dynamic programming.',
+ reading:'Jeff Erickson, <i>Algorithms</i>, Chapter 2 (sections 2.1, 2.3–2.4, 2.6, 2.8). If you are shaky on recursion, review Chapter 1 first.', notes:null,
+ videos:[], extra:[['Jeff Erickson\'s Algorithms textbook (free online)','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ prereq:[],
+ html:`<h2>The pattern</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>A solution is a sequence of decisions x₁, x₂, …, x_n.</li><li>At each step, try every option for the next decision that is consistent with the choices so far.</li><li>Recurse. If the recursion fails, <b>undo</b> the choice and try the next option.</li><li>The recursive structure forms a <b>recursion tree</b> of partial solutions; pruning cuts off branches early.</li></ul></div>
+ <pre><code><span class="fn">SUBSET-SUM</span>(X[1..n], T)   <span class="cm">// is there a subset summing to T?</span>
+  <span class="kw">if</span> T == 0  <span class="kw">return</span> TRUE
+  <span class="kw">if</span> T &lt; 0 <span class="kw">or</span> n == 0  <span class="kw">return</span> FALSE
+  <span class="cm">// include X[n] or exclude it</span>
+  <span class="kw">return</span> SUBSET-SUM(X[1..n-1], T - X[n])
+      <span class="kw">or</span> SUBSET-SUM(X[1..n-1], T)</code></pre></div>
+ <h2>Classic examples (Erickson ch. 2)</h2>
+ <div class="grid g3"><div class="card"><h3>N-Queens</h3><p>Place queens row by row; for each row try every column that is not attacked. Backtrack when a row has no safe column.</p></div>
+ <div class="card"><h3>Subset sum</h3><p>Each element is in or out: 2 branches per element ⇒ O(2ⁿ) time. Recurrence T(n) = 2T(n−1) + O(1).</p></div>
+ <div class="card"><h3>Longest increasing subsequence</h3><p>Decide for each element whether to take it, remembering the last value taken. Exponential as written; memoizing gives DP (Topic 12).</p></div></div>
+ <div class="callout cyan">Write the recursive procedure first, prove it correct by induction, then measure its cost with a recurrence. If subproblems repeat, that is a hint to use <b>dynamic programming</b>.</div>`,
+ eli5:{title:'Exploring a maze: try a path, back up if stuck',pts:['🌽 Imagine walking a corn maze. At each fork you pick a path.','🧱 If you hit a dead end, you walk back to the last fork and try a different path. That is <b>backtracking</b>!','👑 N-Queens puzzle: put queens on a chess board one row at a time so none can attack another. Stuck? Move the last queen.','🌳 All the choices make a big tree. We skip whole branches as soon as we know they can\'t work.']},
+ diagram:()=>fig(D.svg(720,220,(()=>{let s='';const nodes=[[360,30,'{ }',C.acc],[200,95,'take 3',C.acc],[520,95,'skip 3',C.acc],[120,160,'take 5',C.bad],[280,160,'skip 5',C.good],[440,160,'take 5',C.acc],[600,160,'skip 5',C.dim]];[[0,1],[0,2],[1,3],[1,4],[2,5],[2,6]].forEach(([a,b])=>s+=D.line(nodes[a][0],nodes[a][1]+14,nodes[b][0],nodes[b][1]-14,C.dim));nodes.forEach(([x,y,l,c])=>s+=`<rect x="${x-46}" y="${y-14}" width="92" height="28" rx="14" fill="${c}22" stroke="${c}" stroke-width="2"/>`+D.text(x,y+5,l,12,'#fff','middle',700));return s+D.text(120,195,'sum 8 > 7 ✗ prune',11.5,C.bad)+D.text(280,195,'sum 3 … continue',11.5,C.good)+D.text(360,215,'subset sum with X = {3, 5, 4}, target T = 7',12.5,C.txt);})()),
+  'The recursion tree of SUBSET-SUM: each level decides one element; infeasible branches are pruned.','Each fork is "take it" or "skip it". Red branches go over the target, so we stop exploring there.'),
+ mc:[
+  ['Backtracking explores:','A recursion tree of partial solutions, undoing choices at dead ends',['Only the greedy choice at each step','A table of subproblems bottom-up','A random sample of solutions'],'Choose, recurse, un-choose.'],
+  ['The naive recursive SUBSET-SUM on n elements runs in:','O(2ⁿ)',['O(n²)','O(n lg n)','O(n)'],'T(n) = 2T(n−1) + O(1).'],
+  ['In the N-Queens backtracking algorithm, queens are typically placed:','One row at a time, trying each safe column',['All at once at random','Column by column with no checks','Only on the diagonal'],'Then backtrack when a row has no safe square.'],
+  ['When a backtracking algorithm\'s subproblems repeat, it suggests:','Using dynamic programming (memoization)',['Using a greedy algorithm instead','Adding more recursion','Using a hash table of answers is never helpful'],'Store answers to repeated subproblems.'],
+  ['What is "pruning" in backtracking?','Abandoning a branch as soon as it cannot lead to a valid solution',['Deleting nodes from a BST','Sorting the input first','Removing the base case'],'It shrinks the explored tree.'],
+  ['The recurrence T(n) = 2T(n − 1) + O(1) solves to:','Θ(2ⁿ)',['Θ(n²)','Θ(n lg n)','Θ(n)'],'Doubling at every level for n levels.']
+ ]},
+
+{id:'t12a', num:'#12A', short:'Dynamic Programming', title:'Dynamic', grad:'Programming', when:'Week 9 · Mon 10/19', icon:'🧮', color:'#22c55e',
+ blurb:'Overlapping subproblems, memoization vs bottom-up, rod cutting.',
+ lead:'<b>Dynamic programming</b> solves problems with <b>optimal substructure</b> and <b>overlapping subproblems</b> by solving each subproblem once and storing the answer in a table.',
+ reading:'CLRS Chapter 14.1–14.3 and Chapter 3 of Jeff Erickson\'s textbook (through Section 3.5)', notes:'Topic 12A',
+ videos:[['RYPsOJmhwgE','12A · Dynamic Programming Intro'],['0tQ3ah0Fddw','12B · DP Steps (minutes 0:00–5:00)',0,300],['QzgqDJIJtNY','12D · DP Applications (0:00–6:16)',0,376],['QzgqDJIJtNY','12D · DP Applications (9:23–end)',563]],
+ mit:[['V5hZoJ6uK-s','MIT Lecture 15: Dynamic Programming']],
+ extra:[['Jeff Erickson\'s Algorithms, Chapter 3','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ prereq:[],
+ html:`<h2>The four steps</h2>
+ <div class="grid g2"><div class="card"><ol><li>Characterize the structure of an optimal solution.</li><li>Recursively define the value of an optimal solution.</li><li>Compute the value, usually <b>bottom-up</b> in a table.</li><li>Construct an optimal solution from the stored choices.</li></ol></div>
+ <div class="card"><h3>Two ingredients</h3><ul class="clean"><li><b>Optimal substructure:</b> an optimal solution contains optimal solutions to subproblems.</li><li><b>Overlapping subproblems:</b> the naive recursion solves the same subproblems again and again.</li><li><b>Top-down memoization:</b> recursion + a lookup table. <b>Bottom-up:</b> fill the table in an order where dependencies are ready.</li></ul></div></div>
+ <h2>Rod cutting</h2>
+ <div class="grid g2"><pre><code><span class="fn">BOTTOM-UP-CUT-ROD</span>(p, n)
+  let r[0..n] be a new array
+  r[0] = 0
+  <span class="kw">for</span> j = 1 <span class="kw">to</span> n
+      q = -∞
+      <span class="kw">for</span> i = 1 <span class="kw">to</span> j       <span class="cm">// first piece length i</span>
+          q = max(q, p[i] + r[j - i])
+      r[j] = q
+  <span class="kw">return</span> r[n]</code></pre>
+ <div class="card"><p class="math">r_n = max_{1 ≤ i ≤ n} (p_i + r_{n−i})</p><ul class="clean"><li>Naive recursion: T(n) = 1 + Σ T(j) = 2ⁿ. Exponential!</li><li>Bottom-up: n subproblems, each O(n) work ⇒ <b>Θ(n²)</b>.</li><li>Running time of DP ≈ (number of subproblems) × (choices per subproblem).</li></ul></div></div>
+ <div class="callout"><b>Matrix-chain multiplication</b> (14.2): m[i,j] = min over i ≤ k &lt; j of m[i,k] + m[k+1,j] + p_{i−1}p_k p_j. Θ(n²) subproblems × O(n) choices = Θ(n³).</div>`,
+ eli5:{title:'Don\'t solve the same puzzle twice: write it down!',pts:['📝 If your teacher asks "what is 7 × 8?" ten times, you work it out once and then just remember it.','🔁 Some problems break into smaller problems that repeat a LOT. Solving them again and again is wasteful.','📊 <b>Dynamic programming</b> keeps a chart. Every time you solve a small problem, write the answer in the chart.','🪵 Rod cutting: what is the best way to cut a candy bar to sell the pieces for the most money? Try each first cut and look up the best for what is left.']},
+ diagram:()=>fig(D.svg(720,220,(()=>{let s=D.text(180,22,'naive recursion: fib(5)',13,C.txt,'middle',700);const T=[[180,50,'5'],[100,100,'4'],[260,100,'3'],[60,150,'3'],[140,150,'2'],[230,150,'2'],[290,150,'1'],[40,200,'2'],[80,200,'1']];[[0,1],[0,2],[1,3],[1,4],[2,5],[2,6],[3,7],[3,8]].forEach(([a,b])=>s+=D.line(T[a][0],T[a][1],T[b][0],T[b][1],C.dim,1.8));T.forEach(([x,y,l])=>s+=D.node(x,y,l,['3','2'].includes(l)?C.bad:C.mut,14));
+   s+=D.arrow(330,110,380,110,'mut',3);s+=D.text(550,22,'DP table: each value computed once',13,C.txt,'middle',700);[0,1,1,2,3,5].forEach((v,i)=>{s+=`<rect x="${400+i*50}" y="80" width="44" height="44" rx="8" fill="${C.good}22" stroke="${C.good}" stroke-width="2"/>`+D.text(422+i*50,108,v,16,'#fff','middle',700)+D.text(422+i*50,142,'f'+i,11,C.mut);if(i>1)s+=`<path d="M${422+(i-1)*50} 78 Q ${422+(i-0.5)*50} 58 ${422+i*50-6} 78" fill="none" stroke="${C.cy}" stroke-width="1.5" marker-end="url(#ar-cy)"/>`;});return s+D.text(550,185,'red nodes on the left are repeated work',12,C.bad);})()),
+  'Naive recursion recomputes the same subproblems (red); a DP table computes each once.','The left tree does the same little problems over and over. The chart on the right does each one only once.'),
+ mc:[
+  ['Dynamic programming applies when a problem has:','Optimal substructure and overlapping subproblems',['Only independent subproblems','A greedy choice property only','No recursive structure'],'Divide & conquer handles independent subproblems.'],
+  ['Memoization means:','Storing results of recursive calls in a table to reuse them',['Writing the algorithm bottom-up only','Sorting the subproblems','Using a greedy choice'],'Top-down DP.'],
+  ['Bottom-up rod cutting for a rod of length n runs in:','Θ(n²)',['Θ(2ⁿ)','Θ(n)','Θ(n³)'],'n subproblems with up to n choices each.'],
+  ['The naive recursive CUT-ROD makes how many calls for length n?','2ⁿ',['n²','n','n!'],'T(n) = 1 + Σ_{j<n} T(j).'],
+  ['A rough formula for DP running time is:','(number of subproblems) × (choices per subproblem)',['(input size)²','2^(number of subproblems)','lg of the table size'],'Each subproblem is solved once.'],
+  ['Matrix-chain multiplication with the DP algorithm runs in:','Θ(n³)',['Θ(n²)','Θ(2ⁿ)','Θ(n lg n)'],'Θ(n²) subproblems × O(n) split points.'],
+  ['The last step of the DP method is:','Construct an optimal solution from stored information',['Prove the greedy choice','Sort the input','Guess the answer and verify by substitution'],'Keep "choice" tables (like s[j]) to rebuild the solution.']
+ ]},
+
+{id:'t12b', num:'#12B', short:'DP continued: LCS', title:'Dynamic Programming:', grad:'LCS &amp; More', when:'Week 9 · Wed 10/21', icon:'🔤', color:'#10b981',
+ blurb:'Elements of DP, longest common subsequence, optimal BSTs.',
+ lead:'More DP: when it applies, and the classic <b>longest common subsequence</b> (LCS) table, plus optimal binary search trees.',
+ reading:'CLRS Chapter 14.4–14.5; more examples in Erickson Chapter 3 (sections 3.6–3.9)', notes:'Topic 12B',
+ videos:[['0tQ3ah0Fddw','12B · DP Steps and LCS (from 5:00)',300],['dFObo5BeJ0k','12C · LCS Example Continued'],['QzgqDJIJtNY','12D · DP Applications Summary (from 6:17)',377]],
+ mit:[['V5hZoJ6uK-s','MIT Lecture 15: Dynamic Programming']],
+ prereq:[],
+ html:`<h2>Longest common subsequence</h2>
+ <div class="grid g2"><div class="card"><p>A <b>subsequence</b> keeps order but may skip characters. LCS("ABCBDAB", "BDCABA") has length 4 (e.g. "BCBA").</p>
+ <p class="math">c[i, j] = 0 if i = 0 or j = 0<br>c[i, j] = c[i−1, j−1] + 1 if x_i = y_j<br>c[i, j] = max(c[i−1, j], c[i, j−1]) otherwise</p><p>Θ(mn) time and space. Store arrows (↖ ↑ ←) in table b to print the LCS in O(m + n).</p></div>
+ <pre><code><span class="fn">LCS-LENGTH</span>(X, Y, m, n)
+  let c[0..m, 0..n] be a new table
+  <span class="kw">for</span> i = 0 <span class="kw">to</span> m   c[i, 0] = 0
+  <span class="kw">for</span> j = 0 <span class="kw">to</span> n   c[0, j] = 0
+  <span class="kw">for</span> i = 1 <span class="kw">to</span> m
+      <span class="kw">for</span> j = 1 <span class="kw">to</span> n
+          <span class="kw">if</span> X[i] == Y[j]
+              c[i, j] = c[i-1, j-1] + 1
+          <span class="kw">else</span>
+              c[i, j] = max(c[i-1, j], c[i, j-1])
+  <span class="kw">return</span> c[m, n]</code></pre></div>
+ <h2>Elements of dynamic programming</h2>
+ <div class="grid g3"><div class="card"><h3>Optimal substructure</h3><p>Show via cut-and-paste: if a sub-solution weren't optimal you could swap in a better one. Beware: <i>longest simple path</i> lacks it, <i>shortest path</i> has it.</p></div>
+ <div class="card"><h3>Overlapping subproblems</h3><p>The space of distinct subproblems is small (polynomial) even though the recursion tree is exponential.</p></div>
+ <div class="card"><h3>Optimal BST (14.5)</h3><p>Given search probabilities, minimize expected search cost. e[i,j] = min over roots r of e[i,r−1] + e[r+1,j] + w(i,j). Θ(n³).</p></div></div>`,
+ eli5:{title:'Finding the longest shared pattern in two words',pts:['🔤 Take two words. What is the longest list of letters that appears in both, in the same order (you may skip letters)?','📊 Make a grid: one word across the top, one down the side.','✅ If the letters match, add 1 to the number diagonally up-left.','↔️ If they don\'t match, copy the bigger number from above or from the left.','🏁 The bottom-right box is the answer!']},
+ diagram:()=>fig(D.svg(720,250,(()=>{const X='ABCB',Y='BDCAB';const c=[];for(let i=0;i<=4;i++){c[i]=[];for(let j=0;j<=5;j++)c[i][j]=(i&&j)?(X[i-1]===Y[j-1]?c[i-1][j-1]+1:Math.max(c[i-1][j],c[i][j-1])):0;}let s='';for(let j=0;j<5;j++)s+=D.text(250+(j+1)*50,30,Y[j],14,C.cy,'middle',700);for(let i=0;i<4;i++)s+=D.text(215,92+(i+1)*40-28,X[i],14,C.pink,'middle',700);for(let i=0;i<=4;i++)for(let j=0;j<=5;j++){const m=i&&j&&X[i-1]===Y[j-1];s+=`<rect x="${227+j*50}" y="${40+i*40}" width="46" height="36" rx="6" fill="${m?C.good+'44':C.dim+'22'}" stroke="${m?C.good:C.dim}"/>`+D.text(250+j*50,63+i*40,c[i][j],13,'#fff','middle',700);}
+   return s+D.text(120,120,'match → ↖ + 1',12.5,C.good,'middle',700)+D.text(120,145,'else max(↑, ←)',12.5,C.mut)+D.text(600,240,'LCS length = '+c[4][5],13,C.warn,'end',700);})()),
+  'The LCS table for X = ABCB and Y = BDCAB; green cells are character matches.','Green boxes are where the letters match. Numbers grow as we find more matching letters.'),
+ mc:[
+  ['The LCS-LENGTH algorithm on strings of length m and n runs in:','Θ(mn)',['Θ(m + n)','Θ(2^m)','Θ(mn lg n)'],'Each of the (m+1)(n+1) cells takes O(1).'],
+  ['If x_i = y_j, then c[i, j] equals:','c[i−1, j−1] + 1',['max(c[i−1, j], c[i, j−1])','c[i−1, j] + 1','0'],'The matching character extends the LCS of the prefixes.'],
+  ['The length of an LCS of "ABCBDAB" and "BDCABA" is:','4',['3','5','6'],'For example BCBA or BDAB.'],
+  ['Which problem does NOT have optimal substructure?','Longest simple path in a general graph',['Shortest path','LCS','Rod cutting'],'Sub-paths of a longest simple path need not be longest.'],
+  ['Printing the actual LCS from the arrow table takes:','O(m + n)',['O(mn)','O(m·n²)','O(1)'],'Each step moves up, left, or diagonally.'],
+  ['A subsequence of a string:','Keeps the characters in order but may skip some',['Must be contiguous','Can reorder characters','Must start at the first character'],'"ACE" is a subsequence of "ABCDE".'],
+  ['The optimal BST DP algorithm runs in:','Θ(n³)',['Θ(n²)','Θ(n lg n)','Θ(2ⁿ)'],'Θ(n²) subproblems × O(n) root choices.']
+ ]}
+);
+
+// ======================= COURSE DATA · AFTER MIDTERM 3 =======================
+COURSE.push(
+{id:'t13', num:'#13', short:'Greedy & Huffman Codes', title:'Greedy Algorithms &amp;', grad:'Huffman Codes', when:'Week 10 · Mon 10/26', icon:'🪙', color:'#eab308',
+ blurb:'Greedy-choice property, activity selection, Huffman codes.',
+ lead:'A <b>greedy algorithm</b> makes the locally best choice at each step and never looks back. It works when the problem has the <b>greedy-choice property</b> and optimal substructure.',
+ reading:'CLRS Sections 15.1–15.3', notes:'Topic 13',
+ videos:[['hWtmauUMYD8','13A · Greedy Algorithms and DP'],['_-1nKy0bnwE','13B · Activity Scheduling'],['UgJk87jazLQ','13C · Huffman Codes']],
+ prereq:[],
+ html:`<h2>Activity selection</h2>
+ <div class="grid g2"><pre><code><span class="fn">GREEDY-ACTIVITY-SELECTOR</span>(s, f, n)
+  <span class="cm">// activities sorted by finish time f</span>
+  A = {a₁}
+  k = 1
+  <span class="kw">for</span> m = 2 <span class="kw">to</span> n
+      <span class="kw">if</span> s[m] ≥ f[k]      <span class="cm">// compatible</span>
+          A = A ∪ {a_m}
+          k = m
+  <span class="kw">return</span> A</code></pre>
+ <div class="card"><ul class="clean"><li>Goal: the largest set of mutually compatible activities.</li><li><b>Greedy choice:</b> pick the activity that finishes first. It leaves the most room for the rest.</li><li>Proof idea (exchange argument): swap the first activity of any optimal solution with a₁; it stays optimal.</li><li>Θ(n) after an O(n lg n) sort.</li></ul></div></div>
+ <h2>Huffman codes</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>A <b>prefix code</b>: no codeword is a prefix of another, so decoding is unambiguous. Codes = binary trees, characters at leaves.</li><li>Cost B(T) = Σ c.freq · depth(c).</li><li><b>HUFFMAN:</b> put characters in a min-priority queue by frequency; repeatedly EXTRACT-MIN twice, merge into a new node with summed frequency, INSERT it back. n − 1 merges.</li><li>O(n lg n) with a binary heap.</li></ul></div>
+ <div class="card"><h3>Greedy vs dynamic programming</h3><table class="tbl"><tr><th></th><th>Greedy</th><th>DP</th></tr><tr><td>Choice</td><td>made before solving subproblems</td><td>depends on subproblem solutions</td></tr><tr><td>Subproblems</td><td>one remains</td><td>many considered</td></tr><tr><td>Example</td><td>fractional knapsack</td><td>0-1 knapsack</td></tr></table></div></div>`,
+ eli5:{title:'Always grab the best-looking choice right now',pts:['🍪 Greedy means: at every step, take what looks best right now, and never change your mind.','📅 Fitting the most activities into your day? Always pick the one that <b>ends earliest</b>, so you have time left for more.','🔡 Huffman codes give short codes to common letters (like "e") and long codes to rare ones (like "z"), so messages get smaller.','⚠️ Greedy does not always work! It only works for problems where the "best right now" choice is always safe.']},
+ diagram:()=>fig(D.svg(720,220,(()=>{const A=[[1,4],[3,5],[0,6],[5,7],[3,9],[5,9],[6,10],[8,11],[8,12],[2,14],[12,16]];const pick=[0,3,7,10];const X=t=>40+t*40;let s='';A.forEach(([a,b],i)=>{const p=pick.includes(i);s+=`<rect x="${X(a)}" y="${14+i*17}" width="${(b-a)*40}" height="13" rx="6" fill="${p?C.good:C.dim}" opacity="${p?.95:.45}"/>`;});for(let t=0;t<=16;t+=2)s+=D.text(X(t),210,t,10.5,C.mut);return s+D.text(700,40,'green = chosen',12,C.good,'end',700)+D.text(700,60,'earliest finish first',12,C.mut,'end');})()),
+  'GREEDY-ACTIVITY-SELECTOR repeatedly picks the compatible activity with the earliest finish time.','Each bar is an activity. We keep picking the one that ends first, so we fit the most green bars.'),
+ mc:[
+  ['The greedy choice in activity selection is to pick the activity that:','Finishes earliest',['Starts earliest','Is shortest','Overlaps the fewest others'],'Leaves the maximum remaining time.'],
+  ['Huffman\'s algorithm repeatedly:','Merges the two least-frequent trees',['Merges the two most-frequent trees','Splits the largest tree','Assigns codes in alphabetical order'],'Using EXTRACT-MIN twice.'],
+  ['Running time of Huffman\'s algorithm on n characters with a binary heap:','O(n lg n)',['O(n²)','O(n)','O(2ⁿ)'],'n − 1 merges, each O(lg n).'],
+  ['In a prefix code:','No codeword is a prefix of another codeword',['All codewords have the same length','Codewords are sorted','Every codeword starts with 0'],'Makes decoding unambiguous.'],
+  ['Which problem is solved optimally by a greedy algorithm?','Fractional knapsack',['0-1 knapsack','Longest common subsequence','Matrix-chain multiplication'],'0-1 knapsack needs DP.'],
+  ['The standard proof technique for greedy algorithms is:','An exchange argument',['The master theorem','A decision tree','Amortized potential functions'],'Swap the greedy choice into an optimal solution.'],
+  ['Greedy algorithms differ from DP because they:','Make a choice before solving the remaining subproblem',['Always consider all subproblems','Never use recursion','Require overlapping subproblems'],'Greedy commits; DP compares.']
+ ]},
+
+{id:'t14a', num:'#14A', short:'Graphs, BFS & DFS', title:'Graph Representations,', grad:'BFS &amp; DFS', when:'Week 11 · Mon 11/02', icon:'🕸️', color:'#06b6d4',
+ blurb:'Adjacency lists vs matrices, breadth-first search, depth-first search, edge types.',
+ lead:'Graphs model pairwise relationships. <b>BFS</b> explores in layers and finds shortest paths by edge count; <b>DFS</b> goes deep first and records discovery and finish times that reveal the graph\'s structure.',
+ reading:'CLRS Sections 20.1–20.3; Chapter 5 of Jeff Erickson\'s notes; Goodrich &amp; Tamassia section on Graph Representations (Google Drive Resources folder)', notes:'Topic 14A',
+ videos:[['IdStgDmUlXM','14A · Graphs Definitions'],['pyDxf58rK_0','14B · Graph ADT Representations'],['A8SKOFseOyU','14C · BFS'],['emiWSGizJlc','14D · DFS Introduction'],['HMPaUoGfsPo','14E · DFS Example Properties']],
+ mit:[['FPEMBWg_WlY','MIT Lecture 16 (until 23:26)',0,1406]],
+ prereq:['ICS 241 Ch 10.1: Graphs and Graph Models','ICS 241 Ch 10.2: Graph Terminology and Special Types of Graphs','ICS 241 Ch 10.3: Representing Graphs and Graph Isomorphism','ICS 241 Ch 10.4: Connectivity','ICS 241 Ch 11.4: Spanning Trees','ICS 241: Graphs'],
+ html:`<h2>Representations</h2>
+ <table class="tbl"><tr><th></th><th>Adjacency list</th><th>Adjacency matrix</th></tr>
+ <tr><td>Space</td><td>Θ(V + E)</td><td>Θ(V²)</td></tr><tr><td>Is (u, v) an edge?</td><td>O(degree(u))</td><td>O(1)</td></tr><tr><td>List neighbors of u</td><td>Θ(degree(u))</td><td>Θ(V)</td></tr><tr><td>Best for</td><td>sparse graphs (E ≪ V²)</td><td>dense graphs</td></tr></table>
+ <h2>Breadth-first search</h2>
+ <div class="grid g2"><pre><code><span class="fn">BFS</span>(G, s)
+  <span class="kw">for each</span> vertex u ∈ G.V - {s}
+      u.color = WHITE; u.d = ∞; u.π = NIL
+  s.color = GRAY; s.d = 0; s.π = NIL
+  Q = ∅
+  <span class="fn">ENQUEUE</span>(Q, s)
+  <span class="kw">while</span> Q ≠ ∅
+      u = <span class="fn">DEQUEUE</span>(Q)
+      <span class="kw">for each</span> v ∈ G.Adj[u]
+          <span class="kw">if</span> v.color == WHITE
+              v.color = GRAY
+              v.d = u.d + 1; v.π = u
+              <span class="fn">ENQUEUE</span>(Q, v)
+      u.color = BLACK</code></pre>
+ <div class="card"><ul class="clean"><li>Runs in <b>O(V + E)</b>: each vertex is enqueued once, each adjacency list scanned once.</li><li>v.d = shortest-path distance (number of edges) from s.</li><li>The π pointers form a <b>breadth-first tree</b>.</li></ul><h3>Depth-first search</h3><ul class="clean"><li>DFS-VISIT recursively explores each white neighbor; it stamps discovery time u.d and finish time u.f. Also Θ(V + E).</li><li><b>Parenthesis theorem:</b> intervals [u.d, u.f] are either nested or disjoint.</li><li>Edge types: <b>tree</b>, <b>back</b> (to an ancestor ⇒ cycle), <b>forward</b>, <b>cross</b>. Undirected graphs have only tree and back edges.</li></ul></div></div>`,
+ eli5:{title:'Two ways to explore a map',pts:['🗺️ A <b>graph</b> is dots (places) connected by lines (roads).','🌊 <b>BFS</b> is like ripples in a pond: first visit all neighbors 1 step away, then 2 steps away, and so on. It finds the fewest-steps route!','🕳️ <b>DFS</b> is like exploring a cave: go as deep as you can down one tunnel, then back up and try the next tunnel.','📒 We can store a graph as a list of neighbors for each dot (great when there are few roads) or a big yes/no grid (great when there are lots).']},
+ diagram:()=>fig(D.svg(720,230,(()=>{const N={s:[90,115,0],a:[220,55,1],b:[220,175,1],c:[360,40,2],d:[360,120,2],e:[360,195,2],f:[500,80,3],g:[500,170,3]};const E=[['s','a'],['s','b'],['a','c'],['a','d'],['b','d'],['b','e'],['c','f'],['d','f'],['e','g'],['d','g']];const col=[C.warn,C.cy,C.acc,C.pink];let s=[1,2,3].map(r=>`<circle cx="90" cy="115" r="${r*135}" fill="none" stroke="${col[r]}" stroke-opacity=".25" stroke-dasharray="5 6"/>`).join('');s+=E.map(([u,v])=>D.line(N[u][0],N[u][1],N[v][0],N[v][1],C.dim,2)).join('');Object.entries(N).forEach(([k,[x,y,d]])=>{s+=D.node(x,y,k,col[d],17)+D.text(x,y+32,'d='+d,11,col[d]);});return s+D.text(640,60,'BFS layers',13,C.txt,'middle',700)+col.map((c,i)=>D.text(640,85+i*22,'distance '+i,12,c)).join('');})()),
+  'BFS discovers vertices in layers by distance from s; each ring is one more edge away.','Ripples spread out from s: the first ring is 1 step away, the next ring 2 steps, and so on.'),
+ mc:[
+  ['Running time of BFS with adjacency lists:','O(V + E)',['O(V²)','O(E lg V)','O(VE)'],'Each vertex dequeued once; each list scanned once.'],
+  ['Space for an adjacency-matrix representation:','Θ(V²)',['Θ(V + E)','Θ(E)','Θ(V lg V)'],'One entry per vertex pair.'],
+  ['After BFS from s, v.d equals:','The minimum number of edges on a path from s to v',['The DFS discovery time of v','The total weight of the lightest path','The degree of v'],'BFS computes unweighted shortest paths.'],
+  ['BFS uses which data structure for its frontier?','A FIFO queue',['A stack','A min-heap keyed by weight','A hash table only'],'DFS uses recursion (a stack).'],
+  ['In DFS, an edge (u, v) to an ancestor v of u is a:','Back edge',['Tree edge','Forward edge','Cross edge'],'Back edges indicate cycles.'],
+  ['In a DFS of an undirected graph, every edge is either:','A tree edge or a back edge',['A tree edge or a cross edge','A forward edge or a cross edge','Any of the four types'],'CLRS Theorem 20.10.'],
+  ['The parenthesis theorem says the intervals [u.d, u.f] and [v.d, v.f] are:','Either nested or disjoint',['Always disjoint','Always overlapping','Equal in length'],'Like properly matched parentheses.'],
+  ['For a sparse graph (E = O(V)), the better representation is usually:','Adjacency lists',['Adjacency matrix','Incidence matrix','Edge list sorted by weight'],'Θ(V + E) space instead of Θ(V²).']
+ ]},
+
+{id:'t14b', num:'#14B', short:'Topological Sort & SCC', title:'Topological Sort &amp;', grad:'Strongly Connected Components', when:'Week 11 · Wed 11/04', icon:'🧱', color:'#0ea5e9',
+ blurb:'Ordering a DAG with DFS finish times; Kosaraju\'s SCC algorithm.',
+ lead:'DFS finish times solve two classic problems: ordering the tasks of a <b>DAG</b> so every edge points forward, and splitting a directed graph into <b>strongly connected components</b>.',
+ reading:'CLRS Sections 20.4–20.5', notes:'Topic 14B',
+ videos:[['TZDQHplPrNo','14F · DFS Applications: Topological Sort and SCC']],
+ prereq:['ICS 241 Ch 10.4: Connectivity','ICS 241: Graphs'],
+ html:`<h2>Topological sort</h2>
+ <div class="grid g2"><pre><code><span class="fn">TOPOLOGICAL-SORT</span>(G)
+  call <span class="fn">DFS</span>(G) to compute finish times v.f
+  as each vertex finishes, insert it
+      onto the <b>front</b> of a linked list
+  <span class="kw">return</span> the linked list</code></pre>
+ <div class="card"><ul class="clean"><li>A topological order lists vertices so every edge (u, v) has u before v. It exists <b>iff</b> the graph is a DAG.</li><li>Order vertices by <b>decreasing finish time</b>. Θ(V + E).</li><li>A directed graph is acyclic iff DFS finds <b>no back edges</b>.</li><li>Classic example: getting dressed (socks before shoes).</li></ul></div></div>
+ <h2>Strongly connected components</h2>
+ <div class="grid g2"><div class="card"><h3>STRONGLY-CONNECTED-COMPONENTS(G)</h3><ol><li>Call DFS(G) to compute finish times u.f.</li><li>Compute the transpose Gᵀ (reverse every edge).</li><li>Call DFS(Gᵀ), considering vertices in order of <b>decreasing u.f</b>.</li><li>Each tree in the second DFS forest is one SCC.</li></ol><p>Θ(V + E) total.</p></div>
+ <div class="card"><ul class="clean"><li>An SCC is a maximal set of vertices where every vertex can reach every other.</li><li>G and Gᵀ have the same SCCs.</li><li>The <b>component graph</b> G^SCC (one vertex per SCC) is always a DAG.</li></ul></div></div>`,
+ eli5:{title:'Doing chores in the right order',pts:['👟 You must put on socks before shoes, and underwear before pants. A <b>topological sort</b> lists chores so every "before" rule is obeyed.','🔁 This only works if there are no loops (you can\'t need A before B and B before A).','🏘️ <b>Strongly connected components</b> are neighborhoods where you can drive from any house to any other house and back.','🔄 Trick to find them: explore once, flip every one-way street, then explore again in a special order.']},
+ diagram:()=>fig(D.svg(720,200,(()=>{const order=['undershorts','socks','pants','shoes','belt','shirt','tie','jacket'];const E=[[0,2],[0,3],[1,3],[2,3],[2,4],[5,4],[5,6],[6,7],[4,7]];let s='';const X=i=>55+i*88;E.forEach(([a,b])=>{const h=Math.abs(b-a)*20+18;s+=`<path d="M${X(a)} 95 Q ${(X(a)+X(b))/2} ${95-h} ${X(b)-6} 95" fill="none" stroke="${C.cy}" stroke-width="2" marker-end="url(#ar-cy)"/>`;});order.forEach((l,i)=>{s+=`<rect x="${X(i)-40}" y="95" width="80" height="30" rx="8" fill="${C.acc}22" stroke="${C.acc}" stroke-width="2"/>`+D.text(X(i),115,l,11,'#fff','middle',700);});return s+D.text(360,165,'topological order: every arrow points to the right',12.5,C.txt)+D.text(360,188,'= vertices sorted by decreasing DFS finish time',12,C.mut);})()),
+  'In a topological order of a DAG every edge points forward; DFS finish times produce one.','Every arrow goes left-to-right, so if you do the chores in this order, you never break a rule.'),
+ mc:[
+  ['A topological sort exists if and only if the directed graph:','Is acyclic (a DAG)',['Is strongly connected','Is undirected','Has no isolated vertices'],'A cycle makes a consistent order impossible.'],
+  ['TOPOLOGICAL-SORT orders vertices by:','Decreasing DFS finish time',['Increasing discovery time','BFS distance','Out-degree'],'Insert each finished vertex at the front of a list.'],
+  ['A directed graph is acyclic iff DFS yields:','No back edges',['No tree edges','No cross edges','Exactly V − 1 edges'],'CLRS Lemma 20.11.'],
+  ['The SCC algorithm runs DFS on:','G, then on the transpose Gᵀ in order of decreasing finish time',['G twice in the same order','Gᵀ only','G with BFS in between'],'Kosaraju’s algorithm.'],
+  ['The component graph G^SCC is always:','A DAG',['A tree','Strongly connected','Complete'],'Otherwise two components would merge.'],
+  ['Running time of the SCC algorithm with adjacency lists:','Θ(V + E)',['Θ(V²)','Θ(E lg V)','Θ(VE)'],'Two DFS runs plus computing Gᵀ.'],
+  ['G and its transpose Gᵀ have:','Exactly the same strongly connected components',['Reversed topological orders but different SCCs','No SCCs in common','The same DFS finish times'],'Mutual reachability is unchanged by reversing all edges.']
+ ]}
+);
+
+// ======================= COURSE ENGINE: MIDTERM GROUPS, PAGES, NAV =======================
+const GROUPS = [
+ {id:'mt1', name:'Midterm 1', icon:'1️⃣', color:'#60a5fa', date:'Wed 09/09 · Week 3', covers:'Topics 1–4, 7', topics:['t01','t03','t02','t07'], note:'Week 3 Monday (09/07) is the Labor Day holiday, so no topic is excluded.'},
+ {id:'mt2', name:'Midterm 2', icon:'2️⃣', color:'#fb7185', date:'Wed 10/07 · Week 7', covers:'Topics 5, 6, 8, 9, 11', topics:['t09','t08','t11','t05a','t05b','t06'], excluded:'t10a'},
+ {id:'mt3', name:'Midterm 3', icon:'3️⃣', color:'#22c55e', date:'Wed 10/28 · Week 10', covers:'Topics 10, 12', topics:['t10a','t10b','t12s','t12a','t12b'], excluded:'t13'},
+ {id:'after', name:'After Midterm 3', icon:'🚀', color:'#a78bfa', date:'Week 10 onward', covers:'Topics 13, 14, 16, 17 and Fibonacci heaps', topics:['t13','t14a','t14b','ds','mst','kruskal','prim','fib']}
+];
+const TMETA = {};
+COURSE.forEach(t => {
+  TOPICS[t.id] = {name: t.short, icon: t.icon, color: t.color, blurb: t.blurb};
+  t.mc.forEach(([q, a, ds, ex]) => MC.push({topic: t.id, q, options: [a, ...ds], answer: 0, explain: ex}));
+  DIAGRAMS[t.id] = t.diagram; ELI5[t.id] = t.eli5; TMETA[t.id] = t;
+});
+[['ds','#16','Topic 16'],['mst','#17A','Topic 17A'],['kruskal','#17B','Topic 17B'],['prim','#17C','Topic 17C'],['fib','Ch 19','CLRS supplement']].forEach(([id, num, when]) =>
+  TMETA[id] = {id, num, when, short: TOPICS[id].name, icon: TOPICS[id].icon, color: TOPICS[id].color, blurb: TOPICS[id].blurb});
+const EXIST_VIDS = {mst: [['Mx-dvvSE4Qc', '17A · Minimum Spanning Trees']], kruskal: [['1BnpXYm7LKY', '17B · MST: Kruskal']], prim: [['qegY0R78QMQ', '17C · MST: Prim']]};
+
+const ytLite = (id, title, start, end) => `<div class="vcard"><div class="video lite" data-yt="${id}" data-start="${start || ''}" data-end="${end || ''}" title="${esc(title)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="play">▶</span></div><div class="vt">${title}</div></div>`;
+document.addEventListener('click', e => {
+  const v = e.target.closest('.video.lite');
+  if (v){ const p = new URLSearchParams({autoplay: 1, rel: 0}); if (v.dataset.start) p.set('start', v.dataset.start); if (v.dataset.end) p.set('end', v.dataset.end);
+    v.classList.remove('lite'); v.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${v.dataset.yt}?${p}" title="${v.title}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`; return; }
+  const b = e.target.closest('[data-practice]'); if (b) startPractice(b.dataset.practice);
+});
+
+function topicPage(t){
+  const g = GROUPS.find(x => x.topics.includes(t.id));
+  const res = [`<span class="res">📖 <b>Reading:</b> ${t.reading}</span>`, `<span class="res">📝 <b>Lecture notes:</b> ${t.notes || 'none for this topic'}</span>`,
+    `<span class="res">🎬 <b>Screencasts:</b> ${t.videos.length ? [...new Set(t.videos.map(v => v[1].split(' · ')[0]))].join(', ') : 'none'}</span>`];
+  (t.extra || []).forEach(([l, u]) => res.push(`<a class="res link" href="${u}" target="_blank" rel="noopener">🔗 ${l} ↗</a>`));
+  return `<section class="page hidden" id="page-${t.id}">
+  <div class="row" style="gap:8px"><span class="eyebrow" style="color:${t.color};border-color:${t.color}55;background:${t.color}14">${t.when} · Topic ${t.num}</span>${g.id !== 'after' ? `<a class="eyebrow mt-tag" href="#${g.id}">📝 Core concept for ${g.name}</a>` : ''}</div>
+  <h1>${t.title} <span class="grad">${t.grad}</span></h1>
+  <p class="lead">${t.lead}</p>
+  <div class="row res-row">${res.join('')}</div>
+  ${t.warn ? `<div class="callout" style="border-color:var(--warn);background:rgba(251,191,36,.08)">⏰ ${t.warn}</div>` : ''}
+  ${t.html}
+  <h2>🎬 Screencasts</h2>
+  ${t.videos.length ? `<div class="vgrid">${t.videos.map(v => ytLite(...v)).join('')}</div>` : '<p class="stat-label">No course screencasts for this topic. Use the reading and any extra video below.</p>'}
+  ${(t.mit || []).length ? `<h3>Additional screencasts (MIT 6.046J)</h3><div class="vgrid">${t.mit.map(v => ytLite(...v)).join('')}</div>` : ''}
+  ${t.prereq.length ? `<h2>📚 Prerequisite review</h2><div class="chips">${t.prereq.map(p => `<span class="chip">${p}</span>`).join('')}</div>` : ''}
+  <h2>🧠 Practice this topic</h2>
+  <div class="card qa" data-topic="${t.id}"></div>
+</section>`;
+}
+function groupPage(g){
+  const ex = g.excluded && TMETA[g.excluded], after = g.id === 'after';
+  return `<section class="page hidden" id="page-${g.id}">
+  <span class="eyebrow" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} ${after ? 'Topics after the last midterm' : 'Exam'} · ${g.date}</span>
+  <h1>${g.name} <span class="grad">${after ? 'Topics' : 'Core Concepts'}</span></h1>
+  <p class="lead">${after ? 'Everything taught from the Monday of Midterm 3 week onward: greedy algorithms, graphs, disjoint sets, minimum spanning trees and Fibonacci heaps.' : `Every topic taught before the week of ${g.name}. Official exam coverage: <b>${g.covers}</b>.`}</p>
+  <div class="row"><button class="btn primary" data-practice="${g.id}">🎯 Practice ${g.name}: 10 random questions</button><a class="btn" href="#${g.topics[0]}">📘 Start with ${TMETA[g.topics[0]].short}</a></div>
+  ${ex ? `<div class="callout">Not on this exam: <b>Topic ${ex.num} ${ex.short}</b>, taught ${ex.when.split(' · ')[1]} (the Monday of exam week). It counts toward the next exam.</div>` : g.note ? `<div class="callout cyan">${g.note}</div>` : ''}
+  <h2>${after ? 'Topics' : 'Core concepts'}</h2>
+  <div class="grid g3 group-cards" data-group="${g.id}"></div>
+</section>`;
+}
+function topicCard(id){
+  const t = TMETA[id], s = store.byTopic[id], pct = s && s.a ? Math.round(100 * s.c / s.a) : 0;
+  const nQ = MC.filter(q => q.topic === id).length, nG = GEN.filter(q => q.topic === id).length, nC = CODE.filter(q => q.topic === id).length;
+  return `<div class="card topic-card" onclick="location.hash='${id}'"><div class="row" style="justify-content:space-between"><div class="ic" style="background:${t.color}22">${t.icon}</div><span class="tnum" style="color:${t.color}">${t.num}</span></div><h3>${t.short}</h3><p>${t.blurb}</p>
+    <div class="row" style="gap:6px"><span class="pill mc">${nQ} MC${nG ? ` + ${nG} generator${nG > 1 ? 's' : ''}` : ''}</span>${nC ? `<span class="pill code">${nC} pseudocode</span>` : ''}</div>
+    <div class="bar"><span style="width:${pct}%"></span></div><div class="stat-label" style="font-size:.75rem;margin-top:4px">${s ? `${s.a} answered · ${pct}% avg` : 'Not started'}</div></div>`;
+}
+
+// ---- diagrams & simple-mode text for overview pages ----
+GROUPS.forEach(g => {
+  const ts = g.topics.map(id => TMETA[id]), after = g.id === 'after';
+  DIAGRAMS[g.id] = () => { const per = 4, rows = Math.ceil(ts.length / per); let s = '';
+    ts.forEach((t, i) => { const x = 20 + (i % per) * 170, y = 30 + Math.floor(i / per) * 80; s += D.box(x, y, 150, 54, t.num, t.color, t.short.length > 21 ? t.short.slice(0, 20) + '…' : t.short); if (i % per < per - 1 && i < ts.length - 1) s += D.arrow(x + 150, y + 27, x + 167, y + 27, 'mut', 2); });
+    const ey = 30 + (rows - 1) * 40;
+    if (!after) s += D.arrow(690, ey + 27, 712, ey + 27, 'warn', 3) + D.box(715, ey, 150, 54, g.name, C.warn, g.date.split(' · ')[0]);
+    return fig(D.svg(after ? 700 : 880, 50 + rows * 80, s), after ? 'Topics covered after Midterm 3, in the order they are taught.' : `Everything taught before exam week feeds into ${g.name} (${g.covers}).`, after ? 'These are the newest lessons, in order.' : `Learn these boxes, in order, to be ready for ${g.name}!`); };
+  ELI5[g.id] = {title: after ? 'What comes after Midterm 3?' : `What do I need for ${g.name}?`, pts: ts.map(t => `${t.icon} <b>${t.short}</b>: ${(ELI5[t.id] || {}).title || t.blurb}`)};
+});
+DIAGRAMS.home = () => fig(D.svg(780, 170, D.text(390, 26, 'the semester at a glance', 13, C.txt, 'middle', 700) +
+  GROUPS.map((g, i) => D.box(20 + i * 190, 50, 165, 70, g.name, g.color, g.date.split(' · ')[0]) + (i < 3 ? D.arrow(185 + i * 190, 85, 207 + i * 190, 85, 'mut', 2.5) : '')).join('') +
+  D.text(390, 152, 'each exam covers the topics taught before its exam week', 12, C.mut)),
+  'Topics are grouped by the midterm they prepare you for. Use the sidebar groups or the cards below.', 'The school year is split into 4 chunks. Each chunk ends with a big test (except the last one, so far).');
+ELI5.home = {title: 'What is this site?', pts: ['📚 It is a study buddy for ICS 311, the class about <b>algorithms</b> (smart recipes for computers).', '🗂️ The lessons are sorted into piles, one pile for each big test (midterm).', '🎬 Every lesson has notes, pictures, videos, and practice questions.', '🧒 Keep this switch on to see a simple explanation at the top of every page.']};
+
+// ---- render pages & nav ----
+document.getElementById('page-videos').insertAdjacentHTML('beforebegin', GROUPS.map(g => groupPage(g) + g.topics.filter(id => COURSE.some(t => t.id === id)).map(id => topicPage(TMETA[id])).join('')).join(''));
+function buildNav(){
+  const link = id => { const t = TMETA[id]; return `<a href="#${id}" data-page="${id}"><span class="dot" style="background:${t.color}"></span><span class="nnum">${t.num}</span><span class="nlabel">${t.short}</span></a>`; };
+  document.getElementById('nav').innerHTML = `<a href="#home" data-page="home"><span class="dot" style="background:#e5e7eb"></span>Overview</a>` +
+    GROUPS.map(g => `<details class="nav-group" data-group="${g.id}"><summary><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0]}</span></summary><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.id === 'after' ? 'Overview' : 'Exam overview'}</a>${g.topics.map(link).join('')}</details>`).join('') +
+    `<div class="nav-label">Watch &amp; Practice</div><a href="#videos" data-page="videos"><span class="dot" style="background:#f87171"></span>All screencasts</a><a href="#practice" data-page="practice"><span class="dot" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)"></span>Practice Arena</a>`;
+}
+buildNav();
+
+function renderHome(){
+  const all = Object.values(store.byTopic), a = all.reduce((s, t) => s + t.a, 0), c = all.reduce((s, t) => s + t.c, 0), codes = Object.values(store.code);
+  const hs = document.getElementById('home-stats');
+  if (hs) hs.innerHTML = [[a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'], [`${codes.length}/${CODE.length}`, 'Pseudocode challenges attempted'], [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']]
+    .map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('');
+  const tc = document.getElementById('topic-cards');
+  if (tc) tc.innerHTML = GROUPS.map(g => `<div class="home-group"><div class="hg-head"><h3>${g.icon} ${g.name}</h3><span class="pill">${g.date}</span>${g.id !== 'after' ? `<span class="pill">${g.covers}</span>` : ''}<a class="btn sm ghost" href="#${g.id}">Overview →</a></div><div class="grid g3">${g.topics.map(topicCard).join('')}</div></div>`).join('');
+  document.querySelectorAll('.group-cards[data-group]').forEach(el => { el.innerHTML = GROUPS.find(x => x.id === el.dataset.group).topics.map(topicCard).join(''); });
+}
+function renderVideos(){
+  document.getElementById('video-grid').innerHTML = GROUPS.map(g => `<h2>${g.icon} ${g.name} <span class="pill">${g.date}</span></h2>` + g.topics.map(id => {
+    const t = TMETA[id], vids = t.videos ? [...t.videos, ...(t.mit || [])] : (EXIST_VIDS[id] || []);
+    if (!vids.length) return '';
+    return `<div class="card vtopic"><div class="row" style="justify-content:space-between"><h3 style="margin:0">${t.icon} Topic ${t.num} · ${t.short}</h3><a class="btn sm" href="#${id}">📘 Notes</a></div><div class="vgrid">${vids.map(v => ytLite(...v)).join('')}</div></div>`;
+  }).join('')).join('');
+}
+function renderPractice(preset){
+  const root = document.getElementById('practice-root'), cfg = {mode: 'mixed', n: 10}, sel = new Set(preset || Object.keys(TOPICS));
+  root.innerHTML = `<div class="card fade" style="margin-top:20px">
+    <h3 style="margin-top:0">Quick presets</h3><div class="row" id="p-presets"><button class="btn sm" data-g="all">All topics</button>${GROUPS.map(g => `<button class="btn sm" data-g="${g.id}">${g.icon} ${g.name}</button>`).join('')}</div>
+    <h3>Topics</h3>${GROUPS.map(g => `<div class="pgroup"><div class="pg-head"><b>${g.icon} ${g.name}</b> <span class="stat-label">· ${g.date}</span></div><div class="row">${g.topics.map(id => `<label class="chk"><input type="checkbox" value="${id}" ${sel.has(id) ? 'checked' : ''}> ${TMETA[id].icon} ${TMETA[id].num} ${TMETA[id].short}</label>`).join('')}</div></div>`).join('')}
+    <h3>Question type</h3><div class="seg" id="p-mode">${[['mixed', 'Mixed'], ['mc', 'Multiple choice only'], ['code', 'Pseudocode only']].map(([k, l]) => `<button data-m="${k}" class="${k === 'mixed' ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <h3>Length</h3><div class="seg" id="p-n">${[5, 10, 15, 20].map(n => `<button data-n="${n}" class="${n === 10 ? 'on' : ''}">${n} questions</button>`).join('')}</div>
+    <div style="margin-top:22px"><button class="btn primary" id="p-start">🚀 Start practice</button></div></div>`;
+  root.querySelectorAll('#p-presets button').forEach(b => b.onclick = () => { const g = GROUPS.find(x => x.id === b.dataset.g); root.querySelectorAll('.chk input').forEach(i => i.checked = !g || g.topics.includes(i.value)); });
+  root.querySelectorAll('#p-mode button').forEach(b => b.onclick = () => { cfg.mode = b.dataset.m; root.querySelectorAll('#p-mode button').forEach(x => x.classList.toggle('on', x === b)); });
+  root.querySelectorAll('#p-n button').forEach(b => b.onclick = () => { cfg.n = +b.dataset.n; root.querySelectorAll('#p-n button').forEach(x => x.classList.toggle('on', x === b)); });
+  root.querySelector('#p-start').onclick = () => {
+    cfg.topics = [...root.querySelectorAll('.chk input:checked')].map(i => i.value);
+    if (!cfg.topics.length) { toast('Pick at least one topic'); return; }
+    runQuiz(root, cfg);
+  };
+}
+function startPractice(groupId){
+  const g = GROUPS.find(x => x.id === groupId); location.hash = 'practice';
+  renderPractice(g.topics); runQuiz(document.getElementById('practice-root'), {topics: g.topics, mode: 'mixed', n: 10});
+}
+DIAGRAMS.videos = () => fig(D.svg(780, 150, GROUPS.map((g, i) => { const n = g.topics.reduce((s, id) => s + ((TMETA[id].videos || EXIST_VIDS[id] || []).length + (TMETA[id].mit || []).length), 0);
+  return D.box(20 + i * 190, 30, 165, 70, g.name, g.color, n + ' videos') + (i < 3 ? D.arrow(185 + i * 190, 65, 207 + i * 190, 65, 'mut', 2.5) : ''); }).join('') + D.text(390, 135, 'click any thumbnail to play it in place', 12, C.mut)),
+  'Screencasts are grouped by the midterm they prepare you for, in teaching order.', 'Pick your test, then watch the videos from left to right.');
+ELI5.videos = {title: 'Watching the videos', pts: ['🎬 Every lesson has short videos from the teacher. They are sorted by which big test they help with.', '▶️ Tap a picture to play the video right on the page.', '✂️ Some videos only play the part your schedule says to watch.', '💡 Tip: pause and try to guess the next step before the teacher shows it!']};
+
 // ======================= STATE =======================
 const STORE_KEY = 'mstlab-v1';
 const store = (() => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; } })();
@@ -1663,22 +2812,6 @@ function mountQA(el){
 }
 
 // ======================= PRACTICE ARENA =======================
-function renderPractice(){
-  const root = document.getElementById('practice-root');
-  const cfg = {topics: Object.keys(TOPICS), mode: 'mixed', n: 10};
-  root.innerHTML = `<div class="card fade" style="margin-top:20px">
-    <h3 style="margin-top:0">Topics</h3><div class="row">${Object.entries(TOPICS).map(([k, t]) => `<label class="chk"><input type="checkbox" value="${k}" checked> ${t.icon} ${t.name}</label>`).join('')}</div>
-    <h3>Question type</h3><div class="seg" id="p-mode">${[['mixed', 'Mixed'], ['mc', 'Multiple choice only'], ['code', 'Pseudocode only']].map(([k, l]) => `<button data-m="${k}" class="${k === 'mixed' ? 'on' : ''}">${l}</button>`).join('')}</div>
-    <h3>Length</h3><div class="seg" id="p-n">${[5, 10, 15, 20].map(n => `<button data-n="${n}" class="${n === 10 ? 'on' : ''}">${n} questions</button>`).join('')}</div>
-    <div style="margin-top:22px"><button class="btn primary" id="p-start">🚀 Start practice</button></div></div>`;
-  root.querySelectorAll('#p-mode button').forEach(b => b.onclick = () => { cfg.mode = b.dataset.m; root.querySelectorAll('#p-mode button').forEach(x => x.classList.toggle('on', x === b)); });
-  root.querySelectorAll('#p-n button').forEach(b => b.onclick = () => { cfg.n = +b.dataset.n; root.querySelectorAll('#p-n button').forEach(x => x.classList.toggle('on', x === b)); });
-  root.querySelector('#p-start').onclick = () => {
-    cfg.topics = [...root.querySelectorAll('.chk input:checked')].map(i => i.value);
-    if (!cfg.topics.length) { toast('Pick at least one topic'); return; }
-    runQuiz(root, cfg);
-  };
-}
 function runQuiz(root, cfg){
   const results = []; let i = 0;
   const step = () => {
@@ -1704,7 +2837,7 @@ function runQuiz(root, cfg){
       <table class="tbl" style="max-width:520px;margin:18px auto"><tr><th>Topic</th><th>Questions</th><th>Score</th></tr>${Object.entries(byT).map(([k, v]) => `<tr><td>${TOPICS[k].icon} ${TOPICS[k].name}</td><td>${v.n}</td><td>${Math.round(100 * v.s / v.n)}%</td></tr>`).join('')}</table>
       <div class="row" style="justify-content:center"><button class="btn primary again">↻ New random set</button><button class="btn change">⚙ Change settings</button></div></div>`;
     root.querySelector('.again').onclick = () => runQuiz(root, cfg);
-    root.querySelector('.change').onclick = renderPractice;
+    root.querySelector('.change').onclick = () => renderPractice(cfg.topics);
   };
   step();
 }
@@ -1755,40 +2888,13 @@ function mountPrim(){
 }
 
 // ======================= HOME & VIDEOS =======================
-function renderHome(){
-  const all = Object.values(store.byTopic), a = all.reduce((s, t) => s + t.a, 0), c = all.reduce((s, t) => s + t.c, 0);
-  const codes = Object.values(store.code);
-  document.getElementById('home-stats').innerHTML = [
-    [a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'],
-    [codes.length ? `${codes.length}/${CODE.length}` : `0/${CODE.length}`, 'Pseudocode challenges attempted'],
-    [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']
-  ].map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('') +
-  (a ? '' : '') ;
-  document.getElementById('topic-cards').innerHTML = Object.entries(TOPICS).map(([k, t]) => {
-    const s = store.byTopic[k]; const pct = s && s.a ? Math.round(100 * s.c / s.a) : 0;
-    const nQ = MC.filter(q => q.topic === k).length, nG = GEN.filter(q => q.topic === k).length, nC = CODE.filter(q => q.topic === k).length;
-    return `<div class="card topic-card" onclick="location.hash='${k}'"><div class="ic" style="background:${t.color}22">${t.icon}</div><h3>${t.name}</h3><p>${t.blurb}</p>
-      <div class="row" style="gap:6px"><span class="pill mc">${nQ} MC + ${nG} generators</span><span class="pill code">${nC} pseudocode</span></div>
-      <div class="bar"><span style="width:${pct}%"></span></div><div class="stat-label" style="font-size:.75rem;margin-top:4px">${s ? `${s.a} answered · ${pct}% avg` : 'Not started'}</div></div>`;
-  }).join('');
-}
-const VIDEOS = [
-  {id: 'Mx-dvvSE4Qc', title: 'Topic 17 A · Minimum Spanning Trees', topic: 'mst', pts: ['Spanning trees: BFS/DFS trees revisited', 'MST problem formulation & applications (circuits, networks)', 'Generic greedy algorithm & loop invariant', 'Cuts, light edges, and the Safe Edge Theorem proof']},
-  {id: '1BnpXYm7LKY', title: "Topic 17 B · Kruskal's Algorithm", topic: 'kruskal', pts: ['Greedy: sort edges cheapest-first', 'Union-Find detects cycles (like CONNECTED-COMPONENTS)', 'Worked example on a US airline map (PVD, JFK, BWI, SFO, LAX…)', 'Analysis: O(E lg V); works on disconnected graphs']},
-  {id: 'qegY0R78QMQ', title: "Topic 17 C · Prim's Algorithm", topic: 'prim', pts: ['Grow one tree from root r using parent pointers', 'Priority queue keyed by cheapest connecting edge', 'Worked example rooted at SFO; comparison with Dijkstra', 'Analysis: O(E lg V); O(E + V lg V) with Fibonacci heaps']}
-];
-function renderVideos(){
-  document.getElementById('video-grid').innerHTML = VIDEOS.map(v => `<div class="card"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}" title="${v.title}" allowfullscreen loading="lazy"></iframe></div>
-    <h3>${v.title}</h3><ul class="clean">${v.pts.map(p => `<li>${p}</li>`).join('')}</ul>
-    <div class="row"><a class="btn sm" href="#${v.topic}">📘 Read the notes</a><a class="btn sm" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">↗ YouTube</a></div></div>`).join('');
-}
-
 // ======================= ROUTER =======================
 function route(){
   const page = (location.hash || '#home').slice(1);
   const id = document.getElementById('page-' + page) ? page : 'home';
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + id));
   document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
+  const act = document.querySelector('.nav a.active'); if (act && act.closest('details')) act.closest('details').open = true;
   document.querySelector('.sidebar').classList.remove('open');
   window.scrollTo(0, 0);
 }

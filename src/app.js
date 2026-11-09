@@ -102,22 +102,6 @@ function mountQA(el){
 }
 
 // ======================= PRACTICE ARENA =======================
-function renderPractice(){
-  const root = document.getElementById('practice-root');
-  const cfg = {topics: Object.keys(TOPICS), mode: 'mixed', n: 10};
-  root.innerHTML = `<div class="card fade" style="margin-top:20px">
-    <h3 style="margin-top:0">Topics</h3><div class="row">${Object.entries(TOPICS).map(([k, t]) => `<label class="chk"><input type="checkbox" value="${k}" checked> ${t.icon} ${t.name}</label>`).join('')}</div>
-    <h3>Question type</h3><div class="seg" id="p-mode">${[['mixed', 'Mixed'], ['mc', 'Multiple choice only'], ['code', 'Pseudocode only']].map(([k, l]) => `<button data-m="${k}" class="${k === 'mixed' ? 'on' : ''}">${l}</button>`).join('')}</div>
-    <h3>Length</h3><div class="seg" id="p-n">${[5, 10, 15, 20].map(n => `<button data-n="${n}" class="${n === 10 ? 'on' : ''}">${n} questions</button>`).join('')}</div>
-    <div style="margin-top:22px"><button class="btn primary" id="p-start">🚀 Start practice</button></div></div>`;
-  root.querySelectorAll('#p-mode button').forEach(b => b.onclick = () => { cfg.mode = b.dataset.m; root.querySelectorAll('#p-mode button').forEach(x => x.classList.toggle('on', x === b)); });
-  root.querySelectorAll('#p-n button').forEach(b => b.onclick = () => { cfg.n = +b.dataset.n; root.querySelectorAll('#p-n button').forEach(x => x.classList.toggle('on', x === b)); });
-  root.querySelector('#p-start').onclick = () => {
-    cfg.topics = [...root.querySelectorAll('.chk input:checked')].map(i => i.value);
-    if (!cfg.topics.length) { toast('Pick at least one topic'); return; }
-    runQuiz(root, cfg);
-  };
-}
 function runQuiz(root, cfg){
   const results = []; let i = 0;
   const step = () => {
@@ -143,7 +127,7 @@ function runQuiz(root, cfg){
       <table class="tbl" style="max-width:520px;margin:18px auto"><tr><th>Topic</th><th>Questions</th><th>Score</th></tr>${Object.entries(byT).map(([k, v]) => `<tr><td>${TOPICS[k].icon} ${TOPICS[k].name}</td><td>${v.n}</td><td>${Math.round(100 * v.s / v.n)}%</td></tr>`).join('')}</table>
       <div class="row" style="justify-content:center"><button class="btn primary again">↻ New random set</button><button class="btn change">⚙ Change settings</button></div></div>`;
     root.querySelector('.again').onclick = () => runQuiz(root, cfg);
-    root.querySelector('.change').onclick = renderPractice;
+    root.querySelector('.change').onclick = () => renderPractice(cfg.topics);
   };
   step();
 }
@@ -194,40 +178,13 @@ function mountPrim(){
 }
 
 // ======================= HOME & VIDEOS =======================
-function renderHome(){
-  const all = Object.values(store.byTopic), a = all.reduce((s, t) => s + t.a, 0), c = all.reduce((s, t) => s + t.c, 0);
-  const codes = Object.values(store.code);
-  document.getElementById('home-stats').innerHTML = [
-    [a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'],
-    [codes.length ? `${codes.length}/${CODE.length}` : `0/${CODE.length}`, 'Pseudocode challenges attempted'],
-    [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']
-  ].map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('') +
-  (a ? '' : '') ;
-  document.getElementById('topic-cards').innerHTML = Object.entries(TOPICS).map(([k, t]) => {
-    const s = store.byTopic[k]; const pct = s && s.a ? Math.round(100 * s.c / s.a) : 0;
-    const nQ = MC.filter(q => q.topic === k).length, nG = GEN.filter(q => q.topic === k).length, nC = CODE.filter(q => q.topic === k).length;
-    return `<div class="card topic-card" onclick="location.hash='${k}'"><div class="ic" style="background:${t.color}22">${t.icon}</div><h3>${t.name}</h3><p>${t.blurb}</p>
-      <div class="row" style="gap:6px"><span class="pill mc">${nQ} MC + ${nG} generators</span><span class="pill code">${nC} pseudocode</span></div>
-      <div class="bar"><span style="width:${pct}%"></span></div><div class="stat-label" style="font-size:.75rem;margin-top:4px">${s ? `${s.a} answered · ${pct}% avg` : 'Not started'}</div></div>`;
-  }).join('');
-}
-const VIDEOS = [
-  {id: 'Mx-dvvSE4Qc', title: 'Topic 17 A · Minimum Spanning Trees', topic: 'mst', pts: ['Spanning trees: BFS/DFS trees revisited', 'MST problem formulation & applications (circuits, networks)', 'Generic greedy algorithm & loop invariant', 'Cuts, light edges, and the Safe Edge Theorem proof']},
-  {id: '1BnpXYm7LKY', title: "Topic 17 B · Kruskal's Algorithm", topic: 'kruskal', pts: ['Greedy: sort edges cheapest-first', 'Union-Find detects cycles (like CONNECTED-COMPONENTS)', 'Worked example on a US airline map (PVD, JFK, BWI, SFO, LAX…)', 'Analysis: O(E lg V); works on disconnected graphs']},
-  {id: 'qegY0R78QMQ', title: "Topic 17 C · Prim's Algorithm", topic: 'prim', pts: ['Grow one tree from root r using parent pointers', 'Priority queue keyed by cheapest connecting edge', 'Worked example rooted at SFO; comparison with Dijkstra', 'Analysis: O(E lg V); O(E + V lg V) with Fibonacci heaps']}
-];
-function renderVideos(){
-  document.getElementById('video-grid').innerHTML = VIDEOS.map(v => `<div class="card"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}" title="${v.title}" allowfullscreen loading="lazy"></iframe></div>
-    <h3>${v.title}</h3><ul class="clean">${v.pts.map(p => `<li>${p}</li>`).join('')}</ul>
-    <div class="row"><a class="btn sm" href="#${v.topic}">📘 Read the notes</a><a class="btn sm" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">↗ YouTube</a></div></div>`).join('');
-}
-
 // ======================= ROUTER =======================
 function route(){
   const page = (location.hash || '#home').slice(1);
   const id = document.getElementById('page-' + page) ? page : 'home';
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + id));
   document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
+  const act = document.querySelector('.nav a.active'); if (act && act.closest('details')) act.closest('details').open = true;
   document.querySelector('.sidebar').classList.remove('open');
   window.scrollTo(0, 0);
 }

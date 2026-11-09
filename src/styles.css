@@ -197,3 +197,44 @@ body.eli5 figcaption .pro-only{display:none}
 .eli5-box ul{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
 @media (min-width:1800px){html{font-size:17px}.app{grid-template-columns:280px 1fr}}
 @media (min-width:2400px){html{font-size:18px}}
+
+/* ---------- Midterm-grouped nav ---------- */
+.nav-group{margin:2px 0}
+.nav-group summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;font-size:.76rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);user-select:none}
+.nav-group summary::-webkit-details-marker{display:none}
+.nav-group summary::after{content:"▸";color:var(--dim);transition:.2s}
+.nav-group[open] summary::after{transform:rotate(90deg)}
+.nav-group summary:hover{background:var(--panel2);color:var(--text)}
+.gdate{margin-left:auto;font-size:.68rem;color:var(--dim);font-weight:600;letter-spacing:0;text-transform:none}
+.nav-group a{padding-left:18px;font-size:.87rem}
+.nav .nnum{font-family:var(--mono);font-size:.66rem;font-weight:700;color:var(--dim);min-width:40px}
+.nav a.active .nnum{color:var(--accent2)}
+.nav a.gover{font-weight:600;color:var(--text)}
+.nav .nlabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ---------- Topic resources ---------- */
+.res-row{gap:8px;margin:18px 0}
+.res{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:10px;background:var(--panel);border:1px solid var(--border);font-size:.86rem;color:var(--muted)}
+.res b{color:var(--text)}
+a.res.link{color:var(--accent2)}
+a.eyebrow.mt-tag{color:var(--warn);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--border);font-size:.82rem;color:var(--muted)}
+pre .cm{color:#6b7280;font-style:italic}
+/* ---------- Lightweight YouTube embeds ---------- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px;margin:12px 0}
+.vt{font-size:.88rem;margin-top:8px;font-weight:600}
+.video.lite{cursor:pointer}
+.video.lite img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;transition:.2s}
+.video.lite:hover img{opacity:1;transform:scale(1.02)}
+.video.lite .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:44px;border-radius:12px;background:rgba(239,68,68,.92);display:grid;place-items:center;color:#fff;font-size:1.15rem;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vtopic{margin:14px 0}
+/* ---------- Home & practice groups ---------- */
+.home-group{margin:10px 0 28px}
+.hg-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hg-head h3{margin:0}
+.tnum{font-family:var(--mono);font-size:.8rem;font-weight:700}
+.pgroup{margin:10px 0 16px}
+.pg-head{margin-bottom:8px}
+.nav .nnum{white-space:nowrap;min-width:48px}
+.nav .nlabel{white-space:normal;overflow:visible;line-height:1.3}
