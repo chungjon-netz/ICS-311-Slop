@@ -201,7 +201,7 @@ COURSE.push(
  mit:[['JZHBa-rLrBA','MIT Lecture 07'],['s7QSM_hlS1U','MIT Lecture 08 (through 11:02)',0,662]],
  prereq:['ICS 211: Hash Tables'],
  html:`<h2>Chaining</h2>
- <div class="grid g2"><div class="card"><ul class="clean"><li>Slot j holds a linked list of all keys with h(k) = j.</li><li>INSERT at the head: O(1). DELETE with a doubly linked list given the node: O(1).</li><li><b>Load factor</b> α = n/m (keys per slot).</li><li>Under <b>simple uniform hashing</b>, a search (hit or miss) takes Θ(1 + α) expected time. If m = Θ(n), that is O(1).</li></ul></div>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>Slot j holds a linked list of all keys with h(k) = j.</li><li>INSERT at the head: O(1). DELETE with a doubly linked list given the node: O(1).</li><li><b>Load factor</b> α = n/m (keys per slot).</li><li>Under <b>independent uniform hashing</b>, a search (hit or miss) takes Θ(1 + α) expected time. If m = Θ(n), that is O(1).</li></ul></div>
  <div class="card"><h3>Hash functions</h3><ul class="clean"><li><b>Division:</b> h(k) = k mod m. Pick m prime, not near a power of 2.</li><li><b>Multiplication:</b> h(k) = ⌊m (kA mod 1)⌋, 0 &lt; A &lt; 1 (Knuth: A ≈ 0.618).</li><li><b>Universal hashing:</b> pick h at random from a family so that Pr[collision] ≤ 1/m for any two keys. Defeats adversarial inputs.</li></ul></div></div>
  <h2>Open addressing</h2>
  <table class="tbl"><tr><th>Probe sequence</th><th>h(k, i)</th><th>Issue</th></tr>
@@ -214,7 +214,7 @@ COURSE.push(
    return s+D.text(520,70,'chaining',14,C.txt,'middle',700)+D.text(520,98,'α = n / m = 7 / 7 = 1',13,C.mut)+D.text(520,126,'expected search: Θ(1 + α)',13,C.good,'middle',700)+D.text(520,160,'colliding keys share a list',12,C.mut);})()),
   'Chaining: each slot points to a list of keys that hash there; expected search time Θ(1 + α).','Each mailbox (number) holds a little chain of letters that landed in that same box.'),
  mc:[
-  ['With chaining and simple uniform hashing, expected search time is:','Θ(1 + α)',['Θ(α²)','Θ(lg n)','Θ(n)'],'Compute h(k), then scan a list of expected length α.'],
+  ['With chaining and independent uniform hashing, expected search time is:','Θ(1 + α)',['Θ(α²)','Θ(lg n)','Θ(n)'],'Compute h(k), then scan a list of expected length α.'],
   ['The load factor α of a hash table with n keys and m slots is:','n/m',['m/n','n·m','n − m'],'Average number of keys per slot.'],
   ['In open addressing, the load factor satisfies:','α ≤ 1',['α can exceed 1','α = 0 always','α ≥ 1'],'Every key occupies its own slot.'],
   ['Primary clustering is a problem of:','Linear probing',['Double hashing','Chaining','Universal hashing'],'Long runs of occupied slots grow.'],
