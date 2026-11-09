@@ -1,0 +1,1796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ICS 311 · Disjoint Sets & Minimum Spanning Trees</title>
+<style>
+:root{
+  --bg:#0b0f1a; --bg2:#111827; --panel:rgba(255,255,255,.04); --panel2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.09); --text:#e5e7eb; --muted:#9ca3af; --dim:#6b7280;
+  --accent:#8b5cf6; --accent2:#22d3ee; --good:#34d399; --bad:#f87171; --warn:#fbbf24;
+  --radius:16px; --mono:"JetBrains Mono","Fira Code",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;
+  background-image:radial-gradient(1200px 600px at 10% -10%,rgba(139,92,246,.18),transparent 60%),
+  radial-gradient(900px 500px at 110% 10%,rgba(34,211,238,.12),transparent 60%);background-attachment:fixed}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+code,pre,textarea{font-family:var(--mono)}
+code{background:rgba(255,255,255,.07);padding:.1em .4em;border-radius:6px;font-size:.9em}
+pre{background:#0a0d16;border:1px solid var(--border);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.88rem;line-height:1.55;margin:12px 0}
+pre code{background:none;padding:0}
+.kw{color:#c084fc}.fn{color:#67e8f9}.cm{color:#6b7280;font-style:italic}.nu{color:#fbbf24}
+
+/* layout */
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:24px 18px;border-right:1px solid var(--border);background:rgba(10,13,22,.7);backdrop-filter:blur(14px);display:flex;flex-direction:column;gap:6px;overflow:auto}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem;margin:0 6px 18px}
+.brand .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-size:1rem;box-shadow:0 6px 20px rgba(139,92,246,.4)}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:.72rem;letter-spacing:.04em}
+.nav-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin:14px 10px 4px}
+.nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;color:var(--muted);font-weight:500;font-size:.93rem;transition:.15s}
+.nav a:hover{background:var(--panel2);color:var(--text);text-decoration:none}
+.nav a.active{background:linear-gradient(90deg,rgba(139,92,246,.25),rgba(139,92,246,.05));color:#fff;box-shadow:inset 2px 0 0 var(--accent)}
+.nav .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.sidebar .foot{margin-top:auto;font-size:.75rem;color:var(--dim);padding:10px}
+main{padding:40px clamp(18px,4vw,56px) 80px;max-width:1180px;width:100%}
+.btn.menu-btn{display:none}
+
+/* typography */
+h1{font-size:clamp(2rem,4vw,3rem);line-height:1.1;margin:0 0 12px;letter-spacing:-.02em}
+h2{font-size:1.5rem;margin:36px 0 12px;letter-spacing:-.01em}
+h3{font-size:1.1rem;margin:22px 0 8px}
+p{margin:8px 0}
+.lead{color:var(--muted);font-size:1.08rem;max-width:760px}
+.grad{background:linear-gradient(90deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px;backdrop-filter:blur(8px)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.topic-card{cursor:pointer;transition:transform .15s,border-color .15s;position:relative;overflow:hidden}
+.topic-card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.5)}
+.topic-card .ic{font-size:1.6rem;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;margin-bottom:10px}
+.topic-card h3{margin:4px 0}
+.topic-card p{color:var(--muted);font-size:.92rem}
+.topic-card .bar{height:4px;border-radius:4px;background:rgba(255,255,255,.08);margin-top:12px;overflow:hidden}
+.topic-card .bar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.callout{border-left:3px solid var(--accent);background:rgba(139,92,246,.08);padding:12px 16px;border-radius:0 12px 12px 0;margin:14px 0}
+.callout.cyan{border-color:var(--accent2);background:rgba(34,211,238,.07)}
+.callout.warn{border-color:var(--warn);background:rgba(251,191,36,.07)}
+.callout b{color:#fff}
+ul.clean{padding-left:20px;margin:6px 0}
+ul.clean li{margin:4px 0}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--border);color:var(--muted)}
+.pill.mc{color:#67e8f9;border-color:rgba(34,211,238,.35)}
+.pill.code{color:#c4b5fd;border-color:rgba(139,92,246,.4)}
+.stat{font-size:2rem;font-weight:800}
+.stat-label{color:var(--muted);font-size:.85rem}
+table.tbl{width:100%;border-collapse:collapse;font-size:.9rem;margin:10px 0}
+.tbl th,.tbl td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:left}
+.tbl th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:10px 16px;border-radius:12px;font-weight:600;font-size:.92rem;cursor:pointer;transition:.15s;font-family:inherit}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#6d28d9);border-color:transparent;color:#fff;box-shadow:0 8px 24px rgba(139,92,246,.35)}
+.btn.primary:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:6px 12px;font-size:.82rem;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:3px}
+.seg button{background:none;border:0;color:var(--muted);padding:7px 14px;border-radius:9px;font-weight:600;cursor:pointer;font-family:inherit;font-size:.85rem}
+.seg button.on{background:var(--panel2);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.06) inset}
+
+/* video */
+.video{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#000}
+.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+/* quiz */
+.qa{margin-top:28px;border:1px solid rgba(139,92,246,.35);background:linear-gradient(180deg,rgba(139,92,246,.08),rgba(139,92,246,.02))}
+.qa-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.qa-head h3{margin:0;display:flex;align-items:center;gap:8px}
+.question{font-size:1.04rem;font-weight:500;margin:10px 0 14px}
+.question pre{font-size:.85rem}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);cursor:pointer;font-family:inherit;font-size:.95rem;transition:.12s}
+.opt:hover:not(:disabled){border-color:rgba(139,92,246,.6);background:var(--panel2)}
+.opt .k{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.07);font-weight:700;font-size:.8rem;color:var(--muted)}
+.opt.correct{border-color:var(--good);background:rgba(52,211,153,.1)}
+.opt.correct .k{background:var(--good);color:#052e1f}
+.opt.wrong{border-color:var(--bad);background:rgba(248,113,113,.1)}
+.opt.wrong .k{background:var(--bad);color:#3b0a0a}
+.opt:disabled{cursor:default}
+.explain{margin-top:14px;padding:12px 16px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:.93rem}
+.explain.good{border-color:rgba(52,211,153,.4)}
+.explain.bad{border-color:rgba(248,113,113,.4)}
+.editor-wrap{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0a0d16}
+.editor-bar{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--dim)}
+.editor-bar .dots span{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+textarea.code{width:100%;min-height:280px;resize:vertical;background:transparent;color:#e5e7eb;border:0;outline:0;padding:14px 16px;font-size:.88rem;line-height:1.6;tab-size:4}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:16px 0}
+.score{padding:14px;border-radius:12px;background:var(--panel);border:1px solid var(--border)}
+.score .lbl{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.score .val{font-size:1.6rem;font-weight:800;margin:2px 0 6px}
+.meter{height:6px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
+.meter span{display:block;height:100%;border-radius:6px;transition:width .6s ease}
+.overall{display:flex;align-items:center;gap:18px;padding:16px;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,.18),rgba(34,211,238,.08));border:1px solid rgba(139,92,246,.35)}
+.overall .grade{font-size:2.6rem;font-weight:900;width:72px;height:72px;border-radius:18px;display:grid;place-items:center;background:rgba(0,0,0,.25)}
+.fb{list-style:none;padding:0;margin:8px 0}
+.fb li{padding:7px 10px;border-radius:8px;margin:4px 0;font-size:.9rem;display:flex;gap:10px;align-items:flex-start}
+.fb li .m{flex:none;font-weight:800;width:18px;text-align:center}
+.fb li.ok .m{color:var(--good)}
+.fb li.no .m{color:var(--bad)}
+.fb li.pen .m{color:var(--warn)}
+.fb li .hint{color:var(--muted);font-size:.84rem;display:block}
+details.model{margin-top:12px}
+details.model summary{cursor:pointer;color:var(--accent2);font-weight:600}
+.progress{height:8px;border-radius:8px;background:rgba(255,255,255,.07);overflow:hidden;margin:6px 0 18px}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s}
+.chk{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:10px;border:1px solid var(--border);background:var(--panel);cursor:pointer;font-size:.9rem;user-select:none}
+.chk input{accent-color:var(--accent)}
+
+/* graph viz */
+.viz{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px;align-items:start}
+.viz svg{width:100%;height:auto;background:#0a0d16;border:1px solid var(--border);border-radius:14px}
+.viz .side{font-size:.86rem}
+.viz .log{font-family:var(--mono);font-size:.8rem;background:#0a0d16;border:1px solid var(--border);border-radius:12px;padding:10px 12px;max-height:260px;overflow:auto}
+.viz .log div{padding:2px 0;color:var(--muted)}
+.viz .log div.cur{color:#fff}
+.viz .log .acc{color:var(--good)}.viz .log .rej{color:var(--bad)}
+.q-graph svg{max-width:420px;width:100%;background:#0a0d16;border:1px solid var(--border);border-radius:12px;display:block;margin:8px 0}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#1f2937;border:1px solid var(--border);padding:10px 18px;border-radius:12px;transition:.3s;z-index:50;font-size:.9rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hidden{display:none!important}
+.math{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-style:italic}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;inset:0 30% 0 0;z-index:40;transform:translateX(-105%);transition:.25s;height:100vh}
+  .sidebar.open{transform:none}
+  .btn.menu-btn{display:inline-flex;position:fixed;top:14px;right:14px;z-index:45}
+  .viz{grid-template-columns:1fr}
+  main{padding-top:64px}
+}
+.log::-webkit-scrollbar,textarea::-webkit-scrollbar{width:8px}
+.log::-webkit-scrollbar-thumb,textarea::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:8px}
+.log::-webkit-scrollbar-track,textarea::-webkit-scrollbar-track{background:transparent}
+.log,textarea{scrollbar-color:rgba(255,255,255,.15) transparent}
+pre{overflow-x:auto;max-width:100%}
+/* ---------- Dummy mode switch ---------- */
+.eli5-toggle{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--panel);cursor:pointer;transition:.2s}
+.eli5-toggle:hover{border-color:rgba(251,191,36,.5)}
+.eli5-toggle + .foot{margin-top:0}
+.eli5-text{display:flex;flex-direction:column;font-size:.9rem}
+.eli5-text small{color:var(--dim);font-size:.72rem;margin-top:2px}
+.eli5-toggle input{position:absolute;opacity:0;width:0;height:0}
+.switch{position:relative;flex:none;width:44px;height:24px;border-radius:99px;background:#374151;transition:.2s}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.eli5-toggle input:checked + .switch{background:linear-gradient(90deg,#fbbf24,#f472b6)}
+.eli5-toggle input:checked + .switch::after{transform:translateX(20px)}
+.eli5-toggle input:focus-visible + .switch{outline:2px solid var(--accent2);outline-offset:2px}
+body.eli5 .eli5-toggle{border-color:rgba(251,191,36,.6);background:rgba(251,191,36,.08)}
+.kid-only{display:none}
+body.eli5 .kid-only{display:block}
+body.eli5 figcaption .kid-only{display:inline}
+body.eli5 figcaption .pro-only{display:none}
+.eli5-box{margin:22px 0;padding:20px 22px;border-radius:var(--radius);background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.10));border:1px solid rgba(251,191,36,.35)}
+.eli5-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.eli5-head h3{margin:0;font-size:1.15rem}
+.eli5-badge{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:4px 10px;border-radius:99px;background:#fbbf24;color:#1f1300}
+.eli5-box ul{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.eli5-box li{font-size:1.02rem;line-height:1.55;padding:10px 14px;background:rgba(0,0,0,.18);border-radius:10px}
+/* ---------- Diagrams ---------- */
+.diagram-card{margin:22px 0}
+.dg-head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.dg-head h3{margin:0}
+.fig{margin:10px 0 0;padding:14px;background:#0a0d16;border:1px solid var(--border);border-radius:14px}
+.fig svg.dg{width:100%;height:auto;display:block;font-family:inherit}
+.fig figcaption{margin-top:10px;font-size:.88rem;color:var(--muted);line-height:1.5}
+.diagram-card .grid{gap:14px}
+@media (max-width:640px){.fig{overflow-x:auto}.fig svg.dg{min-width:560px}}
+
+</style>
+</head>
+<body>
+<button class="btn sm menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menu</button>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="logo">⟡</div><div>MST Lab<small>ICS 311 · TOPICS 16–17</small></div></div>
+  <nav class="nav">
+    <a href="#home" data-page="home"><span class="dot" style="background:#e5e7eb"></span>Overview</a>
+    <div class="nav-label">Learn</div>
+    <a href="#ds" data-page="ds"><span class="dot" style="background:#f472b6"></span>Disjoint Sets</a>
+    <a href="#mst" data-page="mst"><span class="dot" style="background:#a78bfa"></span>MSTs &amp; Safe Edges</a>
+    <a href="#kruskal" data-page="kruskal"><span class="dot" style="background:#34d399"></span>Kruskal's Algorithm</a>
+    <a href="#prim" data-page="prim"><span class="dot" style="background:#22d3ee"></span>Prim's Algorithm</a>
+    <a href="#fib" data-page="fib"><span class="dot" style="background:#fbbf24"></span>Fibonacci Heap Bounds</a>
+    <div class="nav-label">Watch &amp; Practice</div>
+    <a href="#videos" data-page="videos"><span class="dot" style="background:#f87171"></span>Screencasts</a>
+    <a href="#practice" data-page="practice"><span class="dot" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)"></span>Practice Arena</a>
+  </nav>
+  <label class="eli5-toggle" title="Explain everything as if to an elementary student">
+    <span class="eli5-text"><b>🧒 Dummy mode</b><small>Explain it like I'm in grade school</small></span>
+    <input type="checkbox" id="eli5-switch"><span class="switch"></span>
+  </label>
+  <div class="foot">Content based on ICS 311 notes #16–#17 (Sitchinava / Suthers) and CLRS. Progress is saved in your browser.</div>
+</aside>
+
+<main>
+<!-- ============ HOME ============ -->
+<section class="page" id="page-home">
+  <span class="eyebrow">⚡ Study hub</span>
+  <h1>Disjoint Sets &amp; <span class="grad">Minimum Spanning Trees</span></h1>
+  <p class="lead">Interactive notes, the three course screencasts, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
+  <div class="row" style="margin:22px 0 30px">
+    <a class="btn primary" href="#practice">🎯 Start random practice</a>
+    <a class="btn" href="#ds">📘 Begin with Disjoint Sets</a>
+  </div>
+  <div class="grid g3" id="home-stats"></div>
+  <h2>Topics</h2>
+  <div class="grid g3" id="topic-cards"></div>
+  <h2>How it all connects</h2>
+  <div class="card">
+    <div class="grid g3">
+      <div><h3>1 · Union-Find</h3><p class="lead" style="font-size:.95rem">A forest of trees with <b>union by rank</b> + <b>path compression</b> gives near-constant <span class="math">O(α(n))</span> amortized operations.</p></div>
+      <div><h3>2 · Safe Edge Theorem</h3><p class="lead" style="font-size:.95rem">A light edge crossing any cut that respects <span class="math">A</span> is safe — the engine behind every greedy MST algorithm.</p></div>
+      <div><h3>3 · Kruskal vs. Prim</h3><p class="lead" style="font-size:.95rem">Kruskal grows a <b>forest</b> using Union-Find; Prim grows a <b>single tree</b> using a priority queue. Both run in <span class="math">O(E lg V)</span>.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DISJOINT SETS ============ -->
+<section class="page" id="page-ds">
+  <span class="eyebrow" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.08)">Topic 16 · CLRS Ch. 19/21</span>
+  <h1>Disjoint Sets &amp; Union-Find</h1>
+  <p class="lead">Group <span class="math">n</span> distinct elements into a dynamic collection of non-overlapping sets, each identified by a <b>representative</b> member.</p>
+
+  <h2>A quick note on amortized analysis</h2>
+  <p>The amortized cost of an operation is the <b>average</b> time per operation over a sequence of operations. Example: a stack backed by an array that doubles when full. Most pushes are <span class="math">O(1)</span>, an occasional push costs <span class="math">O(k)</span> to copy, but <span class="math">n</span> pushes total about <span class="math">O(3n)</span> — so each push is <span class="math">O(1)</span> amortized.</p>
+
+  <h2>Operations</h2>
+  <div class="grid g3">
+    <div class="card"><h3><code>MAKE-SET(x)</code></h3><p>Create a new set <span class="math">{x}</span>; <span class="math">x</span> is its representative.</p></div>
+    <div class="card"><h3><code>UNION(x, y)</code></h3><p>Replace <span class="math">S<sub>x</sub></span> and <span class="math">S<sub>y</sub></span> with <span class="math">S<sub>x</sub> ∪ S<sub>y</sub></span> (old sets are destroyed so sets stay disjoint).</p></div>
+    <div class="card"><h3><code>FIND-SET(x)</code></h3><p>Return the representative of the set containing <span class="math">x</span>.</p></div>
+  </div>
+  <div class="callout cyan">Analysis uses <b>n</b> = number of MAKE-SET operations and <b>m</b> = total operations. Always <span class="math">m ≥ n</span>, and there can be at most <span class="math">n − 1</span> UNIONs (after that only one set remains).</div>
+
+  <h2>Application: connected components</h2>
+  <pre><code><span class="fn">CONNECTED-COMPONENTS</span>(G)
+  <span class="kw">for each</span> vertex v ∈ G.V
+      <span class="fn">MAKE-SET</span>(v)
+  <span class="kw">for each</span> edge (u, v) ∈ G.E
+      <span class="kw">if</span> <span class="fn">FIND-SET</span>(u) ≠ <span class="fn">FIND-SET</span>(v)
+          <span class="fn">UNION</span>(u, v)
+
+<span class="fn">SAME-COMPONENT</span>(u, v)
+  <span class="kw">return</span> <span class="fn">FIND-SET</span>(u) == <span class="fn">FIND-SET</span>(v)</code></pre>
+  <p>For a <b>static</b> undirected graph, DFS is faster. Union-Find wins when edges are <b>added dynamically</b> — no need to re-run DFS. (Directed graphs need the SCC algorithm instead.)</p>
+
+  <h2>Linked-list representation <span class="pill">optional</span></h2>
+  <ul class="clean">
+    <li>Each set is a list with <code>head</code> (the representative) and <code>tail</code>; each node points back to its list object.</li>
+    <li>MAKE-SET and FIND-SET are <span class="math">O(1)</span>; UNION must update the back-pointer of every node in the appended list.</li>
+    <li>Naively, <span class="math">n</span> MAKE-SETs + <span class="math">n</span> UNIONs can cost <span class="math">O(n)</span> amortized per operation.</li>
+    <li><b>Weighted-union heuristic</b> (append smaller onto larger): <span class="math">m</span> operations take <span class="math">O(m + n lg n)</span>, because each element's pointer is updated ≤ lg n times (its set at least doubles each time).</li>
+  </ul>
+
+  <h2>Forest representation (Tarjan, 1975)</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>Representation</h3>
+      <ul class="clean"><li>Each tree is a set; the <b>root</b> is the representative.</li><li>Nodes point only to their <b>parent</b>; the root points to itself.</li></ul>
+      <h3>Heuristics</h3>
+      <ul class="clean">
+        <li><b>Union by rank:</b> rank is an upper bound on node height. Lower-rank root becomes the child (ranks unchanged). Equal ranks: pick one as parent and <b>increment</b> its rank.</li>
+        <li><b>Path compression:</b> during FIND-SET, every node on the path is re-pointed directly to the root.</li>
+      </ul>
+    </div>
+<pre><code><span class="fn">MAKE-SET</span>(x)
+  x.p = x
+  x.rank = 0
+
+<span class="fn">UNION</span>(x, y)
+  <span class="fn">LINK</span>(<span class="fn">FIND-SET</span>(x), <span class="fn">FIND-SET</span>(y))
+
+<span class="fn">LINK</span>(x, y)        <span class="cm">// union by rank</span>
+  <span class="kw">if</span> x.rank > y.rank
+      y.p = x
+  <span class="kw">else</span> x.p = y
+      <span class="kw">if</span> x.rank == y.rank
+          y.rank = y.rank + <span class="nu">1</span>
+
+<span class="fn">FIND-SET</span>(x)      <span class="cm">// path compression</span>
+  <span class="kw">if</span> x ≠ x.p
+      x.p = <span class="fn">FIND-SET</span>(x.p)
+  <span class="kw">return</span> x.p</code></pre>
+  </div>
+  <p>FIND-SET is a two-pass method: it recurses up to find the root, then updates each node as the recursion unwinds (so it is not tail-recursive).</p>
+
+  <h2>Time complexity</h2>
+  <p>With both heuristics, a sequence of <span class="math">m</span> operations takes <span class="math">O(m α(n))</span>, where <span class="math">α(n) = min{k : A<sub>k</sub>(1) ≥ n}</span> is the inverse of an Ackermann-like function. <span class="math">A<sub>4</sub>(1)</span> already dwarfs the number of atoms in the universe (10<sup>80</sup>), so in practice <span class="math">α(n) ≤ 4</span>, giving effectively <b>O(1) amortized</b> per operation.</p>
+  <table class="tbl"><tr><th>n</th><td>0–2</td><td>3</td><td>4–7</td><td>8–2047</td><td>2048 – A<sub>4</sub>(1)</td></tr><tr><th>α(n)</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr></table>
+
+  <div class="card qa" data-topic="ds"></div>
+</section>
+
+<!-- ============ MST ============ -->
+<section class="page" id="page-mst">
+  <span class="eyebrow" style="color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.08)">Topic 17A · CLRS Ch. 21</span>
+  <h1>Minimum Spanning Trees &amp; the Safe Edge Theorem</h1>
+  <p class="lead">Find the cheapest way to connect every vertex of a weighted, connected graph — the core problem behind wiring circuits, laying cable, and building road networks.</p>
+  <div class="grid g2" style="margin-top:20px">
+    <div>
+      <h3>The problem</h3>
+      <p>Given <span class="math">G = (V, E)</span> with weight function <span class="math">w(u,v)</span>, find <span class="math">T ⊆ E</span> that connects all of <span class="math">V</span> and minimizes <span class="math">w(T) = Σ<sub>(u,v)∈T</sub> w(u,v)</span>.</p>
+      <ul class="clean">
+        <li>A spanning tree includes every vertex (BFS and DFS trees are spanning trees).</li>
+        <li><span class="math">G</span> must be connected; otherwise we find a <b>minimum spanning forest</b>.</li>
+        <li>A minimum-cost connecting subgraph is always a <b>tree</b>: any cycle has an edge you could remove to save cost.</li>
+        <li>An MST has exactly <b>|V| − 1</b> edges, has no cycles, and one unique path between any two vertices.</li>
+        <li>MSTs are <b>not necessarily unique</b> (ties in weights). With distinct weights, the MST is unique.</li>
+      </ul>
+    </div>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/Mx-dvvSE4Qc" title="Topic 17 A MST" allowfullscreen loading="lazy"></iframe></div>
+  </div>
+
+  <h2>Generic greedy algorithm</h2>
+  <div class="grid g2">
+<pre><code><span class="fn">GENERIC-MST</span>(G, w)
+  A = ∅
+  <span class="kw">while</span> A does not form a spanning tree
+      find an edge (u, v) that is safe for A
+      A = A ∪ {(u, v)}
+  <span class="kw">return</span> A</code></pre>
+    <div>
+      <p><b>Loop invariant:</b> <span class="math">A</span> is a subset of some MST.</p>
+      <ul class="clean">
+        <li><b>Initialization:</b> ∅ trivially satisfies it.</li>
+        <li><b>Maintenance:</b> only safe edges are added.</li>
+        <li><b>Termination:</b> stop when <span class="math">|A| = |V| − 1</span>; A is a spanning tree and an MST.</li>
+      </ul>
+      <p>An edge <span class="math">(u,v)</span> is <b>safe</b> for <span class="math">A</span> iff <span class="math">A ∪ {(u,v)}</span> is also a subset of some MST.</p>
+    </div>
+  </div>
+
+  <h2>Cuts &amp; light edges</h2>
+  <div class="grid g2">
+    <div class="card"><ul class="clean">
+      <li>A <b>cut</b> <span class="math">(S, V − S)</span> partitions the vertices.</li>
+      <li>An edge <b>crosses</b> the cut if one endpoint is in <span class="math">S</span> and the other in <span class="math">V − S</span>.</li>
+      <li>A cut <b>respects</b> <span class="math">A</span> iff no edge of <span class="math">A</span> crosses it.</li>
+      <li>A <b>light edge</b> has minimum weight among all edges crossing the cut (there may be ties).</li>
+    </ul></div>
+    <div class="callout" style="margin:0"><b>Safe Edge Theorem.</b> Let <span class="math">A</span> be a subset of some MST, <span class="math">(S, V − S)</span> a cut that respects <span class="math">A</span>, and <span class="math">(u,v)</span> a light edge crossing it. Then <span class="math">(u,v)</span> is safe for <span class="math">A</span>.</div>
+  </div>
+  <h3>Proof sketch (cut-and-paste)</h3>
+  <ol>
+    <li>Let <span class="math">T</span> be an MST containing <span class="math">A</span>. If <span class="math">(u,v) ∈ T</span>, done.</li>
+    <li>Otherwise <span class="math">T</span> has a unique path <span class="math">p</span> from <span class="math">u</span> to <span class="math">v</span>, which must cross the cut at some edge <span class="math">(x,y)</span>. Because the cut respects <span class="math">A</span>, <span class="math">(x,y) ∉ A</span>.</li>
+    <li>Form <span class="math">T' = T − {(x,y)} ∪ {(u,v)}</span>: removing <span class="math">(x,y)</span> splits <span class="math">T</span> in two; adding <span class="math">(u,v)</span> reconnects it.</li>
+    <li><span class="math">w(T') = w(T) − w(x,y) + w(u,v) ≤ w(T)</span> since <span class="math">(u,v)</span> is light ⇒ <span class="math">T'</span> is an MST.</li>
+    <li><span class="math">A ⊆ T'</span> (we only removed an edge not in <span class="math">A</span>), so <span class="math">A ∪ {(u,v)} ⊆ T'</span>. ∎</li>
+  </ol>
+  <div class="callout cyan"><b>Corollary.</b> If <span class="math">C</span> is a connected component of the forest <span class="math">G<sub>A</sub> = (V, A)</span> and <span class="math">(u,v)</span> is a light edge connecting <span class="math">C</span> to another component, then <span class="math">(u,v)</span> is safe (take <span class="math">S = V<sub>C</sub></span>). Each safe edge merges two components; after <span class="math">|V| − 1</span> merges one tree remains. This component view leads to <b>Kruskal</b>.</div>
+
+  <div class="card qa" data-topic="mst"></div>
+</section>
+
+<!-- ============ KRUSKAL ============ -->
+<section class="page" id="page-kruskal">
+  <span class="eyebrow" style="color:#34d399;border-color:rgba(52,211,153,.3);background:rgba(52,211,153,.08)">Topic 17B</span>
+  <h1>Kruskal's Algorithm</h1>
+  <p class="lead">Start with every vertex as its own component. Scan edges in non-decreasing weight order and keep each edge that joins two <b>different</b> components — detected with Union-Find.</p>
+  <div class="grid g2" style="margin-top:20px">
+<pre><code><span class="fn">MST-KRUSKAL</span>(G, w)
+  A = ∅
+  <span class="kw">for each</span> vertex v ∈ G.V
+      <span class="fn">MAKE-SET</span>(v)
+  sort G.E into non-decreasing order by weight w
+  <span class="kw">for each</span> edge (u, v) ∈ G.E, in sorted order
+      <span class="kw">if</span> <span class="fn">FIND-SET</span>(u) ≠ <span class="fn">FIND-SET</span>(v)
+          A = A ∪ {(u, v)}
+          <span class="fn">UNION</span>(u, v)
+  <span class="kw">return</span> A</code></pre>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/1BnpXYm7LKY" title="Topic 17 B MST Kruskal" allowfullscreen loading="lazy"></iframe></div>
+  </div>
+  <p>Kruskal mirrors CONNECTED-COMPONENTS, but processes edges cheapest-first. It can "hop" around the graph growing several fragments at once, and on a disconnected graph it returns a <b>minimum spanning forest</b>.</p>
+
+  <h2>Step-through visualizer</h2>
+  <div class="card"><div id="viz-kruskal"></div></div>
+
+  <h2>Analysis</h2>
+  <table class="tbl">
+    <tr><th>Step</th><th>Cost</th></tr>
+    <tr><td>Initialize A</td><td>O(1)</td></tr>
+    <tr><td>|V| MAKE-SET operations</td><td>O(V α(V))</td></tr>
+    <tr><td>Sort E</td><td>O(E lg E)</td></tr>
+    <tr><td>O(E) FIND-SETs and UNIONs</td><td>O(E α(V))</td></tr>
+  </table>
+  <ul class="clean">
+    <li>Total <span class="math">O((V + E) α(V)) + O(E lg E)</span>. Connected ⇒ <span class="math">|E| ≥ |V| − 1</span>, so this is <span class="math">O(E α(V)) + O(E lg E)</span>.</li>
+    <li><span class="math">α(V) = O(lg V) = O(lg E)</span> ⇒ total <span class="math">O(E lg E)</span> — sorting dominates.</li>
+    <li><span class="math">|E| ≤ |V|<sup>2</sup></span> ⇒ <span class="math">lg E ≤ 2 lg V</span> ⇒ <b>O(E lg V)</b>.</li>
+  </ul>
+
+  <div class="card qa" data-topic="kruskal"></div>
+</section>
+
+<!-- ============ PRIM ============ -->
+<section class="page" id="page-prim">
+  <span class="eyebrow" style="color:#22d3ee;border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.08)">Topic 17C</span>
+  <h1>Prim's Algorithm</h1>
+  <p class="lead">Grow a <b>single tree</b> from a root <span class="math">r</span>. At each step add a light edge crossing the cut <span class="math">(V<sub>A</sub>, V − V<sub>A</sub>)</span>, found quickly with a min-priority queue.</p>
+  <div class="grid g2" style="margin-top:20px">
+<pre><code><span class="fn">MST-PRIM</span>(G, w, r)
+  Q = ∅
+  <span class="kw">for each</span> u ∈ G.V
+      u.key = ∞
+      u.π = NIL
+      <span class="fn">INSERT</span>(Q, u)
+  <span class="fn">DECREASE-KEY</span>(Q, r, 0)     <span class="cm">// r.key = 0</span>
+  <span class="kw">while</span> Q ≠ ∅
+      u = <span class="fn">EXTRACT-MIN</span>(Q)
+      <span class="kw">for each</span> v ∈ G.Adj[u]
+          <span class="kw">if</span> v ∈ Q <span class="kw">and</span> w(u, v) < v.key
+              v.π = u
+              <span class="fn">DECREASE-KEY</span>(Q, v, w(u, v))</code></pre>
+    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/qegY0R78QMQ" title="Topic 17 C MST Prim" allowfullscreen loading="lazy"></iframe></div>
+  </div>
+  <ul class="clean">
+    <li>Queue holds vertices not yet in the tree; <b>key</b> = min weight of any edge connecting <span class="math">v</span> to the tree (∞ if none).</li>
+    <li><span class="math">v.π</span> is <span class="math">v</span>'s parent; <span class="math">A = {(v, v.π) : v ∈ V − {r} − Q}</span>. When <span class="math">Q</span> is empty, <span class="math">A</span> is an MST.</li>
+    <li>A vertex's key may be lowered <b>multiple times</b> before it is extracted.</li>
+    <li>Only spans the component containing <span class="math">r</span> (needs a connected graph). Very similar to <b>Dijkstra</b>, except the key is a single edge weight, not a total path length.</li>
+  </ul>
+
+  <h2>Step-through visualizer</h2>
+  <div class="card"><div id="viz-prim"></div></div>
+
+  <h2>Analysis (binary heap)</h2>
+  <table class="tbl">
+    <tr><th>Step</th><th>Cost</th></tr>
+    <tr><td>|V| INSERTs</td><td>O(V lg V) (or O(V) via build-heap)</td></tr>
+    <tr><td>|V| EXTRACT-MINs</td><td>O(V lg V)</td></tr>
+    <tr><td>Θ(E) adjacency checks (aggregate analysis), O(E) DECREASE-KEYs</td><td>O(E lg V)</td></tr>
+  </table>
+  <p>Total <span class="math">O(V lg V + E lg V) = </span><b>O(E lg V)</b> for connected graphs — the same as Kruskal. With <b>Fibonacci heaps</b> (O(1) amortized DECREASE-KEY) it improves to <b>O(E + V lg V)</b>, though they are harder to implement.</p>
+
+  <div class="card qa" data-topic="prim"></div>
+</section>
+
+<!-- ============ FIB ============ -->
+<section class="page" id="page-fib">
+  <span class="eyebrow" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08)">CLRS 4e · Ch. 19 supplement</span>
+  <h1>Fibonacci Heaps: Bounding the Maximum Degree</h1>
+  <p class="lead">For <code>FIB-HEAP-EXTRACT-MIN</code> to run in <span class="math">O(lg n)</span> amortized time, the maximum degree <span class="math">D(n)</span> of any node must be <span class="math">O(lg n)</span>. That is what makes Prim's algorithm hit <span class="math">O(E + V lg V)</span>.</p>
+
+  <h2>Structure &amp; cascading cuts</h2>
+  <div class="grid g2">
+    <div class="card"><ul class="clean">
+      <li>Each node keeps <code>degree</code> (number of children), <code>mark</code>, and pointers <code>p</code>, <code>child</code>, <code>left</code>, <code>right</code>.</li>
+      <li><code>mark</code> = true iff the node has lost a child since it last became the child of another node.</li>
+      <li>When a marked node loses a <b>second</b> child, it is cut and moved to the root list — and the cut cascades upward.</li>
+    </ul></div>
+<pre><code><span class="fn">CUT</span>(H, x, y)
+  remove x from y's child list
+  y.degree = y.degree - <span class="nu">1</span>
+  add x to H's root list
+  x.p = NIL
+  x.mark = FALSE
+
+<span class="fn">CASCADING-CUT</span>(H, y)
+  z = y.p
+  <span class="kw">if</span> z ≠ NIL
+      <span class="kw">if</span> y.mark == FALSE
+          y.mark = TRUE
+      <span class="kw">else</span> <span class="fn">CUT</span>(H, y, z)
+           <span class="fn">CASCADING-CUT</span>(H, z)</code></pre>
+  </div>
+
+  <h2>The chain of results</h2>
+  <div class="grid g2">
+    <div class="card"><h3>Lemma 19.11 · Child degree ordering</h3>
+      <p>If <span class="math">x.degree = k</span> with children <span class="math">y<sub>1</sub>, …, y<sub>k</sub></span> in the order linked, then <span class="math">y<sub>1</sub>.degree ≥ 0</span> and <span class="math">y<sub>i</sub>.degree ≥ i − 2</span> for <span class="math">i ≥ 2</span>.</p>
+      <p class="stat-label">Why: when <span class="math">y<sub>i</sub></span> was linked, <span class="math">x</span> had ≥ <span class="math">i − 1</span> children, and linking requires equal degree. <span class="math">y<sub>i</sub></span> can lose at most one child before being cut.</p></div>
+    <div class="card"><h3>Lemma 19.12 · Fibonacci lower bound</h3>
+      <p>For any node with degree <span class="math">k</span>: <span class="math">size(x) ≥ F<sub>k+2</sub> ≥ φ<sup>k</sup></span>.</p>
+      <p class="stat-label">Let <span class="math">s<sub>k</sub></span> be the minimum size of a degree-<span class="math">k</span> tree: <span class="math">s<sub>0</sub> = 1, s<sub>1</sub> = 2</span>, and <span class="math">s<sub>k</sub> ≥ 1 + s<sub>0</sub> + Σ<sub>i=2..k</sub> s<sub>i−2</sub></span>; induction gives <span class="math">s<sub>k</sub> ≥ F<sub>k+2</sub></span>.</p></div>
+    <div class="card"><h3>Lemma 19.13 · Golden ratio inequality</h3>
+      <p>For all <span class="math">k ≥ 0</span>: <span class="math">F<sub>k+2</sub> ≥ φ<sup>k</sup></span>, where <span class="math">φ = (1 + √5)/2 ≈ 1.618</span>.</p>
+      <p class="stat-label">Induction using <span class="math">φ<sup>2</sup> = φ + 1</span>.</p></div>
+    <div class="card"><h3>Theorem 19.14 · Max degree</h3>
+      <p><span class="math">D(n) ≤ ⌊log<sub>φ</sub> n⌋ = O(lg n)</span>.</p>
+      <p class="stat-label"><span class="math">n ≥ size(x) ≥ φ<sup>k</sup></span> ⇒ <span class="math">k ≤ log<sub>φ</sub> n</span>.</p></div>
+  </div>
+  <table class="tbl" style="margin-top:16px"><tr><th>k</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><th>F<sub>k+2</sub> (min subtree size)</th><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>13</td><td>21</td><td>34</td></tr><tr><th>φ<sup>k</sup></th><td>1</td><td>1.62</td><td>2.62</td><td>4.24</td><td>6.85</td><td>11.09</td><td>17.94</td><td>29.03</td></tr></table>
+
+  <div class="card qa" data-topic="fib"></div>
+</section>
+
+<!-- ============ VIDEOS ============ -->
+<section class="page" id="page-videos">
+  <span class="eyebrow">🎬 UHM ICS Algorithms</span>
+  <h1>Screencasts</h1>
+  <p class="lead">Dan Suthers' screencasts, filmed while touring Laysan Island in Papahānaumokuākea — "an island with a minimum of trees."</p>
+  <div class="grid g2" style="margin-top:20px" id="video-grid"></div>
+</section>
+
+<!-- ============ PRACTICE ============ -->
+<section class="page" id="page-practice">
+  <span class="eyebrow">🎯 Randomized</span>
+  <h1>Practice Arena</h1>
+  <p class="lead">Every session draws a fresh random mix. Multiple-choice options are shuffled and many questions are generated from random graphs, so you'll never see the exact same quiz twice.</p>
+  <div id="practice-root"></div>
+</section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+// ---------- utilities ----------
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function shuffle(a){ a = a.slice(); for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---------- graph algorithms ----------
+function kruskalSteps(nodes, edges){
+  const parent = {}, rank = {};
+  nodes.forEach(n => { parent[n.id] = n.id; rank[n.id] = 0; });
+  const find = x => parent[x] === x ? x : (parent[x] = find(parent[x]));
+  const sorted = edges.map((e, i) => ({...e, i})).sort((a, b) => a.w - b.w || a.i - b.i);
+  const steps = []; const acc = []; let total = 0;
+  for (const e of sorted){
+    const ru = find(e.u), rv = find(e.v);
+    const ok = ru !== rv;
+    if (ok){
+      if (rank[ru] > rank[rv]) parent[rv] = ru; else { parent[ru] = rv; if (rank[ru] === rank[rv]) rank[rv]++; }
+      acc.push(e); total += e.w;
+    }
+    const sets = {};
+    nodes.forEach(n => { const r = find(n.id); (sets[r] = sets[r] || []).push(n.id); });
+    steps.push({edge: e, accepted: ok, accepted_so_far: acc.slice(), sets: Object.values(sets)});
+  }
+  return {steps, mst: acc, total, sorted};
+}
+function primSteps(nodes, edges, root){
+  const key = {}, pi = {}, inQ = {};
+  nodes.forEach(n => { key[n.id] = Infinity; pi[n.id] = null; inQ[n.id] = true; });
+  key[root] = 0;
+  const adj = {}; nodes.forEach(n => adj[n.id] = []);
+  edges.forEach(e => { adj[e.u].push({v: e.v, w: e.w}); adj[e.v].push({v: e.u, w: e.w}); });
+  const steps = [], order = []; let total = 0;
+  steps.push({u: null, key: {...key}, pi: {...pi}, done: [], updates: []});
+  while (Object.values(inQ).some(Boolean)){
+    let u = null;
+    nodes.forEach(n => { if (inQ[n.id] && (u === null || key[n.id] < key[u] || (key[n.id] === key[u] && n.id < u))) u = n.id; });
+    if (key[u] === Infinity) break;
+    inQ[u] = false; order.push(u); if (pi[u] !== null) total += key[u];
+    const updates = [];
+    for (const {v, w} of adj[u]) if (inQ[v] && w < key[v]){ updates.push({v, from: key[v], to: w}); key[v] = w; pi[v] = u; }
+    steps.push({u, key: {...key}, pi: {...pi}, done: order.slice(), updates});
+  }
+  return {steps, order, total, pi};
+}
+
+// ---------- random graph ----------
+function randomGraph(n = rnd(5, 6), extra = rnd(2, 4)){
+  const ids = 'abcdefgh'.slice(0, n).split('');
+  const R = 120, cx = 160, cy = 140, off = Math.random() * Math.PI;
+  const nodes = ids.map((id, i) => ({id, x: cx + R * Math.cos(off + 2 * Math.PI * i / n), y: cy + R * Math.sin(off + 2 * Math.PI * i / n)}));
+  const set = new Set(), edges = [];
+  const add = (u, v) => { const k = [u, v].sort().join(); if (u === v || set.has(k)) return false; set.add(k); edges.push({u, v}); return true; };
+  const order = shuffle(ids);
+  for (let i = 1; i < n; i++) add(order[i], order[rnd(0, i - 1)]);
+  let tries = 0; while (edges.length < n - 1 + extra && tries++ < 100) add(pick(ids), pick(ids));
+  const ws = shuffle([...Array(19).keys()].map(x => x + 1));
+  edges.forEach((e, i) => e.w = ws[i]);
+  return {nodes, edges};
+}
+
+// ---------- SVG renderer ----------
+function renderGraph(g, opt = {}){
+  const W = opt.w || 320, H = opt.h || 280;
+  const es = opt.edgeState || {}, ns = opt.nodeState || {}, lab = opt.nodeLabel || {};
+  const pos = {}; g.nodes.forEach(n => pos[n.id] = n);
+  const k = e => [e.u, e.v].sort().join();
+  let s = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="Inter,system-ui,sans-serif">`;
+  for (const e of g.edges){
+    const a = pos[e.u], b = pos[e.v], st = es[k(e)] || '';
+    const col = st === 'mst' ? '#34d399' : st === 'cur' ? '#fbbf24' : st === 'rej' ? '#f87171' : 'rgba(255,255,255,.22)';
+    const wd = st === 'mst' || st === 'cur' ? 4 : 2;
+    s += `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${col}" stroke-width="${wd}" ${st === 'rej' ? 'stroke-dasharray="6 5"' : ''} stroke-linecap="round"/>`;
+    const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    s += `<rect x="${mx - 12}" y="${my - 10}" width="24" height="19" rx="6" fill="#111827" stroke="${st ? col : 'rgba(255,255,255,.15)'}"/><text x="${mx}" y="${my + 4}" text-anchor="middle" font-size="11" font-weight="700" fill="${st ? col : '#cbd5e1'}">${e.w}</text>`;
+  }
+  for (const n of g.nodes){
+    const st = ns[n.id] || '';
+    const fill = st === 'in' ? '#065f46' : st === 'cur' ? '#78350f' : '#1e1b4b';
+    const stroke = st === 'in' ? '#34d399' : st === 'cur' ? '#fbbf24' : '#8b5cf6';
+    s += `<circle cx="${n.x}" cy="${n.y}" r="17" fill="${fill}" stroke="${stroke}" stroke-width="2.5"/><text x="${n.x}" y="${n.y + 5}" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">${n.id}</text>`;
+    if (lab[n.id] !== undefined) s += `<text x="${n.x}" y="${n.y - 24}" text-anchor="middle" font-size="11" font-weight="700" fill="#67e8f9">${lab[n.id]}</text>`;
+  }
+  return s + '</svg>';
+}
+
+// CLRS Figure 21.4 example graph
+const CLRS_GRAPH = {
+  nodes: [
+    {id:'a', x:40, y:150}, {id:'b', x:130, y:60}, {id:'c', x:250, y:60}, {id:'d', x:370, y:60}, {id:'e', x:460, y:150},
+    {id:'f', x:370, y:240}, {id:'g', x:250, y:240}, {id:'h', x:130, y:240}, {id:'i', x:200, y:150}],
+  edges: [
+    {u:'a',v:'b',w:4},{u:'a',v:'h',w:8},{u:'b',v:'c',w:8},{u:'b',v:'h',w:11},{u:'c',v:'d',w:7},{u:'c',v:'f',w:4},{u:'c',v:'i',w:2},
+    {u:'d',v:'e',w:9},{u:'d',v:'f',w:14},{u:'e',v:'f',w:10},{u:'f',v:'g',w:2},{u:'g',v:'h',w:1},{u:'g',v:'i',w:6},{u:'h',v:'i',w:7}]
+};
+
+// ======================= TOPICS =======================
+const TOPICS = {
+  ds:      {name: 'Disjoint Sets',          icon: '🧩', color: '#f472b6', blurb: 'Union-Find, union by rank, path compression, α(n).'},
+  mst:     {name: 'MSTs & Safe Edges',      icon: '🌳', color: '#a78bfa', blurb: 'Cuts, light edges, the generic algorithm and its proof.'},
+  kruskal: {name: "Kruskal's Algorithm",    icon: '🔗', color: '#34d399', blurb: 'Sort edges, merge components with Union-Find.'},
+  prim:    {name: "Prim's Algorithm",       icon: '🌐', color: '#22d3ee', blurb: 'Grow one tree with a min-priority queue.'},
+  fib:     {name: 'Fibonacci Heap Bounds',  icon: '🌀', color: '#fbbf24', blurb: 'Cascading cuts, Lemmas 19.11–19.13, D(n) = O(lg n).'}
+};
+
+// ======================= MULTIPLE CHOICE =======================
+const MC = [
+ // ---- Disjoint sets ----
+ {topic:'ds', q:'In the disjoint-set forest, what does FIND-SET(x) do when path compression is used?',
+  options:['Makes every node on the path from x to the root point directly to the root','Swaps x with the root so x becomes the representative','Moves the root down to be a child of x','Increments the rank of every node on the path'], answer:0,
+  explain:'Path compression re-points each node on the find path directly at the root, flattening the tree for future finds.'},
+ {topic:'ds', q:'With union by rank, two roots of <b>equal</b> rank are linked. What happens to the ranks?',
+  options:['One root is chosen as parent and its rank increases by 1','Both ranks increase by 1','Ranks are unchanged','The child\'s rank is set to 0'], answer:0,
+  explain:'Equal ranks: pick one as the parent and increment its rank, since the tree height may have grown by one.'},
+ {topic:'ds', q:'With union by rank, two roots of <b>unequal</b> rank are linked. Which statement is true?',
+  options:['The lower-rank root becomes the child and no ranks change','The higher-rank root becomes the child','The new root\'s rank becomes the sum of both ranks','The new root\'s rank increases by 1'], answer:0,
+  explain:'Attaching the shorter tree under the taller one cannot increase the taller tree\'s height bound, so ranks stay the same.'},
+ {topic:'ds', q:'What is the running time of a sequence of m MAKE-SET, UNION and FIND-SET operations (n of them MAKE-SETs) using union by rank <i>and</i> path compression?',
+  options:['O(m α(n))','O(m lg n)','O(m + n lg n)','O(mn)'], answer:0,
+  explain:'Tarjan\'s analysis gives O(m α(n)); since α(n) ≤ 4 in practice, that is effectively O(1) amortized per operation.'},
+ {topic:'ds', q:'Starting with n MAKE-SET operations, what is the maximum number of UNION operations that can actually merge sets?',
+  options:['n − 1','n','n / 2','m − n'], answer:0, explain:'Each successful union reduces the number of sets by one; after n − 1 unions only one set remains.'},
+ {topic:'ds', q:'With the linked-list representation and the <b>weighted-union heuristic</b>, a sequence of m operations on n elements takes:',
+  options:['O(m + n lg n)','O(m α(n))','O(mn)','O(m lg m)'], answer:0,
+  explain:'Each element\'s back-pointer is updated only when it\'s in the smaller list, and its set at least doubles each time, so at most lg n updates per element.'},
+ {topic:'ds', q:'In the forest representation, the "rank" of a node is…',
+  options:['An upper bound on the height of the node','The exact number of nodes in its subtree','Its depth from the root','The number of children it has'], answer:0,
+  explain:'Rank is an upper bound on height; path compression can shrink height without updating rank.'},
+ {topic:'ds', q:'How is the root (representative) of a tree identified in the disjoint-set forest?',
+  options:['It is its own parent (x.p == x)','Its parent pointer is NIL','It has rank 0','It is the head of a linked list'], answer:0,
+  explain:'MAKE-SET sets x.p = x, and roots keep pointing to themselves.'},
+ {topic:'ds', q:'For connected components of a <b>static</b> undirected graph, which approach is faster than Union-Find?',
+  options:['Depth-first search','Re-running Union-Find twice','Kruskal\'s algorithm','Bubble sort on the edges'], answer:0,
+  explain:'DFS is linear for a static graph. Union-Find shines when edges are added dynamically, avoiding a full DFS re-run.'},
+ {topic:'ds', q:'Without any heuristic, linked-list UNION that appends the longer list onto the shorter one can cost, for n MAKE-SETs and n UNIONs:',
+  options:['O(n) amortized per operation','O(1) amortized per operation','O(lg n) amortized per operation','O(α(n)) amortized per operation'], answer:0,
+  explain:'The total can be Θ(n²) pointer updates over 2n operations, i.e. O(n) amortized per operation.'},
+ {topic:'ds', q:'In practice, what is the largest value of α(n) we would ever expect to encounter?',
+  options:['4','16','lg n','64'], answer:0, explain:'α(n) ≤ 4 for any n up to A₄(1), which is astronomically larger than the number of atoms in the universe.'},
+ {topic:'ds', q:'Why is the recursive FIND-SET with path compression <b>not</b> tail recursive?',
+  options:['It updates x.p after the recursive call returns','It calls itself twice','It needs to know the rank of x','It returns NIL at the root'], answer:0,
+  explain:'It makes a pass up to find the root and then updates each node as the recursion unwinds.'},
+
+ // ---- MST ----
+ {topic:'mst', q:'A cut (S, V − S) <b>respects</b> a set of edges A if…',
+  options:['No edge in A crosses the cut','Every edge in A crosses the cut','A contains a light edge crossing the cut','S contains all endpoints of A and V − S is empty'], answer:0,
+  explain:'Respecting means no edge of A has one endpoint in S and the other in V − S.'},
+ {topic:'mst', q:'A <b>light edge</b> crossing a cut is…',
+  options:['An edge of minimum weight among all edges crossing the cut','The lightest edge in the entire graph','Any edge in the MST','An edge with weight 0'], answer:0,
+  explain:'It is minimum among crossing edges only, and there may be ties.'},
+ {topic:'mst', q:'What loop invariant does GENERIC-MST maintain?',
+  options:['A is a subset of some minimum spanning tree','A is always a spanning tree','A contains no light edges','|A| = |V| − 1'], answer:0,
+  explain:'Initially A = ∅; adding only safe edges keeps A inside some MST.'},
+ {topic:'mst', q:'Are minimum spanning trees unique?',
+  options:['Not necessarily, since ties in edge weights can give several MSTs','Always','Never','Only for directed graphs'], answer:0,
+  explain:'Equal-weight alternatives (like edges (e,f) and (c,e) in the notes\' example) can give different MSTs with the same total. Distinct weights guarantee uniqueness.'},
+ {topic:'mst', q:'In the proof of the Safe Edge Theorem, if T doesn\'t contain (u,v), how is T′ built?',
+  options:['Remove an edge (x,y) on T\'s u–v path that crosses the cut, then add (u,v)','Add (u,v) and remove the heaviest edge of T','Remove all edges crossing the cut and add (u,v)','Re-run Kruskal on T ∪ {(u,v)}'], answer:0,
+  explain:'T′ = T − {(x,y)} ∪ {(u,v)}; since (u,v) is light, w(T′) ≤ w(T).'},
+ {topic:'mst', q:'Why must the edge (x,y) removed in the Safe Edge proof <b>not</b> belong to A?',
+  options:['Because the cut respects A, so no edge of A crosses it','Because (x,y) is heavier than every edge in A','Because A is empty','Because (x,y) forms a cycle with A'], answer:0,
+  explain:'(x,y) crosses the cut, and edges of A never cross a cut that respects A.'},
+ {topic:'mst', q:'Why is a minimum-cost subgraph connecting all vertices (with positive weights) always a tree?',
+  options:['Any cycle contains an edge that could be removed to lower the cost while staying connected','Because graphs cannot contain cycles','Because DFS always produces trees','Because it has exactly |V| edges'], answer:0,
+  explain:'Removing one edge of a cycle keeps connectivity and reduces total weight, so a minimum solution has no cycles.'},
+ {topic:'mst', q:'If G is not connected, the MST problem generalizes to finding…',
+  options:['A minimum spanning forest, one tree per connected component','A Hamiltonian path','The shortest path tree','Nothing, since the problem is undefined'], answer:0,
+  explain:'We find T₁ … T_c for each of the c components.'},
+ {topic:'mst', q:'The Safe Edge Corollary says a light edge connecting a component C of G_A = (V, A) to another component is safe. Which cut is used?',
+  options:['(V_C, V − V_C)','(A, E − A)','({u}, V − {u}) for any vertex u','(V, ∅)'], answer:0,
+  explain:'Set S = V_C. That cut respects A because C is a whole component.'},
+ {topic:'mst', q:'How many times does GENERIC-MST\'s loop execute on a connected graph?',
+  options:['|V| − 1','|E|','|V|','|E| − |V|'], answer:0, explain:'Each iteration adds one safe edge, and a spanning tree has |V| − 1 edges.'},
+
+ // ---- Kruskal ----
+ {topic:'kruskal', q:'Which data structure does Kruskal\'s algorithm use to decide whether an edge would create a cycle?',
+  options:['Disjoint-set (Union-Find) forest','Min-priority queue keyed on vertices','Adjacency matrix with DFS','Stack'], answer:0,
+  explain:'If FIND-SET(u) == FIND-SET(v), u and v are already connected, so the edge would form a cycle.'},
+ {topic:'kruskal', q:'In what order does Kruskal\'s algorithm consider edges?',
+  options:['Non-decreasing order of weight','Non-increasing order of weight','Breadth-first from a root','Order of the adjacency lists'], answer:0,
+  explain:'Greedily cheapest first ("stingy").'},
+ {topic:'kruskal', q:'What is the overall running time of Kruskal\'s algorithm with a good Union-Find implementation?',
+  options:['O(E lg V)','O(V²)','O(E + V lg V)','O(E α(V)) without sorting'], answer:0,
+  explain:'Sorting is O(E lg E) = O(E lg V), and it dominates the O(E α(V)) Union-Find work.'},
+ {topic:'kruskal', q:'Which step dominates Kruskal\'s running time?',
+  options:['Sorting the edges','The MAKE-SET loop','Initializing A','The UNION operations'], answer:0, explain:'O(E lg E) sorting dominates O((V + E) α(V)).'},
+ {topic:'kruskal', q:'Why can O(E lg E) be rewritten as O(E lg V)?',
+  options:['|E| ≤ |V|², so lg E ≤ 2 lg V','|E| = |V| − 1','lg E is always smaller than lg V','α(V) = lg V'], answer:0, explain:'lg |E| ≤ lg |V|² = 2 lg |V| = O(lg V).'},
+ {topic:'kruskal', q:'What does Kruskal\'s algorithm produce on a graph with 3 connected components?',
+  options:['A minimum spanning forest of 3 trees','An error','An MST of only the first component','A single tree with 3 cycles'], answer:0,
+  explain:'Unlike Prim, Kruskal naturally works on disconnected graphs.'},
+ {topic:'kruskal', q:'During Kruskal, the set of chosen edges A is always…',
+  options:['A forest (possibly several trees)','A single connected tree','A cycle','Empty until the end'], answer:0,
+  explain:'Kruskal can "hop" around the graph, growing several fragments that eventually merge.'},
+ {topic:'kruskal', q:'Kruskal\'s algorithm has the same structure as which earlier algorithm?',
+  options:['CONNECTED-COMPONENTS with Union-Find','Topological sort','Heap sort','Bellman-Ford'], answer:0,
+  explain:'Both MAKE-SET every vertex and process edges with FIND-SET/UNION; Kruskal just sorts the edges first and records accepted edges.'},
+ {topic:'kruskal', q:'Kruskal rejects edge (u,v) when…',
+  options:['FIND-SET(u) == FIND-SET(v)','u.key < v.key','w(u,v) is larger than the previous edge','u and v are adjacent'], answer:0, explain:'Same representative ⇒ already connected ⇒ adding the edge forms a cycle.'},
+ {topic:'kruskal', q:'Which safe-edge argument justifies Kruskal\'s choice?',
+  options:['The Corollary: a light edge connecting two components of G_A is safe','Lemma 19.11','The edge is the heaviest in a cycle','The edge is on a shortest path'], answer:0,
+  explain:'The cheapest edge joining two different components is light for the cut around one of them.'},
+
+ // ---- Prim ----
+ {topic:'prim', q:'In MST-PRIM, what is the key of a vertex v still in the queue?',
+  options:['Minimum weight of any edge connecting v to the tree so far (∞ if none)','Length of the shortest path from r to v','Number of neighbors of v','The rank of v\'s set'], answer:0,
+  explain:'This is how EXTRACT-MIN finds a light edge crossing (V_A, V − V_A).'},
+ {topic:'prim', q:'How are keys initialized in MST-PRIM?',
+  options:['All ∞, then the root\'s key is decreased to 0','All 0','Each vertex gets its smallest incident edge weight','Root ∞, all others 0'], answer:0,
+  explain:'Root key 0 guarantees r is extracted first.'},
+ {topic:'prim', q:'Running time of MST-PRIM with a binary min-heap on a connected graph?',
+  options:['O(E lg V)','O(V²)','O(E + V lg V)','O(E α(V))'], answer:0, explain:'O(V lg V) for extract-mins + O(E lg V) for decrease-keys = O(E lg V).'},
+ {topic:'prim', q:'Running time of MST-PRIM with a Fibonacci heap?',
+  options:['O(E + V lg V)','O(E lg V)','O(V lg E)','O(E²)'], answer:0, explain:'DECREASE-KEY becomes O(1) amortized, EXTRACT-MIN stays O(lg V).'},
+ {topic:'prim', q:'What happens if MST-PRIM is run on a disconnected graph?',
+  options:['It finds an MST only for the component containing r','It finds a minimum spanning forest','It loops forever','It returns the same result as Kruskal'], answer:0,
+  explain:'Vertices in other components keep key ∞ and never get a parent.'},
+ {topic:'prim', q:'At any time during MST-PRIM, the set A equals…',
+  options:['{(v, v.π) : v ∈ V − {r} − Q}','{(v, v.π) : v ∈ Q}','All edges with finite key','The sorted edge list'], answer:0, explain:'Every extracted non-root vertex contributes its parent edge.'},
+ {topic:'prim', q:'Can DECREASE-KEY be called on the same vertex v more than once?',
+  options:['Yes, a cheaper connecting edge may be found before v is extracted','No, each vertex is updated at most once','Only for the root','Only if the graph has negative weights'], answer:0,
+  explain:'In the notes\' example, a key is lowered from one finite value to another.'},
+ {topic:'prim', q:'How does Prim\'s algorithm differ from Dijkstra\'s?',
+  options:['Prim\'s key is a single edge weight; Dijkstra\'s key is total path distance from the source','Prim uses a stack; Dijkstra uses a queue','Prim requires sorted edges','There is no difference'], answer:0,
+  explain:'Dijkstra updates keys with u.d + w(u,v); Prim uses only w(u,v).'},
+ {topic:'prim', q:'The test inside Prim\'s inner loop is…',
+  options:['v ∈ Q and w(u,v) < v.key','FIND-SET(u) ≠ FIND-SET(v)','v.π == NIL','w(u,v) > v.key'], answer:0, explain:'Only vertices not yet in the tree, reachable more cheaply, are updated.'},
+ {topic:'prim', q:'Why is the total work of Prim\'s inner for-loop Θ(E) over the whole run?',
+  options:['Aggregate analysis: each adjacency list is scanned once when its vertex is extracted','Each vertex has exactly 2 neighbors','The loop runs |V| times each','The heap has height lg E'], answer:0,
+  explain:'Summed over all extracted vertices, the adjacency lists total Θ(E) entries.'},
+ {topic:'prim', q:'Unlike Kruskal, the edge set A in Prim\'s algorithm is always…',
+  options:['A single tree rooted at r','A forest of many trees','Sorted by weight','Empty until the queue is empty'], answer:0, explain:'Prim grows one tree outward from the root.'},
+
+ // ---- Fib heaps ----
+ {topic:'fib', q:'Lemma 19.11: if x has degree k with children y₁…y_k in link order, then for i ≥ 2…',
+  options:['y_i.degree ≥ i − 2','y_i.degree ≥ i','y_i.degree ≤ i − 2','y_i.degree = i − 1'], answer:0,
+  explain:'When linked, y_i had degree ≥ i − 1 and can lose at most one child before being cut.'},
+ {topic:'fib', q:'Lemma 19.12 bounds the size of a subtree rooted at a degree-k node by…',
+  options:['size(x) ≥ F_{k+2} ≥ φ^k','size(x) ≥ 2^k','size(x) ≤ F_k','size(x) ≥ k²'], answer:0, explain:'Minimum sizes satisfy a Fibonacci recurrence: s₀ = 1, s₁ = 2, …'},
+ {topic:'fib', q:'Which identity drives the induction in Lemma 19.13 (F_{k+2} ≥ φ^k)?',
+  options:['φ² = φ + 1','φ = 2','F_k = 2F_{k−1}','φ · (1 − φ) = 1'], answer:0, explain:'φ^{k−1} + φ^{k−2} = φ^{k−2}(φ + 1) = φ^k.'},
+ {topic:'fib', q:'Theorem 19.14 gives the maximum degree of an n-node Fibonacci heap as…',
+  options:['D(n) ≤ ⌊log_φ n⌋ = O(lg n)','D(n) ≤ √n','D(n) = n − 1','D(n) ≤ α(n)'], answer:0, explain:'n ≥ size(x) ≥ φ^k ⇒ k ≤ log_φ n.'},
+ {topic:'fib', q:'What does a node\'s <code>mark</code> bit indicate?',
+  options:['It has lost a child since it last became a child of another node','It is the minimum node','It has been extracted','It is in the root list'], answer:0, explain:'A second loss triggers a cut (cascading cut).'},
+ {topic:'fib', q:'In CASCADING-CUT(H, y), what happens if y is already marked and has a parent z?',
+  options:['y is cut from z and CASCADING-CUT(H, z) is called','y is unmarked and nothing else happens','z is deleted','y\'s degree is doubled'], answer:0, explain:'The cut propagates up the tree until an unmarked node (or a root) is reached.'},
+ {topic:'fib', q:'Why must D(n) be O(lg n)?',
+  options:['So FIB-HEAP-EXTRACT-MIN runs in O(lg n) amortized time','So INSERT is O(1)','So DECREASE-KEY is O(lg n)','So the heap uses O(n) space'], answer:0, explain:'Extract-min\'s consolidation cost depends on D(n).'},
+ {topic:'fib', q:'In Lemma 19.12, what are the base cases for s_k (the minimum size of a degree-k subtree)?',
+  options:['s₀ = 1, s₁ = 2','s₀ = 0, s₁ = 1','s₀ = 1, s₁ = 1','s₀ = 2, s₁ = 3'], answer:0, explain:'A degree-0 node is just itself; a degree-1 node has at least one child.'},
+ {topic:'fib', q:'φ, the golden ratio used in the degree bound, is approximately…',
+  options:['1.618','2.718','1.414','3.142'], answer:0, explain:'φ = (1 + √5) / 2 ≈ 1.618.'},
+ {topic:'fib', q:'What does CUT(H, x, y) do to x?',
+  options:['Removes x from y\'s child list, adds it to the root list, sets x.p = NIL and x.mark = FALSE','Deletes x from the heap','Marks x and leaves it in place','Links x under the minimum node'], answer:0, explain:'Also decrements y.degree.'}
+];
+
+// ======================= GENERATED MC =======================
+function makeOpts(correct, distractors){
+  const uniq = [...new Set(distractors.map(String).filter(d => d !== String(correct)))].slice(0, 3);
+  return {options: [String(correct), ...uniq], answer: 0};
+}
+const GEN = [
+ {topic:'ds', gen(){
+   const k = rnd(2, 6), n = 2 ** k;
+   return {q:`Start with <b>${n}</b> singleton sets. Repeatedly UNION sets of equal size in pairs (round 1 pairs singletons, round 2 pairs the size-2 sets, …) until one set remains, using <b>union by rank</b>. What is the rank of the final root?`,
+     ...makeOpts(k, [k + 1, n - 1, n / 2, k - 1, 2 * k]),
+     explain:`Each round links two equal-rank roots, adding 1 to the rank, and there are lg ${n} = ${k} rounds. So rank = ${k}.`};
+ }},
+ {topic:'ds', gen(){
+   const ids = 'abcdef'.split('');
+   const p = {}, r = {}; ids.forEach(x => { p[x] = x; r[x] = 0; });
+   const find = x => p[x] === x ? x : (p[x] = find(p[x]));
+   const ops = [];
+   const nOps = rnd(4, 5);
+   for (let t = 0; t < nOps; t++){
+     const pairs = [];
+     ids.forEach(x => ids.forEach(y => { if (x < y && find(x) !== find(y)) pairs.push([x, y]); }));
+     if (!pairs.length) break;
+     const [x, y] = shuffle(pick(pairs));
+     ops.push(`UNION(${x}, ${y})`);
+     const a = find(x), b = find(y);
+     if (r[a] > r[b]) p[b] = a; else { p[a] = b; if (r[a] === r[b]) r[b]++; }
+   }
+   const q = pick(ids), rep = find(q);
+   return {q:`Using the CLRS code (<code>UNION(x,y) = LINK(FIND-SET(x), FIND-SET(y))</code>, and LINK makes <b>y</b> the parent when ranks tie), run these operations on singletons a–f:<pre><code>${ops.join('\n')}</code></pre>What does <code>FIND-SET(${q})</code> return, and what is that root's rank?`,
+     ...makeOpts(`${rep}, rank ${r[rep]}`, shuffle(ids).flatMap(x => [`${x}, rank ${r[rep]}`, `${x}, rank ${r[rep] + 1}`, `${rep}, rank ${Math.max(0, r[rep] - 1)}`]).filter(s => s !== `${rep}, rank ${r[rep]}`).slice(0, 6)),
+     explain:`Tracing LINK: on a tie the second argument's root becomes the parent and its rank goes up by one. ${q}'s representative ends up as ${rep} with rank ${r[rep]}.`};
+ }},
+ {topic:'mst', gen(){
+   const v = rnd(6, 80);
+   return {q:`A connected, weighted graph has <b>${v}</b> vertices and ${v + rnd(3, 40)} edges. How many edges are in any minimum spanning tree of it?`,
+     ...makeOpts(v - 1, [v, v - 2, v + 1, Math.ceil(v / 2)]), explain:`Every spanning tree on |V| = ${v} vertices has |V| − 1 = ${v - 1} edges.`};
+ }},
+ {topic:'mst', gen(){
+   let g, S, crossing;
+   do {
+     g = randomGraph(6, 4);
+     S = shuffle(g.nodes.map(n => n.id)).slice(0, rnd(2, 3));
+     crossing = g.edges.filter(e => S.includes(e.u) !== S.includes(e.v));
+   } while (crossing.length < 3);
+   const light = crossing.reduce((a, b) => a.w < b.w ? a : b);
+   const lab = e => `(${e.u}, ${e.v}) w=${e.w}`;
+   const nonCross = g.edges.filter(e => !crossing.includes(e)).sort((a, b) => a.w - b.w);
+   const ds = shuffle(crossing.filter(e => e !== light)).slice(0, 2).map(lab);
+   if (nonCross.length && nonCross[0].w < light.w) ds.unshift(lab(nonCross[0])); else if (nonCross.length) ds.push(lab(nonCross[0]));
+   const ns = {}; S.forEach(x => ns[x] = 'in');
+   return {q:`The green vertices form S = {${S.sort().join(', ')}}. Which edge is a <b>light edge</b> crossing the cut (S, V − S)?`,
+     graph: renderGraph(g, {nodeState: ns}), ...makeOpts(lab(light), ds),
+     explain:`Edges crossing the cut: ${crossing.map(lab).join(', ')}. The minimum is ${lab(light)}. Edges with both endpoints on one side don't count, even if lighter.`};
+ }},
+ {topic:'kruskal', gen(){
+   const g = randomGraph(); const {total, mst} = kruskalSteps(g.nodes, g.edges);
+   const naive = g.edges.map(e => e.w).sort((a, b) => a - b).slice(0, g.nodes.length - 1).reduce((a, b) => a + b, 0);
+   return {q:'Run Kruskal\'s algorithm on this graph. What is the total weight of the minimum spanning tree?', graph: renderGraph(g),
+     ...makeOpts(total, [naive, total + rnd(1, 3), total - rnd(1, 3), total + rnd(4, 7)]),
+     explain:`Kruskal accepts ${mst.map(e => `(${e.u},${e.v})=${e.w}`).join(', ')} for a total of ${total}.${naive !== total ? ` (Just adding the ${g.nodes.length - 1} smallest weights gives ${naive}, but that would create a cycle.)` : ''}`};
+ }},
+ {topic:'kruskal', gen(){
+   let g, steps, rej;
+   do { g = randomGraph(6, 4); steps = kruskalSteps(g.nodes, g.edges).steps; rej = steps.find(s => !s.accepted); } while (!rej);
+   const lab = e => `(${e.u}, ${e.v}) w=${e.w}`;
+   const acc = steps.filter(s => s.accepted).map(s => lab(s.edge));
+   return {q:'Kruskal scans edges in non-decreasing order. Which is the <b>first edge it rejects</b> because both endpoints are already in the same set?', graph: renderGraph(g),
+     ...makeOpts(lab(rej.edge), shuffle(acc).slice(0, 4)),
+     explain:`Accepted before it: ${steps.slice(0, steps.indexOf(rej)).map(s => lab(s.edge)).join(', ')}. At that point FIND-SET(${rej.edge.u}) == FIND-SET(${rej.edge.v}), so ${lab(rej.edge)} would form a cycle.`};
+ }},
+ {topic:'prim', gen(){
+   const g = randomGraph(); const root = pick(g.nodes).id; const {order} = primSteps(g.nodes, g.edges, root);
+   const rest = order.slice(1);
+   const d = [];
+   for (let t = 0; t < 8; t++) d.push([root, ...shuffle(rest)].join(' → '));
+   const k = kruskalSteps(g.nodes, g.edges).mst; const kv = [root]; k.forEach(e => { if (!kv.includes(e.u)) kv.push(e.u); if (!kv.includes(e.v)) kv.push(e.v); });
+   d.unshift(kv.join(' → '));
+   return {q:`Run MST-PRIM with root <b>${root}</b>. In what order are vertices removed by EXTRACT-MIN?`, graph: renderGraph(g),
+     ...makeOpts(order.join(' → '), d), explain:`Each step extracts the queue vertex with the smallest key (cheapest edge into the tree): ${order.join(' → ')}.`};
+ }},
+ {topic:'prim', gen(){
+   const g = randomGraph(); const root = pick(g.nodes).id; const {total} = primSteps(g.nodes, g.edges, root);
+   return {q:`Run MST-PRIM from root <b>${root}</b>. What is Σ v.key over all vertices once the queue is empty?`, graph: renderGraph(g),
+     ...makeOpts(total, [total + rnd(1, 3), total - rnd(1, 3), total + rnd(4, 8), g.edges.reduce((a, e) => a + e.w, 0)]),
+     explain:`The final keys are the weights of each vertex's MST parent edge (root = 0), so the sum is the MST weight, ${total}.`};
+ }},
+ {topic:'fib', gen(){
+   const n = pick([10, 25, 50, 100, 500, 1000, 5000, 10000, 100000, 1000000]);
+   const phi = (1 + Math.sqrt(5)) / 2, a = Math.floor(Math.log(n) / Math.log(phi));
+   return {q:`By Theorem 19.14, what upper bound on D(n), the max degree of any node, holds for a Fibonacci heap with <b>n = ${n.toLocaleString()}</b> nodes?`,
+     ...makeOpts(a, [Math.floor(Math.log2(n)), a + 2, Math.ceil(Math.sqrt(n)), a - 3, a + 1, a - 1]),
+     explain:`D(n) ≤ ⌊log_φ n⌋ = ⌊ln ${n} / ln 1.618⌋ = ${a}.`};
+ }},
+ {topic:'fib', gen(){
+   const k = rnd(2, 10); const F = [0, 1]; for (let i = 2; i <= k + 3; i++) F.push(F[i - 1] + F[i - 2]);
+   return {q:`What is the minimum possible number of nodes in the subtree rooted at a Fibonacci-heap node of degree <b>k = ${k}</b>?`,
+     ...makeOpts(F[k + 2], [F[k + 1], 2 ** k, F[k + 3], k + 1, k + 2, F[k + 2] + 1]), explain:`Lemma 19.12: size(x) ≥ F_{k+2} = F_${k + 2} = ${F[k + 2]}.`};
+ }}
+];
+
+// ======================= PSEUDOCODE GRADER =======================
+// Heuristic, rubric-based static analysis of free-form pseudocode.
+const COMPOUNDS = ['make set','find set','extract min','decrease key','cascading cut','connected components','same component',
+  'mst kruskal','mst prim','light edge','kruskal weight','prim mst edges','max degree','generic mst','min heap','root list','child list','in q'];
+const CTRL = new Set(['if','elif','else','while','for','foreach','return','switch','until','repeat','do','print','and','or','not','then','in','case','loop']);
+
+function normalize(src){
+  let s = '\n' + src.toLowerCase() + '\n';
+  s = s.replace(/\u2190|<-|:=/g, '=').replace(/\u2260|=\/=|<>/g, '!=').replace(/\u2264/g, '<=').replace(/\u2265/g, '>=')
+       .replace(/\u221e|infinity|float\(\s*['"]inf['"]\s*\)|math\.inf/g, 'inf').replace(/\u2212|\u2013/g, '-')
+       .replace(/\u222a/g, ' cup ').replace(/\u2205/g, '{}').replace(/\u03c0/g, 'pi').replace(/\u2209/g, ' not in ').replace(/\u2208/g, ' in ')
+       .replace(/\bnot\s+equal(\s+to)?\b/g, '!=').replace(/\bis\s+not\b/g, '!=').replace(/\bequals?\b/g, '==')
+       .replace(/\bheappop\b|\bpop_?min\b|\bremove_?min\b/g, 'extractmin').replace(/\bheappush\b/g, 'insert');
+  for (const c of COMPOUNDS){
+    const re = new RegExp('\\b' + c.split(' ').join('[\\s_\\-]?') + '\\b', 'g');
+    s = s.replace(re, c.replace(/ /g, ''));
+  }
+  s = s.replace(/\bfind\s*\(/g, 'findset(').replace(/\bunite\s*\(/g, 'union(');
+  return s;
+}
+const normName = n => n.toLowerCase().replace(/[\s_\-]/g, '');
+
+function parse(src){
+  const raw = src.replace(/\t/g, '    ').split('\n');
+  const lines = raw.map((r, i) => ({i, raw: r, t: normalize(r).trim(), indent: r.match(/^\s*/)[0].length, blank: !r.trim()}));
+  const headerRe = /^\s*(?:def|function|procedure|func|algorithm|proc|fn|sub|void|int|bool|boolean)?\s*([A-Za-z_][\w\-]*)\s*\(([^)]*)\)\s*(?::|\{|->[^\n]*|returns?\b[^\n]*)?\s*$/i;
+  const kwRe = /^\s*(def|function|procedure|func|algorithm|proc|fn|sub)\b/i;
+  const funcs = [];
+  const nonBlank = lines.filter(l => !l.blank && !/^\s*(\/\/|#|\u25b9)/.test(l.raw));
+  nonBlank.forEach((l, k) => {
+    const code = l.raw.replace(/\s*(\/\/|#|\u25b9).*$/, ''); const m = code.match(headerRe); if (!m) return;
+    const name = m[1]; if (CTRL.has(name.toLowerCase())) return;
+    const next = nonBlank[k + 1];
+    const opens = kwRe.test(code) || /[:{]\s*$/.test(code) || (next && next.indent > l.indent);
+    if (!opens) return;
+    funcs.push({name, norm: normName(name), start: l.i, indent: l.indent});
+  });
+  funcs.forEach((f, k) => {
+    let end = lines.length;
+    for (let j = f.start + 1; j < lines.length; j++){
+      const L = lines[j]; if (L.blank) continue;
+      if (L.indent <= f.indent && !/^\s*(\}|end\b)/i.test(L.raw)) { end = j; break; }
+    }
+    if (k + 1 < funcs.length) end = Math.min(end, funcs[k + 1].start);
+    f.end = end;
+    f.bodyLines = lines.slice(f.start + 1, end).filter(l => !l.blank);
+    f.body = '\n' + f.bodyLines.map(l => l.t).join('\n') + '\n';
+    f.len = f.bodyLines.length;
+  });
+  // loop & nesting depth via indentation stack
+  const stack = []; let maxLoop = 0, maxNest = 0;
+  for (const L of lines){
+    if (L.blank) continue;
+    while (stack.length && stack[stack.length - 1].indent >= L.indent) stack.pop();
+    const owner = funcs.find(f => L.i > f.start && L.i < f.end);
+    const anc = stack.filter(s => !owner || s.i > owner.start);
+    L.loopDepth = anc.filter(s => s.loop).length;
+    L.isLoop = /^\s*(for|foreach|while|repeat|loop|do)\b/.test(L.t);
+    if (L.isLoop) maxLoop = Math.max(maxLoop, L.loopDepth + 1);
+    if (owner) { maxNest = Math.max(maxNest, anc.length); owner.maxLoop = Math.max(owner.maxLoop || 0, L.isLoop ? L.loopDepth + 1 : 0); }
+    stack.push({indent: L.indent, loop: L.isLoop, i: L.i});
+  }
+  const text = normalize(src);
+  const headerIdx = new Set(funcs.map(f => f.start));
+  const callText = normalize(raw.filter((_, i) => !headerIdx.has(i)).join('\n'));
+  const findF = names => funcs.find(f => [].concat(names).some(n => f.norm === n || f.norm.includes(n)));
+  return {
+    src, text, lines, funcs, maxLoop, maxNest,
+    body(names){ const f = findF(names); return f ? f.body : text; },
+    fn: findF,
+    hasFn(names){ return !!findF(names); },
+    calls(name){ return new RegExp('\\b' + name + '\\s*\\(').test(callText); },
+    count(re){ return (text.match(new RegExp(re.source, 'g' + re.flags.replace('g', ''))) || []).length; }
+  };
+}
+
+// --- regex helpers on normalized text ---
+const FIELD = (f) => `(?:\\w+\\.(?:${f})\\b|\\b(?:${f})\\s*\\[\\s*\\w+\\s*\\])`;
+const PAR = FIELD('p|parent|pi');
+const has = (s, ...res) => res.some(r => r.test(s));
+const ADD_EDGE = /\b(\w+)\s*=\s*\1\s*(cup|\+|union\b|\|)|\.(add|append|push|insert)\s*\(|\b(add|append|insert|push)\b[^\n]*\b(to|into)\b/;
+const EMPTY_INIT = /=\s*(\{\s*\}|\[\s*\]|empty\b|set\(\s*\)|list\(\s*\)|new\s+\w+|none\b|nil\b)/;
+const FOR_VERT = /(for|foreach)[^\n]*\b(v|u|x|vertex|vertices|node|nodes|g\.v|v\[g\])\b[^\n]*\n[\s\S]{0,60}?makeset\s*\(|(for|foreach)[^\n]*makeset\s*\(/;
+const FOR_EDGE = /(for|foreach)[^\n]*(edge|\(\s*\w+\s*,\s*\w+\s*\)|\.e\b|\be\b|\bg\.e\b|e\[g\])/;
+const CMP_FIND = /findset\s*\([^)]*\)\s*!=\s*findset\s*\(|!\s*samecomponent|not\s+samecomponent|findset\s*\([^)]*\)\s*==\s*findset\s*\([^)]*\)[^\n]*(continue|skip)|(\w+)\s*!=\s*(\w+)[^\n]*$/m;
+
+const CODE = [
+ {id:'ds-forest', topic:'ds', title:'Disjoint-set forest with both heuristics',
+  prompt:'Write pseudocode for <code>MAKE-SET(x)</code>, <code>FIND-SET(x)</code> with <b>path compression</b>, <code>LINK(x, y)</code> with <b>union by rank</b>, and <code>UNION(x, y)</code>. Each node has fields <code>p</code> (parent) and <code>rank</code>.',
+  starter:'MAKE-SET(x)\n    \n\nFIND-SET(x)\n    \n\nLINK(x, y)\n    \n\nUNION(x, y)\n    \n',
+  define:['makeset','findset','link','union'], call:['findset','link'], maxLoop:1,
+  correctness:[
+   {label:'MAKE-SET makes x its own parent', w:2, test:(t,P)=>has(P.body('makeset'), /(\w+)\.(?:p|parent)\s*=\s*\1\b(?!\.)/, /\b(?:p|parent)\s*\[\s*(\w+)\s*\]\s*=\s*\1\b(?!\s*[\[.])/), hint:'Set x.p = x so a singleton is its own representative.'},
+   {label:'MAKE-SET initializes rank to 0', w:1, test:(t,P)=>/rank(\s*\[\s*\w+\s*\])?\s*=\s*0\b/.test(P.body('makeset')), hint:'x.rank = 0'},
+   {label:'FIND-SET tests whether x is a root', w:1, test:(t,P)=>/^(?=[^\n]*(?:!=|==|\bis\b))(?=[^\n]*(?:\.p\b|\.parent\b|parent\s*\[|\bp\s*\[))[^\n]*$/m.test(P.body('findset')), hint:'Compare x with x.p (if x ≠ x.p …).'},
+   {label:'FIND-SET compresses the path', w:3, test:(t,P)=>new RegExp(PAR + '\\s*=\\s*(?:findset\\s*\\(|root\\b|r\\b)').test(P.body('findset')), hint:'Assign x.p = FIND-SET(x.p) so nodes point straight at the root.'},
+   {label:'FIND-SET returns the representative', w:1, test:(t,P)=>/\breturn\b/.test(P.body('findset')), hint:'Return x.p (or the root) at the end.'},
+   {label:'LINK compares ranks', w:2, test:(t,P)=>/rank[^\n]*(?:>|<)/.test(P.body('link')), hint:'if x.rank > y.rank … else …'},
+   {label:'LINK increments rank on a tie', w:2, test:(t,P)=>/rank[^\n]*(?:\+=\s*1|\+\s*1|\+\+)/.test(P.body('link')) && /rank[^\n]*==/.test(P.body('link')), hint:'if x.rank == y.rank then y.rank = y.rank + 1'},
+   {label:'UNION links the two roots', w:2, test:(t,P)=>{const b=P.body('union'); return /link\s*\(\s*findset/.test(b) || ((b.match(/findset\s*\(/g)||[]).length>=2 && /link\s*\(|\.(p|parent)\s*=/.test(b));}, hint:'UNION(x, y) = LINK(FIND-SET(x), FIND-SET(y))'}
+  ],
+  efficiency:[
+   {label:'Path compression (amortized near-O(1) finds)', w:5, test:(t,P)=>new RegExp(PAR + '\\s*=\\s*(?:findset\\s*\\(|root\\b|r\\b)').test(P.body('findset')), hint:'Without it, finds can cost O(lg n) each.'},
+   {label:'Union by rank keeps trees shallow', w:5, test:(t,P)=>/rank[^\n]*(?:>|<)/.test(t), hint:'Attach the lower-rank root beneath the higher-rank root.'}
+  ],
+  penalties:[
+   {label:'UNION/LINK loops over set members (linked-list style relabeling)', p:3, test:(t,P)=>/\b(for|while)\b/.test(P.body('union')) || (P.hasFn('link') && /\b(for|while)\b/.test(P.body('link'))), hint:'Linking two roots should be O(1).'}
+  ],
+  model:`MAKE-SET(x)
+    x.p = x
+    x.rank = 0
+
+FIND-SET(x)                      // path compression
+    if x ≠ x.p
+        x.p = FIND-SET(x.p)
+    return x.p
+
+LINK(x, y)                       // union by rank
+    if x.rank > y.rank
+        y.p = x
+    else
+        x.p = y
+        if x.rank == y.rank
+            y.rank = y.rank + 1
+
+UNION(x, y)
+    LINK(FIND-SET(x), FIND-SET(y))`},
+
+ {id:'ds-cc', topic:'ds', title:'Connected components with Union-Find',
+  prompt:'Write <code>CONNECTED-COMPONENTS(G)</code> that uses the disjoint-set operations to group the vertices of an undirected graph, and <code>SAME-COMPONENT(u, v)</code> that answers whether two vertices are connected. Assume MAKE-SET, FIND-SET and UNION exist.',
+  starter:'CONNECTED-COMPONENTS(G)\n    \n\nSAME-COMPONENT(u, v)\n    \n',
+  define:['connectedcomponents','samecomponent'], call:['makeset','findset','union'], maxLoop:1,
+  correctness:[
+   {label:'MAKE-SET for every vertex', w:2, test:t=>FOR_VERT.test(t), hint:'for each vertex v ∈ G.V: MAKE-SET(v)'},
+   {label:'Iterates over every edge', w:2, test:t=>FOR_EDGE.test(t), hint:'for each edge (u, v) ∈ G.E'},
+   {label:'Only unions vertices in different sets', w:2, test:t=>/findset\s*\([^)]*\)\s*!=\s*findset\s*\(|not\s+samecomponent|!\s*samecomponent/.test(t), hint:'if FIND-SET(u) ≠ FIND-SET(v)'},
+   {label:'Calls UNION', w:2, test:t=>/\bunion\s*\(/.test(t), hint:'UNION(u, v) merges the components.'},
+   {label:'SAME-COMPONENT compares representatives', w:2, test:(t,P)=>/findset[\s\S]*==[\s\S]*findset|==/.test(P.body('samecomponent')) && /return/.test(P.body('samecomponent')), hint:'return FIND-SET(u) == FIND-SET(v)'}
+  ],
+  efficiency:[
+   {label:'Uses Union-Find rather than a traversal per query', w:5, test:t=>/findset\s*\(/.test(t) && /\bunion\s*\(/.test(t), hint:'Union-Find handles dynamic edge additions without re-running DFS.'},
+   {label:'SAME-COMPONENT is O(α(n)) with no loops', w:5, test:(t,P)=>P.hasFn('samecomponent') && !/\b(for|while)\b/.test(P.body('samecomponent')), hint:'Just two FIND-SETs and a comparison.'}
+  ],
+  penalties:[
+   {label:'Runs BFS/DFS (unnecessary given Union-Find)', p:3, test:t=>/\b(bfs|dfs|breadth|depth)/.test(t), hint:'Use FIND-SET instead of a traversal.'}
+  ],
+  model:`CONNECTED-COMPONENTS(G)
+    for each vertex v ∈ G.V
+        MAKE-SET(v)
+    for each edge (u, v) ∈ G.E
+        if FIND-SET(u) ≠ FIND-SET(v)
+            UNION(u, v)
+
+SAME-COMPONENT(u, v)          // O(α(n)) query
+    return FIND-SET(u) == FIND-SET(v)`},
+
+ {id:'mst-cut', topic:'mst', title:'Cuts, respecting, and light edges',
+  prompt:'Write three procedures: <code>CROSSES(u, v, S)</code> returns TRUE if edge (u,v) crosses the cut (S, V − S); <code>RESPECTS(A, S)</code> returns TRUE if no edge of A crosses the cut; and <code>LIGHT-EDGE(G, w, S)</code> returns a minimum-weight edge crossing the cut. Reuse your helpers.',
+  starter:'CROSSES(u, v, S)\n    \n\nRESPECTS(A, S)\n    \n\nLIGHT-EDGE(G, w, S)\n    \n',
+  define:['crosses','respects','lightedge'], call:['crosses'], maxLoop:1,
+  correctness:[
+   {label:'CROSSES checks exactly one endpoint is in S', w:3, test:(t,P)=>{const b=P.body('crosses'); return /\bin\s+s\b|s\.contains|\[s\]|s\[/.test(b) && /(not\s+in|!=|\bxor\b|\^|and\s+not|!\s*\(|not\s*\()/.test(b);}, hint:'return (u ∈ S) ≠ (v ∈ S)'},
+   {label:'RESPECTS iterates over the edges of A', w:2, test:(t,P)=>/(for|foreach)[^\n]*\ba\b/.test(P.body('respects')), hint:'for each (u, v) ∈ A'},
+   {label:'RESPECTS returns FALSE when an edge of A crosses', w:2, test:(t,P)=>{const b=P.body('respects'); return /crosses\s*\(/.test(b) && /return\s+(false|0|no)\b/.test(b);}, hint:'if CROSSES(u, v, S) return FALSE; return TRUE at the end.'},
+   {label:'LIGHT-EDGE initializes the best weight to ∞', w:2, test:(t,P)=>/=\s*(inf\b|max_?(int|value)|null|nil|none)/.test(P.body('lightedge')), hint:'best = NIL, bestW = ∞'},
+   {label:'LIGHT-EDGE only considers crossing edges', w:2, test:(t,P)=>{const b=P.body('lightedge'); return /\b(for|foreach)\b/.test(b) && /crosses\s*\(/.test(b);}, hint:'for each (u,v) ∈ G.E: if CROSSES(u, v, S) …'},
+   {label:'LIGHT-EDGE compares weights', w:2, test:(t,P)=>/(w\s*\([^)]*\)|weight|\.w\b)[^\n]*<|<[^\n]*(w\s*\(|weight|\.w\b)/.test(P.body('lightedge')), hint:'if w(u, v) < bestW'},
+   {label:'LIGHT-EDGE returns the edge', w:1, test:(t,P)=>/\breturn\b/.test(P.body('lightedge')), hint:'return best'}
+  ],
+  efficiency:[
+   {label:'LIGHT-EDGE is a single O(E) pass', w:5, test:(t,P)=>{const f=P.fn('lightedge'); return !!f && (f.maxLoop||0) <= 1;}, hint:'One loop over E is enough.'},
+   {label:'No sorting needed to find a minimum', w:5, test:(t,P)=>!/sort/.test(P.body('lightedge')), hint:'Sorting costs O(E lg E); a linear scan finds the min in O(E).'}
+  ],
+  penalties:[
+   {label:'Nested loops inside LIGHT-EDGE', p:3, test:(t,P)=>{const f=P.fn('lightedge'); return !!f && (f.maxLoop||0) > 1;}, hint:'Avoid re-scanning edges or S for every edge; use set membership.'}
+  ],
+  model:`CROSSES(u, v, S)
+    return (u ∈ S) ≠ (v ∈ S)          // exactly one endpoint in S
+
+RESPECTS(A, S)
+    for each edge (u, v) ∈ A
+        if CROSSES(u, v, S)
+            return FALSE
+    return TRUE
+
+LIGHT-EDGE(G, w, S)
+    best = NIL
+    bestW = ∞
+    for each edge (u, v) ∈ G.E
+        if CROSSES(u, v, S) and w(u, v) < bestW
+            best = (u, v)
+            bestW = w(u, v)
+    return best`},
+
+ {id:'kr-mst', topic:'kruskal', title:"Kruskal's algorithm",
+  prompt:'Write <code>MST-KRUSKAL(G, w)</code> that returns the set of MST edges. Use the disjoint-set operations (MAKE-SET, FIND-SET, UNION). Bonus efficiency credit for stopping as soon as the tree is complete.',
+  starter:'MST-KRUSKAL(G, w)\n    \n',
+  define:['mstkruskal'], call:['makeset','findset','union'], maxLoop:1,
+  correctness:[
+   {label:'Initializes A to the empty set', w:1, test:t=>EMPTY_INIT.test(t), hint:'A = ∅'},
+   {label:'MAKE-SET for every vertex', w:2, test:t=>FOR_VERT.test(t), hint:'for each vertex v ∈ G.V: MAKE-SET(v)'},
+   {label:'Sorts edges by weight (non-decreasing)', w:2, test:t=>/sort/.test(t), hint:'sort G.E into non-decreasing order by w'},
+   {label:'Iterates over edges in sorted order', w:1, test:t=>FOR_EDGE.test(t) || /(for|foreach)[^\n]*sort/.test(t), hint:'for each (u, v) in sorted order'},
+   {label:'Checks endpoints are in different sets', w:2, test:t=>/findset\s*\([^)]*\)\s*!=\s*findset\s*\(/.test(t), hint:'if FIND-SET(u) ≠ FIND-SET(v)'},
+   {label:'Adds the edge to A', w:1, test:t=>ADD_EDGE.test(t), hint:'A = A ∪ {(u, v)}'},
+   {label:'UNIONs the two components', w:2, test:t=>/\bunion\s*\(/.test(t), hint:'UNION(u, v)'},
+   {label:'Returns A', w:1, test:t=>/\breturn\b/.test(t), hint:'return A'}
+  ],
+  efficiency:[
+   {label:'Sorts once, outside the main loop', w:3, test:(t,P)=>P.lines.some(l=>/sort/.test(l.t) && l.loopDepth===0) && P.count(/sort/)<=2, hint:'Sorting inside the loop multiplies the cost.'},
+   {label:'Cycle detection via Union-Find (O(α(V)))', w:4, test:t=>/findset\s*\(/.test(t), hint:'Use FIND-SET instead of searching for a path.'},
+   {label:'Early exit once |A| = |V| − 1', w:2, bonus:true, test:t=>/(\|\s*a\s*\||len\s*\(\s*a\s*\)|a\.(size|length|count)|\bcount\b|\bsize\b|\bedges\w*)[^\n]*(==|>=)[^\n]*-\s*1/.test(t), hint:'Bonus: break when the tree has |V| − 1 edges.'}
+  ],
+  penalties:[
+   {label:'Detects cycles with DFS/BFS/path search (O(V) per edge)', p:4, test:t=>/\b(dfs|bfs|hascycle|createscycle|formscycle|haspath|pathexists|reachable)\b|has_?cycle|creates?_?cycle|has_?path/.test(t), hint:'FIND-SET is nearly O(1) amortized.'}
+  ],
+  model:`MST-KRUSKAL(G, w)
+    A = ∅
+    for each vertex v ∈ G.V
+        MAKE-SET(v)
+    sort G.E into non-decreasing order by weight w
+    for each edge (u, v) ∈ G.E, taken in sorted order
+        if FIND-SET(u) ≠ FIND-SET(v)
+            A = A ∪ {(u, v)}
+            UNION(u, v)
+            if |A| == |G.V| - 1        // optional early exit
+                break
+    return A`},
+
+ {id:'kr-weight', topic:'kruskal', title:'Kruskal: total weight or "disconnected"',
+  prompt:'Write <code>KRUSKAL-WEIGHT(G, w)</code> that returns the total weight of a minimum spanning tree, or reports that G is <b>disconnected</b> (fewer than |V| − 1 edges could be added). Keep it modular, e.g. by calling a helper or MST-KRUSKAL.',
+  starter:'KRUSKAL-WEIGHT(G, w)\n    \n',
+  define:['kruskalweight'], call:['mstkruskal|findset','union|mstkruskal'], maxLoop:1,
+  correctness:[
+   {label:'Builds MST edges with Kruskal / Union-Find', w:3, test:t=>/mstkruskal\s*\(|kruskal\s*\(/.test(t) || (/findset/.test(t) && /\bunion\s*\(/.test(t) && /sort/.test(t)), hint:'Call MST-KRUSKAL(G, w) or inline the sort + FIND-SET/UNION loop.'},
+   {label:'Accumulates the total weight', w:2, test:t=>/\+=|(\w+)\s*=\s*\1\s*\+|\bsum\s*\(/.test(t), hint:'total = total + w(u, v)'},
+   {label:'Initializes the total to 0', w:1, test:t=>/=\s*0\b/.test(t) || /\bsum\s*\(/.test(t), hint:'total = 0'},
+   {label:'Compares edge count with |V| − 1', w:2, test:t=>/-\s*1/.test(t) && /(<|!=|==|>=)/.test(t), hint:'if |A| < |V| − 1 → disconnected'},
+   {label:'Reports disconnected / returns total', w:2, test:t=>/disconnect|not\s+connected|error|inf\b|nil|null|none|-1|false/.test(t) && /\breturn\b/.test(t), hint:'return "disconnected" (or ∞) otherwise return total.'}
+  ],
+  efficiency:[
+   {label:'Single pass over sorted edges', w:5, test:(t,P)=>P.maxLoop<=1, hint:'Sum weights while accepting edges or in one pass afterwards.'},
+   {label:'Uses Union-Find for cycle checks', w:5, test:t=>/findset|mstkruskal|kruskal\s*\(/.test(t), hint:''}
+  ],
+  penalties:[
+   {label:'Runs BFS/DFS separately to test connectivity', p:2, test:t=>/\b(bfs|dfs)\b/.test(t), hint:'Kruskal already tells you: connected ⇔ |A| = |V| − 1.'}
+  ],
+  model:`KRUSKAL-WEIGHT(G, w)
+    A = MST-KRUSKAL(G, w)
+    if |A| < |G.V| - 1
+        return "disconnected"          // spanning forest only
+    return TOTAL-WEIGHT(A, w)
+
+TOTAL-WEIGHT(A, w)
+    total = 0
+    for each edge (u, v) ∈ A
+        total = total + w(u, v)
+    return total`},
+
+ {id:'pr-mst', topic:'prim', title:"Prim's algorithm",
+  prompt:'Write <code>MST-PRIM(G, w, r)</code> using a min-priority queue Q with INSERT, EXTRACT-MIN and DECREASE-KEY. Each vertex has fields <code>key</code> and <code>π</code>.',
+  starter:'MST-PRIM(G, w, r)\n    \n',
+  define:['mstprim'], call:['extractmin','decreasekey'], maxLoop:2,
+  correctness:[
+   {label:'Initializes every key to ∞', w:2, test:t=>/key[^\n]*=\s*inf\b/.test(t), hint:'u.key = ∞ for each u'},
+   {label:'Initializes every parent to NIL', w:1, test:t=>new RegExp(PAR + '\\s*=\\s*(nil|null|none|undefined|-1)\\b').test(t), hint:'u.π = NIL'},
+   {label:'Root key set to 0', w:2, test:t=>/\br\.key\s*=\s*0\b|key\s*\[\s*r\s*\]\s*=\s*0\b|decreasekey\s*\([^)]*\br\s*,\s*0\s*\)/.test(t), hint:'DECREASE-KEY(Q, r, 0)'},
+   {label:'Fills the priority queue', w:1, test:t=>/insert\s*\(|build\w*heap|priority|minheap|\bq\s*=\s*(g\.v|v\b|all|\{)/.test(t), hint:'INSERT(Q, u) for each vertex'},
+   {label:'Loops while Q is non-empty', w:1, test:t=>/while[^\n]*(\bq\b|queue|heap)/.test(t), hint:'while Q ≠ ∅'},
+   {label:'Extracts the minimum-key vertex', w:2, test:t=>/extractmin/.test(t), hint:'u = EXTRACT-MIN(Q)'},
+   {label:'Scans the adjacency list of u', w:1, test:t=>/(for|foreach)[^\n]*(adj|neighbo)/.test(t), hint:'for each v ∈ G.Adj[u]'},
+   {label:'Tests v ∈ Q and w(u,v) < v.key', w:2, test:t=>/(\bin\s+q\b|inq|inqueue|not\s+visited|!\s*visited|visited\s*\[[^\]]*\]\s*==\s*false)/.test(t) && /(w\s*\([^)]*\)|weight|\bwt\b)\s*<|<\s*\w+\.key|<\s*key/.test(t), hint:'if v ∈ Q and w(u, v) < v.key'},
+   {label:'Updates π and the key', w:2, test:t=>new RegExp(PAR + '\\s*=\\s*u\\b').test(t) && /(decreasekey|key[^\n]*=\s*(w|weight))/.test(t), hint:'v.π = u; DECREASE-KEY(Q, v, w(u, v))'}
+  ],
+  efficiency:[
+   {label:'Uses a min-priority queue (EXTRACT-MIN)', w:4, test:t=>/extractmin/.test(t), hint:'O(lg V) per extraction with a binary heap.'},
+   {label:'Uses DECREASE-KEY instead of rebuilding the queue', w:4, test:t=>/decreasekey/.test(t), hint:'O(lg V) per update; O(1) amortized with a Fibonacci heap.'},
+   {label:'O(1) "in Q" membership test (flag)', w:2, bonus:true, test:t=>/inq|inqueue|visited|intree|\.done\b/.test(t), hint:'Bonus: keep a boolean per vertex instead of searching the heap.'}
+  ],
+  penalties:[
+   {label:'Linear scan over all vertices inside the main loop', p:4, test:(t,P)=>P.lines.some(l=>l.isLoop && l.loopDepth>=1 && !/adj|neighbo/.test(l.t)), hint:'An O(V) min-search per step makes Prim O(V²) (fine only for dense graphs).'},
+   {label:'Sorts inside the loop', p:3, test:(t,P)=>P.lines.some(l=>/sort/.test(l.t) && l.loopDepth>=1), hint:'The heap already orders vertices by key.'}
+  ],
+  model:`MST-PRIM(G, w, r)
+    Q = ∅
+    for each vertex u ∈ G.V
+        u.key = ∞
+        u.π = NIL
+        INSERT(Q, u)
+    DECREASE-KEY(Q, r, 0)           // r.key = 0
+    while Q ≠ ∅
+        u = EXTRACT-MIN(Q)
+        for each v ∈ G.Adj[u]
+            if v ∈ Q and w(u, v) < v.key
+                v.π = u
+                DECREASE-KEY(Q, v, w(u, v))`},
+
+ {id:'pr-edges', topic:'prim', title:'Recover the MST from π pointers',
+  prompt:'After calling <code>MST-PRIM(G, w, r)</code>, every vertex has a parent pointer <code>π</code>. Write <code>PRIM-MST-EDGES(G, w, r)</code> that runs Prim, then returns the set of MST edges <b>and</b> its total weight.',
+  starter:'PRIM-MST-EDGES(G, w, r)\n    \n',
+  define:['primmstedges'], call:['mstprim'], maxLoop:1,
+  correctness:[
+   {label:'Calls MST-PRIM first', w:2, test:t=>/mstprim\s*\(/.test(t), hint:'MST-PRIM(G, w, r)'},
+   {label:'Iterates over the vertices', w:2, test:t=>/(for|foreach)[^\n]*\b(v|u|vertex|vertices|g\.v|node)\b/.test(t), hint:'for each v ∈ G.V'},
+   {label:'Skips the root / NIL parents', w:2, test:t=>/!=\s*(r|nil|null|none)\b|\bif[^\n]*(nil|null|none)\b|!=\s*nil/.test(t), hint:'if v ≠ r (equivalently v.π ≠ NIL)'},
+   {label:'Adds edge (v, v.π)', w:2, test:t=>/\(\s*\w+\s*,\s*\w+\.(pi|p|parent)\s*\)|\(\s*\w+\.(pi|p|parent)\s*,\s*\w+\s*\)/.test(t), hint:'A = A ∪ {(v, v.π)}'},
+   {label:'Accumulates the total weight', w:2, test:t=>/\+=|(\w+)\s*=\s*\1\s*\+/.test(t), hint:'total = total + w(v, v.π)  (or + v.key)'},
+   {label:'Returns the edges and the weight', w:1, test:t=>/\breturn\b/.test(t), hint:'return (A, total)'}
+  ],
+  efficiency:[
+   {label:'Single O(V) pass after Prim', w:5, test:(t,P)=>P.maxLoop<=1, hint:'Each vertex contributes at most one edge.'},
+   {label:'Uses stored v.key or w(v, v.π) directly', w:5, test:t=>/\.key\b|w\s*\(\s*\w+\s*,\s*\w+\.(pi|p|parent)|w\s*\(\s*\w+\.(pi|p|parent)/.test(t), hint:'No need to search the edge list for the parent edge.'}
+  ],
+  penalties:[
+   {label:'Searches the edge list for each vertex', p:3, test:(t,P)=>P.maxLoop>1, hint:'That makes it O(VE).'}
+  ],
+  model:`PRIM-MST-EDGES(G, w, r)
+    MST-PRIM(G, w, r)
+    A = ∅
+    total = 0
+    for each vertex v ∈ G.V
+        if v.π ≠ NIL                 // every vertex except r
+            A = A ∪ {(v, v.π)}
+            total = total + v.key    // v.key == w(v, v.π)
+    return (A, total)`},
+
+ {id:'fib-cut', topic:'fib', title:'CUT and CASCADING-CUT',
+  prompt:'Write <code>CUT(H, x, y)</code>, which moves child x of y to the root list of Fibonacci heap H, and <code>CASCADING-CUT(H, y)</code>, which handles marking and propagates cuts up the tree.',
+  starter:'CUT(H, x, y)\n    \n\nCASCADING-CUT(H, y)\n    \n',
+  define:['cut','cascadingcut'], call:['cut','cascadingcut'], maxLoop:0,
+  correctness:[
+   {label:"Removes x from y's child list", w:2, test:(t,P)=>/remove|delete|unlink|splice/.test(P.body('cut')), hint:"remove x from y's child list"},
+   {label:'Decrements y.degree', w:2, test:t=>/degree[^\n]*(-=\s*1|-\s*1|--)/.test(t), hint:'y.degree = y.degree − 1'},
+   {label:'Adds x to the root list', w:2, test:t=>/rootlist|root/.test(t) && /(add|insert|append|concat|splice|move|addto)/.test(t), hint:"add x to H's root list"},
+   {label:'Clears x.p', w:1, test:t=>/\.(p|parent)\s*=\s*(nil|null|none)/.test(t), hint:'x.p = NIL'},
+   {label:'Clears x.mark', w:1, test:(t,P)=>/mark\s*=\s*(false|0|no)\b/.test(P.body(['cut'])) || /mark\s*=\s*(false|0|no)\b/.test(t), hint:'x.mark = FALSE'},
+   {label:"CASCADING-CUT reads y's parent and checks it is not NIL", w:2, test:(t,P)=>{const b=P.body('cascadingcut'); return /(\.p\b|\.parent\b)/.test(b) && /(nil|null|none)/.test(b);}, hint:'z = y.p; if z ≠ NIL'},
+   {label:'Marks y if it was unmarked', w:2, test:(t,P)=>/mark\s*=\s*(true|1|yes)\b/.test(P.body('cascadingcut')), hint:'if y.mark == FALSE then y.mark = TRUE'},
+   {label:'Otherwise cuts y and recurses on the parent', w:3, test:(t,P)=>{const b=P.body('cascadingcut'); return /\bcut\s*\(/.test(b) && (/cascadingcut\s*\(/.test(b) || /\bwhile\b/.test(b));}, hint:'else CUT(H, y, z); CASCADING-CUT(H, z)'}
+  ],
+  efficiency:[
+   {label:'CUT is O(1), with no loops', w:5, test:(t,P)=>P.hasFn('cut') && !/\b(for|while)\b/.test(P.body('cut')), hint:'Doubly linked circular lists give O(1) splicing.'},
+   {label:'CASCADING-CUT only walks up the parent chain', w:5, test:(t,P)=>!/\bfor\b/.test(P.body('cascadingcut')), hint:'No need to visit children or the root list.'}
+  ],
+  penalties:[
+   {label:'Scans the root list or a child list', p:3, test:t=>/(for|foreach)[^\n]*(root|child)/.test(t), hint:'Use the doubly linked list pointers directly.'}
+  ],
+  model:`CUT(H, x, y)                  // O(1) splice
+    remove x from the child list of y
+    y.degree = y.degree - 1
+    add x to the root list of H
+    x.p = NIL
+    x.mark = FALSE
+
+CASCADING-CUT(H, y)
+    z = y.p
+    if z ≠ NIL
+        if y.mark == FALSE
+            y.mark = TRUE
+        else
+            CUT(H, y, z)
+            CASCADING-CUT(H, z)`},
+
+ {id:'fib-deg', topic:'fib', title:'Exact max-degree bound from Fibonacci numbers',
+  prompt:'Lemma 19.12 says a degree-k node has at least F<sub>k+2</sub> nodes in its subtree. Write <code>MAX-DEGREE(n)</code> that returns the largest k with F<sub>k+2</sub> ≤ n, i.e. the largest degree possible in an n-node Fibonacci heap. Aim for O(lg n) time.',
+  starter:'MAX-DEGREE(n)\n    \n',
+  define:['maxdegree'], call:[], maxLoop:1,
+  correctness:[
+   {label:'Initializes consecutive Fibonacci values', w:2, test:t=>/(\w+)\s*,\s*(\w+)\s*=\s*[0-9]|\w+\s*=\s*[0-9]\b[\s\S]*\w+\s*=\s*[0-9]\b/.test(t) || /log/.test(t), hint:'a = 1 (F₂), b = 2 (F₃), k = 0'},
+   {label:'Loops while the next Fibonacci number ≤ n', w:3, test:t=>/while[^\n]*(<=?\s*n\b|n\s*>=?)/.test(t) || (/log/.test(t) && /(phi|1\.618|sqrt\s*\(\s*5)/.test(t)), hint:'while F_{k+3} ≤ n: k = k + 1'},
+   {label:'Advances the Fibonacci sequence (sum of previous two)', w:3, test:t=>/=\s*\w+\s*\+\s*\w+|,\s*\w+\s*\+\s*\w+/.test(t) || (/log/.test(t) && /(phi|1\.618|sqrt)/.test(t)), hint:'a, b = b, a + b'},
+   {label:'Counts k', w:1, test:t=>/\+=\s*1|\+\s*1\b|\+\+/.test(t) || /floor/.test(t), hint:'k = k + 1'},
+   {label:'Returns k', w:1, test:t=>/\breturn\b/.test(t), hint:'return k'}
+  ],
+  efficiency:[
+   {label:'Iterative / closed form, not naive double recursion', w:5, test:t=>!/fib\w*\s*\(\s*\w+\s*-\s*1\s*\)\s*\+\s*fib\w*\s*\(/.test(t), hint:'Naive recursive Fibonacci is exponential.'},
+   {label:'Does not recompute Fibonacci numbers from scratch each step', w:5, test:(t,P)=>P.maxLoop<=1, hint:'Carry the last two values forward: O(lg n) iterations total.'}
+  ],
+  penalties:[
+   {label:'Naive recursive Fibonacci', p:4, test:t=>/fib\w*\s*\(\s*\w+\s*-\s*1\s*\)\s*\+\s*fib\w*\s*\(/.test(t), hint:'Exponential time.'}
+  ],
+  model:`MAX-DEGREE(n)              // largest k with F(k+2) <= n
+    k = 0
+    a = 1                       // F(k+2) = F(2)
+    b = 2                       // F(k+3) = F(3)
+    while b <= n
+        a, b = b, a + b
+        k = k + 1
+    return k                    // O(lg n) iterations, since F grows like φ^k`}
+];
+
+function gradeCode(q, src){
+  const P = parse(src), t = P.text;
+  const nonEmpty = src.split('\n').filter(l => l.trim()).length;
+  const fb = {correctness: [], modularity: [], efficiency: []};
+  // ---- correctness ----
+  let tot = 0, got = 0;
+  for (const c of q.correctness){ tot += c.w; const ok = safe(() => c.test(t, P)); if (ok) got += c.w; fb.correctness.push({ok, label: c.label, hint: c.hint}); }
+  let correctness = 10 * got / tot;
+  const starterLines = (q.starter || '').split('\n').filter(l => l.trim()).length;
+  if (nonEmpty - starterLines < 3) { correctness = Math.min(correctness, 2); fb.correctness.push({ok: false, pen: true, label: 'Answer is too short to be a complete solution'}); }
+  // ---- modularity ----
+  let mod = 0;
+  const defs = q.define.filter(d => P.funcs.some(f => f.norm === d || f.norm.includes(d) || (d.includes(f.norm) && f.norm.length > 3)));
+  const dScore = q.define.length ? 4 * defs.length / q.define.length : 4;
+  mod += dScore;
+  fb.modularity.push({ok: defs.length === q.define.length, label: `Defines the required procedures (${defs.length}/${q.define.length})`, hint: q.define.length ? 'Expected: ' + q.define.map(d => d.toUpperCase()).join(', ') + '. Use a header line like NAME(args) followed by an indented body.' : ''});
+  const usedCalls = q.call.filter(c => c.split('|').some(x => P.calls(x)));
+  const extraHelpers = P.funcs.filter(f => !q.define.some(d => f.norm.includes(d)) && P.calls(f.norm) );
+  let cScore = q.call.length ? 2 * usedCalls.length / q.call.length : 2;
+  if (extraHelpers.length) cScore = Math.min(2, cScore + 0.5);
+  mod += cScore;
+  fb.modularity.push({ok: cScore >= 1.99, label: `Reuses helper procedures/ADT operations (${usedCalls.length}/${q.call.length || 0}${extraHelpers.length ? `, +${extraHelpers.length} own helper${extraHelpers.length > 1 ? 's' : ''}` : ''})`, hint: q.call.length ? 'Call ' + q.call.map(c => c.split('|').join(' or ').toUpperCase()).join(', ') + ' rather than re-implementing them inline.' : ''});
+  const longest = P.funcs.reduce((m, f) => Math.max(m, f.len), 0);
+  const sizeOK = P.funcs.length > 0 && longest <= 20;
+  mod += P.funcs.length === 0 ? 0 : longest <= 20 ? 2 : longest <= 30 ? 1 : 0;
+  fb.modularity.push({ok: sizeOK, label: P.funcs.length ? `Procedures are short and focused (longest: ${longest} lines)` : 'No procedure headers detected', hint: P.funcs.length ? 'Split procedures longer than ~20 lines into helpers.' : 'Wrap your code in named procedures, e.g. MST-PRIM(G, w, r).'});
+  const nestOK = P.maxNest <= 4;
+  mod += nestOK ? 1 : 0;
+  fb.modularity.push({ok: nestOK, label: `Nesting depth is manageable (${P.maxNest} level${P.maxNest === 1 ? '' : 's'})`, hint: 'Deep nesting (> 4) hurts readability; extract a helper.'});
+  const goodNames = P.funcs.length > 0 && P.funcs.every(f => f.name.length >= 3);
+  const commented = /(\/\/|#|\u25b9|\/\*|--\s)/.test(src);
+  mod += (goodNames ? 0.5 : 0) + (commented ? 0.5 : 0);
+  fb.modularity.push({ok: goodNames && commented, label: 'Descriptive names and at least one comment', hint: (goodNames ? '' : 'Use descriptive procedure names. ') + (commented ? '' : 'Add a brief comment (// …) explaining a key step.')});
+  // ---- efficiency ----
+  let et = 0, eg = 0;
+  for (const c of q.efficiency){ const ok = safe(() => c.test(t, P)); if (!c.bonus) et += c.w; if (ok) eg += c.w; fb.efficiency.push({ok, label: c.label + (c.bonus ? ' (bonus)' : ''), hint: c.hint, bonus: c.bonus}); }
+  let eff = et ? 10 * Math.min(eg, et) / et : 10;
+  if (eg > et) eff = 10;
+  for (const p of (q.penalties || [])){ if (safe(() => p.test(t, P))) { eff -= p.p; fb.efficiency.push({ok: false, pen: true, label: p.label + ` (−${p.p})`, hint: p.hint}); } }
+  if (P.maxLoop > q.maxLoop + 0){ eff -= 2; fb.efficiency.push({ok: false, pen: true, label: `Loop nesting depth ${P.maxLoop} exceeds the expected ${q.maxLoop} (−2)`, hint: 'Extra nested loops usually mean a higher polynomial running time.'}); }
+  if (correctness < 4) { mod = Math.min(mod, correctness + 3); eff = Math.min(eff, correctness + 2); fb.efficiency.push({ok: false, pen: true, label: 'Efficiency capped because the solution is largely incomplete'}); }
+  const clamp = x => Math.max(0, Math.min(10, Math.round(x * 10) / 10));
+  const r = {correctness: clamp(correctness), modularity: clamp(mod), efficiency: clamp(eff), fb};
+  r.overall = Math.round((0.4 * r.correctness + 0.3 * r.modularity + 0.3 * r.efficiency) * 10);
+  r.letter = r.overall >= 90 ? 'A' : r.overall >= 80 ? 'B' : r.overall >= 70 ? 'C' : r.overall >= 60 ? 'D' : 'F';
+  return r;
+}
+function safe(f){ try { return !!f(); } catch (e) { return false; } }
+
+// ======================= DIAGRAM PRIMITIVES =======================
+const C = {acc: '#8b5cf6', cy: '#22d3ee', good: '#34d399', bad: '#f87171', warn: '#fbbf24', pink: '#f472b6', txt: '#e5e7eb', mut: '#9ca3af', dim: '#4b5563', bg: '#0f1424'};
+let dgN = 0;
+const D = {
+  svg: (w, h, body) => { const id = 'dg' + (++dgN); return `<svg viewBox="0 0 ${w} ${h}" class="dg" role="img"><defs>${['acc', 'cy', 'good', 'bad', 'mut', 'warn'].map(k => `<marker id="${id}-ar-${k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="${C[k]}"/></marker>`).join('')}</defs>${body.replace(/url\(#ar-/g, `url(#${id}-ar-`)}</svg>`; },
+  node: (x, y, l, col = C.acc, r = 17, fill) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${fill || col + '33'}" stroke="${col}" stroke-width="2.5"/><text x="${x}" y="${y + 5}" text-anchor="middle" font-size="${r > 14 ? 14 : 12}" font-weight="700" fill="#fff">${l}</text>`,
+  line: (x1, y1, x2, y2, col = C.dim, w = 2.5, extra = '') => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" ${extra}/>`,
+  arrow: (x1, y1, x2, y2, k = 'mut', w = 2.5, dash) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C[k]}" stroke-width="${w}" marker-end="url(#ar-${k})" ${dash ? 'stroke-dasharray="6 5"' : ''}/>`,
+  text: (x, y, s, size = 13, col = C.mut, anchor = 'middle', weight = 500) => `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-weight="${weight}" fill="${col}">${s}</text>`,
+  box: (x, y, w, h, l, col = C.acc, sub) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="12" fill="${col}22" stroke="${col}" stroke-width="2"/><text x="${x + w / 2}" y="${y + h / 2 + (sub ? -3 : 5)}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">${l}</text>${sub ? `<text x="${x + w / 2}" y="${y + h / 2 + 15}" text-anchor="middle" font-size="11.5" fill="${C.mut}">${sub}</text>` : ''}`,
+  diamond: (cx, cy, w, h, l, col = C.warn) => `<path d="M${cx} ${cy - h / 2}L${cx + w / 2} ${cy}L${cx} ${cy + h / 2}L${cx - w / 2} ${cy}Z" fill="${col}22" stroke="${col}" stroke-width="2"/><text x="${cx}" y="${cy + 5}" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">${l}</text>`,
+  wlabel: (x, y, w, col = C.mut) => `<rect x="${x - 12}" y="${y - 10}" width="24" height="19" rx="6" fill="#111827" stroke="${col}" stroke-width="1.2"/><text x="${x}" y="${y + 4}" text-anchor="middle" font-size="11.5" font-weight="700" fill="${col}">${w}</text>`
+};
+const fig = (svg, pro, kid) => `<figure class="fig">${svg}<figcaption><span class="pro-only">${pro}</span><span class="kid-only">${kid}</span></figcaption></figure>`;
+
+// ======================= PAGE DIAGRAMS =======================
+const DIAGRAMS = {
+  home: () => fig(D.svg(720, 230,
+      D.box(20, 30, 170, 58, 'Disjoint Sets', C.pink, 'Union-Find · Topic 16') +
+      D.box(20, 140, 170, 58, 'Priority Queue', C.warn, 'binary / Fibonacci heap') +
+      D.box(275, 85, 170, 58, 'Safe Edge Thm', C.acc, 'light edge across a cut') +
+      D.box(530, 30, 170, 58, "Kruskal", C.good, 'grows a forest') +
+      D.box(530, 140, 170, 58, "Prim", C.cy, 'grows one tree') +
+      D.arrow(190, 59, 526, 59, 'good') + D.arrow(190, 169, 526, 169, 'cy') +
+      D.arrow(445, 105, 526, 72, 'acc') + D.arrow(445, 124, 526, 156, 'acc') +
+      D.text(358, 52, 'detects cycles', 11.5, C.good) + D.text(358, 190, 'finds the cheapest next edge', 11.5, C.cy) +
+      D.text(360, 222, 'both → Minimum Spanning Tree in O(E lg V)', 12.5, C.txt)),
+    'How the pieces fit: Union-Find powers Kruskal, a priority queue powers Prim, and the Safe Edge Theorem proves both correct.',
+    'Two helpers (the group-tracker and the "cheapest-first" line) help two robots (Kruskal and Prim) build the cheapest set of roads.'),
+
+  ds: () => `<div class="grid g2">` + fig(D.svg(400, 250,
+      D.text(95, 22, 'Before FIND-SET(e)', 13, C.txt, 'middle', 700) +
+      D.arrow(95, 177, 95, 162, 'mut') + D.arrow(95, 132, 95, 117, 'mut') + D.arrow(95, 87, 95, 72, 'mut') + D.arrow(95, 222, 95, 207, 'mut') +
+      D.node(95, 55, 'a', C.warn) + D.node(95, 100, 'b') + D.node(95, 145, 'c') + D.node(95, 190, 'd') + D.node(95, 235, 'e', C.pink) +
+      D.arrow(160, 145, 225, 145, 'cy', 3) + D.text(192, 133, 'compress', 11.5, C.cy) +
+      D.text(310, 22, 'After', 13, C.txt, 'middle', 700) +
+      [['b', 250], ['c', 290], ['d', 330], ['e', 370]].map(([l, x]) => D.arrow(x, 128, 310 + (x - 310) * .25, 88, 'good', 2)).join('') +
+      D.node(310, 70, 'a', C.warn) + D.node(250, 145, 'b') + D.node(290, 145, 'c') + D.node(330, 145, 'd') + D.node(370, 145, 'e', C.pink) +
+      D.text(310, 200, 'everyone points at the root', 11.5, C.good)),
+    '<b>Path compression:</b> FIND-SET makes every node on the find path point directly at the representative (root).',
+    'Instead of passing a note up a long line of kids, everyone learns where the team captain sits so next time they go straight there.') +
+    fig(D.svg(400, 250,
+      D.text(80, 22, 'rank 1', 12, C.cy) + D.node(80, 60, 'x', C.cy) + D.node(80, 125, 'p', C.cy, 14) + D.arrow(80, 109, 80, 79, 'mut', 2) +
+      D.text(250, 22, 'rank 2', 12, C.warn) + D.node(250, 60, 'y', C.warn) + D.node(215, 125, 'q', C.warn, 14) + D.node(285, 125, 'r', C.warn, 14) + D.node(285, 185, 's', C.warn, 14) +
+      D.arrow(222, 110, 240, 77, 'mut', 2) + D.arrow(278, 110, 260, 77, 'mut', 2) + D.arrow(285, 170, 285, 141, 'mut', 2) +
+      `<path d="M98 52 Q 165 15 230 50" fill="none" stroke="${C.good}" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#ar-good)"/>` +
+      D.text(165, 22, 'LINK', 12, C.good, 'middle', 700) +
+      D.text(200, 230, 'short tree goes under tall tree → height stays O(lg n)', 11.5, C.txt)),
+    '<b>Union by rank:</b> the root with smaller rank becomes a child of the root with larger rank.',
+    'When two teams join, the small team joins the big team, so the line to the captain never gets too long.') + `</div>`,
+
+  mst: () => `<div class="grid g2">` + fig(D.svg(420, 260,
+      `<rect x="15" y="30" width="170" height="210" rx="40" fill="${C.pink}14" stroke="${C.pink}" stroke-dasharray="6 5"/><rect x="235" y="30" width="170" height="210" rx="40" fill="${C.cy}12" stroke="${C.cy}" stroke-dasharray="6 5"/>` +
+      D.text(100, 22, 'S', 14, C.pink, 'middle', 700) + D.text(320, 22, 'V − S', 14, C.cy, 'middle', 700) +
+      D.line(70, 80, 130, 150, C.good, 4) + D.line(70, 80, 80, 200, C.dim) +
+      D.line(130, 150, 290, 80, C.mut) + D.line(130, 150, 300, 200, C.good, 5) + D.line(80, 200, 300, 200, C.mut) + D.line(290, 80, 350, 150, C.dim) + D.line(350, 150, 300, 200, C.dim) +
+      D.wlabel(215, 115, 8) + D.wlabel(215, 175, 2, C.good) + D.wlabel(190, 200, 6) +
+      D.node(70, 80, 'a', C.pink) + D.node(130, 150, 'b', C.pink) + D.node(80, 200, 'c', C.pink) + D.node(290, 80, 'd', C.cy) + D.node(350, 150, 'e', C.cy) + D.node(300, 200, 'f', C.cy) +
+      D.text(210, 255, 'green across the gap = light edge = safe', 11.5, C.good)),
+    '<b>Cut (S, V − S):</b> three edges cross it (8, 2, 6). The lightest crossing edge (2) is a <b>safe edge</b>: some MST contains it.',
+    'Draw a line splitting the towns into two teams. Of all the bridges that cross the line, the cheapest one is always a smart pick.') +
+    fig(D.svg(420, 260,
+      D.box(130, 15, 160, 46, 'A = ∅', C.mut) +
+      D.diamond(210, 115, 230, 64, '|A| < |V| − 1 ?') +
+      D.box(15, 185, 175, 56, 'Find a safe edge', C.acc, 'light edge across a cut') +
+      D.box(250, 185, 155, 56, 'return A', C.good, 'it\'s an MST!') +
+      D.arrow(210, 61, 210, 81) + D.arrow(150, 135, 110, 181, 'acc') + D.arrow(270, 135, 320, 181, 'good') +
+      D.text(112, 158, 'yes', 12, C.acc) + D.text(312, 158, 'no', 12, C.good) +
+      `<path d="M30 185 Q 0 115 92 115" fill="none" stroke="${C.acc}" stroke-width="2.5" marker-end="url(#ar-acc)"/>` + D.text(20, 100, 'add it', 12, C.acc, 'start')),
+    '<b>Generic MST:</b> keep adding safe edges. Invariant: A is always a subset of some MST.',
+    'Keep adding the "smart pick" bridge until every town is connected. Then stop!') + `</div>`,
+
+  kruskal: () => `<div class="grid g2">` + fig(D.svg(420, 280,
+      D.box(70, 10, 280, 46, 'Sort edges cheap → expensive', C.acc) +
+      D.box(105, 80, 210, 42, 'Take next edge (u,v)', C.mut) +
+      D.diamond(210, 165, 300, 66, 'FIND-SET(u) = FIND-SET(v)?') +
+      D.box(10, 222, 165, 50, '✗ Skip it', C.bad, 'would make a cycle') +
+      D.box(245, 222, 165, 50, '✓ Keep + UNION', C.good, 'joins two groups') +
+      D.arrow(210, 56, 210, 76) + D.arrow(210, 122, 210, 132) + D.arrow(120, 180, 95, 218, 'bad') + D.arrow(300, 180, 325, 218, 'good') +
+      D.text(95, 196, 'same', 12, C.bad) + D.text(330, 196, 'different', 12, C.good) +
+      `<path d="M410 247 Q 418 100 319 101" fill="none" stroke="${C.mut}" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#ar-mut)"/>` +
+      `<path d="M10 247 Q 2 100 101 101" fill="none" stroke="${C.mut}" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#ar-mut)"/>`),
+    '<b>Kruskal loop:</b> each sorted edge is accepted only if its endpoints are in different Union-Find sets.',
+    'Look at roads from cheapest to priciest. If a road connects two towns that are already linked, skip it. Otherwise build it!') +
+    fig(D.svg(420, 280, (() => {
+      const stage = (ox, oy, title, groups, edges) => D.text(ox + 60, oy - 8, title, 12, C.txt, 'middle', 700) +
+        groups.map(([cx, cy, rx, ry, col]) => `<ellipse cx="${ox + cx}" cy="${oy + cy}" rx="${rx}" ry="${ry}" fill="${col}18" stroke="${col}" stroke-dasharray="4 4"/>`).join('') +
+        edges.map(([x1, y1, x2, y2]) => D.line(ox + x1, oy + y1, ox + x2, oy + y2, C.good, 3.5)).join('') +
+        [[20, 25, 'a'], [70, 25, 'b'], [20, 85, 'c'], [70, 85, 'd'], [110, 55, 'e']].map(([x, y, l]) => D.node(ox + x, oy + y, l, C.acc, 13)).join('');
+      return stage(10, 30, '1 · 5 groups', [[20, 25, 18, 18, C.pink], [70, 25, 18, 18, C.cy], [20, 85, 18, 18, C.warn], [70, 85, 18, 18, C.good], [110, 55, 18, 18, C.acc]], []) +
+        stage(150, 30, '2 · merge', [[45, 25, 45, 22, C.pink], [45, 85, 45, 22, C.warn], [110, 55, 18, 18, C.acc]], [[20, 25, 70, 25], [20, 85, 70, 85]]) +
+        stage(290, 30, '3 · merge', [[60, 55, 66, 58, C.good]], [[20, 25, 70, 25], [20, 85, 70, 85], [70, 25, 110, 55], [20, 25, 20, 85]]) +
+        D.text(210, 210, 'Groups (sets) merge until one tree remains', 12.5, C.txt) +
+        D.text(210, 232, 'n vertices → exactly n − 1 accepted edges', 12, C.good) +
+        D.arrow(140, 85, 155, 85, 'mut') + D.arrow(280, 85, 295, 85, 'mut');
+    })()),
+    '<b>Forest view:</b> Kruskal grows many small trees at once; every accepted edge merges two of them.',
+    'Each town starts on its own little island team. Every new road merges two teams until everybody is one big team.') + `</div>`,
+
+  prim: () => fig(D.svg(780, 230, (() => {
+      const N = {r: [60, 70], b: [150, 40], c: [140, 140], d: [230, 110]}, E = [['r', 'b', 4], ['r', 'c', 2], ['b', 'd', 3], ['c', 'd', 5], ['b', 'c', 6]];
+      const stage = (ox, title, inT, tree, pick) => D.text(ox + 145, 20, title, 13, C.txt, 'middle', 700) + E.map(([u, v, w]) => {
+        const [x1, y1] = N[u], [x2, y2] = N[v], k = [u, v].sort().join(), isT = tree.includes(k), fr = inT.includes(u) !== inT.includes(v), pk = pick === k;
+        return D.line(ox + x1, oy(y1), ox + x2, oy(y2), isT ? C.good : pk ? C.warn : fr ? C.cy : C.dim, isT || pk ? 4 : 2.5, fr && !pk ? 'stroke-dasharray="6 5"' : '') + D.wlabel(ox + (x1 + x2) / 2, oy((y1 + y2) / 2), w, isT ? C.good : pk ? C.warn : fr ? C.cy : C.mut);
+      }).join('') + Object.entries(N).map(([l, [x, y]]) => D.node(ox + x, oy(y), l, inT.includes(l) ? C.good : C.mut, 16)).join('');
+      const oy = y => y + 20;
+      return stage(0, '1 · start at root r', ['r'], [], 'c,r') + stage(260, '2 · tree {r, c}', ['r', 'c'], ['c,r'], 'b,r') + stage(520, '3 · tree {r, c, b}', ['r', 'c', 'b'], ['c,r', 'b,r'], 'b,d') +
+        D.text(390, 222, 'cyan dashed = edges leaving the tree (their weights are the keys)  ·  yellow = cheapest → EXTRACT-MIN adds it', 12, C.txt);
+    })()),
+    '<b>Prim:</b> one tree grows from the root. The priority queue always hands back the vertex with the cheapest edge into the tree.',
+    'Start at one town. Look at all roads going out from your group, build the cheapest one, and repeat. Your group gets bigger one town at a time.'),
+
+  fib: () => `<div class="grid g2">` + fig(D.svg(420, 260, (() => {
+      const F = [1, 2, 3, 5, 8, 13, 21]; let s = '';
+      F.forEach((v, k) => { const h = v * 7, x = 40 + k * 52; s += `<rect x="${x}" y="${215 - h}" width="34" height="${h}" rx="6" fill="${C.warn}" opacity="${.45 + k * .08}"/>` + D.text(x + 17, 208 - h, v, 12, C.txt, 'middle', 700) + D.text(x + 17, 235, 'k=' + k, 11.5, C.mut); });
+      return s + D.line(30, 215, 400, 215, C.dim, 1.5) + D.text(210, 22, 'min nodes in a subtree whose root has degree k', 12.5, C.txt) + D.text(210, 254, 's_k ≥ F_(k+2) ≥ φ^k   →   k ≤ log_φ n', 12, C.warn, 'middle', 700);
+    })()),
+    '<b>Size grows like Fibonacci:</b> a degree-k node has ≥ F<sub>k+2</sub> ≥ φ<sup>k</sup> descendants, so D(n) ≤ ⌊log<sub>φ</sub> n⌋ = O(lg n).',
+    'A node with lots of children must have a HUGE family behind it, growing like 1, 2, 3, 5, 8, 13… So no node can have too many children.') +
+    fig(D.svg(420, 260,
+      D.text(70, 22, '1 · lose a child', 12, C.txt, 'middle', 700) + D.node(70, 70, 'x', C.acc) + D.node(45, 140, '', C.dim, 12) + D.line(55, 128, 64, 87, C.dim) + D.line(85, 128, 76, 87, C.bad, 2.5, 'stroke-dasharray="4 4"') + D.text(102, 140, '✂', 18, C.bad) +
+      `<circle cx="88" cy="55" r="7" fill="${C.warn}"/>` + D.text(70, 185, 'x becomes marked', 11.5, C.warn) +
+      D.arrow(130, 90, 160, 90, 'mut') +
+      D.text(210, 22, '2 · lose another', 12, C.txt, 'middle', 700) + D.node(210, 70, 'x', C.acc) + `<circle cx="228" cy="55" r="7" fill="${C.warn}"/>` + D.line(210, 87, 210, 128, C.bad, 2.5, 'stroke-dasharray="4 4"') + D.text(228, 115, '✂', 18, C.bad) + D.node(210, 140, '', C.dim, 12) +
+      D.arrow(260, 90, 290, 90, 'mut') +
+      D.text(350, 22, '3 · cascading cut', 12, C.txt, 'middle', 700) + D.box(300, 50, 100, 40, 'root list', C.good) + D.node(350, 140, 'x', C.acc) + D.arrow(350, 122, 350, 94, 'good') + D.text(350, 185, 'x cut, unmarked', 11.5, C.good) +
+      D.text(210, 235, 'a node may lose at most ONE child before it is cut', 12.5, C.txt)),
+    '<b>Mark bits + cascading cuts:</b> a non-root node is cut to the root list the second time it loses a child. That keeps subtrees "bushy."',
+    'Rule: a parent can lose one kid and get a warning sticker. If it loses a second kid, it gets moved to the top row. This keeps families big.') + `</div>`,
+
+  videos: () => fig(D.svg(720, 120,
+      D.box(20, 30, 200, 60, 'A · MST basics', C.acc, 'cuts & safe edges') + D.box(260, 30, 200, 60, "B · Kruskal", C.good, 'sort + Union-Find') + D.box(500, 30, 200, 60, "C · Prim", C.cy, 'priority queue') +
+      D.arrow(220, 60, 256, 60, 'mut', 3) + D.arrow(460, 60, 496, 60, 'mut', 3)),
+    'Watch the screencasts in order. A gives the theory, then B and C apply it.',
+    'Watch them in order: first the big idea, then robot #1 (Kruskal), then robot #2 (Prim).'),
+
+  practice: () => fig(D.svg(720, 150,
+      D.text(20, 22, 'How pseudocode is graded', 13, C.txt, 'start', 700) +
+      `<rect x="20" y="40" width="${680 * .4}" height="40" rx="10" fill="${C.good}55" stroke="${C.good}"/><rect x="${20 + 680 * .4}" y="40" width="${680 * .3}" height="40" rx="10" fill="${C.acc}55" stroke="${C.acc}"/><rect x="${20 + 680 * .7}" y="40" width="${680 * .3}" height="40" rx="10" fill="${C.cy}55" stroke="${C.cy}"/>` +
+      D.text(20 + 136, 66, 'Correctness 40%', 14, '#fff', 'middle', 700) + D.text(20 + 272 + 102, 66, 'Modularity 30%', 14, '#fff', 'middle', 700) + D.text(20 + 476 + 102, 66, 'Efficiency 30%', 14, '#fff', 'middle', 700) +
+      D.text(156, 105, 'right steps, right answer', 12, C.mut) + D.text(394, 105, 'helper procedures, short & clear', 12, C.mut) + D.text(598, 105, 'no slow nested loops', 12, C.mut) +
+      D.text(360, 138, 'A ≥ 90 · B ≥ 80 · C ≥ 70 · D ≥ 60', 12.5, C.warn)),
+    'Each pseudocode answer gets three sub-scores combined into a letter grade.',
+    'Your code gets three stars: does it work? Is it split into neat little pieces? Is it fast?')
+};
+
+// ======================= "DUMMY MODE" (ELI5) EXPLANATIONS =======================
+const ELI5 = {
+  home: {title: 'What is this site about?', pts: [
+    '🏝️ Imagine a bunch of islands and you want to build bridges so you can walk from any island to any other.',
+    '💰 Every bridge costs money. You want to spend the <b>least money</b> possible but still connect everybody.',
+    '🌳 The cheapest set of bridges is called a <b>Minimum Spanning Tree</b> (MST). "Tree" just means no loops: no wasted bridges.',
+    '🤖 You\'ll meet two "robots" that find it: <b>Kruskal</b> and <b>Prim</b>. They use helpers called <b>Disjoint Sets</b> and <b>heaps</b>.']},
+  ds: {title: 'Disjoint Sets = sorting kids into teams', pts: [
+    '👫 Every kid starts on their <b>own team</b> (MAKE-SET).',
+    '🧢 Each team has a <b>captain</b>. To find out which team you\'re on, follow the arrows up to the captain (FIND-SET).',
+    '🤝 UNION means "these two teams join together into one bigger team."',
+    '📏 <b>Union by rank:</b> the shorter team joins under the taller team, so lines never get too long.',
+    '⚡ <b>Path compression:</b> after you find your captain once, you remember them, so next time you go straight there.',
+    '🚀 With both tricks, every question is answered almost instantly, even with millions of kids.']},
+  mst: {title: 'MST = the cheapest way to connect everything', pts: [
+    '🏘️ Towns are dots and roads are lines. Each road has a price tag (its <b>weight</b>).',
+    '✅ A <b>spanning tree</b> connects every town using no loops. With n towns you always need exactly <b>n − 1</b> roads.',
+    '✂️ A <b>cut</b> is like drawing a line that splits the towns into two teams.',
+    '🌉 Roads that go across the line are <b>crossing edges</b>. The cheapest crossing road is called a <b>light edge</b>.',
+    '🛡️ <b>Safe Edge Theorem:</b> that cheapest crossing road is always a safe pick. You will never regret choosing it!']},
+  kruskal: {title: "Kruskal's robot: cheapest roads first", pts: [
+    '📋 Put all the roads in a line from <b>cheapest</b> to <b>most expensive</b>.',
+    '👀 Look at each road in order.',
+    '🤔 Ask: "Are these two towns already connected?" (Same team? Use FIND-SET.)',
+    '❌ If YES → skip it, because it would make a useless loop.',
+    '✅ If NO → build it, and merge the two teams (UNION).',
+    '🏁 Stop when every town is on one big team.']},
+  prim: {title: "Prim's robot: grow one blob", pts: [
+    '📍 Start at one town. That is your little blob.',
+    '🔍 Look at every road that leaves your blob.',
+    '💲 Build the <b>cheapest</b> one. Now the town at the other end joins your blob.',
+    '🔁 Repeat! The blob grows one town at a time.',
+    '📦 A <b>priority queue</b> is like a magic line where the cheapest choice always jumps to the front, so the robot doesn\'t have to search every time.',
+    '🏁 When every town is in the blob, you\'re done.']},
+  fib: {title: 'Fibonacci heaps: why no node gets too many kids', pts: [
+    '🌲 A Fibonacci heap is a bunch of family trees. Each parent can have kids.',
+    '🏷️ <b>Rule:</b> if a parent loses one kid, it gets a warning sticker (a <b>mark</b>). If it loses a second kid, it gets moved to the top row (a <b>cascading cut</b>).',
+    '🐰 Because of this rule, a parent with k kids must have a family at least as big as the Fibonacci numbers: 1, 2, 3, 5, 8, 13, 21… which grow super fast!',
+    '📉 So with n nodes, nobody can have more than about <b>log n</b> kids.',
+    '⚡ That keeps the heap fast, and it makes Prim\'s robot even faster.']},
+  videos: {title: 'Watching the videos', pts: [
+    '🎬 <b>Video A:</b> what the "cheapest roads" problem is and why the cheapest crossing road is safe.',
+    '🎬 <b>Video B:</b> Kruskal\'s robot with real airports (like SFO and JFK).',
+    '🎬 <b>Video C:</b> Prim\'s robot growing its blob from San Francisco.',
+    '💡 Tip: pause the video and try to guess the next road before the teacher picks it!']},
+  practice: {title: 'How practice works', pts: [
+    '🎲 Questions are picked at random, and some are even made up fresh each time with new graphs.',
+    '🔘 <b>Multiple choice:</b> tap the answer you think is right.',
+    '⌨️ <b>Pseudocode:</b> write step-by-step instructions like a recipe. You get three scores:',
+    '⭐ Does it work? (Correctness) · ⭐ Is it split into neat little pieces? (Modularity) · ⭐ Is it fast? (Efficiency)',
+    '💡 Stuck? Press <b>Hint</b>, and you can always peek at the model answer.']}
+};
+
+function mountExtras(){
+  Object.keys(DIAGRAMS).forEach(id => {
+    const page = document.getElementById('page-' + id); if (!page) return;
+    const lead = page.querySelector(':scope > p.lead');
+    let anchor = lead && lead.nextElementSibling && lead.nextElementSibling.classList.contains('row') ? lead.nextElementSibling : lead;
+    const e = ELI5[id];
+    const html = `<div class="eli5-box kid-only fade"><div class="eli5-head"><span class="eli5-badge">🧒 Simple mode</span><h3>${e.title}</h3></div><ul>${e.pts.map(p => `<li>${p}</li>`).join('')}</ul></div>
+      <div class="card diagram-card"><div class="dg-head"><h3>🖼️ Picture it</h3><span class="pill">diagram</span></div>${DIAGRAMS[id]()}</div>`;
+    if (anchor) anchor.insertAdjacentHTML('afterend', html); else page.insertAdjacentHTML('afterbegin', html);
+  });
+  const sw = document.getElementById('eli5-switch');
+  const apply = on => { document.body.classList.toggle('eli5', on); sw.checked = on; };
+  apply(!!store.eli5);
+  sw.addEventListener('change', () => {
+    store.eli5 = sw.checked; save(); apply(sw.checked);
+    toast(sw.checked ? '🧒 Simple mode on: easy explanations added to every page' : 'Simple mode off');
+    if (sw.checked) { const box = document.querySelector('.page:not(.hidden) .eli5-box'); box && box.scrollIntoView({behavior: 'smooth', block: 'center'}); }
+  });
+}
+
+// ======================= STATE =======================
+const STORE_KEY = 'mstlab-v1';
+const store = (() => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; } })();
+store.byTopic = store.byTopic || {}; store.code = store.code || {};
+const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) {} };
+function record(topic, frac, codeId){
+  const t = store.byTopic[topic] = store.byTopic[topic] || {a: 0, c: 0};
+  t.a++; t.c += frac;
+  if (codeId) store.code[codeId] = Math.max(store.code[codeId] || 0, Math.round(frac * 100));
+  save(); renderHome();
+}
+function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 1800); }
+
+// ======================= QUESTION FACTORY =======================
+const recent = [];
+function nextQuestion(topics, mode){
+  topics = [].concat(topics);
+  const mcPool = MC.filter(q => topics.includes(q.topic)).map((q, i) => ({src: q, id: 'mc' + MC.indexOf(q)}));
+  const genPool = GEN.filter(g => topics.includes(g.topic)).map(g => ({gen: g, id: 'gen' + GEN.indexOf(g)}));
+  const codePool = CODE.filter(q => topics.includes(q.topic)).map(q => ({code: q, id: q.id}));
+  let kind = mode === 'mc' ? 'mc' : mode === 'code' ? 'code' : (Math.random() < 0.3 && codePool.length ? 'code' : 'mc');
+  if (kind === 'code' && !codePool.length) kind = 'mc';
+  let pool = kind === 'code' ? codePool : (genPool.length && Math.random() < 0.4 ? genPool : mcPool);
+  const fresh = pool.filter(p => !recent.includes(p.id) || p.gen);
+  const choice = pick(fresh.length ? fresh : pool);
+  recent.push(choice.id); if (recent.length > 25) recent.shift();
+  if (choice.code) return {kind: 'code', topic: choice.code.topic, q: choice.code};
+  const base = choice.gen ? {topic: choice.gen.topic, ...choice.gen.gen()} : {...choice.src};
+  const idx = shuffle(base.options.map((_, i) => i));
+  return {kind: 'mc', topic: base.topic, q: base.q, graph: base.graph, explain: base.explain, generated: !!choice.gen,
+    options: idx.map(i => base.options[i]), answer: idx.indexOf(base.answer)};
+}
+
+// ======================= RENDERERS =======================
+function renderQuestion(el, inst, onDone){
+  const T = TOPICS[inst.topic];
+  const tag = `<div class="row" style="gap:6px"><span class="pill ${inst.kind}">${inst.kind === 'mc' ? 'Multiple choice' : 'Pseudocode'}</span><span class="pill" style="color:${T.color}">${T.icon} ${T.name}</span>${inst.generated ? '<span class="pill">🎲 generated</span>' : ''}</div>`;
+  if (inst.kind === 'mc'){
+    el.innerHTML = `<div class="fade">${tag}<div class="question">${inst.q}</div>${inst.graph ? `<div class="q-graph">${inst.graph}</div>` : ''}
+      <div class="opts">${inst.options.map((o, i) => `<button class="opt" data-i="${i}"><span class="k">${'ABCD'[i]}</span><span>${o}</span></button>`).join('')}</div><div class="explain-slot"></div></div>`;
+    el.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      const i = +b.dataset.i, ok = i === inst.answer;
+      el.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === inst.answer) x.classList.add('correct'); });
+      if (!ok) b.classList.add('wrong');
+      el.querySelector('.explain-slot').innerHTML = `<div class="explain ${ok ? 'good' : 'bad'} fade"><b>${ok ? '✓ Correct!' : '✗ Not quite.'}</b> ${inst.explain}</div>`;
+      record(inst.topic, ok ? 1 : 0);
+      onDone && onDone(ok ? 1 : 0);
+    });
+  } else {
+    const q = inst.q;
+    el.innerHTML = `<div class="fade">${tag}<h3 style="margin-top:12px">${q.title}</h3><div class="question">${q.prompt}</div>
+      <div class="callout cyan" style="font-size:.86rem;margin-top:0">Graded on <b>Correctness</b> (40%) · <b>Modularity</b> (30%) · <b>Efficiency</b> (30%). Any reasonable pseudocode style works: CLRS, Python-like, or C-like. Use <code>NAME(args)</code> headers with indented bodies.</div>
+      <div class="editor-wrap"><div class="editor-bar"><span class="dots"><span style="background:#f87171"></span><span style="background:#fbbf24"></span><span style="background:#34d399"></span></span><span>pseudocode · Tab = 4 spaces</span></div>
+      <textarea class="code" spellcheck="false">${esc(q.starter)}</textarea></div>
+      <div class="row" style="margin-top:12px"><button class="btn primary submit">⚡ Submit for grading</button><button class="btn hintbtn">💡 Hint</button><button class="btn ghost reset">↺ Reset</button></div>
+      <div class="hint-slot"></div><div class="result-slot"></div></div>`;
+    const ta = el.querySelector('textarea');
+    ta.addEventListener('keydown', e => {
+      if (e.key === 'Tab'){ e.preventDefault(); const s = ta.selectionStart; ta.setRangeText('    ', s, ta.selectionEnd, 'end'); }
+      if (e.key === 'Enter'){ const s = ta.selectionStart; const line = ta.value.slice(0, s).split('\n').pop(); const ind = line.match(/^\s*/)[0] + (/[:{]\s*$/.test(line) ? '    ' : ''); if (ind){ e.preventDefault(); ta.setRangeText('\n' + ind, s, ta.selectionEnd, 'end'); } }
+    });
+    let hintN = 0, recorded = false;
+    el.querySelector('.reset').onclick = () => { ta.value = q.starter; el.querySelector('.result-slot').innerHTML = ''; };
+    el.querySelector(".hintbtn").onclick = () => {
+      const r = gradeCode(q, ta.value); const miss = r.fb.correctness.filter(x => !x.ok && x.hint);
+      const h = miss[hintN % Math.max(1, miss.length)]; hintN++;
+      el.querySelector('.hint-slot').innerHTML = `<div class="explain fade">💡 ${h ? `<b>${h.label}:</b> ${esc(h.hint)}` : 'Your answer already covers every correctness point. Now polish modularity and efficiency!'}</div>`;
+    };
+    el.querySelector('.submit').onclick = () => {
+      if (ta.value.trim() === q.starter.trim()) { toast('Write some pseudocode first ✍️'); return; }
+      const r = gradeCode(q, ta.value);
+      el.querySelector('.result-slot').innerHTML = renderGrade(r, q);
+      if (!recorded){ recorded = true; record(q.topic, r.overall / 100, q.id); onDone && onDone(r.overall / 100); }
+      else if (r.overall / 100 > (store.code[q.id] || 0) / 100) { store.code[q.id] = r.overall; save(); }
+    };
+  }
+}
+function renderGrade(r, q){
+  const col = v => v >= 8 ? 'var(--good)' : v >= 5 ? 'var(--warn)' : 'var(--bad)';
+  const meter = (lbl, v, w) => `<div class="score"><div class="lbl">${lbl} <span style="opacity:.6">· ${w}</span></div><div class="val" style="color:${col(v)}">${v}<span style="font-size:.9rem;color:var(--dim)"> / 10</span></div><div class="meter"><span style="width:${v * 10}%;background:${col(v)}"></span></div></div>`;
+  const list = items => `<ul class="fb">${items.map(x => `<li class="${x.ok ? 'ok' : x.pen ? 'pen' : 'no'}"><span class="m">${x.ok ? '✓' : x.pen ? '!' : x.bonus ? '○' : '✗'}</span><span>${esc(x.label)}${!x.ok && x.hint ? `<span class="hint">${esc(x.hint)}</span>` : ''}</span></li>`).join('')}</ul>`;
+  const gcol = r.overall >= 80 ? 'var(--good)' : r.overall >= 60 ? 'var(--warn)' : 'var(--bad)';
+  return `<div class="fade" style="margin-top:18px">
+    <div class="overall"><div class="grade" style="color:${gcol}">${r.letter}</div><div><div style="font-size:1.4rem;font-weight:800">${r.overall}%</div><div class="stat-label">${r.overall >= 90 ? 'Excellent: clean, correct, and efficient.' : r.overall >= 70 ? 'Solid. Check the feedback below to tighten it up.' : 'Keep going. Use the feedback and hints to fill the gaps.'}</div></div></div>
+    <div class="scores">${meter('Correctness', r.correctness, '40%')}${meter('Modularity', r.modularity, '30%')}${meter('Efficiency', r.efficiency, '30%')}</div>
+    <div class="grid g3"><div><h3>Correctness</h3>${list(r.fb.correctness)}</div><div><h3>Modularity</h3>${list(r.fb.modularity)}</div><div><h3>Efficiency</h3>${list(r.fb.efficiency)}</div></div>
+    <details class="model"><summary>Show model answer</summary><pre><code>${esc(q.model)}</code></pre></details>
+    <p class="stat-label" style="margin-top:10px">Automated rubric grading looks for key algorithmic steps, structure, and complexity red flags. Compare with the model answer to self-check.</p></div>`;
+}
+
+// ======================= TOPIC Q&A WIDGETS =======================
+function mountQA(el){
+  const topic = el.dataset.topic; let mode = 'mixed';
+  el.innerHTML = `<div class="qa-head"><h3>🧠 Topic Q&amp;A <span class="pill">random</span></h3>
+    <div class="row"><div class="seg">${[['mixed', 'Mixed'], ['mc', 'Multiple choice'], ['code', 'Pseudocode']].map(([k, l]) => `<button data-m="${k}" class="${k === mode ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <button class="btn sm next">New question ↻</button></div></div><div class="body"></div><div class="row after" style="margin-top:14px"></div>`;
+  const body = el.querySelector('.body'), after = el.querySelector('.after');
+  const go = () => { after.innerHTML = ''; renderQuestion(body, nextQuestion(topic, mode), () => { after.innerHTML = '<button class="btn primary">Next question →</button>'; after.firstChild.onclick = go; }); };
+  el.querySelectorAll('.seg button').forEach(b => b.onclick = () => { mode = b.dataset.m; el.querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b)); go(); });
+  el.querySelector('.next').onclick = go;
+  go();
+}
+
+// ======================= PRACTICE ARENA =======================
+function renderPractice(){
+  const root = document.getElementById('practice-root');
+  const cfg = {topics: Object.keys(TOPICS), mode: 'mixed', n: 10};
+  root.innerHTML = `<div class="card fade" style="margin-top:20px">
+    <h3 style="margin-top:0">Topics</h3><div class="row">${Object.entries(TOPICS).map(([k, t]) => `<label class="chk"><input type="checkbox" value="${k}" checked> ${t.icon} ${t.name}</label>`).join('')}</div>
+    <h3>Question type</h3><div class="seg" id="p-mode">${[['mixed', 'Mixed'], ['mc', 'Multiple choice only'], ['code', 'Pseudocode only']].map(([k, l]) => `<button data-m="${k}" class="${k === 'mixed' ? 'on' : ''}">${l}</button>`).join('')}</div>
+    <h3>Length</h3><div class="seg" id="p-n">${[5, 10, 15, 20].map(n => `<button data-n="${n}" class="${n === 10 ? 'on' : ''}">${n} questions</button>`).join('')}</div>
+    <div style="margin-top:22px"><button class="btn primary" id="p-start">🚀 Start practice</button></div></div>`;
+  root.querySelectorAll('#p-mode button').forEach(b => b.onclick = () => { cfg.mode = b.dataset.m; root.querySelectorAll('#p-mode button').forEach(x => x.classList.toggle('on', x === b)); });
+  root.querySelectorAll('#p-n button').forEach(b => b.onclick = () => { cfg.n = +b.dataset.n; root.querySelectorAll('#p-n button').forEach(x => x.classList.toggle('on', x === b)); });
+  root.querySelector('#p-start').onclick = () => {
+    cfg.topics = [...root.querySelectorAll('.chk input:checked')].map(i => i.value);
+    if (!cfg.topics.length) { toast('Pick at least one topic'); return; }
+    runQuiz(root, cfg);
+  };
+}
+function runQuiz(root, cfg){
+  const results = []; let i = 0;
+  const step = () => {
+    if (i >= cfg.n) return summary();
+    const inst = nextQuestion(cfg.topics, cfg.mode);
+    root.innerHTML = `<div class="card" style="margin-top:20px"><div class="row" style="justify-content:space-between"><b>Question ${i + 1} of ${cfg.n}</b><span class="stat-label">Score so far: ${results.length ? Math.round(100 * results.reduce((a, r) => a + r.s, 0) / results.length) : 0}%</span></div>
+      <div class="progress"><span style="width:${100 * i / cfg.n}%"></span></div><div class="qbody"></div>
+      <div class="row" style="margin-top:16px;justify-content:space-between"><button class="btn ghost sm quit">✕ End session</button><div class="nav-slot"><button class="btn sm skip">Skip →</button></div></div></div>`;
+    const slot = root.querySelector('.nav-slot');
+    root.querySelector('.quit').onclick = summary;
+    root.querySelector('.skip').onclick = () => { results.push({inst, s: 0, skipped: true}); i++; step(); };
+    renderQuestion(root.querySelector('.qbody'), inst, s => {
+      results.push({inst, s}); i++;
+      slot.innerHTML = `<button class="btn primary">${i >= cfg.n ? 'See results 🏁' : 'Next →'}</button>`;
+      slot.firstChild.onclick = step;
+    });
+  };
+  const summary = () => {
+    const pct = results.length ? Math.round(100 * results.reduce((a, r) => a + r.s, 0) / results.length) : 0;
+    const byT = {}; results.forEach(r => { const t = byT[r.inst.topic] = byT[r.inst.topic] || {n: 0, s: 0}; t.n++; t.s += r.s; });
+    root.innerHTML = `<div class="card fade" style="margin-top:20px;text-align:center"><div style="font-size:3rem">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : pct >= 50 ? '💪' : '📚'}</div>
+      <h2 style="margin:6px 0">${pct}%</h2><p class="lead" style="margin:0 auto">${results.length} answered · ${results.filter(r => r.inst.kind === 'code').length} pseudocode · ${results.filter(r => r.skipped).length} skipped</p>
+      <table class="tbl" style="max-width:520px;margin:18px auto"><tr><th>Topic</th><th>Questions</th><th>Score</th></tr>${Object.entries(byT).map(([k, v]) => `<tr><td>${TOPICS[k].icon} ${TOPICS[k].name}</td><td>${v.n}</td><td>${Math.round(100 * v.s / v.n)}%</td></tr>`).join('')}</table>
+      <div class="row" style="justify-content:center"><button class="btn primary again">↻ New random set</button><button class="btn change">⚙ Change settings</button></div></div>`;
+    root.querySelector('.again').onclick = () => runQuiz(root, cfg);
+    root.querySelector('.change').onclick = renderPractice;
+  };
+  step();
+}
+
+// ======================= VISUALIZERS =======================
+function mountKruskal(){
+  const el = document.getElementById('viz-kruskal'); const {steps, total} = kruskalSteps(CLRS_GRAPH.nodes, CLRS_GRAPH.edges); let k = -1;
+  const key = e => [e.u, e.v].sort().join();
+  const draw = () => {
+    const es = {};
+    steps.slice(0, k + 1).forEach((s, j) => { es[key(s.edge)] = s.accepted ? 'mst' : 'rej'; });
+    if (k >= 0) es[key(steps[k].edge)] = steps[k].accepted ? 'mst' : 'rej';
+    const cur = steps[k];
+    const g = {nodes: CLRS_GRAPH.nodes, edges: CLRS_GRAPH.edges};
+    const accW = cur ? cur.accepted_so_far.reduce((a, e) => a + e.w, 0) : 0;
+    el.innerHTML = `<div class="viz"><div>${renderGraph(g, {w: 500, h: 300, edgeState: es})}
+      <div class="row" style="margin-top:10px"><button class="btn sm" data-a="reset">⏮ Reset</button><button class="btn sm" data-a="prev">◀ Prev</button><button class="btn primary sm" data-a="next">Next edge ▶</button><button class="btn sm" data-a="end">⏭ Finish</button></div></div>
+      <div class="side"><p><b>Step ${k + 1} / ${steps.length}</b> · MST weight so far: <b>${accW}</b>${k === steps.length - 1 ? ` (final = ${total})` : ''}</p>
+      <p>${cur ? (cur.accepted ? `✅ <b>(${cur.edge.u},${cur.edge.v})</b> w=${cur.edge.w} joins two different sets, so it is <span style="color:var(--good)">accepted</span>.` : `❌ <b>(${cur.edge.u},${cur.edge.v})</b> w=${cur.edge.w}: FIND-SET(${cur.edge.u}) = FIND-SET(${cur.edge.v}), so it is <span style="color:var(--bad)">rejected</span> (would form a cycle).`) : 'Every vertex starts in its own set. Edges are sorted by weight.'}</p>
+      <p class="stat-label">Disjoint sets:</p><p style="font-family:var(--mono);font-size:.82rem">${(cur ? cur.sets : CLRS_GRAPH.nodes.map(n => [n.id])).map(s => `{${s.join(',')}}`).join(' ')}</p>
+      <div class="log">${steps.map((s, j) => `<div class="${j === k ? 'cur' : ''}">${j <= k ? (s.accepted ? '<span class="acc">✓</span>' : '<span class="rej">✗</span>') : '·'} (${s.edge.u},${s.edge.v}) ${s.edge.w}</div>`).join('')}</div></div></div>`;
+    el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a; k = a === 'reset' ? -1 : a === 'prev' ? Math.max(-1, k - 1) : a === 'next' ? Math.min(steps.length - 1, k + 1) : steps.length - 1; draw(); });
+  };
+  draw();
+}
+function mountPrim(){
+  const el = document.getElementById('viz-prim'); let root = 'a', data, k;
+  const key = (a, b) => [a, b].sort().join();
+  const init = () => { data = primSteps(CLRS_GRAPH.nodes, CLRS_GRAPH.edges, root); k = 0; draw(); };
+  const draw = () => {
+    const s = data.steps[k]; const es = {}, ns = {}, lab = {};
+    s.done.forEach(v => { ns[v] = 'in'; if (s.pi[v]) es[key(v, s.pi[v])] = 'mst'; });
+    if (s.u) ns[s.u] = 'cur';
+    CLRS_GRAPH.nodes.forEach(n => { if (!s.done.includes(n.id)) { lab[n.id] = s.key[n.id] === Infinity ? '∞' : s.key[n.id]; if (s.pi[n.id]) es[key(n.id, s.pi[n.id])] = 'cur'; } });
+    const W = s.done.reduce((a, v) => a + (s.pi[v] ? s.key[v] : 0), 0);
+    el.innerHTML = `<div class="viz"><div>${renderGraph(CLRS_GRAPH, {w: 500, h: 300, edgeState: es, nodeState: ns, nodeLabel: lab})}
+      <div class="row" style="margin-top:10px"><label class="stat-label">Root <select id="prim-root" style="background:#111827;color:#fff;border:1px solid var(--border);border-radius:8px;padding:4px 8px">${CLRS_GRAPH.nodes.map(n => `<option ${n.id === root ? 'selected' : ''}>${n.id}</option>`).join('')}</select></label>
+      <button class="btn sm" data-a="reset">⏮</button><button class="btn sm" data-a="prev">◀ Prev</button><button class="btn primary sm" data-a="next">EXTRACT-MIN ▶</button><button class="btn sm" data-a="end">⏭</button></div></div>
+      <div class="side"><p><b>Step ${k} / ${data.steps.length - 1}</b> · tree weight: <b>${W}</b></p>
+      <p>${s.u ? `Extracted <b>${s.u}</b>${s.pi[s.u] ? ` via edge (${s.pi[s.u]},${s.u}) w=${s.key[s.u]}` : ' (root)'}. ${s.updates.length ? 'Updated keys: ' + s.updates.map(x => `${x.v}: ${x.from === Infinity ? '∞' : x.from}→${x.to}`).join(', ') : 'No key updates.'}` : `All keys = ∞, then DECREASE-KEY(Q, ${root}, 0).`}</p>
+      <p class="stat-label">Cyan numbers are current keys of vertices still in Q; yellow edges show tentative π pointers; green = tree.</p>
+      <table class="tbl"><tr><th>v</th>${CLRS_GRAPH.nodes.map(n => `<th>${n.id}</th>`).join('')}</tr><tr><td>key</td>${CLRS_GRAPH.nodes.map(n => `<td>${s.key[n.id] === Infinity ? '∞' : s.key[n.id]}</td>`).join('')}</tr><tr><td>π</td>${CLRS_GRAPH.nodes.map(n => `<td>${s.pi[n.id] || '–'}</td>`).join('')}</tr></table>
+      <p class="stat-label">Extraction order: ${s.done.join(' → ') || '—'}</p></div></div>`;
+    el.querySelector('#prim-root').onchange = e => { root = e.target.value; init(); };
+    el.querySelectorAll('button').forEach(b => b.onclick = () => { const a = b.dataset.a, L = data.steps.length - 1; k = a === 'reset' ? 0 : a === 'prev' ? Math.max(0, k - 1) : a === 'next' ? Math.min(L, k + 1) : L; draw(); });
+  };
+  init();
+}
+
+// ======================= HOME & VIDEOS =======================
+function renderHome(){
+  const all = Object.values(store.byTopic), a = all.reduce((s, t) => s + t.a, 0), c = all.reduce((s, t) => s + t.c, 0);
+  const codes = Object.values(store.code);
+  document.getElementById('home-stats').innerHTML = [
+    [a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'],
+    [codes.length ? `${codes.length}/${CODE.length}` : `0/${CODE.length}`, 'Pseudocode challenges attempted'],
+    [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']
+  ].map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('') +
+  (a ? '' : '') ;
+  document.getElementById('topic-cards').innerHTML = Object.entries(TOPICS).map(([k, t]) => {
+    const s = store.byTopic[k]; const pct = s && s.a ? Math.round(100 * s.c / s.a) : 0;
+    const nQ = MC.filter(q => q.topic === k).length, nG = GEN.filter(q => q.topic === k).length, nC = CODE.filter(q => q.topic === k).length;
+    return `<div class="card topic-card" onclick="location.hash='${k}'"><div class="ic" style="background:${t.color}22">${t.icon}</div><h3>${t.name}</h3><p>${t.blurb}</p>
+      <div class="row" style="gap:6px"><span class="pill mc">${nQ} MC + ${nG} generators</span><span class="pill code">${nC} pseudocode</span></div>
+      <div class="bar"><span style="width:${pct}%"></span></div><div class="stat-label" style="font-size:.75rem;margin-top:4px">${s ? `${s.a} answered · ${pct}% avg` : 'Not started'}</div></div>`;
+  }).join('');
+}
+const VIDEOS = [
+  {id: 'Mx-dvvSE4Qc', title: 'Topic 17 A · Minimum Spanning Trees', topic: 'mst', pts: ['Spanning trees: BFS/DFS trees revisited', 'MST problem formulation & applications (circuits, networks)', 'Generic greedy algorithm & loop invariant', 'Cuts, light edges, and the Safe Edge Theorem proof']},
+  {id: '1BnpXYm7LKY', title: "Topic 17 B · Kruskal's Algorithm", topic: 'kruskal', pts: ['Greedy: sort edges cheapest-first', 'Union-Find detects cycles (like CONNECTED-COMPONENTS)', 'Worked example on a US airline map (PVD, JFK, BWI, SFO, LAX…)', 'Analysis: O(E lg V); works on disconnected graphs']},
+  {id: 'qegY0R78QMQ', title: "Topic 17 C · Prim's Algorithm", topic: 'prim', pts: ['Grow one tree from root r using parent pointers', 'Priority queue keyed by cheapest connecting edge', 'Worked example rooted at SFO; comparison with Dijkstra', 'Analysis: O(E lg V); O(E + V lg V) with Fibonacci heaps']}
+];
+function renderVideos(){
+  document.getElementById('video-grid').innerHTML = VIDEOS.map(v => `<div class="card"><div class="video"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}" title="${v.title}" allowfullscreen loading="lazy"></iframe></div>
+    <h3>${v.title}</h3><ul class="clean">${v.pts.map(p => `<li>${p}</li>`).join('')}</ul>
+    <div class="row"><a class="btn sm" href="#${v.topic}">📘 Read the notes</a><a class="btn sm" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">↗ YouTube</a></div></div>`).join('');
+}
+
+// ======================= ROUTER =======================
+function route(){
+  const page = (location.hash || '#home').slice(1);
+  const id = document.getElementById('page-' + page) ? page : 'home';
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + id));
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
+  document.querySelector('.sidebar').classList.remove('open');
+  window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', route);
+mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim();
+document.querySelectorAll('.qa[data-topic]').forEach(mountQA);
+route();
+
+</script>
+</body>
+</html>
