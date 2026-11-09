@@ -46,7 +46,7 @@
 
 <!-- ============ DISJOINT SETS ============ -->
 <section class="page" id="page-ds">
-  <span class="eyebrow" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.08)">Topic 16 · CLRS Ch. 19/21</span>
+  <span class="eyebrow" style="color:#f472b6;border-color:rgba(244,114,182,.3);background:rgba(244,114,182,.08)">Topic 16 · CLRS Ch. 19</span>
   <h1>Disjoint Sets &amp; Union-Find</h1>
   <p class="lead">Group <span class="math">n</span> distinct elements into a dynamic collection of non-overlapping sets, each identified by a <b>representative</b> member.</p>
 
@@ -267,7 +267,7 @@
 
 <!-- ============ FIB ============ -->
 <section class="page" id="page-fib">
-  <span class="eyebrow" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08)">CLRS 4e · Ch. 19 supplement</span>
+  <span class="eyebrow" style="color:#fbbf24;border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.08)">Supplement · not in the CLRS 4e print book</span>
   <h1>Fibonacci Heaps: Bounding the Maximum Degree</h1>
   <p class="lead">For <code>FIB-HEAP-EXTRACT-MIN</code> to run in <span class="math">O(lg n)</span> amortized time, the maximum degree <span class="math">D(n)</span> of any node must be <span class="math">O(lg n)</span>. That is what makes Prim's algorithm hit <span class="math">O(E + V lg V)</span>.</p>
 
@@ -296,16 +296,16 @@
 
   <h2>The chain of results</h2>
   <div class="grid g2">
-    <div class="card"><h3>Lemma 19.11 · Child degree ordering</h3>
+    <div class="card"><h3>Lemma 1 · Child degree ordering</h3>
       <p>If <span class="math">x.degree = k</span> with children <span class="math">y<sub>1</sub>, …, y<sub>k</sub></span> in the order linked, then <span class="math">y<sub>1</sub>.degree ≥ 0</span> and <span class="math">y<sub>i</sub>.degree ≥ i − 2</span> for <span class="math">i ≥ 2</span>.</p>
       <p class="stat-label">Why: when <span class="math">y<sub>i</sub></span> was linked, <span class="math">x</span> had ≥ <span class="math">i − 1</span> children, and linking requires equal degree. <span class="math">y<sub>i</sub></span> can lose at most one child before being cut.</p></div>
-    <div class="card"><h3>Lemma 19.12 · Fibonacci lower bound</h3>
+    <div class="card"><h3>Lemma 2 · Fibonacci lower bound</h3>
       <p>For any node with degree <span class="math">k</span>: <span class="math">size(x) ≥ F<sub>k+2</sub> ≥ φ<sup>k</sup></span>.</p>
       <p class="stat-label">Let <span class="math">s<sub>k</sub></span> be the minimum size of a degree-<span class="math">k</span> tree: <span class="math">s<sub>0</sub> = 1, s<sub>1</sub> = 2</span>, and <span class="math">s<sub>k</sub> ≥ 1 + s<sub>0</sub> + Σ<sub>i=2..k</sub> s<sub>i−2</sub></span>; induction gives <span class="math">s<sub>k</sub> ≥ F<sub>k+2</sub></span>.</p></div>
-    <div class="card"><h3>Lemma 19.13 · Golden ratio inequality</h3>
+    <div class="card"><h3>Lemma 3 · Golden ratio inequality</h3>
       <p>For all <span class="math">k ≥ 0</span>: <span class="math">F<sub>k+2</sub> ≥ φ<sup>k</sup></span>, where <span class="math">φ = (1 + √5)/2 ≈ 1.618</span>.</p>
       <p class="stat-label">Induction using <span class="math">φ<sup>2</sup> = φ + 1</span>.</p></div>
-    <div class="card"><h3>Theorem 19.14 · Max degree</h3>
+    <div class="card"><h3>Theorem · Max degree</h3>
       <p><span class="math">D(n) ≤ ⌊log<sub>φ</sub> n⌋ = O(lg n)</span>.</p>
       <p class="stat-label"><span class="math">n ≥ size(x) ≥ φ<sup>k</sup></span> ⇒ <span class="math">k ≤ log<sub>φ</sub> n</span>.</p></div>
   </div>

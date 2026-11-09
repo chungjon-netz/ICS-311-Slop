@@ -4,7 +4,7 @@ const TOPICS = {
   mst:     {name: 'MSTs & Safe Edges',      icon: '🌳', color: '#a78bfa', blurb: 'Cuts, light edges, the generic algorithm and its proof.'},
   kruskal: {name: "Kruskal's Algorithm",    icon: '🔗', color: '#34d399', blurb: 'Sort edges, merge components with Union-Find.'},
   prim:    {name: "Prim's Algorithm",       icon: '🌐', color: '#22d3ee', blurb: 'Grow one tree with a min-priority queue.'},
-  fib:     {name: 'Fibonacci Heap Bounds',  icon: '🌀', color: '#fbbf24', blurb: 'Cascading cuts, Lemmas 19.11–19.13, D(n) = O(lg n).'}
+  fib:     {name: 'Fibonacci Heap Bounds',  icon: '🌀', color: '#fbbf24', blurb: 'Cascading cuts, the Fibonacci size bound, D(n) = O(lg n).'}
 };
 
 // ======================= MULTIPLE CHOICE =======================
@@ -102,7 +102,7 @@ const MC = [
  {topic:'kruskal', q:'Kruskal rejects edge (u,v) when…',
   options:['FIND-SET(u) == FIND-SET(v)','u.key < v.key','w(u,v) is larger than the previous edge','u and v are adjacent'], answer:0, explain:'Same representative ⇒ already connected ⇒ adding the edge forms a cycle.'},
  {topic:'kruskal', q:'Which safe-edge argument justifies Kruskal\'s choice?',
-  options:['The Corollary: a light edge connecting two components of G_A is safe','Lemma 19.11','The edge is the heaviest in a cycle','The edge is on a shortest path'], answer:0,
+  options:['The Corollary: a light edge connecting two components of G_A is safe','The Fibonacci-heap degree lemma','The edge is the heaviest in a cycle','The edge is on a shortest path'], answer:0,
   explain:'The cheapest edge joining two different components is light for the cut around one of them.'},
 
  // ---- Prim ----
@@ -136,14 +136,14 @@ const MC = [
   options:['A single tree rooted at r','A forest of many trees','Sorted by weight','Empty until the queue is empty'], answer:0, explain:'Prim grows one tree outward from the root.'},
 
  // ---- Fib heaps ----
- {topic:'fib', q:'Lemma 19.11: if x has degree k with children y₁…y_k in link order, then for i ≥ 2…',
+ {topic:'fib', q:'Child-degree lemma: if x has degree k with children y₁…y_k in link order, then for i ≥ 2…',
   options:['y_i.degree ≥ i − 2','y_i.degree ≥ i','y_i.degree ≤ i − 2','y_i.degree = i − 1'], answer:0,
   explain:'When linked, y_i had degree ≥ i − 1 and can lose at most one child before being cut.'},
- {topic:'fib', q:'Lemma 19.12 bounds the size of a subtree rooted at a degree-k node by…',
+ {topic:'fib', q:'The Fibonacci size lemma bounds the size of a subtree rooted at a degree-k node by…',
   options:['size(x) ≥ F_{k+2} ≥ φ^k','size(x) ≥ 2^k','size(x) ≤ F_k','size(x) ≥ k²'], answer:0, explain:'Minimum sizes satisfy a Fibonacci recurrence: s₀ = 1, s₁ = 2, …'},
- {topic:'fib', q:'Which identity drives the induction in Lemma 19.13 (F_{k+2} ≥ φ^k)?',
+ {topic:'fib', q:'Which identity drives the induction in the golden-ratio lemma (F_{k+2} ≥ φ^k)?',
   options:['φ² = φ + 1','φ = 2','F_k = 2F_{k−1}','φ · (1 − φ) = 1'], answer:0, explain:'φ^{k−1} + φ^{k−2} = φ^{k−2}(φ + 1) = φ^k.'},
- {topic:'fib', q:'Theorem 19.14 gives the maximum degree of an n-node Fibonacci heap as…',
+ {topic:'fib', q:'The max-degree theorem gives the maximum degree of an n-node Fibonacci heap as…',
   options:['D(n) ≤ ⌊log_φ n⌋ = O(lg n)','D(n) ≤ √n','D(n) = n − 1','D(n) ≤ α(n)'], answer:0, explain:'n ≥ size(x) ≥ φ^k ⇒ k ≤ log_φ n.'},
  {topic:'fib', q:'What does a node\'s <code>mark</code> bit indicate?',
   options:['It has lost a child since it last became a child of another node','It is the minimum node','It has been extracted','It is in the root list'], answer:0, explain:'A second loss triggers a cut (cascading cut).'},
@@ -151,7 +151,7 @@ const MC = [
   options:['y is cut from z and CASCADING-CUT(H, z) is called','y is unmarked and nothing else happens','z is deleted','y\'s degree is doubled'], answer:0, explain:'The cut propagates up the tree until an unmarked node (or a root) is reached.'},
  {topic:'fib', q:'Why must D(n) be O(lg n)?',
   options:['So FIB-HEAP-EXTRACT-MIN runs in O(lg n) amortized time','So INSERT is O(1)','So DECREASE-KEY is O(lg n)','So the heap uses O(n) space'], answer:0, explain:'Extract-min\'s consolidation cost depends on D(n).'},
- {topic:'fib', q:'In Lemma 19.12, what are the base cases for s_k (the minimum size of a degree-k subtree)?',
+ {topic:'fib', q:'In the Fibonacci size lemma, what are the base cases for s_k (the minimum size of a degree-k subtree)?',
   options:['s₀ = 1, s₁ = 2','s₀ = 0, s₁ = 1','s₀ = 1, s₁ = 1','s₀ = 2, s₁ = 3'], answer:0, explain:'A degree-0 node is just itself; a degree-1 node has at least one child.'},
  {topic:'fib', q:'φ, the golden ratio used in the degree bound, is approximately…',
   options:['1.618','2.718','1.414','3.142'], answer:0, explain:'φ = (1 + √5) / 2 ≈ 1.618.'},
@@ -248,13 +248,13 @@ const GEN = [
  {topic:'fib', gen(){
    const n = pick([10, 25, 50, 100, 500, 1000, 5000, 10000, 100000, 1000000]);
    const phi = (1 + Math.sqrt(5)) / 2, a = Math.floor(Math.log(n) / Math.log(phi));
-   return {q:`By Theorem 19.14, what upper bound on D(n), the max degree of any node, holds for a Fibonacci heap with <b>n = ${n.toLocaleString()}</b> nodes?`,
+   return {q:`By the max-degree theorem, what upper bound on D(n), the max degree of any node, holds for a Fibonacci heap with <b>n = ${n.toLocaleString()}</b> nodes?`,
      ...makeOpts(a, [Math.floor(Math.log2(n)), a + 2, Math.ceil(Math.sqrt(n)), a - 3, a + 1, a - 1]),
      explain:`D(n) ≤ ⌊log_φ n⌋ = ⌊ln ${n} / ln 1.618⌋ = ${a}.`};
  }},
  {topic:'fib', gen(){
    const k = rnd(2, 10); const F = [0, 1]; for (let i = 2; i <= k + 3; i++) F.push(F[i - 1] + F[i - 2]);
    return {q:`What is the minimum possible number of nodes in the subtree rooted at a Fibonacci-heap node of degree <b>k = ${k}</b>?`,
-     ...makeOpts(F[k + 2], [F[k + 1], 2 ** k, F[k + 3], k + 1, k + 2, F[k + 2] + 1]), explain:`Lemma 19.12: size(x) ≥ F_{k+2} = F_${k + 2} = ${F[k + 2]}.`};
+     ...makeOpts(F[k + 2], [F[k + 1], 2 ** k, F[k + 3], k + 1, k + 2, F[k + 2] + 1]), explain:`Fibonacci size lemma: size(x) ≥ F_{k+2} = F_${k + 2} = ${F[k + 2]}.`};
  }}
 ];
