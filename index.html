@@ -312,6 +312,16 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 :is([data-theme=light],[data-theme=green]) :is(.fig,pre,.editor-wrap,.viz .log){--text:#e5e7eb;--muted:#9ca3af;--dim:#94a3b8;--border:rgba(255,255,255,.1);color:var(--text)}
 .nav-group a{font-size:.86rem}
 
+.ded-steps{margin:6px 0 0;padding-left:20px}.ded-steps li{margin:3px 0}
+/* green theme: make incorrect answers unmistakably red (pale red washes out on green panels) */
+[data-theme=green] .explain.bad{border-color:#dc2626;background:rgba(220,38,38,.08)}
+[data-theme=green] .explain.bad>b{color:#dc2626}
+[data-theme=green] .explain.good{border-color:rgba(21,128,61,.55)}
+[data-theme=green] .opt.wrong{border-color:#dc2626;background:rgba(220,38,38,.12)}
+[data-theme=green] .opt.wrong .k{background:#dc2626;color:#fff}
+[data-theme=green] .fb li.no{box-shadow:inset 3px 0 0 #dc2626}
+[data-theme=green] .fb li.no .m{color:#dc2626}
+
 </style>
 </head>
 <body>
@@ -4103,6 +4113,58 @@ const MISS_TIPS = [
 ];
 const NOTE_FOR = {ds:'Topic 16', mst:'Topic 17', kruskal:'Topic 17', prim:'Topic 17', fib:'Topic 16'};
 
+// One concrete mini-example per topic — the "base case" to test any claim against.
+const BASE_EXAMPLES = {
+  t01:'Push a, b, c onto a stack, then pop twice: you get c, then b (LIFO). A queue would give a, then b (FIFO).',
+  t02:'Binary search on [1,3,5,7,9] for 7: probe index 3 (5), discard the left half, probe index 4 → found in ⌈lg 5⌉ ≈ 3 steps.',
+  t03:'At n = 1024: n = 1024, n lg n ≈ 10,240, n² ≈ 1,048,576, 2ⁿ is over 10³⁰⁰. Ordering growth rates is most of asymptotic analysis.',
+  t07:'Merge sort on 8 elements: split to singles (3 levels), merge pairwise — each level costs Θ(n), so T(n) = 2T(n/2) + Θ(n) = Θ(n lg n).',
+  t08:'Insert 5, 3, 8, 1 into a BST: search for 1 walks 5 → 3 → 1. In-order walk prints 1, 3, 5, 8 — sorted for free.',
+  t09:'Max-heap array [16, 14, 10, 8, 2]: every parent ≥ its children. EXTRACT-MIN/EXTRACT-MAX removes the root, moves the last element up, and sifts it down — O(lg n).',
+  t11:'Inserting into a full 2-3-4 node splits it and pushes the middle key up; red-black trees do the same dance with colors and rotations. Height stays ≤ 2 lg(n + 1).',
+  t05a:'Interview candidates one by one and hire anyone better than all before: expected hires = 1 + 1/2 + 1/3 + … + 1/n ≈ ln n.',
+  t05b:'Quicksort picks a random pivot; on average it splits near the middle, giving T(n) = 2T(n/2) + Θ(n) = Θ(n lg n) — no matter the input order.',
+  t06:'Hash k = 37 into a table of size m = 13 with h(k) = k mod m: slot 11. If occupied, double hashing probes (11 + i·(1 + 37 mod 7)) mod 13.',
+  t10a:'SELECT finds the k-th smallest without sorting: median-of-medians picks a good pivot, partitions, and recurses on one side — worst case still Θ(n).',
+  t10b:'If keys are integers in [0, k], counting sort runs in Θ(n + k) — beat the n lg n comparison lower bound by not comparing at all.',
+  t12s:'N-Queens: place one queen per row; when a column/diagonal clashes, undo the last choice and try the next — that undo is backtracking.',
+  t12a:'Rod cutting: revenue[n] = max over cut i of (price[i] + revenue[n − i]); fill the table bottom-up instead of recomputing exponentially many cuts.',
+  t12b:'LCS of "ABCBDAB" and "BDCABA" is "BCBA" (length 4) — the DP table fills cell by cell: match → diagonal + 1, else → max of up/left.',
+  t13:'Huffman coding: repeatedly merge the two lowest-frequency symbols into a node; the deepest symbols get the longest codes, and frequent ones stay short.',
+  t14a:'BFS from a source visits vertices in layers by edge count; DFS dives down one path first. BFS gives shortest paths in unweighted graphs.',
+  t14b:'Topological sort orders a DAG so every edge points forward — Kahn\'s algorithm (repeatedly take in-degree-0 vertices) or DFS finish times both work.',
+  t18:'Dijkstra on A→B (4), A→C (2), C→B (1): settle A, relax C (2) and B (4), then C improves B to 3. Keys only decrease via relaxation.',
+  t19:'Floyd-Warshall: d[i][j] = min(d[i][j], d[i][k] + d[k][j]) for every intermediate k — Θ(V³) but trivially correct for dense graphs.',
+  t20:'Ford-Fulkerson: keep finding an augmenting path in the residual graph and pushing its bottleneck capacity until no path remains — that flow is maximum.',
+  t24:'Reduction example: to prove a problem NP-hard, transform a known NP-hard problem into it in polynomial time — e.g., reduce 3-SAT to CLIQUE.',
+  t25:'Greedy vertex cover: repeatedly pick an uncovered edge\'s endpoint — you get a cover at most twice the optimum, a 2-approximation in polynomial time.',
+  t22:'Brent\'s theorem: parallel time T₁ ≤ W/P + O(S) — total work W spread over P processors plus the longest dependency chain S.',
+  ds:'MAKE-SET a, b, c; UNION(a,b); UNION(b,c); FIND-SET(a) and FIND-SET(c) return the same root — all three are now one set.',
+  mst:'Three vertices a, b, c with edges ab = 1, bc = 2, ac = 3: the MST takes ab and bc for total 3 — the safe-edge theorem guarantees the cheapest crossing edge is safe.',
+  kruskal:'Edges sorted: (a,b)=1 accept, (b,c)=2 accept, (a,c)=3 reject — FIND-SET(a) = FIND-SET(c) already, so it would close a cycle.',
+  prim:'From root a with edges ab = 5, ac = 3, bc = 1: extract a, keys become b:5, c:3; extract c (key 3), then b drops to 1 via c. Tree weight = 4.',
+  fib:'A degree-3 node must have children of degree ≥ 0, 1, 1 — cascading cuts keep that ordering, which is what forces size(x) ≥ F_{k+2} and D(n) = O(lg n).'
+};
+const DEDUCTION_MC = [
+  'Pin down exactly what is being asked — a definition, a cost, or a behavior.',
+  'Write the rule or theorem from memory, then test <b>each</b> option against it.',
+  'Cross out options that swap one detail: order, which data structure, or best vs. worst case.',
+  'Sanity-check the surviving option on a tiny example (n = 3 or a 3-vertex graph).'
+];
+const DEDUCTION_CODE = [
+  'Plan first: in a comment, write what the procedure returns and its target running time.',
+  'Fix the ✗ correctness items top to bottom — each hint names the exact missing step.',
+  'Then check modularity: could a helper procedure make this cleaner?',
+  'Then efficiency: look for nested scans, repeated work, or a better data structure.',
+  'Compare with the model answer, then rewrite your version from memory and resubmit.'
+];
+
+function deductionBlock(kind, topic){
+  const steps = kind === 'code' ? DEDUCTION_CODE : DEDUCTION_MC;
+  const ex = BASE_EXAMPLES[topic];
+  return `<div class="callout cyan" style="margin-top:10px;font-size:.9rem"><b>🧮 Base example:</b> ${ex || 'Take the smallest non-trivial case and trace it by hand — wrong answers usually break on it.'}<br><b>🔎 Process of deduction:</b><ol class="ded-steps">${steps.map(s => `<li>${s}</li>`).join('')}</ol></div>`;
+}
+
 function topicRefs(topicId){
   const t = TMETA[topicId]; if (!t) return '';
   const name = t.short || (TOPICS[topicId] || {}).name || topicId;
@@ -4121,7 +4183,7 @@ function postGrade(topic, score){
   const how = score >= 0.8
     ? 'Nice work — skim the ✗ items anyway; polishing those is what turns good into great.'
     : 'How to get there: fix the ✗ and ! items in the feedback above one at a time (each hint names the missing step), then compare with the model answer and submit once more from memory.';
-  return `<div class="explain ${score >= 0.8 ? 'good' : ''} fade" style="margin-top:12px">${habitLine(score)}<div class="stat-label" style="margin-top:8px">${how}</div>${topicRefs(topic)}</div>`;
+  return `<div class="explain ${score >= 0.8 ? 'good' : ''} fade" style="margin-top:12px">${habitLine(score)}<div class="stat-label" style="margin-top:8px">${how}</div>${score < 0.8 ? deductionBlock('code', topic) : ''}${topicRefs(topic)}</div>`;
 }
 
 // ======================= QUESTION FACTORY =======================
@@ -4160,6 +4222,7 @@ function renderQuestion(el, inst, onDone){
         <b>${ok ? '✓ Correct!' : '✗ Not quite — the correct answer is: ' + correctTxt}</b>
         ${inst.explain ? `<div style="margin-top:6px">${inst.explain}</div>` : ''}
         ${ok ? '' : `<div class="stat-label" style="margin-top:8px">How to get there: ${pick(MISS_TIPS)}</div>`}
+        ${ok ? '' : deductionBlock('mc', inst.topic)}
         ${habitLine(ok ? 1 : 0.2)}
         ${topicRefs(inst.topic)}
       </div>`;

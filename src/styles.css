@@ -303,3 +303,13 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 
 :is([data-theme=light],[data-theme=green]) :is(.fig,pre,.editor-wrap,.viz .log){--text:#e5e7eb;--muted:#9ca3af;--dim:#94a3b8;--border:rgba(255,255,255,.1);color:var(--text)}
 .nav-group a{font-size:.86rem}
+
+.ded-steps{margin:6px 0 0;padding-left:20px}.ded-steps li{margin:3px 0}
+/* green theme: make incorrect answers unmistakably red (pale red washes out on green panels) */
+[data-theme=green] .explain.bad{border-color:#dc2626;background:rgba(220,38,38,.08)}
+[data-theme=green] .explain.bad>b{color:#dc2626}
+[data-theme=green] .explain.good{border-color:rgba(21,128,61,.55)}
+[data-theme=green] .opt.wrong{border-color:#dc2626;background:rgba(220,38,38,.12)}
+[data-theme=green] .opt.wrong .k{background:#dc2626;color:#fff}
+[data-theme=green] .fb li.no{box-shadow:inset 3px 0 0 #dc2626}
+[data-theme=green] .fb li.no .m{color:#dc2626}
