@@ -22,7 +22,7 @@ Other features: three color themes (Dark, Light, White & Green), a layout that w
 
 ## How it was built
 
-The site is plain HTML, CSS and JavaScript, with no framework, no backend and no build dependencies beyond Python 3. The source is a set of small files that a short Python script (`build.py`) joins into one self-contained `index.html`. That file is published on the `gh-pages` branch through GitHub Pages, and it also works when opened directly from disk.
+The site is plain HTML, CSS and JavaScript, with no framework, no backend and no build dependencies beyond Python 3. The source is a set of small files that a short Python script (`build.py`) joins into one self-contained `index.html`. That file is published on the `gh-pages` branch through GitHub Pages, and it also works when opened directly from disk. This repo only holds the built page (on `gh-pages`); the source files and `build.py` described below aren't in the repo.
 
 | Source file | Contents |
 |---|---|
@@ -45,7 +45,7 @@ The site is plain HTML, CSS and JavaScript, with no framework, no backend and no
 
 ### Multiple choice
 - **228 hand-written questions**, each tagged with a topic, with an explanation shown after you answer.
-- **16 randomized generators** that build a new question with new numbers every time. Examples: run Kruskal or Dijkstra on a random graph, trace a heap operation, solve a recurrence, or pick a running time.
+- **16 randomized generators** that build a new question with new numbers every time. They use random graphs for union-find, Kruskal, Prim and Dijkstra questions, and random inputs for heap, hashing, LCS and BFS questions.
 - The picker avoids repeating recent questions. Practice can draw from one topic, one exam's topics or the whole course.
 
 ### Pseudocode challenges (42)
