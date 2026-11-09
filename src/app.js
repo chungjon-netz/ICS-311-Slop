@@ -189,6 +189,6 @@ function route(){
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
-mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim();
+mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS();
 document.querySelectorAll('.qa[data-topic]').forEach(mountQA);
 route();

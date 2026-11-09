@@ -125,7 +125,7 @@ buildNav();
 function renderHome(){
   const all = Object.values(store.byTopic), a = all.reduce((s, t) => s + t.a, 0), c = all.reduce((s, t) => s + t.c, 0), codes = Object.values(store.code);
   const hs = document.getElementById('home-stats');
-  if (hs) hs.innerHTML = [[a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'], [`${codes.length}/${CODE.length}`, 'Pseudocode challenges attempted'], [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']]
+  if (hs) hs.innerHTML = [[a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'], [`${codes.length}/${CODE.length + PS_CODE.length}`, 'Pseudocode challenges attempted'], [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']]
     .map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('');
   const tc = document.getElementById('topic-cards');
   if (tc) tc.innerHTML = GROUPS.map(g => `<div class="home-group"><div class="hg-head"><h3>${g.icon} ${g.name}</h3><span class="pill">${g.date}</span><span class="pill">${g.covers}</span><a class="btn sm ghost" href="#${g.id}">Overview →</a></div><div class="grid g3">${g.topics.map(topicCard).join('')}</div></div>`).join('');
