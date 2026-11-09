@@ -670,6 +670,9 @@ document.getElementById('page-videos').insertAdjacentHTML('beforebegin',
     <div class="row" style="gap:6px">${psChips(s)}<a class="btn sm ghost" href="${PS_BASE}${s.id}.pdf" target="_blank" rel="noopener">Open the PDF ↗</a></div>
     <div class="callout cyan" style="margin-top:14px">Graded like the Practice Arena: <b>Correctness</b> 40% · <b>Modularity</b> 30% · <b>Efficiency</b> 30%. Plan in a comment, write from memory, then use the feedback.</div>
     ${s.probs.map((q, i) => `<div class="card ps-prob" id="psq-${q.id}"><div class="row" style="justify-content:space-between"><span class="pill">Problem ${i + 1} of ${s.probs.length} · based on PS ${s.num}, ${q.from}</span><span class="ps-best" data-best="${q.id}"></span></div><div class="ps-q" data-q="${q.id}"></div></div>`).join('')}
+    ${(PS_TOPICS[s.id] || []).length ? `<h2>🧠 Quick questions — all types</h2><p class="stat-label">Multiple-choice and generated questions on this problem set's topics, not just the coding problems.</p><div class="card qa" data-topics="${PS_TOPICS[s.id].join(',')}"></div>` : ''}
+    <h2>🔍 Review missed problems</h2>
+    <div class="card">${psReviewToggle(s)}</div>
     <div class="row" style="justify-content:space-between;margin-top:16px">${k ? `<a class="btn ghost" href="#${PSETS[k - 1].id}">← Problem Set ${k}</a>` : '<span></span>'}${k < PSETS.length - 1 ? `<a class="btn ghost" href="#${PSETS[k + 1].id}">Problem Set ${k + 2} →</a>` : ''}</div></section>`).join(''));
 document.getElementById('nav').insertAdjacentHTML('beforeend',
   `<details class="nav-group" data-group="ps"><summary><span>📂 Problem Sets</span><span class="gdate">${PS_CODE.length}</span></summary><a href="#ps" data-page="ps" class="gover"><span class="dot" style="background:linear-gradient(135deg,#60a5fa,#c084fc)"></span>All problem sets</a>` +
@@ -677,12 +680,37 @@ document.getElementById('nav').insertAdjacentHTML('beforeend',
 function psBest(){
   document.querySelectorAll('.ps-best[data-best]').forEach(el => { const v = store.code[el.dataset.best]; el.innerHTML = v == null ? '' : `<span class="pill" style="color:${v >= 90 ? 'var(--good)' : v >= 70 ? 'var(--warn)' : 'var(--bad)'}">best ${v}%</span>`; });
 }
+function psReviewToggle(s){
+  return `<label class="eli5-toggle" style="margin:0;cursor:pointer"><span class="eli5-text"><b>🔍 Review missed problems</b><small>problems below 90% or not attempted · deeper explanations + retest</small></span><input type="checkbox" class="psrv-sw" data-ps="${s.id}"><span class="switch"></span></label>
+  <div class="psrv-panel hidden" data-ps="${s.id}" style="margin-top:14px"></div>`;
+}
+function fillPSReview(s){
+  const panel = document.querySelector(`.psrv-panel[data-ps="${s.id}"]`); if (!panel) return;
+  const missed = s.probs.filter(q => (store.code[q.id] || 0) < 90);
+  panel.innerHTML = missed.length ? missed.map(q => {
+    const v = store.code[q.id];
+    return `<div class="card" style="margin:12px 0;padding:16px" id="psrv-${q.id}">
+      <div class="row" style="justify-content:space-between;gap:8px"><span class="pill code">Pseudocode</span><span class="pill" style="color:var(--bad)">${v == null ? 'not attempted' : `best ${v}%`}</span></div>
+      <h3 style="margin:10px 0 4px">${q.title}</h3><div class="stat-label">PS ${s.num} · ${q.from}</div>
+      ${topicRefs(q.topic)}
+      <details class="model"><summary>Deeper explanation: model answer</summary><pre><code>${esc(q.model)}</code></pre></details>
+      <div class="row" style="margin-top:10px"><a class="btn sm primary" href="#psq-${q.id}">↻ Retest — jump to the editor</a></div>
+    </div>`;
+  }).join('') : `<p class="stat-label" style="margin:10px 0 0">Every problem in this set is aced (≥90%). 🏆 Try the <a href="#ps">other problem sets</a> or the <a href="#practice">Practice Arena</a>.</p>`;
+}
+function refreshPSReviews(){ PSETS.forEach(s => { const p = document.querySelector(`.psrv-panel[data-ps="${s.id}"]`); if (p && !p.classList.contains('hidden')) fillPSReview(s); }); }
+const psRefresh = () => { psBest(); refreshPSReviews(); };
 function mountPS(){
   document.querySelectorAll('.ps-q[data-q]').forEach(el => {
     const q = PS_CODE.find(x => x.id === el.dataset.q);
-    renderQuestion(el, {kind: 'code', topic: q.topic, q}, () => { psBest(); renderHome(); });
-    el.querySelector('.submit').addEventListener('click', () => setTimeout(psBest, 0));
+    renderQuestion(el, {kind: 'code', topic: q.topic, q}, () => { psRefresh(); renderHome(); });
+    el.querySelector('.submit').addEventListener('click', () => setTimeout(psRefresh, 0));
   });
+  document.querySelectorAll('.psrv-sw').forEach(sw => sw.addEventListener('change', () => {
+    const s = PSETS.find(x => x.id === sw.dataset.ps), panel = document.querySelector(`.psrv-panel[data-ps="${s.id}"]`);
+    panel.classList.toggle('hidden', !sw.checked);
+    if (sw.checked) fillPSReview(s);
+  }));
   document.getElementById('ps-random').onclick = () => {
     const pool = PS_CODE.filter(q => (store.code[q.id] || 0) < 90), list = pool.length ? pool : PS_CODE;
     const q = list[Math.floor(Math.random() * list.length)];

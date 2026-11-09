@@ -11,6 +11,42 @@ function record(topic, frac, codeId){
 }
 function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 1800); }
 
+// ======================= FEEDBACK & REVIEW HELPERS =======================
+const PRAISE = [
+  'You reasoned it through instead of guessing — that is exactly how it sticks.',
+  'Correct! Now say the <i>why</i> out loud; teaching it to yourself is the best review there is.',
+  'Nice work. Small consistent wins like this are what carry you to exam day.',
+  'Clean answer. You earned it — keep the streak going.'
+];
+const MISS_TIPS = [
+  'Slow down: eliminate the wrong options one at a time — most distractors fail on a single swapped detail.',
+  'Cover the choices and re-derive the answer from the definition or theorem first, then match.',
+  'Ask what each option <i>claims</i>. Wrong answers usually sound right but break one rule.',
+  'Re-read the question carefully — half of these misses are a misread, not a misremembered fact.'
+];
+const NOTE_FOR = {ds:'Topic 16', mst:'Topic 17', kruskal:'Topic 17', prim:'Topic 17', fib:'Topic 16'};
+
+function topicRefs(topicId){
+  const t = TMETA[topicId]; if (!t) return '';
+  const name = t.short || (TOPICS[topicId] || {}).name || topicId;
+  const chips = [`<a class="chip link" href="#${topicId}">📘 ${t.num ? t.num + ' · ' : ''}${name}</a>`];
+  const notes = (t.notes || '').split(',').map(x => x.trim()).filter(x => SCHED.notes[x]);
+  const key = notes[0] || (NOTE_FOR[topicId] && SCHED.notes[NOTE_FOR[topicId]] ? NOTE_FOR[topicId] : null);
+  if (key) chips.push(`<a class="chip link" href="${SCHED.notes[key]}" target="_blank" rel="noopener">📝 ${key} lecture notes ↗</a>`);
+  return `<div class="row" style="gap:6px;margin-top:10px">${chips.join('')}</div>`;
+}
+function habitLine(score){
+  if (score >= 0.9) return `<b>📌 Study habit:</b> ${pick(PRAISE)}`;
+  if (score >= 0.5) return `<b>📌 Study habit:</b> You were close. Cover the feedback, fix the weak spots, and try to say the rule in your own words.`;
+  return `<b>📌 Study habit:</b> Don't just read the answer — figure out <i>why</i> each wrong choice fails, review the linked notes, then retest yourself.`;
+}
+function postGrade(topic, score){
+  const how = score >= 0.8
+    ? 'Nice work — skim the ✗ items anyway; polishing those is what turns good into great.'
+    : 'How to get there: fix the ✗ and ! items in the feedback above one at a time (each hint names the missing step), then compare with the model answer and submit once more from memory.';
+  return `<div class="explain ${score >= 0.8 ? 'good' : ''} fade" style="margin-top:12px">${habitLine(score)}<div class="stat-label" style="margin-top:8px">${how}</div>${topicRefs(topic)}</div>`;
+}
+
 // ======================= QUESTION FACTORY =======================
 const recent = [];
 function nextQuestion(topics, mode){
@@ -42,7 +78,14 @@ function renderQuestion(el, inst, onDone){
       const i = +b.dataset.i, ok = i === inst.answer;
       el.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === inst.answer) x.classList.add('correct'); });
       if (!ok) b.classList.add('wrong');
-      el.querySelector('.explain-slot').innerHTML = `<div class="explain ${ok ? 'good' : 'bad'} fade"><b>${ok ? '✓ Correct!' : '✗ Not quite.'}</b> ${inst.explain}</div>`;
+      const correctTxt = inst.options[inst.answer];
+      el.querySelector('.explain-slot').innerHTML = `<div class="explain ${ok ? 'good' : 'bad'} fade">
+        <b>${ok ? '✓ Correct!' : '✗ Not quite — the correct answer is: ' + correctTxt}</b>
+        ${inst.explain ? `<div style="margin-top:6px">${inst.explain}</div>` : ''}
+        ${ok ? '' : `<div class="stat-label" style="margin-top:8px">How to get there: ${pick(MISS_TIPS)}</div>`}
+        ${habitLine(ok ? 1 : 0.2)}
+        ${topicRefs(inst.topic)}
+      </div>`;
       record(inst.topic, ok ? 1 : 0);
       onDone && onDone(ok ? 1 : 0);
     });
@@ -69,7 +112,8 @@ function renderQuestion(el, inst, onDone){
     el.querySelector('.submit').onclick = () => {
       if (ta.value.trim() === q.starter.trim()) { toast('Write some pseudocode first ✍️'); return; }
       const r = gradeCode(q, ta.value);
-      el.querySelector('.result-slot').innerHTML = renderGrade(r, q);
+      inst.grade = r;
+      el.querySelector('.result-slot').innerHTML = renderGrade(r, q) + postGrade(inst.topic, r.overall / 100);
       if (!recorded){ recorded = true; record(q.topic, r.overall / 100, q.id); onDone && onDone(r.overall / 100); }
       else if (r.overall / 100 > (store.code[q.id] || 0) / 100) { store.code[q.id] = r.overall; save(); }
     };
@@ -90,15 +134,50 @@ function renderGrade(r, q){
 
 // ======================= TOPIC Q&A WIDGETS =======================
 function mountQA(el){
-  const topic = el.dataset.topic; let mode = 'mixed';
+  const topics = (el.dataset.topics || el.dataset.topic || '').split(',').filter(Boolean); let mode = 'mixed';
   el.innerHTML = `<div class="qa-head"><h3>🧠 Topic Q&amp;A <span class="pill">random</span></h3>
     <div class="row"><div class="seg">${[['mixed', 'Mixed'], ['mc', 'Multiple choice'], ['code', 'Pseudocode']].map(([k, l]) => `<button data-m="${k}" class="${k === mode ? 'on' : ''}">${l}</button>`).join('')}</div>
     <button class="btn sm next">New question ↻</button></div></div><div class="body"></div><div class="row after" style="margin-top:14px"></div>`;
   const body = el.querySelector('.body'), after = el.querySelector('.after');
-  const go = () => { after.innerHTML = ''; renderQuestion(body, nextQuestion(topic, mode), () => { after.innerHTML = '<button class="btn primary">Next question →</button>'; after.firstChild.onclick = go; }); };
+  const go = () => { after.innerHTML = ''; renderQuestion(body, nextQuestion(topics, mode), () => { after.innerHTML = '<button class="btn primary">Next question →</button>'; after.firstChild.onclick = go; }); };
   el.querySelectorAll('.seg button').forEach(b => b.onclick = () => { mode = b.dataset.m; el.querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b)); go(); });
   el.querySelector('.next').onclick = go;
   go();
+}
+
+// ======================= RESULTS REVIEW =======================
+function reviewCard(r, i){
+  const inst = r.inst, T = TOPICS[inst.topic] || {name: inst.topic, icon: '❓', color: '#888'};
+  const isCode = inst.kind === 'code';
+  const badge = r.retests ? `missed · retested ${Math.round(100 * (r.lastRetest || 0))}%` : (r.skipped ? 'skipped' : 'missed');
+  const head = isCode
+    ? `<div class="question" style="margin-top:10px">${inst.q.title}</div><div class="question" style="font-size:.9rem;color:var(--muted)">${inst.q.prompt}</div>`
+    : `<div class="question" style="margin-top:10px">${inst.q}</div>${inst.graph ? `<div class="q-graph">${inst.graph}</div>` : ''}
+       <div class="stat-label" style="margin-top:8px">✅ Correct answer: <b style="color:var(--good)">${inst.options[inst.answer]}</b></div>`;
+  const deeper = isCode
+    ? (inst.grade ? `<details class="model"><summary>Deeper explanation: grading feedback &amp; model answer</summary>${renderGrade(inst.grade, inst.q)}</details>` : `<details class="model"><summary>Deeper explanation: model answer</summary><pre><code>${esc(inst.q.model)}</code></pre></details>`)
+    : '';
+  return `<div class="card" style="margin:12px 0;padding:16px" data-rv="${i}">
+    <div class="row" style="justify-content:space-between;gap:8px"><span class="pill ${isCode ? 'code' : 'mc'}">${isCode ? 'Pseudocode' : 'Multiple choice'}</span>
+      <span class="pill" style="color:${T.color}">${T.icon} ${T.name}</span><span class="pill" style="color:var(--bad)">${badge}</span></div>
+    ${head}${deeper}
+    <div style="margin-top:8px">${topicRefs(inst.topic)}</div>
+    <div class="rv-slot" style="margin-top:10px"></div>
+    <div class="row" style="margin-top:8px"><button class="btn sm primary rv-btn">↻ Retest this question</button></div>
+  </div>`;
+}
+function wireRetests(panel, missed){
+  panel.querySelectorAll('.rv-btn').forEach(b => {
+    b.onclick = () => {
+      const card = b.closest('[data-rv]'), r = missed[+card.dataset.rv], slot = card.querySelector('.rv-slot');
+      renderQuestion(slot, r.inst, s => {
+        r.retests = (r.retests || 0) + 1; r.lastRetest = s;
+        const badge = [...card.querySelectorAll('.pill')].find(p => /missed|skipped/.test(p.textContent));
+        if (badge) badge.textContent = `missed · retested ${Math.round(s * 100)}%`;
+        slot.insertAdjacentHTML('afterbegin', `<div class="explain ${s >= 1 ? 'good' : 'bad'} fade" style="margin-bottom:10px"><b>${s >= 1 ? '✓ Retest passed!' : '✗ Not yet — review the notes above and try again.'}</b> Score: ${Math.round(s * 100)}%</div>`);
+      });
+    };
+  });
 }
 
 // ======================= PRACTICE ARENA =======================
@@ -122,12 +201,25 @@ function runQuiz(root, cfg){
   const summary = () => {
     const pct = results.length ? Math.round(100 * results.reduce((a, r) => a + r.s, 0) / results.length) : 0;
     const byT = {}; results.forEach(r => { const t = byT[r.inst.topic] = byT[r.inst.topic] || {n: 0, s: 0}; t.n++; t.s += r.s; });
+    const missed = results.filter(r => r.s < 1);
     root.innerHTML = `<div class="card fade" style="margin-top:20px;text-align:center"><div style="font-size:3rem">${pct >= 90 ? '🏆' : pct >= 70 ? '🎉' : pct >= 50 ? '💪' : '📚'}</div>
       <h2 style="margin:6px 0">${pct}%</h2><p class="lead" style="margin:0 auto">${results.length} answered · ${results.filter(r => r.inst.kind === 'code').length} pseudocode · ${results.filter(r => r.skipped).length} skipped</p>
       <table class="tbl" style="max-width:520px;margin:18px auto"><tr><th>Topic</th><th>Questions</th><th>Score</th></tr>${Object.entries(byT).map(([k, v]) => `<tr><td>${TOPICS[k].icon} ${TOPICS[k].name}</td><td>${v.n}</td><td>${Math.round(100 * v.s / v.n)}%</td></tr>`).join('')}</table>
-      <div class="row" style="justify-content:center"><button class="btn primary again">↻ New random set</button><button class="btn change">⚙ Change settings</button></div></div>`;
+      <div class="row" style="justify-content:center"><button class="btn primary again">↻ New random set</button><button class="btn change">⚙ Change settings</button></div>
+      ${missed.length ? `<div style="margin-top:22px;border-top:1px solid var(--border);padding-top:16px">
+        <label class="eli5-toggle" style="margin:0 auto;max-width:600px;justify-content:center;cursor:pointer"><span class="eli5-text" style="align-items:center"><b>🔍 Review missed questions</b><small>${missed.length} missed/skipped · correct answers, deeper explanations &amp; retest</small></span><input type="checkbox" id="rv-sw"><span class="switch"></span></label>
+        <div id="rv-panel" class="hidden" style="margin-top:14px;text-align:left"></div></div>`
+      : '<p class="stat-label" style="margin-top:14px">No misses — flawless run! 🏆</p>'}</div>`;
     root.querySelector('.again').onclick = () => runQuiz(root, cfg);
     root.querySelector('.change').onclick = () => renderPractice(cfg.topics);
+    const sw = root.querySelector('#rv-sw');
+    if (sw){
+      const panel = root.querySelector('#rv-panel');
+      sw.onchange = () => {
+        panel.classList.toggle('hidden', !sw.checked);
+        if (sw.checked && !panel.dataset.filled){ panel.dataset.filled = '1'; panel.innerHTML = missed.map((r, i) => reviewCard(r, i)).join(''); wireRetests(panel, missed); }
+      };
+    }
   };
   step();
 }
@@ -190,7 +282,7 @@ function route(){
 }
 window.addEventListener('hashchange', route);
 mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
-document.querySelectorAll('.qa[data-topic]').forEach(mountQA);
+document.querySelectorAll('.qa[data-topic], .qa[data-topics]').forEach(mountQA);
 route();
 
 function mountTheme(){
