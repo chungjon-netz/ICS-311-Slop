@@ -6,7 +6,7 @@ COURSE.push(
  lead:'An <b>algorithm</b> is a well-defined procedure that turns input into output. We analyze algorithms for <b>correctness</b> and <b>efficiency</b>, and we build them on top of basic data structures: stacks, queues, linked lists and rooted trees.',
  reading:'CLRS Chapters 1 &amp; 10', notes:'Topic 01, Topic 04',
  videos:[['86QY8mBX7Ks','04A · Stacks, Queues, Lists'],['eECZ_lKXsHs','04B · Trees and Dynamic Sets']],
- extra:[['Appendix I of Jeff Erickson\'s textbook','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ extra:[['Appendix I of Jeff Erickson\'s textbook (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/notes/98-induction.pdf']],
  prereq:['ICS 141 Ch 1.7: Introduction to Proofs','ICS 141 Ch 1.8: Proof Methods and Strategy','ICS 141 Ch 2.4: Sequences and Summations','ICS 141 Appendix 2: Exponential and Logarithmic Functions','ICS 141 Ch 3.1: Algorithms','ICS 141 Ch 5.1 &amp; 5.2: Mathematical Induction','ICS 241 Ch 11.1: Introduction to Trees','ICS 211: Stacks','ICS 211: Queues','ICS 211: Lists','ICS 211: Trees'],
  html:`<h2>Algorithms and problems</h2>
  <div class="grid g2"><div class="card"><h3>What is an algorithm?</h3><ul class="clean"><li>A finite sequence of unambiguous steps that solves a <b>computational problem</b> (input → required output).</li><li>An <b>instance</b> is one particular input. An algorithm is <b>correct</b> if it halts with the right output on <i>every</i> instance.</li><li>We compare algorithms by how their running time grows with input size <span class="math">n</span>, independent of hardware.</li></ul></div>

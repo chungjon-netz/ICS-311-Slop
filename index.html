@@ -246,6 +246,9 @@ pre .cm{color:#6b7280;font-style:italic}
 .nav .nnum{white-space:nowrap;min-width:48px}
 .nav .nlabel{white-space:normal;overflow:visible;line-height:1.3}
 
+a.chip.link,.res a{color:var(--accent2)}
+a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
+
 </style>
 </head>
 <body>
@@ -269,7 +272,7 @@ pre .cm{color:#6b7280;font-style:italic}
   <p class="lead">Every topic from Week 1 onward, grouped by midterm: interactive notes, all the course screencasts, diagrams, step-through visualizers, and an endless pool of randomized questions — multiple choice and pseudocode challenges graded on <b>correctness</b>, <b>modularity</b>, and <b>efficiency</b>.</p>
   <div class="row" style="margin:22px 0 30px">
     <a class="btn primary" href="#practice">🎯 Start random practice</a>
-    <a class="btn" href="#t01">📘 Start at Week 1</a><a class="btn" href="#mt1">1️⃣ Midterm 1</a><a class="btn" href="#mt2">2️⃣ Midterm 2</a><a class="btn" href="#mt3">3️⃣ Midterm 3</a>
+    <a class="btn" href="#t01">📘 Start at Week 1</a><a class="btn" href="#mt1">1️⃣ Midterm 1</a><a class="btn" href="#mt2">2️⃣ Midterm 2</a><a class="btn" href="#mt3">3️⃣ Midterm 3</a><a class="btn" href="#mt4">4️⃣ Midterm 4</a><a class="btn" href="#final">🎓 Final</a>
   </div>
   <div class="grid g3" id="home-stats"></div>
   <h2>Topics by midterm</h2>
@@ -1688,6 +1691,76 @@ GEN.push(
  }}
 );
 
+// Links scraped from the course schedule page
+const SCHED = {
+"notes": {
+"Topic 01": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-01.html",
+"Topic 04": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-04.html",
+"Topic 03": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-03.html",
+"Topic 02": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-02.html",
+"Topic 07": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-07.html",
+"Topic 09": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-09.html",
+"Topic 08": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-08.html",
+"Topic 11": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-11.html",
+"Topic 05A": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-05A.html",
+"Topic 05B": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-05B.html",
+"Topic 06": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-06.html",
+"Topic 10": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-10.html",
+"Topic 12A": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-12A.html",
+"Topic 12B": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-12B.html",
+"Topic 13": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-13.html",
+"Topic 14A": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-14A.html",
+"Topic 14B": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-14B.html",
+"Topic 16": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-16.html",
+"Topic 17": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-17.html",
+"Topic 18": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-18.html",
+"Topic 19": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-19.html",
+"Topic 20": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-20.html",
+"Topic 24": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-24.html",
+"Topic 25": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-25.html",
+"Topic 22": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/Topic-22.html"
+},
+"prereq": {
+"ics311fall2026": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/index.html",
+"ics141ch17introductiontoproofs": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch1_7_Introduction_to_Proofs.pdf",
+"ics141ch18proofmethodsandstrategy": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch1_8_Proof_Methods_and_Strategy.pdf",
+"ics141ch24sequencesandsummations": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch2_4_Sequences_and_Summations.pdf",
+"ics141appendix2exponentialandlogarithmicfunctions": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/A_2_Exponential_and_Logarithmic_Functions.pdf",
+"ics141ch31algorithms": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch3_1_Algorithms.pdf",
+"ics141ch5152mathematicalinduction": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch5_1_5_2_Mathematical_Induction.pdf",
+"ics241ch111introductiontotrees": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch11_1_Introduction_to_Trees.pdf",
+"ics211stacks": "https://courses.ics.hawaii.edu/ReviewICS211/modules/stacks/",
+"ics211queues": "https://courses.ics.hawaii.edu/ReviewICS211/modules/queues/",
+"ics211lists": "https://courses.ics.hawaii.edu/ReviewICS211/modules/lists/",
+"ics211trees": "https://courses.ics.hawaii.edu/ReviewICS211/modules/trees/",
+"ics141ch32growthoffunctions": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch3_2_Growth_of_Functions.pdf",
+"ics141ch33complexityofalgorithms": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch3_3_Complexity_of_Algorithms.pdf",
+"ics141ch55programcorrectness": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch5_5_Program_Correctness.pdf",
+"ics211simplesortingalgorithms": "https://courses.ics.hawaii.edu/ReviewICS211/modules/simple-sorting/",
+"ics141ch54recursivealgorithms": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch5_4_Recursive_Algorithms.pdf",
+"ics241ch83divideandconqueralgorithmsandrecurrencerelations": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch8_3_Divide_and_Conquer_Algorithms_and_Recurrence_Relations.pdf",
+"ics211complexsortingalgorithms": "https://courses.ics.hawaii.edu/ReviewICS211/modules/complex-sorting/",
+"ics241ch112applicationsoftrees": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch11_2_Applications_of_Trees.pdf",
+"ics241ch113treetraversal": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch11_3_Tree_Traversal.pdf",
+"ics141ch61thebasicsofcounting": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch6_1_Basics_of_Counting.pdf",
+"ics141ch62thepigeonholeprinciple": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch6_2_Pigeonhole_Principle.pdf",
+"ics141ch63permutationsandcombinations": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch6_3_Permutations_and_Combinations.pdf",
+"ics141ch65generalizedpermutationsandcombinations": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch6_5_Generalized_Permutations_and_Combinations.pdf",
+"ics141ch71introductiontodiscreteprobability": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch7_1_Introduction_to_Discrete_Probability.pdf",
+"ics141ch72probabilitytheory": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch7_2_Probability_Theory.pdf",
+"ics141ch74expectedvalueandvariance": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch7_4_Expected_Value_and_Variance.pdf",
+"ics211hashtables": "https://courses.ics.hawaii.edu/ReviewICS211/modules/hashtables/",
+"ics241ch101graphsandgraphmodels": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch10_1_Graphs_and_Graph_Models.pdf",
+"ics241ch102graphterminologyandspecialtypesofgraphs": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch10_2_Graph_Terminology_and_Special_Types_of_Graphs.pdf",
+"ics241ch103representinggraphsandgraphisomorphism": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch10_3_Representing_Graphs_and_Graph_Isomorphism.pdf",
+"ics241ch104connectivity": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch10_4_Connectivity.pdf",
+"ics241ch114spanningtrees": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch11_4_Spanning_Trees.pdf",
+"ics241graphs": "https://courses.ics.hawaii.edu/ReviewICS241/modules/graphs/",
+"ics241ch115minimumspanningtrees": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch11_5_Minimum_Spanning_Trees.pdf",
+"ics241ch106shortestpathproblems": "https://algoparc.ics.hawaii.edu/~nodari/teaching/f26/Notes/prereq/Ch10_6_Shortest_Path_Problems.pdf"
+}
+};
+
 // ======================= DIAGRAM PRIMITIVES =======================
 const C = {acc: '#8b5cf6', cy: '#22d3ee', good: '#34d399', bad: '#f87171', warn: '#fbbf24', pink: '#f472b6', txt: '#e5e7eb', mut: '#9ca3af', dim: '#4b5563', bg: '#0f1424'};
 let dgN = 0;
@@ -1915,7 +1988,7 @@ COURSE.push(
  lead:'An <b>algorithm</b> is a well-defined procedure that turns input into output. We analyze algorithms for <b>correctness</b> and <b>efficiency</b>, and we build them on top of basic data structures: stacks, queues, linked lists and rooted trees.',
  reading:'CLRS Chapters 1 &amp; 10', notes:'Topic 01, Topic 04',
  videos:[['86QY8mBX7Ks','04A · Stacks, Queues, Lists'],['eECZ_lKXsHs','04B · Trees and Dynamic Sets']],
- extra:[['Appendix I of Jeff Erickson\'s textbook','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ extra:[['Appendix I of Jeff Erickson\'s textbook (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/notes/98-induction.pdf']],
  prereq:['ICS 141 Ch 1.7: Introduction to Proofs','ICS 141 Ch 1.8: Proof Methods and Strategy','ICS 141 Ch 2.4: Sequences and Summations','ICS 141 Appendix 2: Exponential and Logarithmic Functions','ICS 141 Ch 3.1: Algorithms','ICS 141 Ch 5.1 &amp; 5.2: Mathematical Induction','ICS 241 Ch 11.1: Introduction to Trees','ICS 211: Stacks','ICS 211: Queues','ICS 211: Lists','ICS 211: Trees'],
  html:`<h2>Algorithms and problems</h2>
  <div class="grid g2"><div class="card"><h3>What is an algorithm?</h3><ul class="clean"><li>A finite sequence of unambiguous steps that solves a <b>computational problem</b> (input → required output).</li><li>An <b>instance</b> is one particular input. An algorithm is <b>correct</b> if it halts with the right output on <i>every</i> instance.</li><li>We compare algorithms by how their running time grows with input size <span class="math">n</span>, independent of hardware.</li></ul></div>
@@ -2366,7 +2439,7 @@ COURSE.push(
  blurb:'Recursive search: make a choice, recurse, undo. N-Queens, subset sum.',
  lead:'<b>Backtracking</b> builds a solution one decision at a time, recursing on each choice and <b>undoing</b> it when it leads to a dead end. It is the brute-force starting point for dynamic programming.',
  reading:'Jeff Erickson, <i>Algorithms</i>, Chapter 2 (sections 2.1, 2.3–2.4, 2.6, 2.8). If you are shaky on recursion, review Chapter 1 first.', notes:null,
- videos:[], extra:[['Jeff Erickson\'s Algorithms textbook (free online)','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ videos:[], extra:[['Erickson Ch 2: Backtracking (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/02-backtracking.pdf'],['Erickson Ch 1: Recursion (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/01-recursion.pdf']],
  prereq:[],
  html:`<h2>The pattern</h2>
  <div class="grid g2"><div class="card"><ul class="clean"><li>A solution is a sequence of decisions x₁, x₂, …, x_n.</li><li>At each step, try every option for the next decision that is consistent with the choices so far.</li><li>Recurse. If the recursion fails, <b>undo</b> the choice and try the next option.</li><li>The recursive structure forms a <b>recursion tree</b> of partial solutions; pruning cuts off branches early.</li></ul></div>
@@ -2399,7 +2472,7 @@ COURSE.push(
  reading:'CLRS Chapter 14.1–14.3 and Chapter 3 of Jeff Erickson\'s textbook (through Section 3.5)', notes:'Topic 12A',
  videos:[['RYPsOJmhwgE','12A · Dynamic Programming Intro'],['0tQ3ah0Fddw','12B · DP Steps (minutes 0:00–5:00)',0,300],['QzgqDJIJtNY','12D · DP Applications (0:00–6:16)',0,376],['QzgqDJIJtNY','12D · DP Applications (9:23–end)',563]],
  mit:[['V5hZoJ6uK-s','MIT Lecture 15: Dynamic Programming']],
- extra:[['Jeff Erickson\'s Algorithms, Chapter 3','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ extra:[['Jeff Erickson\'s Algorithms, Chapter 3 (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf']],
  prereq:[],
  html:`<h2>The four steps</h2>
  <div class="grid g2"><div class="card"><ol><li>Characterize the structure of an optimal solution.</li><li>Recursively define the value of an optimal solution.</li><li>Compute the value, usually <b>bottom-up</b> in a table.</li><li>Construct an optimal solution from the stored choices.</li></ol></div>
@@ -2436,6 +2509,7 @@ COURSE.push(
  reading:'CLRS Chapter 14.4–14.5; more examples in Erickson Chapter 3 (sections 3.6–3.9)', notes:'Topic 12B',
  videos:[['0tQ3ah0Fddw','12B · DP Steps and LCS (from 5:00)',300],['dFObo5BeJ0k','12C · LCS Example Continued'],['QzgqDJIJtNY','12D · DP Applications Summary (from 6:17)',377]],
  mit:[['V5hZoJ6uK-s','MIT Lecture 15: Dynamic Programming']],
+ extra:[['Erickson Ch 3: Dynamic Programming (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf']],
  prereq:[],
  html:`<h2>Longest common subsequence</h2>
  <div class="grid g2"><div class="card"><p>A <b>subsequence</b> keeps order but may skip characters. LCS("ABCBDAB", "BDCABA") has length 4 (e.g. "BCBA").</p>
@@ -2511,6 +2585,7 @@ COURSE.push(
  reading:'CLRS Sections 20.1–20.3; Chapter 5 of Jeff Erickson\'s notes; Goodrich &amp; Tamassia section on Graph Representations (Google Drive Resources folder)', notes:'Topic 14A',
  videos:[['IdStgDmUlXM','14A · Graphs Definitions'],['pyDxf58rK_0','14B · Graph ADT Representations'],['A8SKOFseOyU','14C · BFS'],['emiWSGizJlc','14D · DFS Introduction'],['HMPaUoGfsPo','14E · DFS Example Properties']],
  mit:[['FPEMBWg_WlY','MIT Lecture 16 (until 23:26)',0,1406]],
+ extra:[['Erickson Ch 5: Graphs (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/05-graphs.pdf']],
  prereq:['ICS 241 Ch 10.1: Graphs and Graph Models','ICS 241 Ch 10.2: Graph Terminology and Special Types of Graphs','ICS 241 Ch 10.3: Representing Graphs and Graph Isomorphism','ICS 241 Ch 10.4: Connectivity','ICS 241 Ch 11.4: Spanning Trees','ICS 241: Graphs'],
  html:`<h2>Representations</h2>
  <table class="tbl"><tr><th></th><th>Adjacency list</th><th>Adjacency matrix</th></tr>
@@ -2575,12 +2650,308 @@ COURSE.push(
  ]}
 );
 
+// ======================= COURSE DATA · MIDTERM 4 & FINAL =======================
+COURSE.push(
+{id:'t18', num:'#18', short:'Single-Source Shortest Paths', title:'Single-Source', grad:'Shortest Paths', when:'Week 13 · Mon 11/16', icon:'🛣️', color:'#f43f5e',
+ blurb:'Relaxation, Bellman-Ford, DAG shortest paths, Dijkstra.',
+ lead:'Find the lightest path from a source s to every vertex. Every algorithm here is built from one operation, <b>RELAX</b>, applied in a different order.',
+ reading:'CLRS Sections 22.1–22.3', notes:'Topic 18',
+ videos:[['S7rzpWwICo8','18A · Shortest Paths'],['4Iy0RalrsXo','18B · Bellman-Ford and DAG Shortest Paths'],['0wfNtfhHlqE','18C · Dijkstra\'s Algorithm']],
+ mit:[['xhG2DyCX3uA','MIT Lecture 17'],['Ttezuzs39nk','MIT Lecture 18 (until 36:20)',0,2180]],
+ prereq:['ICS 241 Ch 10.6: Shortest-Path Problems'],
+ html:`<h2>Relaxation</h2>
+ <div class="grid g2"><pre><code><span class="fn">INITIALIZE-SINGLE-SOURCE</span>(G, s)
+  <span class="kw">for each</span> vertex v ∈ G.V
+      v.d = ∞;  v.π = NIL
+  s.d = 0
+
+<span class="fn">RELAX</span>(u, v, w)
+  <span class="kw">if</span> v.d &gt; u.d + w(u, v)
+      v.d = u.d + w(u, v)
+      v.π = u</code></pre>
+ <div class="card"><ul class="clean"><li>v.d is an <b>upper bound</b> on the true distance δ(s, v) and only ever decreases.</li><li><b>Optimal substructure:</b> any subpath of a shortest path is a shortest path.</li><li>Negative-weight edges are allowed by some algorithms, but a <b>negative-weight cycle</b> reachable from s makes distances undefined (−∞).</li><li>Shortest paths have no cycles, so they have at most |V| − 1 edges.</li></ul></div></div>
+ <h2>Three algorithms</h2>
+ <table class="tbl"><tr><th>Algorithm</th><th>Idea</th><th>Handles</th><th>Time</th></tr>
+ <tr><td>Bellman-Ford</td><td>relax every edge, |V| − 1 times; one more pass detects negative cycles</td><td>negative edges, reports negative cycles</td><td>O(VE)</td></tr>
+ <tr><td>DAG-SHORTEST-PATHS</td><td>topologically sort, then relax edges out of each vertex in that order</td><td>negative edges (no cycles exist)</td><td>Θ(V + E)</td></tr>
+ <tr><td>Dijkstra</td><td>greedily EXTRACT-MIN the closest unfinished vertex, relax its edges</td><td><b>non-negative</b> weights only</td><td>O((V + E) lg V) binary heap; O(V lg V + E) Fibonacci heap</td></tr></table>
+ <div class="callout cyan">Dijkstra looks like Prim's algorithm. The difference is the key: Prim uses the weight of one edge into the tree, Dijkstra uses the total distance from s.</div>`,
+ eli5:{title:'Finding the fastest way home',pts:['🗺️ Every road has a travel time. You want the quickest route from your house to every other place.','✏️ Start by guessing "infinity" for every place, except 0 for home.','🔧 <b>Relax</b> a road: "If going through this road is faster than my current guess, update my guess!"','🚗 <b>Dijkstra</b> always finishes the closest unfinished place next, like ripples that spread by travel time.','⚠️ Dijkstra breaks if some road has a negative time (a time machine!). <b>Bellman-Ford</b> handles that.']},
+ diagram:()=>fig(D.svg(720,200,
+   D.arrow(150,100,282,100,'mut',3)+D.arrow(330,100,512,100,'warn',4)+D.wlabel(215,88,5)+D.wlabel(420,88,2,C.warn)+
+   D.node(120,100,'s',C.good,26)+D.node(305,100,'u',C.cy,26)+D.node(540,100,'v',C.warn,26)+
+   D.text(120,145,'s.d = 0',13,C.good,'middle',700)+D.text(305,145,'u.d = 5',13,C.cy,'middle',700)+D.text(540,145,'v.d = 9 → 7',13,C.warn,'middle',700)+
+   D.text(360,30,'RELAX(u, v): is u.d + w(u, v) = 5 + 2 = 7 smaller than v.d = 9? Yes, so update v.d and v.π = u',12.5,C.txt)+
+   D.text(360,185,'every shortest-path algorithm is just RELAX applied in a smart order',12,C.mut)),
+  'Relaxing (u, v) lowers v.d when the path through u is shorter, and records u as v\'s predecessor.','Going through u gets to v in 7 minutes instead of 9, so we update our best guess for v.'),
+ mc:[
+  ['Which shortest-path algorithm requires all edge weights to be non-negative?','Dijkstra',['Bellman-Ford','DAG-SHORTEST-PATHS','Floyd-Warshall'],'Its greedy choice can fail with negative edges.'],
+  ['Running time of Bellman-Ford:','O(VE)',['O(V + E)','O(E lg V)','O(V³) always'],'|V| − 1 passes over all |E| edges.'],
+  ['How does Bellman-Ford detect a negative-weight cycle?','After |V| − 1 passes, some edge can still be relaxed',['The queue becomes empty','A vertex is extracted twice','The topological sort fails'],'If v.d > u.d + w(u, v) still holds, a negative cycle is reachable.'],
+  ['Single-source shortest paths in a DAG take:','Θ(V + E)',['O(VE)','O(E lg V)','O(V²)'],'Topological sort, then one relaxation per edge.'],
+  ['Dijkstra with a binary min-heap runs in:','O((V + E) lg V)',['O(V + E)','O(VE)','O(V³)'],'V EXTRACT-MINs and up to E DECREASE-KEYs, each O(lg V).'],
+  ['RELAX(u, v, w) updates v when:','v.d > u.d + w(u, v)',['v.d < u.d + w(u, v)','u.d > v.d','w(u, v) < 0'],'The path through u is shorter than the best known.'],
+  ['A shortest path in a graph with no negative cycles has at most how many edges?','|V| − 1',['|V|','|E|','|V|²'],'It is a simple path.'],
+  ['Dijkstra differs from Prim mainly in:','The key: total distance from s instead of a single edge weight',['Using a stack instead of a heap','Working only on DAGs','Running in O(VE)'],'Otherwise the structure is the same.']
+ ]},
+
+{id:'t19', num:'#19', short:'All-Pairs Shortest Paths', title:'All-Pairs', grad:'Shortest Paths', when:'Week 13 · Wed 11/18', icon:'🧭', color:'#d946ef',
+ blurb:'Matrix multiplication method, Floyd-Warshall, Johnson\'s algorithm.',
+ lead:'Compute δ(u, v) for <b>every</b> pair of vertices. Output is a |V| × |V| distance matrix.',
+ reading:'CLRS Chapter 23', notes:'Topic 19',
+ videos:[['Ku24z4v9YF8','19A · All-Pairs Shortest Paths'],['z0reAeK4kl0','19B · Johnson\'s Algorithm'],['dzf7x5Z8Ui8','19C · Floyd-Warshall']],
+ mit:[['Sygq1e0xWnM','MIT Lecture 19 (00:00–9:00)',0,540],['Sygq1e0xWnM','MIT Lecture 19 (53:00–end)',3180]],
+ prereq:[],
+ html:`<h2>Floyd-Warshall</h2>
+ <div class="grid g2"><pre><code><span class="fn">FLOYD-WARSHALL</span>(W, n)
+  D = W                     <span class="cm">// D[i, j] = w(i, j) or ∞</span>
+  <span class="kw">for</span> k = 1 <span class="kw">to</span> n             <span class="cm">// allow vertex k in the middle</span>
+      <span class="kw">for</span> i = 1 <span class="kw">to</span> n
+          <span class="kw">for</span> j = 1 <span class="kw">to</span> n
+              D[i, j] = min(D[i, j], D[i, k] + D[k, j])
+  <span class="kw">return</span> D</code></pre>
+ <div class="card"><p class="math">d<sub>ij</sub><sup>(k)</sup> = min(d<sub>ij</sub><sup>(k−1)</sup>, d<sub>ik</sub><sup>(k−1)</sup> + d<sub>kj</sub><sup>(k−1)</sup>)</p><ul class="clean"><li>DP over the set of allowed <b>intermediate</b> vertices {1..k}.</li><li>Θ(V³) time, Θ(V²) space. Negative edges are fine; a negative D[i, i] reveals a negative cycle.</li><li>Keep a predecessor matrix Π to rebuild the paths.</li></ul></div></div>
+ <h2>Comparing approaches</h2>
+ <table class="tbl"><tr><th>Method</th><th>Time</th><th>Notes</th></tr>
+ <tr><td>Run Dijkstra from every vertex</td><td>O(V E lg V) or O(V² lg V + VE)</td><td>non-negative weights only</td></tr>
+ <tr><td>Run Bellman-Ford from every vertex</td><td>O(V² E)</td><td>up to O(V⁴) on dense graphs</td></tr>
+ <tr><td>Repeated squaring of the "min-plus" matrix product</td><td>Θ(V³ lg V)</td><td>L<sup>(2m)</sup> = L<sup>(m)</sup> · L<sup>(m)</sup></td></tr>
+ <tr><td>Floyd-Warshall</td><td>Θ(V³)</td><td>simple, great for dense graphs</td></tr>
+ <tr><td>Johnson's algorithm</td><td>O(V² lg V + VE)</td><td>reweights with Bellman-Ford: ŵ(u, v) = w(u, v) + h(u) − h(v) ≥ 0, then Dijkstra from every vertex. Best for sparse graphs.</td></tr></table>`,
+ eli5:{title:'A chart of the fastest trip between every pair of towns',pts:['📋 Instead of one starting town, we want a giant chart: the fastest trip from <b>every</b> town to <b>every</b> other town.','🔁 <b>Floyd-Warshall</b>: "What if we are allowed to stop in town 1 on the way? Now towns 1 and 2? Now 1, 2, 3…" Update the chart each time.','➕ For each pair, check: is going through the new stop faster than what I had?','🪄 <b>Johnson\'s trick</b>: shift every road time so none are negative, then run Dijkstra from each town.']},
+ diagram:()=>fig(D.svg(720,210,
+   `<path d="M120 150 Q 360 40 600 150" fill="none" stroke="${C.dim}" stroke-width="3" stroke-dasharray="7 6"/>`+D.text(360,72,'D[i, j] = 12 (current best)',12.5,C.mut)+
+   D.arrow(145,155,330,155,'cy',3.5)+D.arrow(390,155,575,155,'cy',3.5)+D.wlabel(238,143,4,C.cy)+D.wlabel(482,143,5,C.cy)+
+   D.node(120,155,'i',C.acc,24)+D.node(360,155,'k',C.warn,24)+D.node(600,155,'j',C.acc,24)+
+   D.text(360,200,'D[i, k] + D[k, j] = 4 + 5 = 9 < 12, so D[i, j] becomes 9',13,C.good,'middle',700)),
+  'Floyd-Warshall asks, for every pair (i, j): is going through intermediate vertex k shorter?','Is it faster to stop at town k on the way? Here yes: 9 minutes instead of 12.'),
+ mc:[
+  ['Running time of Floyd-Warshall:','Θ(V³)',['Θ(V² lg V)','Θ(VE)','Θ(V⁴)'],'Three nested loops over the vertices.'],
+  ['In Floyd-Warshall, the outermost loop must range over:','The intermediate vertex k',['The source i','The destination j','The edges'],'Each iteration allows one more intermediate vertex.'],
+  ['Johnson\'s algorithm reweights edges using:','h(v) computed by Bellman-Ford from a new source',['The edge weights squared','Random weights','The degree of each vertex'],'ŵ(u, v) = w(u, v) + h(u) − h(v) ≥ 0.'],
+  ['Johnson\'s algorithm is best suited for:','Sparse graphs with possibly negative edges',['Dense graphs only','Unweighted graphs only','Graphs with negative cycles'],'O(V² lg V + VE).'],
+  ['How can Floyd-Warshall detect a negative-weight cycle?','Some diagonal entry D[i, i] becomes negative',['The algorithm never terminates','D becomes all ∞','A row becomes all zeros'],'A path from i back to i with negative weight.'],
+  ['All-pairs by repeated squaring of the min-plus product takes:','Θ(V³ lg V)',['Θ(V³)','Θ(V⁴)','Θ(V² lg V)'],'lg V squarings, each Θ(V³).'],
+  ['Running Dijkstra from every vertex is valid only when:','All edge weights are non-negative',['The graph is a DAG','The graph is dense','There are negative edges but no negative cycles'],'Otherwise use Johnson to reweight first.']
+ ]},
+
+{id:'t20', num:'#20', short:'Maximum Flow', title:'Maximum', grad:'Flow', when:'Week 14 · Mon 11/23', icon:'🚰', color:'#0891b2',
+ blurb:'Flow networks, residual graphs, augmenting paths, Ford-Fulkerson, max-flow min-cut.',
+ lead:'Push as much "stuff" as possible from a source s to a sink t through a network of pipes with capacities.',
+ reading:'CLRS Sections 24.1–24.3', notes:'Topic 20',
+ videos:[['3Q0IJgyuVEM','20A · Maximum Flow Intro'],['TDO4dwq4fKI','20B · Residuals and Augmenting Flows'],['TTFOk0miZ6k','20C · Flow Algorithms and Applications']],
+ prereq:[],
+ html:`<h2>Flow networks</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li>Directed graph with capacities c(u, v) ≥ 0, a source s and a sink t.</li><li><b>Capacity constraint:</b> 0 ≤ f(u, v) ≤ c(u, v).</li><li><b>Flow conservation:</b> flow in = flow out at every vertex except s and t.</li><li>Value |f| = flow out of s − flow into s.</li></ul></div>
+ <div class="card"><h3>Residual network G<sub>f</sub></h3><ul class="clean"><li>c<sub>f</sub>(u, v) = c(u, v) − f(u, v): room left to push forward.</li><li>c<sub>f</sub>(v, u) = f(u, v): flow you could <b>cancel</b>.</li><li>An <b>augmenting path</b> is an s→t path in G<sub>f</sub>; push its bottleneck capacity along it.</li></ul></div></div>
+ <h2>Ford-Fulkerson and max-flow min-cut</h2>
+ <div class="grid g2"><pre><code><span class="fn">FORD-FULKERSON</span>(G, s, t)
+  <span class="kw">for each</span> edge (u, v) ∈ G.E
+      (u, v).f = 0
+  <span class="kw">while</span> there is a path p from s to t in G<sub>f</sub>
+      c<sub>f</sub>(p) = min{c<sub>f</sub>(u, v) : (u, v) in p}
+      <span class="kw">for each</span> edge (u, v) in p
+          <span class="kw">if</span> (u, v) ∈ G.E
+              (u, v).f = (u, v).f + c<sub>f</sub>(p)
+          <span class="kw">else</span> (v, u).f = (v, u).f − c<sub>f</sub>(p)</code></pre>
+ <div class="card"><p><b>Max-flow min-cut theorem:</b> these are equivalent:</p><ol><li>f is a maximum flow.</li><li>G<sub>f</sub> has no augmenting path.</li><li>|f| = c(S, T) for some cut (S, T).</li></ol><table class="tbl"><tr><th>Variant</th><th>Time</th></tr><tr><td>Ford-Fulkerson (integer capacities)</td><td>O(E |f*|)</td></tr><tr><td>Edmonds-Karp (BFS shortest augmenting path)</td><td>O(VE²)</td></tr></table><p>Application: <b>maximum bipartite matching</b> by adding s, t and unit capacities.</p></div></div>`,
+ eli5:{title:'Pushing water through pipes',pts:['🚰 Imagine water flowing from a tap (s) to a drain (t) through pipes. Each pipe can only carry so much.','💧 Water that goes into a junction must come out (no leaks!).','🔍 Find any route from tap to drain that still has room, and push more water through it. Repeat!','↩️ Sometimes you "undo" some water in one pipe to send it a smarter way. That is the <b>residual</b> network.','✂️ The most water you can push equals the smallest total size of pipes you would need to cut to stop all flow.']},
+ diagram:()=>fig(D.svg(720,240,(()=>{const N={s:[80,120],a:[260,50],b:[260,190],c:[460,50],d:[460,190],t:[640,120]};const E=[['s','a','10/10'],['s','b','5/8'],['a','c','8/9'],['a','b','2/2'],['b','d','7/7'],['c','t','8/10'],['d','c','0/3'],['d','t','7/8']];let s=E.map(([u,v,l])=>{const [x1,y1]=N[u],[x2,y2]=N[v],dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),k=20/L;return D.arrow(x1+dx*k,y1+dy*k,x2-dx*k,y2-dy*k,l.split('/')[0]===l.split('/')[1]?'warn':'cy',2.5)+`<rect x="${(x1+x2)/2-22}" y="${(y1+y2)/2-11}" width="44" height="20" rx="6" fill="#111827" stroke="${C.dim}"/>`+D.text((x1+x2)/2,(y1+y2)/2+4,l,11,C.txt,'middle',700);}).join('');Object.entries(N).forEach(([k,[x,y]])=>s+=D.node(x,y,k,k==='s'||k==='t'?C.good:C.acc,18));return s+`<path d="M360 20 L360 230" stroke="${C.bad}" stroke-width="2" stroke-dasharray="6 6"/>`+D.text(360,236,'a cut (S, T)',11,C.bad)+D.text(110,225,'flow / capacity · yellow = saturated',11.5,C.mut,'start');})()),
+  'Each edge shows flow / capacity. A flow is maximum exactly when its value equals the capacity of some cut.','Numbers show "water now / pipe size". Yellow pipes are completely full.'),
+ mc:[
+  ['Flow conservation says that at every vertex other than s and t:','Total flow in equals total flow out',['Flow equals capacity','Flow is zero','Flow in is at most half the flow out'],'No vertex stores or creates flow.'],
+  ['In the residual network, the reverse edge (v, u) has capacity:','f(u, v), the flow that could be cancelled',['c(u, v)','c(u, v) − f(u, v)','0 always'],'Pushing along (v, u) undoes flow.'],
+  ['The max-flow min-cut theorem states that the maximum flow value equals:','The minimum capacity of an s-t cut',['The number of edges','The maximum edge capacity','The sum of all capacities'],'Strong duality for flows.'],
+  ['Ford-Fulkerson stops when:','There is no augmenting path in the residual network',['Every edge is saturated','The flow equals the sum of capacities out of s','After |V| − 1 iterations'],'Then the flow is maximum.'],
+  ['Edmonds-Karp chooses augmenting paths using:','BFS (shortest paths in edges)',['DFS','Dijkstra on capacities','Random walks'],'This gives O(VE²).'],
+  ['Running time of Edmonds-Karp:','O(VE²)',['O(E |f*|)','O(V + E)','O(V³ lg V)'],'At most O(VE) augmentations, each O(E).'],
+  ['Maximum bipartite matching can be solved by:','Max flow with a source, a sink, and unit capacities',['Dijkstra','Topological sort','Kruskal'],'Integral max flow gives a matching.']
+ ]},
+
+{id:'t24', num:'#24', short:'NP-Completeness', title:'Complexity Theory &amp;', grad:'NP-Completeness', when:'Week 15 · Mon 11/30', icon:'🧩', color:'#9333ea',
+ blurb:'P, NP, reductions, NP-hard, NP-complete, SAT and friends.',
+ lead:'Some problems seem to have no polynomial-time algorithm. NP-completeness gives strong evidence: if any NP-complete problem is in P, then <b>all</b> of NP is.',
+ reading:'CLRS Chapter 34', notes:'Topic 24',
+ videos:[['Cm_c_y2z0HY','24A · NP-Completeness'],['H4OYXaVkLA4','24B · An NP-Complete Problem'],['J5l-crl0LgA','24C · NP-Complete Problems']],
+ prereq:[],
+ html:`<h2>Classes</h2>
+ <table class="tbl"><tr><th>Class</th><th>Meaning</th></tr>
+ <tr><td><b>P</b></td><td>decision problems solvable in polynomial time</td></tr>
+ <tr><td><b>NP</b></td><td>decision problems whose "yes" answers can be <b>verified</b> in polynomial time given a certificate</td></tr>
+ <tr><td><b>NP-hard</b></td><td>every problem in NP reduces to it in polynomial time</td></tr>
+ <tr><td><b>NP-complete (NPC)</b></td><td>in NP <i>and</i> NP-hard</td></tr></table>
+ <div class="grid g2"><div class="card"><h3>Reductions</h3><ul class="clean"><li>A ≤<sub>P</sub> B: a polynomial-time function f maps instances of A to instances of B with the same answer.</li><li>If A ≤<sub>P</sub> B and B ∈ P then A ∈ P.</li><li>To prove B is NP-complete: (1) show B ∈ NP, (2) reduce a <b>known</b> NP-complete problem A to B.</li><li>Direction matters: reduce <i>from</i> the known hard problem <i>to</i> the new one.</li></ul></div>
+ <div class="card"><h3>Famous NP-complete problems</h3><ul class="clean"><li>CIRCUIT-SAT and SAT (Cook-Levin theorem), 3-CNF-SAT</li><li>CLIQUE, VERTEX-COVER, INDEPENDENT-SET</li><li>HAM-CYCLE, TSP (decision version)</li><li>SUBSET-SUM</li></ul><p>Typical chain: CIRCUIT-SAT → SAT → 3-CNF-SAT → CLIQUE → VERTEX-COVER.</p></div></div>
+ <div class="callout">P ⊆ NP is known. Whether P = NP is the most famous open problem in computer science. Most researchers believe P ≠ NP.</div>`,
+ eli5:{title:'Easy to check, hard to solve',pts:['🧩 Some puzzles are easy to <b>check</b> (someone shows you the answer and you can verify it fast) but seem really hard to <b>solve</b>. That is <b>NP</b>.','✅ <b>P</b> is the puzzles that are fast to solve.','🔁 A <b>reduction</b> is turning one puzzle into another: "If I could solve B, I could solve A too."','👑 <b>NP-complete</b> puzzles are the hardest ones in NP. Solve one of them fast and you could solve all of them fast!','❓ Nobody knows if P = NP. There is a million-dollar prize for the answer.']},
+ diagram:()=>fig(D.svg(720,240,
+   `<ellipse cx="300" cy="125" rx="230" ry="100" fill="${C.acc}14" stroke="${C.acc}" stroke-width="2"/><ellipse cx="200" cy="130" rx="105" ry="65" fill="${C.good}22" stroke="${C.good}" stroke-width="2"/><ellipse cx="455" cy="125" rx="70" ry="50" fill="${C.bad}33" stroke="${C.bad}" stroke-width="2"/>`+
+   `<path d="M455 75 Q 560 40 690 70 L 690 200 Q 560 230 455 175" fill="${C.warn}14" stroke="${C.warn}" stroke-width="2" stroke-dasharray="6 5"/>`+
+   D.text(300,45,'NP',15,C.acc,'middle',700)+D.text(200,125,'P',16,C.good,'middle',700)+D.text(200,147,'sorting, MST, shortest paths',10.5,C.mut)+D.text(455,120,'NP-complete',12.5,'#fff','middle',700)+D.text(455,138,'SAT, CLIQUE, TSP',10,C.mut)+D.text(625,135,'NP-hard',13,C.warn,'middle',700)+
+   D.text(360,236,'the picture assuming P ≠ NP',11.5,C.mut)),
+  'Assuming P ≠ NP: P sits inside NP, NP-complete problems are the hardest problems in NP, and NP-hard extends beyond NP.','The green bubble is the easy puzzles. The red bubble is the hardest checkable puzzles.'),
+ mc:[
+  ['A problem is NP-complete if it is:','In NP and NP-hard',['In P and NP','NP-hard only','Unsolvable'],'Both conditions are needed.'],
+  ['To prove a new problem B is NP-hard, you:','Reduce a known NP-complete problem to B',['Reduce B to a known NP-complete problem','Show B is in P','Find an exponential algorithm for B'],'The known hard problem must reduce to the new one.'],
+  ['The class NP consists of decision problems:','Whose yes-instances can be verified in polynomial time with a certificate',['That require exponential time','That are not in P','That cannot be decided'],'NP = nondeterministic polynomial time.'],
+  ['If any NP-complete problem has a polynomial-time algorithm, then:','P = NP',['P ≠ NP','NP = EXP','Nothing changes'],'Every NP problem reduces to it.'],
+  ['The first problem proven NP-complete (Cook-Levin) was:','SAT (circuit / boolean satisfiability)',['CLIQUE','TSP','SUBSET-SUM'],'Everything else is reduced from it.'],
+  ['Which relationship is known to be true?','P ⊆ NP',['P = NP','NP ⊆ P','NP-hard ⊆ NP'],'Whether P = NP is open.'],
+  ['Which problem is in P?','Minimum spanning tree',['Hamiltonian cycle','3-CNF-SAT','Vertex cover (decision)'],'Kruskal and Prim are polynomial.']
+ ]},
+
+{id:'t25', num:'#25', short:'Approximation Algorithms', title:'Approximation', grad:'Algorithms', when:'Week 15 · Wed 12/02', icon:'🎯', color:'#7c3aed',
+ blurb:'Approximation ratios, vertex cover, TSP with the triangle inequality, set cover.',
+ lead:'For NP-hard optimization problems, settle for a solution that is <b>provably close</b> to optimal, computed in polynomial time.',
+ reading:'CLRS Chapter 35', notes:'Topic 25',
+ videos:[['hdch8ioLRqE','25A · Approximation Algorithms'],['a0fkEdx_K3g','25B · Approximation Strategies']],
+ prereq:[],
+ html:`<h2>Approximation ratio</h2>
+ <div class="card"><p>An algorithm has ratio ρ(n) if for every input of size n, its cost C and the optimal cost C* satisfy <span class="math">max(C/C*, C*/C) ≤ ρ(n)</span>. A "2-approximation" is never more than twice as bad as optimal.</p></div>
+ <div class="grid g2"><pre><code><span class="fn">APPROX-VERTEX-COVER</span>(G)    <span class="cm">// ratio 2</span>
+  C = ∅
+  E′ = G.E
+  <span class="kw">while</span> E′ ≠ ∅
+      let (u, v) be any edge of E′
+      C = C ∪ {u, v}
+      remove from E′ every edge incident on u or v
+  <span class="kw">return</span> C</code></pre>
+ <div class="card"><h3>Why ratio 2?</h3><p>The chosen edges form a <b>matching</b> A (no shared endpoints). Any cover must include at least one endpoint of each edge in A, so |C*| ≥ |A|, while |C| = 2|A|.</p></div></div>
+ <table class="tbl"><tr><th>Problem</th><th>Strategy</th><th>Ratio</th></tr>
+ <tr><td>Vertex cover</td><td>take both endpoints of a maximal matching</td><td>2</td></tr>
+ <tr><td>TSP with triangle inequality</td><td>build an MST, walk it in preorder, shortcut repeats</td><td>2</td></tr>
+ <tr><td>General TSP</td><td>no constant-ratio algorithm unless P = NP</td><td>—</td></tr>
+ <tr><td>Set cover</td><td>greedy: pick the set covering the most uncovered elements</td><td>H(max set size) = O(lg n)</td></tr></table>`,
+ eli5:{title:'Good enough, and fast',pts:['⏳ Some problems are so hard that finding the perfect answer could take longer than the age of the universe.','👍 So we use a fast trick that is <b>guaranteed</b> to be close, like "never more than twice the best".','👮 Vertex cover: place guards so every hallway has a guard at one end. Trick: pick any unguarded hallway, put guards at <b>both</b> ends, repeat.','🗺️ Traveling salesman: build the cheapest road network (MST), walk around it, and skip towns you already visited.']},
+ diagram:()=>fig(D.svg(720,220,(()=>{const N={a:[100,60],b:[230,40],c:[360,70],d:[120,170],e:[260,160],f:[400,180],g:[520,110]};const E=[['a','b'],['b','c'],['a','d'],['b','e'],['c','e'],['d','e'],['e','f'],['c','g'],['f','g']];const M=['b,c','d,e','f,g'];const inC=new Set(['b','c','d','e','f','g']);let s=E.map(([u,v])=>D.line(...N[u],...N[v],M.includes([u,v].sort().join())?C.warn:C.dim,M.includes([u,v].sort().join())?5:2.5)).join('');Object.entries(N).forEach(([k,[x,y]])=>s+=D.node(x,y,k,inC.has(k)?C.good:C.mut,18));return s+D.text(640,70,'yellow = chosen edges (a matching A)',12,C.warn,'middle',700)+D.text(640,95,'green = cover C, |C| = 6',12,C.good,'middle',700)+D.text(640,120,'any cover needs ≥ |A| = 3',12,C.mut)+D.text(640,145,'so |C| ≤ 2 · OPT',13,C.txt,'middle',700);})()),
+  'APPROX-VERTEX-COVER takes both endpoints of a maximal matching, so it uses at most twice the optimal number of vertices.','Yellow hallways got guards at both ends (green). We might use extra guards, but never more than double.'),
+ mc:[
+  ['APPROX-VERTEX-COVER has approximation ratio:','2',['1','lg n','n'],'Both endpoints of a maximal matching.'],
+  ['Why is APPROX-VERTEX-COVER within a factor of 2?','The chosen edges form a matching, and any cover needs one endpoint per matched edge',['It solves the problem exactly on trees','It uses dynamic programming','It picks the highest-degree vertex each time'],'|C| = 2|A| ≤ 2|C*|.'],
+  ['The 2-approximation for TSP requires:','The triangle inequality',['Integer weights','A bipartite graph','Negative edges'],'Shortcutting can only make the tour shorter under the triangle inequality.'],
+  ['The TSP approximation with triangle inequality starts by computing:','A minimum spanning tree',['A maximum matching','A topological sort','All-pairs shortest paths'],'MST weight ≤ optimal tour weight.'],
+  ['For general TSP (no triangle inequality):','No constant-ratio polynomial algorithm exists unless P = NP',['A 2-approximation exists','It is in P','Greedy is optimal'],'It would solve HAM-CYCLE.'],
+  ['The greedy set-cover algorithm achieves ratio:','O(lg n)',['2','1','n'],'H(d) where d is the largest set size.'],
+  ['An approximation ratio of ρ means the solution\'s cost is:','Within a factor ρ of optimal',['Exactly ρ','At most ρ more than optimal (additive)','Optimal with probability ρ'],'Multiplicative guarantee.']
+ ]},
+
+{id:'t22', num:'#22', short:'Parallel Algorithms', title:'Parallel', grad:'Algorithms', when:'Week 16 · Mon 12/07', icon:'🧵', color:'#14b8a6',
+ blurb:'Fork-join parallelism, work, span, parallelism, greedy scheduling.',
+ lead:'Use many processors at once. The <b>fork-join</b> model with <b>spawn</b> and <b>sync</b> lets us analyze parallel algorithms with two numbers: <b>work</b> and <b>span</b>.',
+ reading:'CLRS Chapter 26', notes:'Topic 22',
+ videos:[],
+ prereq:[],
+ html:`<h2>Work and span</h2>
+ <div class="grid g2"><div class="card"><ul class="clean"><li><b>Work</b> T<sub>1</sub>: total time on one processor (all the nodes of the computation DAG).</li><li><b>Span</b> T<sub>∞</sub>: length of the longest path (critical path) in the DAG.</li><li><b>Work law:</b> T<sub>P</sub> ≥ T<sub>1</sub>/P. <b>Span law:</b> T<sub>P</sub> ≥ T<sub>∞</sub>.</li><li><b>Parallelism</b> = T<sub>1</sub>/T<sub>∞</sub>: the most speedup possible.</li><li>A greedy scheduler achieves T<sub>P</sub> ≤ T<sub>1</sub>/P + T<sub>∞</sub>.</li></ul></div>
+ <pre><code><span class="fn">P-FIB</span>(n)
+  <span class="kw">if</span> n ≤ 1
+      <span class="kw">return</span> n
+  x = <span class="kw">spawn</span> P-FIB(n - 1)   <span class="cm">// runs in parallel</span>
+  y = P-FIB(n - 2)
+  <span class="kw">sync</span>                    <span class="cm">// wait for the spawned call</span>
+  <span class="kw">return</span> x + y
+
+<span class="cm">// work  T1(n) = T1(n-1) + T1(n-2) + Θ(1) = Θ(φⁿ)</span>
+<span class="cm">// span  T∞(n) = max(T∞(n-1), T∞(n-2)) + Θ(1) = Θ(n)</span></code></pre></div>
+ <h2>Composing work and span</h2>
+ <table class="tbl"><tr><th>Composition</th><th>Work</th><th>Span</th></tr>
+ <tr><td>A then B (serial)</td><td>T₁(A) + T₁(B)</td><td>T∞(A) + T∞(B)</td></tr>
+ <tr><td>A ∥ B (parallel)</td><td>T₁(A) + T₁(B)</td><td>max(T∞(A), T∞(B))</td></tr>
+ <tr><td><b>parallel for</b> over n iterations</td><td>Θ(n) × body</td><td>Θ(lg n) + max body span</td></tr></table>
+ <div class="callout cyan">Parallel merge sort with a serial merge has work Θ(n lg n) but span Θ(n), so parallelism is only Θ(lg n). A parallel merge improves the span to Θ(lg³ n).</div>`,
+ eli5:{title:'Many hands make light work',pts:['👩‍🍳 Cooking dinner alone takes a long time. With friends, some tasks can happen at the same time.','📦 <b>Work</b> is the total amount of cooking to do, no matter who does it.','⛓️ <b>Span</b> is the longest chain of steps that must happen in order (you can\'t frost a cake before baking it).','🚀 Even with a million helpers, you can\'t finish faster than the span!','🧵 <b>spawn</b> means "a friend starts this now"; <b>sync</b> means "wait until the friends are done".']},
+ diagram:()=>fig(D.svg(720,220,(()=>{const N=[[80,110],[200,60],[200,160],[320,30],[320,90],[320,160],[440,60],[440,160],[560,110],[660,110]];const E=[[0,1],[0,2],[1,3],[1,4],[2,5],[3,6],[4,6],[5,7],[6,8],[7,8],[8,9]];const crit=['0-1','1-3','3-6','6-8','8-9'];let s=E.map(([a,b])=>{const c=crit.includes(a+'-'+b);return D.arrow(N[a][0]+14,N[a][1],N[b][0]-16,N[b][1],c?'warn':'mut',c?3.5:2);}).join('');N.forEach(([x,y],i)=>s+=D.node(x,y,'',[0,1,3,6,8,9].includes(i)?C.warn:C.acc,13));return s+D.text(360,205,'work T₁ = 10 nodes · span T∞ = 6 nodes (yellow critical path) · parallelism = 10/6 ≈ 1.7',12.5,C.txt);})()),
+  'A computation DAG: work counts all strands, span is the longest (critical) path.','Each dot is a task. The yellow chain must happen in order, so it decides the fastest possible finish time.'),
+ mc:[
+  ['The span T∞ of a parallel computation is:','The length of the longest path in its computation DAG',['The total number of strands','The number of processors','The running time on one processor'],'Also called the critical-path length.'],
+  ['Parallelism is defined as:','T₁ / T∞',['T∞ / T₁','T₁ · T∞','T_P / P'],'Maximum possible speedup.'],
+  ['The work law says:','T_P ≥ T₁ / P',['T_P ≤ T₁ / P','T_P ≥ T∞ · P','T_P = T₁'],'P processors do at most P units of work per step.'],
+  ['A greedy scheduler guarantees:','T_P ≤ T₁/P + T∞',['T_P = T∞','T_P ≤ T∞ / P','T_P ≥ T₁'],'Within a factor of 2 of optimal.'],
+  ['Running two computations A and B in parallel gives span:','max(T∞(A), T∞(B))',['T∞(A) + T∞(B)','min(T∞(A), T∞(B))','T₁(A) + T₁(B)'],'They overlap in time.'],
+  ['The span of P-FIB(n) is:','Θ(n)',['Θ(φⁿ)','Θ(lg n)','Θ(1)'],'T∞(n) = T∞(n−1) + Θ(1).'],
+  ['In the fork-join model, sync means:','Wait until all spawned children of this procedure have finished',['Start a new thread','Lock a shared variable','Terminate all processors'],'It joins the parallel strands.']
+ ]}
+);
+
+// ---- pseudocode challenges ----
+COMPOUNDS.push('initialize single source','floyd warshall');
+CODE.push(
+ {id:'dijkstra', topic:'t18', title:"Dijkstra's algorithm",
+  prompt:'Write <code>INITIALIZE-SINGLE-SOURCE(G, s)</code>, <code>RELAX(u, v, w)</code> and <code>DIJKSTRA(G, w, s)</code> using a min-priority queue Q keyed by v.d. Assume non-negative weights.',
+  starter:'INITIALIZE-SINGLE-SOURCE(G, s)\n    \n\nRELAX(u, v, w)\n    \n\nDIJKSTRA(G, w, s)\n    \n', define:['initializesinglesource','relax','dijkstra'], call:['initializesinglesource','relax','extractmin'], maxLoop:2,
+  correctness:[
+   {label:'Initializes every v.d = ∞ and s.d = 0', w:2, test:t=>/=\s*inf/.test(t) && /s\.d\s*=\s*0|d\s*\[\s*s\s*\]\s*=\s*0/.test(t), hint:'v.d = ∞ for all v, then s.d = 0'},
+   {label:'Builds a min-priority queue of vertices', w:1, test:t=>/\bq\s*=|insert\s*\(|buildminheap|minheap|priority/.test(t), hint:'Q = G.V (keyed by d)'},
+   {label:'Repeatedly EXTRACT-MINs the closest vertex', w:2, test:t=>/\bwhile\b/.test(t) && /extractmin\s*\(/.test(t), hint:'while Q ≠ ∅: u = EXTRACT-MIN(Q)'},
+   {label:'Relaxes every edge leaving u', w:2, test:t=>/\b(for|foreach)\b[^\n]*(adj|neighbors?)/.test(t) && /relax\s*\(/.test(t), hint:'for each v ∈ G.Adj[u]: RELAX(u, v, w)'},
+   {label:'RELAX tests and updates v.d and v.π', w:3, test:(t,P)=>{const b=P.body('relax');return /(>\s*\w+\.d\s*\+\s*w|>\s*d\s*\[\s*u\s*\]\s*\+)/.test(b) && /(\.d\s*=\s*\w+\.d\s*\+\s*w|d\s*\[\s*v\s*\]\s*=\s*d\s*\[\s*u\s*\]\s*\+)/.test(b) && /(pi|\.p\b|parent)/.test(b);}, hint:'if v.d > u.d + w(u, v): v.d = u.d + w(u, v); v.π = u'}
+  ],
+  efficiency:[
+   {label:'Uses a min-priority queue: O((V + E) lg V)', w:6, test:t=>/extractmin|heap|priority/.test(t), hint:'A binary heap gives O(lg V) EXTRACT-MIN.'},
+   {label:'Updates the queue when a key drops (DECREASE-KEY or re-insert)', w:4, test:t=>/decreasekey|insert\s*\(|push\s*\(/.test(t), hint:'DECREASE-KEY(Q, v, v.d) inside RELAX.'}
+  ],
+  penalties:[{label:'Scans all of Q to find the minimum (O(V²))', p:3, test:(t,P)=>P.lines.some(l=>l.loopDepth>=1 && /\b(for|foreach)\b[^\n]*(\binq\b|\bin\s+q\b|g\.v)/.test(l.t)), hint:'Let the heap find the minimum.'}],
+  model:`INITIALIZE-SINGLE-SOURCE(G, s)
+    for each vertex v in G.V
+        v.d = ∞
+        v.π = NIL
+    s.d = 0
+
+RELAX(u, v, w)
+    if v.d > u.d + w(u, v)
+        v.d = u.d + w(u, v)
+        v.π = u
+        DECREASE-KEY(Q, v, v.d)      // keep the heap up to date
+
+DIJKSTRA(G, w, s)
+    INITIALIZE-SINGLE-SOURCE(G, s)
+    S = ∅
+    Q = G.V                          // min-priority queue keyed by d
+    while Q ≠ ∅
+        u = EXTRACT-MIN(Q)
+        S = S ∪ {u}
+        for each vertex v in G.Adj[u]
+            RELAX(u, v, w)`},
+
+ {id:'floyd', topic:'t19', title:'Floyd-Warshall',
+  prompt:'Write <code>FLOYD-WARSHALL(W, n)</code> that returns the matrix D of shortest-path distances between all pairs, given the n × n weight matrix W (∞ where there is no edge).',
+  starter:'FLOYD-WARSHALL(W, n)\n    \n', define:['floydwarshall'], call:[], maxLoop:3,
+  correctness:[
+   {label:'Starts D from the weight matrix W', w:2, test:t=>/\bd\s*=\s*(w\b|copy)/.test(t) || /d\s*\[\s*i\s*(,|\]\s*\[)\s*j\s*\]\s*=\s*w\s*\[/.test(t), hint:'D = W'},
+   {label:'Outermost loop is over the intermediate vertex k', w:3, test:t=>{const k=t.search(/\bfor\b[^\n]*\bk\s*(=|in)/), i=t.search(/\bfor\b[^\n]*\bi\s*(=|in)/);return k>=0 && i>=0 && k<i;}, hint:'for k = 1 to n (then i, then j)'},
+   {label:'Updates D[i, j] with D[i, k] + D[k, j]', w:3, test:t=>/d\s*\[\s*i\s*(,|\]\s*\[)\s*k\s*\]\s*\+\s*d\s*\[\s*k\s*(,|\]\s*\[)\s*j\s*\]/.test(t), hint:'D[i, j] = min(D[i, j], D[i, k] + D[k, j])'},
+   {label:'Returns D', w:2, test:t=>/return\s+d\b/.test(t), hint:'return D'}
+  ],
+  efficiency:[
+   {label:'Exactly three nested loops: Θ(n³)', w:5, test:(t,P)=>P.maxLoop===3, hint:'k, i, j loops each 1..n.'},
+   {label:'Single matrix updated in place: Θ(n²) space', w:5, test:t=>!/d\s*\(\s*k|d\s*\^|d\s*\[\s*k\s*\]\s*\[\s*i\s*\]\s*\[/.test(t), hint:'You do not need a separate matrix per k.'}
+  ],
+  penalties:[{label:'Runs a single-source algorithm from every vertex instead', p:2, test:t=>/(dijkstra|bellman)/.test(t), hint:'Floyd-Warshall is a direct DP.'}],
+  model:`FLOYD-WARSHALL(W, n)
+    D = copy of W                    // D[i, j] = w(i, j), or ∞ if no edge
+    for k = 1 to n                   // allow vertex k as an intermediate stop
+        for i = 1 to n
+            for j = 1 to n
+                D[i, j] = min(D[i, j], D[i, k] + D[k, j])
+    return D`}
+);
+
+GEN.push({topic:'t18', gen(){
+  const g = randomGraph(), adj = {}; g.nodes.forEach(n => adj[n.id] = []); g.edges.forEach(e => { adj[e.u].push([e.v, e.w]); adj[e.v].push([e.u, e.w]); });
+  const s = g.nodes[0].id, d = {}, done = {}; g.nodes.forEach(n => d[n.id] = Infinity); d[s] = 0;
+  for (let k = 0; k < g.nodes.length; k++){ let u = null; for (const v in d) if (!done[v] && (u === null || d[v] < d[u])) u = v; done[u] = true; adj[u].forEach(([v, w]) => { if (d[u] + w < d[v]) d[v] = d[u] + w; }); }
+  const t = pick(Object.keys(d).filter(v => v !== s)), direct = (adj[s].find(([v]) => v === t) || [])[1];
+  return {q:`Run <b>Dijkstra from ${s}</b> on this undirected weighted graph. What is the shortest-path distance <b>δ(${s}, ${t})</b>?`, graph: renderGraph(g), ...opts4(d[t], [direct, d[t] + 1, d[t] + 2, d[t] - 1].filter(v => v !== undefined && v > 0)),
+    explain:`Final distances from ${s}: ${Object.entries(d).sort((a, b) => a[1] - b[1]).map(([v, x]) => `${v}=${x}`).join(', ')}.`};
+}});
+
 // ======================= COURSE ENGINE: MIDTERM GROUPS, PAGES, NAV =======================
 const GROUPS = [
  {id:'mt1', name:'Midterm 1', icon:'1️⃣', color:'#60a5fa', date:'Wed 09/09 · Week 3', covers:'Topics 1–4, 7', topics:['t01','t03','t02','t07'], note:'Week 3 Monday (09/07) is the Labor Day holiday, so no topic is excluded.'},
  {id:'mt2', name:'Midterm 2', icon:'2️⃣', color:'#fb7185', date:'Wed 10/07 · Week 7', covers:'Topics 5, 6, 8, 9, 11', topics:['t09','t08','t11','t05a','t05b','t06'], excluded:'t10a'},
  {id:'mt3', name:'Midterm 3', icon:'3️⃣', color:'#22c55e', date:'Wed 10/28 · Week 10', covers:'Topics 10, 12', topics:['t10a','t10b','t12s','t12a','t12b'], excluded:'t13'},
- {id:'after', name:'After Midterm 3', icon:'🚀', color:'#a78bfa', date:'Week 10 onward', covers:'Topics 13, 14, 16, 17 and Fibonacci heaps', topics:['t13','t14a','t14b','ds','mst','kruskal','prim','fib']}
+ {id:'mt4', name:'Midterm 4', icon:'4️⃣', color:'#a78bfa', date:'Wed 11/25 · Week 14', covers:'Topics 13, 14, 16–19', topics:['t13','t14a','t14b','ds','mst','kruskal','prim','fib','t18','t19'], excluded:'t20'},
+ {id:'final', name:'Final Exam', icon:'🎓', color:'#f59e0b', date:'Fri 9:45–11:45am · Finals week', covers:'Cumulative: Topics 1–14, 16–20, 22, 24 &amp; 25', topics:['t20','t24','t25','t22'], final:true, note:'The final is cumulative. These are the topics taught after Midterm 4 (Wed 12/09 is the course review). Use “Practice the whole course” to drill everything.'}
 ];
 const TMETA = {};
 COURSE.forEach(t => {
@@ -2590,9 +2961,11 @@ COURSE.forEach(t => {
 });
 [['ds','#16','Topic 16'],['mst','#17A','Topic 17A'],['kruskal','#17B','Topic 17B'],['prim','#17C','Topic 17C'],['fib','Ch 19','CLRS supplement']].forEach(([id, num, when]) =>
   TMETA[id] = {id, num, when, short: TOPICS[id].name, icon: TOPICS[id].icon, color: TOPICS[id].color, blurb: TOPICS[id].blurb});
-const EXIST_VIDS = {mst: [['Mx-dvvSE4Qc', '17A · Minimum Spanning Trees']], kruskal: [['1BnpXYm7LKY', '17B · MST: Kruskal']], prim: [['qegY0R78QMQ', '17C · MST: Prim']]};
+const EXIST_VIDS = {mst: [['Mx-dvvSE4Qc', '17A · Minimum Spanning Trees'], ['FPEMBWg_WlY', 'MIT Lecture 16 (from 23:26)', 1406]], kruskal: [['1BnpXYm7LKY', '17B · MST: Kruskal']], prim: [['qegY0R78QMQ', '17C · MST: Prim']]};
 
 const ytLite = (id, title, start, end) => `<div class="vcard"><div class="video lite" data-yt="${id}" data-start="${start || ''}" data-end="${end || ''}" title="${esc(title)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="play">▶</span></div><div class="vt">${title}</div></div>`;
+const pkey = x => x.replace(/&amp;/g, '&').toLowerCase().replace(/[^a-z0-9]/g, '');
+const prereqChip = p => { const u = SCHED.prereq[pkey(p)]; return u ? `<a class="chip link" href="${u}" target="_blank" rel="noopener">📄 ${p} ↗</a>` : `<span class="chip">${p}</span>`; };
 document.addEventListener('click', e => {
   const v = e.target.closest('.video.lite');
   if (v){ const p = new URLSearchParams({autoplay: 1, rel: 0}); if (v.dataset.start) p.set('start', v.dataset.start); if (v.dataset.end) p.set('end', v.dataset.end);
@@ -2602,11 +2975,11 @@ document.addEventListener('click', e => {
 
 function topicPage(t){
   const g = GROUPS.find(x => x.topics.includes(t.id));
-  const res = [`<span class="res">📖 <b>Reading:</b> ${t.reading}</span>`, `<span class="res">📝 <b>Lecture notes:</b> ${t.notes || 'none for this topic'}</span>`,
+  const res = [`<span class="res">📖 <b>Reading:</b> ${t.reading}</span>`, `<span class="res">📝 <b>Lecture notes:</b> ${t.notes ? t.notes.split(', ').map(n => SCHED.notes[n] ? `<a href="${SCHED.notes[n]}" target="_blank" rel="noopener">${n} ↗</a>` : n).join(', ') : 'none for this topic'}</span>`,
     `<span class="res">🎬 <b>Screencasts:</b> ${t.videos.length ? [...new Set(t.videos.map(v => v[1].split(' · ')[0]))].join(', ') : 'none'}</span>`];
   (t.extra || []).forEach(([l, u]) => res.push(`<a class="res link" href="${u}" target="_blank" rel="noopener">🔗 ${l} ↗</a>`));
   return `<section class="page hidden" id="page-${t.id}">
-  <div class="row" style="gap:8px"><span class="eyebrow" style="color:${t.color};border-color:${t.color}55;background:${t.color}14">${t.when} · Topic ${t.num}</span>${g.id !== 'after' ? `<a class="eyebrow mt-tag" href="#${g.id}">📝 Core concept for ${g.name}</a>` : ''}</div>
+  <div class="row" style="gap:8px"><span class="eyebrow" style="color:${t.color};border-color:${t.color}55;background:${t.color}14">${t.when} · Topic ${t.num}</span><a class="eyebrow mt-tag" href="#${g.id}">📝 ${g.final ? 'New topic for the Final Exam' : 'Core concept for ' + g.name}</a></div>
   <h1>${t.title} <span class="grad">${t.grad}</span></h1>
   <p class="lead">${t.lead}</p>
   <div class="row res-row">${res.join('')}</div>
@@ -2615,20 +2988,20 @@ function topicPage(t){
   <h2>🎬 Screencasts</h2>
   ${t.videos.length ? `<div class="vgrid">${t.videos.map(v => ytLite(...v)).join('')}</div>` : '<p class="stat-label">No course screencasts for this topic. Use the reading and any extra video below.</p>'}
   ${(t.mit || []).length ? `<h3>Additional screencasts (MIT 6.046J)</h3><div class="vgrid">${t.mit.map(v => ytLite(...v)).join('')}</div>` : ''}
-  ${t.prereq.length ? `<h2>📚 Prerequisite review</h2><div class="chips">${t.prereq.map(p => `<span class="chip">${p}</span>`).join('')}</div>` : ''}
+  ${t.prereq.length ? `<h2>📚 Prerequisite review</h2><div class="chips">${t.prereq.map(prereqChip).join('')}</div>` : ''}
   <h2>🧠 Practice this topic</h2>
   <div class="card qa" data-topic="${t.id}"></div>
 </section>`;
 }
 function groupPage(g){
-  const ex = g.excluded && TMETA[g.excluded], after = g.id === 'after';
+  const ex = g.excluded && TMETA[g.excluded], fin = !!g.final;
   return `<section class="page hidden" id="page-${g.id}">
-  <span class="eyebrow" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} ${after ? 'Topics after the last midterm' : 'Exam'} · ${g.date}</span>
-  <h1>${g.name} <span class="grad">${after ? 'Topics' : 'Core Concepts'}</span></h1>
-  <p class="lead">${after ? 'Everything taught from the Monday of Midterm 3 week onward: greedy algorithms, graphs, disjoint sets, minimum spanning trees and Fibonacci heaps.' : `Every topic taught before the week of ${g.name}. Official exam coverage: <b>${g.covers}</b>.`}</p>
-  <div class="row"><button class="btn primary" data-practice="${g.id}">🎯 Practice ${g.name}: 10 random questions</button><a class="btn" href="#${g.topics[0]}">📘 Start with ${TMETA[g.topics[0]].short}</a></div>
-  ${ex ? `<div class="callout">Not on this exam: <b>Topic ${ex.num} ${ex.short}</b>, taught ${ex.when.split(' · ')[1]} (the Monday of exam week). It counts toward the next exam.</div>` : g.note ? `<div class="callout cyan">${g.note}</div>` : ''}
-  <h2>${after ? 'Topics' : 'Core concepts'}</h2>
+  <span class="eyebrow" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} ${fin ? 'Final exam' : 'Exam'} · ${g.date}</span>
+  <h1>${g.name} <span class="grad">${fin ? 'New Topics' : 'Core Concepts'}</span></h1>
+  <p class="lead">${fin ? 'Cumulative final on <b>all topics (1–14, 16–20, 22, 24 &amp; 25)</b>. Below are the topics taught after Midterm 4; every earlier topic is in the Midterm 1–4 tabs.' : `Every topic taught before the week of ${g.name}. Official exam coverage: <b>${g.covers}</b>.`}</p>
+  <div class="row">${fin ? '<button class="btn primary" data-practice="all">🎓 Practice the whole course: 10 random questions</button>' : ''}<button class="btn ${fin ? '' : 'primary'}" data-practice="${g.id}">🎯 Practice ${fin ? 'the new topics' : g.name + ': 10 random questions'}</button><a class="btn" href="#${g.topics[0]}">📘 Start with ${TMETA[g.topics[0]].short}</a></div>
+  ${ex ? `<div class="callout">Not on this exam: <b>Topic ${ex.num} ${ex.short}</b>, taught ${ex.when.split(' · ')[1]} (the Monday of exam week). It counts toward the next exam.</div>` : ''}${g.note ? `<div class="callout cyan">${g.note}</div>` : ''}
+  <h2>${fin ? 'New topics for the final' : 'Core concepts'}</h2>
   <div class="grid g3 group-cards" data-group="${g.id}"></div>
 </section>`;
 }
@@ -2642,26 +3015,34 @@ function topicCard(id){
 
 // ---- diagrams & simple-mode text for overview pages ----
 GROUPS.forEach(g => {
-  const ts = g.topics.map(id => TMETA[id]), after = g.id === 'after';
+  const ts = g.topics.map(id => TMETA[id]), after = false;
   DIAGRAMS[g.id] = () => { const per = 4, rows = Math.ceil(ts.length / per); let s = '';
     ts.forEach((t, i) => { const x = 20 + (i % per) * 170, y = 30 + Math.floor(i / per) * 80; s += D.box(x, y, 150, 54, t.num, t.color, t.short.length > 21 ? t.short.slice(0, 20) + '…' : t.short); if (i % per < per - 1 && i < ts.length - 1) s += D.arrow(x + 150, y + 27, x + 167, y + 27, 'mut', 2); });
     const ey = 30 + (rows - 1) * 40;
     if (!after) s += D.arrow(690, ey + 27, 712, ey + 27, 'warn', 3) + D.box(715, ey, 150, 54, g.name, C.warn, g.date.split(' · ')[0]);
     return fig(D.svg(after ? 700 : 880, 50 + rows * 80, s), after ? 'Topics covered after Midterm 3, in the order they are taught.' : `Everything taught before exam week feeds into ${g.name} (${g.covers}).`, after ? 'These are the newest lessons, in order.' : `Learn these boxes, in order, to be ready for ${g.name}!`); };
-  ELI5[g.id] = {title: after ? 'What comes after Midterm 3?' : `What do I need for ${g.name}?`, pts: ts.map(t => `${t.icon} <b>${t.short}</b>: ${(ELI5[t.id] || {}).title || t.blurb}`)};
+  ELI5[g.id] = {title: g.final ? 'What is new for the final exam?' : `What do I need for ${g.name}?`, pts: ts.map(t => `${t.icon} <b>${t.short}</b>: ${(ELI5[t.id] || {}).title || t.blurb}`)};
 });
 DIAGRAMS.home = () => fig(D.svg(780, 170, D.text(390, 26, 'the semester at a glance', 13, C.txt, 'middle', 700) +
-  GROUPS.map((g, i) => D.box(20 + i * 190, 50, 165, 70, g.name, g.color, g.date.split(' · ')[0]) + (i < 3 ? D.arrow(185 + i * 190, 85, 207 + i * 190, 85, 'mut', 2.5) : '')).join('') +
+  GROUPS.map((g, i) => D.box(20 + i * 152, 50, 135, 70, g.name, g.color, g.date.split(' · ')[0]) + (i < GROUPS.length - 1 ? D.arrow(155 + i * 152, 85, 170 + i * 152, 85, 'mut', 2.5) : '')).join('') +
   D.text(390, 152, 'each exam covers the topics taught before its exam week', 12, C.mut)),
-  'Topics are grouped by the midterm they prepare you for. Use the sidebar groups or the cards below.', 'The school year is split into 4 chunks. Each chunk ends with a big test (except the last one, so far).');
+  'Topics are grouped by the midterm they prepare you for. Use the sidebar groups or the cards below.', 'The semester is split into 5 chunks. Each one ends with a big test: four midterms and the final.');
 ELI5.home = {title: 'What is this site?', pts: ['📚 It is a study buddy for ICS 311, the class about <b>algorithms</b> (smart recipes for computers).', '🗂️ The lessons are sorted into piles, one pile for each big test (midterm).', '🎬 Every lesson has notes, pictures, videos, and practice questions.', '🧒 Keep this switch on to see a simple explanation at the top of every page.']};
+
+// ---- course-site links for the Topic 16–17 pages ----
+['ds','mst','kruskal','prim','fib'].forEach(id => {
+  const pg = document.getElementById('page-' + id), lead = pg && pg.querySelector(':scope > p.lead'); if (!lead) return;
+  const n = id === 'ds' || id === 'fib' ? 'Topic 16' : 'Topic 17';
+  lead.insertAdjacentHTML('afterend', `<div class="row res-row"><span class="res">📅 <b>Week 12 · Mon 11/09</b></span><span class="res">📖 <b>Reading:</b> CLRS 19.1, 19.3 &amp; 21; Lemmas 19.11–19.13, Theorem 19.14</span><span class="res">📝 <b>Lecture notes:</b> <a href="${SCHED.notes[n]}" target="_blank" rel="noopener">${n} ↗</a>${n === 'Topic 16' ? ' (skip the linked-list representation: the forest is much better)' : ''}</span><span class="res">🎬 <b>Screencasts:</b> 17A, 17B, 17C</span></div>`);
+  if (id === 'mst') pg.querySelector('.qa').insertAdjacentHTML('beforebegin', `<h2>🎬 Additional screencast</h2><div class="vgrid">${ytLite('FPEMBWg_WlY', 'MIT Lecture 16 (from 23:26)', 1406)}</div><h2>📚 Prerequisite review</h2><div class="chips">${['ICS 241 Ch 11.4: Spanning Trees', 'ICS 241 Ch 11.5: Minimum Spanning Trees'].map(prereqChip).join('')}</div>`);
+});
 
 // ---- render pages & nav ----
 document.getElementById('page-videos').insertAdjacentHTML('beforebegin', GROUPS.map(g => groupPage(g) + g.topics.filter(id => COURSE.some(t => t.id === id)).map(id => topicPage(TMETA[id])).join('')).join(''));
 function buildNav(){
   const link = id => { const t = TMETA[id]; return `<a href="#${id}" data-page="${id}"><span class="dot" style="background:${t.color}"></span><span class="nnum">${t.num}</span><span class="nlabel">${t.short}</span></a>`; };
   document.getElementById('nav').innerHTML = `<a href="#home" data-page="home"><span class="dot" style="background:#e5e7eb"></span>Overview</a>` +
-    GROUPS.map(g => `<details class="nav-group" data-group="${g.id}"><summary><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0]}</span></summary><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.id === 'after' ? 'Overview' : 'Exam overview'}</a>${g.topics.map(link).join('')}</details>`).join('') +
+    GROUPS.map(g => `<details class="nav-group" data-group="${g.id}"><summary><span>${g.icon} ${g.name}</span><span class="gdate">${g.date.split(' · ')[0]}</span></summary><a href="#${g.id}" data-page="${g.id}" class="gover"><span class="dot" style="background:${g.color}"></span>${g.final ? 'Final exam overview' : 'Exam overview'}</a>${g.topics.map(link).join('')}</details>`).join('') +
     `<div class="nav-label">Watch &amp; Practice</div><a href="#videos" data-page="videos"><span class="dot" style="background:#f87171"></span>All screencasts</a><a href="#practice" data-page="practice"><span class="dot" style="background:linear-gradient(135deg,#8b5cf6,#22d3ee)"></span>Practice Arena</a>`;
 }
 buildNav();
@@ -2672,7 +3053,7 @@ function renderHome(){
   if (hs) hs.innerHTML = [[a, 'Questions answered'], [a ? Math.round(100 * c / a) + '%' : '—', 'Average score'], [`${codes.length}/${CODE.length}`, 'Pseudocode challenges attempted'], [codes.length ? Math.round(codes.reduce((x, y) => x + y, 0) / codes.length) + '%' : '—', 'Best pseudocode avg']]
     .map(([v, l]) => `<div class="card"><div class="stat grad">${v}</div><div class="stat-label">${l}</div></div>`).join('');
   const tc = document.getElementById('topic-cards');
-  if (tc) tc.innerHTML = GROUPS.map(g => `<div class="home-group"><div class="hg-head"><h3>${g.icon} ${g.name}</h3><span class="pill">${g.date}</span>${g.id !== 'after' ? `<span class="pill">${g.covers}</span>` : ''}<a class="btn sm ghost" href="#${g.id}">Overview →</a></div><div class="grid g3">${g.topics.map(topicCard).join('')}</div></div>`).join('');
+  if (tc) tc.innerHTML = GROUPS.map(g => `<div class="home-group"><div class="hg-head"><h3>${g.icon} ${g.name}</h3><span class="pill">${g.date}</span><span class="pill">${g.covers}</span><a class="btn sm ghost" href="#${g.id}">Overview →</a></div><div class="grid g3">${g.topics.map(topicCard).join('')}</div></div>`).join('');
   document.querySelectorAll('.group-cards[data-group]').forEach(el => { el.innerHTML = GROUPS.find(x => x.id === el.dataset.group).topics.map(topicCard).join(''); });
 }
 function renderVideos(){
@@ -2700,11 +3081,11 @@ function renderPractice(preset){
   };
 }
 function startPractice(groupId){
-  const g = GROUPS.find(x => x.id === groupId); location.hash = 'practice';
-  renderPractice(g.topics); runQuiz(document.getElementById('practice-root'), {topics: g.topics, mode: 'mixed', n: 10});
+  const topics = groupId === 'all' ? Object.keys(TOPICS) : GROUPS.find(x => x.id === groupId).topics; location.hash = 'practice';
+  renderPractice(topics); runQuiz(document.getElementById('practice-root'), {topics, mode: 'mixed', n: 10});
 }
 DIAGRAMS.videos = () => fig(D.svg(780, 150, GROUPS.map((g, i) => { const n = g.topics.reduce((s, id) => s + ((TMETA[id].videos || EXIST_VIDS[id] || []).length + (TMETA[id].mit || []).length), 0);
-  return D.box(20 + i * 190, 30, 165, 70, g.name, g.color, n + ' videos') + (i < 3 ? D.arrow(185 + i * 190, 65, 207 + i * 190, 65, 'mut', 2.5) : ''); }).join('') + D.text(390, 135, 'click any thumbnail to play it in place', 12, C.mut)),
+  return D.box(20 + i * 152, 30, 135, 70, g.name, g.color, n + ' videos') + (i < GROUPS.length - 1 ? D.arrow(155 + i * 152, 65, 170 + i * 152, 65, 'mut', 2.5) : ''); }).join('') + D.text(390, 135, 'click any thumbnail to play it in place', 12, C.mut)),
   'Screencasts are grouped by the midterm they prepare you for, in teaching order.', 'Pick your test, then watch the videos from left to right.');
 ELI5.videos = {title: 'Watching the videos', pts: ['🎬 Every lesson has short videos from the teacher. They are sorted by which big test they help with.', '▶️ Tap a picture to play the video right on the page.', '✂️ Some videos only play the part your schedule says to watch.', '💡 Tip: pause and try to guess the next step before the teacher shows it!']};
 

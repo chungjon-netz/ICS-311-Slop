@@ -238,3 +238,6 @@ pre .cm{color:#6b7280;font-style:italic}
 .pg-head{margin-bottom:8px}
 .nav .nnum{white-space:nowrap;min-width:48px}
 .nav .nlabel{white-space:normal;overflow:visible;line-height:1.3}
+
+a.chip.link,.res a{color:var(--accent2)}
+a.chip.link:hover{border-color:var(--accent2);text-decoration:none}

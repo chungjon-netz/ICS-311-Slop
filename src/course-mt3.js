@@ -74,7 +74,7 @@ COURSE.push(
  blurb:'Recursive search: make a choice, recurse, undo. N-Queens, subset sum.',
  lead:'<b>Backtracking</b> builds a solution one decision at a time, recursing on each choice and <b>undoing</b> it when it leads to a dead end. It is the brute-force starting point for dynamic programming.',
  reading:'Jeff Erickson, <i>Algorithms</i>, Chapter 2 (sections 2.1, 2.3–2.4, 2.6, 2.8). If you are shaky on recursion, review Chapter 1 first.', notes:null,
- videos:[], extra:[['Jeff Erickson\'s Algorithms textbook (free online)','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ videos:[], extra:[['Erickson Ch 2: Backtracking (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/02-backtracking.pdf'],['Erickson Ch 1: Recursion (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/01-recursion.pdf']],
  prereq:[],
  html:`<h2>The pattern</h2>
  <div class="grid g2"><div class="card"><ul class="clean"><li>A solution is a sequence of decisions x₁, x₂, …, x_n.</li><li>At each step, try every option for the next decision that is consistent with the choices so far.</li><li>Recurse. If the recursion fails, <b>undo</b> the choice and try the next option.</li><li>The recursive structure forms a <b>recursion tree</b> of partial solutions; pruning cuts off branches early.</li></ul></div>
@@ -107,7 +107,7 @@ COURSE.push(
  reading:'CLRS Chapter 14.1–14.3 and Chapter 3 of Jeff Erickson\'s textbook (through Section 3.5)', notes:'Topic 12A',
  videos:[['RYPsOJmhwgE','12A · Dynamic Programming Intro'],['0tQ3ah0Fddw','12B · DP Steps (minutes 0:00–5:00)',0,300],['QzgqDJIJtNY','12D · DP Applications (0:00–6:16)',0,376],['QzgqDJIJtNY','12D · DP Applications (9:23–end)',563]],
  mit:[['V5hZoJ6uK-s','MIT Lecture 15: Dynamic Programming']],
- extra:[['Jeff Erickson\'s Algorithms, Chapter 3','https://jeffe.cs.illinois.edu/teaching/algorithms/']],
+ extra:[['Jeff Erickson\'s Algorithms, Chapter 3 (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf']],
  prereq:[],
  html:`<h2>The four steps</h2>
  <div class="grid g2"><div class="card"><ol><li>Characterize the structure of an optimal solution.</li><li>Recursively define the value of an optimal solution.</li><li>Compute the value, usually <b>bottom-up</b> in a table.</li><li>Construct an optimal solution from the stored choices.</li></ol></div>
@@ -144,6 +144,7 @@ COURSE.push(
  reading:'CLRS Chapter 14.4–14.5; more examples in Erickson Chapter 3 (sections 3.6–3.9)', notes:'Topic 12B',
  videos:[['0tQ3ah0Fddw','12B · DP Steps and LCS (from 5:00)',300],['dFObo5BeJ0k','12C · LCS Example Continued'],['QzgqDJIJtNY','12D · DP Applications Summary (from 6:17)',377]],
  mit:[['V5hZoJ6uK-s','MIT Lecture 15: Dynamic Programming']],
+ extra:[['Erickson Ch 3: Dynamic Programming (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/03-dynprog.pdf']],
  prereq:[],
  html:`<h2>Longest common subsequence</h2>
  <div class="grid g2"><div class="card"><p>A <b>subsequence</b> keeps order but may skip characters. LCS("ABCBDAB", "BDCABA") has length 4 (e.g. "BCBA").</p>

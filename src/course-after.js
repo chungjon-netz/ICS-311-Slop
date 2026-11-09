@@ -39,6 +39,7 @@ COURSE.push(
  reading:'CLRS Sections 20.1–20.3; Chapter 5 of Jeff Erickson\'s notes; Goodrich &amp; Tamassia section on Graph Representations (Google Drive Resources folder)', notes:'Topic 14A',
  videos:[['IdStgDmUlXM','14A · Graphs Definitions'],['pyDxf58rK_0','14B · Graph ADT Representations'],['A8SKOFseOyU','14C · BFS'],['emiWSGizJlc','14D · DFS Introduction'],['HMPaUoGfsPo','14E · DFS Example Properties']],
  mit:[['FPEMBWg_WlY','MIT Lecture 16 (until 23:26)',0,1406]],
+ extra:[['Erickson Ch 5: Graphs (PDF)','http://jeffe.cs.illinois.edu/teaching/algorithms/book/05-graphs.pdf']],
  prereq:['ICS 241 Ch 10.1: Graphs and Graph Models','ICS 241 Ch 10.2: Graph Terminology and Special Types of Graphs','ICS 241 Ch 10.3: Representing Graphs and Graph Isomorphism','ICS 241 Ch 10.4: Connectivity','ICS 241 Ch 11.4: Spanning Trees','ICS 241: Graphs'],
  html:`<h2>Representations</h2>
  <table class="tbl"><tr><th></th><th>Adjacency list</th><th>Adjacency matrix</th></tr>
