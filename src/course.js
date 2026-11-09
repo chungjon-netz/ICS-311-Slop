@@ -37,6 +37,7 @@ function topicPage(t){
   <p class="lead">${t.lead}</p>
   <div class="row res-row">${res.join('')}</div>
   ${t.warn ? `<div class="callout" style="border-color:var(--warn);background:rgba(251,191,36,.08)">⏰ ${t.warn}</div>` : ''}
+  ${learnBlock(t.id)}
   ${t.html}
   <h2>🎬 Screencasts</h2>
   ${t.videos.length ? `<div class="vgrid">${t.videos.map(v => ytLite(...v)).join('')}</div>` : '<p class="stat-label">No course screencasts for this topic. Use the reading and any extra video below.</p>'}
@@ -54,9 +55,28 @@ function groupPage(g){
   <p class="lead">${fin ? 'Cumulative final on <b>all topics (1–14, 16–20, 22, 24 &amp; 25)</b>. Below are the topics taught after Midterm 4; every earlier topic is in the Midterm 1–4 tabs.' : `Every topic taught before the week of ${g.name}. Official exam coverage: <b>${g.covers}</b>.`}</p>
   <div class="row">${fin ? '<button class="btn primary" data-practice="all">🎓 Practice the whole course: 10 random questions</button>' : ''}<button class="btn ${fin ? '' : 'primary'}" data-practice="${g.id}">🎯 Practice ${fin ? 'the new topics' : g.name + ': 10 random questions'}</button><a class="btn" href="#${g.topics[0]}">📘 Start with ${TMETA[g.topics[0]].short}</a></div>
   ${ex ? `<div class="callout">Not on this exam: <b>Topic ${ex.num} ${ex.short}</b>, taught ${ex.when.split(' · ')[1]} (the Monday of exam week). It counts toward the next exam.</div>` : ''}${g.note ? `<div class="callout cyan">${g.note}</div>` : ''}
+  ${reviewBlock(g)}
   <h2>${fin ? 'New topics for the final' : 'Core concepts'}</h2>
   <div class="grid g3 group-cards" data-group="${g.id}"></div>
 </section>`;
+}
+
+function learnBlock(id){
+  const L = LEARN[id]; if (!L) return '';
+  return `<div class="learn card"><div class="learn-head"><h2 style="margin:0">🎯 Learn it on purpose</h2><span class="pill">core concepts</span></div>
+  ${L.goal ? `<p class="learn-goal"><b>Goal:</b> ${L.goal}</p>` : ''}
+  <div class="grid g2"><div><h3>🔑 Key ideas to own</h3><ol class="keys">${L.key.map(k => `<li>${k}</li>`).join('')}</ol></div>
+  <div><h3>⚠️ Common mistakes</h3><ul class="clean">${L.mistakes.map(m => `<li>${m}</li>`).join('')}</ul></div></div>
+  <h3>🧠 Check yourself <span class="stat-label" style="font-weight:400">· answer out loud or on paper before you peek</span></h3>
+  <div class="prompts">${L.prompts.map(([q, a], i) => `<details class="prompt"><summary><span class="pn">${i + 1}</span>${q}</summary><div class="pa">${a}</div></details>`).join('')}</div>
+  <p class="habit">📌 <b>Study habit:</b> ${L.habit || 'Close the page, write the key ideas from memory, then compare. Re-test yourself tomorrow and again in 3 days.'}</p></div>`;
+}
+function reviewBlock(g){
+  const R = REVIEW[g.id]; if (!R) return '';
+  return `<h2>🔗 Review: how each topic feeds into the next</h2>
+  <div class="chain">${R.chain.map(([id, txt], i) => `<div class="chain-step"><a class="chain-node" href="#${id}" style="border-color:${TMETA[id].color}"><span class="tnum" style="color:${TMETA[id].color}">${TMETA[id].num}</span> ${TMETA[id].short}</a><div class="chain-txt">${txt}</div>${i < R.chain.length - 1 ? '<div class="chain-arrow">↓</div>' : ''}</div>`).join('')}</div>
+  <div class="grid g2"><div class="card"><h3>✅ Can you…</h3><ul class="clean checklist">${R.checklist.map(x => `<li><label><input type="checkbox"> ${x}</label></li>`).join('')}</ul></div>
+  <div class="card"><h3>🗓️ Review plan</h3><ol>${R.plan.map(x => `<li>${x}</li>`).join('')}</ol></div></div>`;
 }
 function topicCard(id){
   const t = TMETA[id], s = store.byTopic[id], pct = s && s.a ? Math.round(100 * s.c / s.a) : 0;
@@ -90,6 +110,7 @@ ELI5.home = {title: 'What is this site?', pts: ['📚 It is a study buddy for IC
   if (id === 'mst') pg.querySelector('.qa').insertAdjacentHTML('beforebegin', `<h2>🎬 Additional screencast</h2><div class="vgrid">${ytLite('FPEMBWg_WlY', 'MIT Lecture 16 (from 23:26)', 1406)}</div><h2>📚 Prerequisite review</h2><div class="chips">${['ICS 241 Ch 11.4: Spanning Trees', 'ICS 241 Ch 11.5: Minimum Spanning Trees'].map(prereqChip).join('')}</div>`);
 });
 
+['ds','mst','kruskal','prim','fib'].forEach(id => { const pg = document.getElementById('page-' + id), rr = pg && pg.querySelector(':scope > .res-row'); if (rr) rr.insertAdjacentHTML('afterend', learnBlock(id)); });
 // ---- render pages & nav ----
 document.getElementById('page-videos').insertAdjacentHTML('beforebegin', GROUPS.map(g => groupPage(g) + g.topics.filter(id => COURSE.some(t => t.id === id)).map(id => topicPage(TMETA[id])).join('')).join(''));
 function buildNav(){
