@@ -39,6 +39,7 @@ function topicPage(t){
   ${t.warn ? `<div class="callout" style="border-color:var(--warn);background:rgba(251,191,36,.08)">⏰ ${t.warn}</div>` : ''}
   ${learnBlock(t.id)}
   ${t.html}
+  ${deepBlock(t.id)}
   <h2>🎬 Screencasts</h2>
   ${t.videos.length ? `<div class="vgrid">${t.videos.map(v => ytLite(...v)).join('')}</div>` : '<p class="stat-label">No course screencasts for this topic. Use the reading and any extra video below.</p>'}
   ${(t.mit || []).length ? `<h3>Additional screencasts (MIT 6.046J)</h3><div class="vgrid">${t.mit.map(v => ytLite(...v)).join('')}</div>` : ''}

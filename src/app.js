@@ -330,6 +330,7 @@ function route(){
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + id));
   document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
   const act = document.querySelector('.nav a.active'); if (act && act.closest('details')) act.closest('details').open = true;
+  mountDeep(document.getElementById('page-' + id));
   document.querySelector('.sidebar').classList.remove('open');
   window.scrollTo(0, 0);
 }
