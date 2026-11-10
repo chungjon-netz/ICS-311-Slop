@@ -267,7 +267,6 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .ps-list{margin:6px 0 12px;padding-left:18px;font-size:.9rem;color:var(--dim)}.ps-list li{margin:3px 0}.ps-steps{margin:6px 0;padding-left:20px}.ps-steps li{margin:4px 0}.ps-prob{margin-top:16px}.ps-prob .ps-q h3{margin-top:10px}
 
 /* sidebar: one line per entry */
-.app{grid-template-columns:290px 1fr}
 .sidebar{padding:22px 14px}
 .nav a,.nav-group summary{white-space:nowrap;min-width:0}
 .nav a{gap:8px}
