@@ -16,7 +16,7 @@ COURSE.forEach(t => {
   TMETA[id] = {id, num, when, short: TOPICS[id].name, icon: TOPICS[id].icon, color: TOPICS[id].color, blurb: TOPICS[id].blurb});
 const EXIST_VIDS = {mst: [['Mx-dvvSE4Qc', '17A · Minimum Spanning Trees'], ['FPEMBWg_WlY', 'MIT Lecture 16 (from 23:26)', 1406]], kruskal: [['1BnpXYm7LKY', '17B · MST: Kruskal']], prim: [['qegY0R78QMQ', '17C · MST: Prim']]};
 
-const ytLite = (id, title, start, end) => `<div class="vcard"><div class="video lite" data-yt="${id}" data-start="${start || ''}" data-end="${end || ''}" title="${esc(title)}"><img loading="lazy" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="play">▶</span></div><div class="vt">${title}</div></div>`;
+const ytLite = (id, title, start, end) => `<div class="vcard"><div class="video lite" data-yt="${id}" data-start="${start || ''}" data-end="${end || ''}" title="${esc(title)}"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt=""><span class="play">▶</span></div><div class="vt">${title}</div></div>`;
 const pkey = x => x.replace(/&amp;/g, '&').toLowerCase().replace(/[^a-z0-9]/g, '');
 const prereqChip = p => { const u = SCHED.prereq[pkey(p)]; return u ? `<a class="chip link" href="${u}" target="_blank" rel="noopener">📄 ${p} ↗</a>` : `<span class="chip">${p}</span>`; };
 document.addEventListener('click', e => {

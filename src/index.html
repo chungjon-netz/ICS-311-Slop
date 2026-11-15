@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ICS 311 · Algorithms Study Hub</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%237c3aed%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-size=%2716%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27sans-serif%27%3EA%3C/text%3E%3C/svg%3E">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("ics311-theme")||"dark"}catch(e){}</script>
 <style>
 /*__CSS__*/
@@ -140,7 +141,7 @@
         <li>MSTs are <b>not necessarily unique</b> (ties in weights). With distinct weights, the MST is unique.</li>
       </ul>
     </div>
-    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/Mx-dvvSE4Qc" title="Topic 17 A MST" allowfullscreen loading="lazy"></iframe></div>
+    <div class="video lite" data-yt="Mx-dvvSE4Qc" data-start="" data-end="" title="Topic 17 A MST"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/Mx-dvvSE4Qc/hqdefault.jpg" alt=""><span class="play">▶</span></div>
   </div>
 
   <h2>Generic greedy algorithm</h2>
@@ -201,7 +202,7 @@
           A = A ∪ {(u, v)}
           <span class="fn">UNION</span>(u, v)
   <span class="kw">return</span> A</code></pre>
-    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/1BnpXYm7LKY" title="Topic 17 B MST Kruskal" allowfullscreen loading="lazy"></iframe></div>
+    <div class="video lite" data-yt="1BnpXYm7LKY" data-start="" data-end="" title="Topic 17 B MST Kruskal"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/1BnpXYm7LKY/hqdefault.jpg" alt=""><span class="play">▶</span></div>
   </div>
   <p>Kruskal mirrors CONNECTED-COMPONENTS, but processes edges cheapest-first. It can "hop" around the graph growing several fragments at once, and on a disconnected graph it returns a <b>minimum spanning forest</b>.</p>
 
@@ -244,7 +245,7 @@
           <span class="kw">if</span> v ∈ Q <span class="kw">and</span> w(u, v) < v.key
               v.π = u
               <span class="fn">DECREASE-KEY</span>(Q, v, w(u, v))</code></pre>
-    <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/qegY0R78QMQ" title="Topic 17 C MST Prim" allowfullscreen loading="lazy"></iframe></div>
+    <div class="video lite" data-yt="qegY0R78QMQ" data-start="" data-end="" title="Topic 17 C MST Prim"><img loading="lazy" decoding="async" src="https://i.ytimg.com/vi/qegY0R78QMQ/hqdefault.jpg" alt=""><span class="play">▶</span></div>
   </div>
   <ul class="clean">
     <li>Queue holds vertices not yet in the tree; <b>key</b> = min weight of any edge connecting <span class="math">v</span> to the tree (∞ if none).</li>
