@@ -335,7 +335,7 @@ function route(){
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
-mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
+mountExtras(); mountLectures(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
 document.querySelectorAll('.qa[data-topic], .qa[data-topics]').forEach(mountQA);
 route();
 
