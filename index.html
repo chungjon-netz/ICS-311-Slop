@@ -5044,7 +5044,7 @@ CODE.push(
    {label:'Tracks the last accepted finish', w:2, test:t=>/last(Finish|End|f)|prev(Finish|End)/.test(t), hint:'lastFinish = finish of the last chosen activity'},
    {label:'Accepts only compatible activities (start ≥ lastFinish)', w:3, test:t=>/start[^\n]*>=|>=\s*last|a\.s\s*>=|s\s*>=\s*last/.test(t), hint:'if a.start >= lastFinish'},
    {label:'Increments count on acceptance', w:2, test:t=>/count\s*(\+\+|\+=\s*1|=\s*count\s*\+\s*1)/.test(t), hint:'count = count + 1'},
-   {label:'Updates lastFinish to the accepted finish', w:3, test:t=>/last(Finish|End|f)\s*=\s*a?\.?f|lastFinish\s*=\s*\w+\.f|lastFinish\s*=\s*finish/.test(t), hint:'lastFinish = a.finish'}
+   {label:'Updates lastFinish to the accepted finish', w:3, test:t=>/last\s*finish\s*=\s*\w*\.?f|lastfinish\s*=\s*\w+\.f/.test(t), hint:'lastFinish = a.finish'}
   ],
   efficiency:[
    {label:'One pass after sorting — O(n log n) total', w:5, test:(t,P)=>P.maxLoop<=1, hint:'Sort dominates; the selection scan is a single loop.'}
@@ -5067,10 +5067,10 @@ CODE.push(
   starter:'TOPO-SORT(V, Adj)\n    // Adj[v] = list of out-neighbors of v\n    for v in V\n        indegree[v] = \n    for v in V\n        for u in Adj[v]\n            \n    Q = new empty queue\n    for v in V\n        if indegree[v] == 0\n            enqueue(Q, v)\n    while Q is not empty\n        v = dequeue(Q)\n        print v\n        for u in Adj[v]\n            \n', define:['toposort'], call:[], maxLoop:2,
   correctness:[
    {label:'Initializes in-degree of every vertex to 0', w:2, test:t=>/indegree|in-?degree|indeg/.test(t) && /=\s*0\b/.test(t), hint:'indegree[v] = 0 for all v'},
-   {label:'Counts in-degrees by scanning adjacency lists', w:3, test:t=>/for[\s\S]{0,200}adj[\s\S]{0,200}indegree\[\w+\]\s*\+\+|indegree\[\w+\]\s*\+\+/.test(t), hint:'for u in Adj[v]: indegree[u]++'},
+   {label:'Counts in-degrees by scanning adjacency lists', w:3, test:t=>/for[\s\S]{0,200}adj[\s\S]{0,200}indegree\[\w+\][^\n]*(\+\+|\+\s*1|=\s*indegree)|indegree\[\w+\][^\n]*(\+\+|\+\s*1|=\s*indegree)/.test(t), hint:'for u in Adj[v]: indegree[u]++'},
    {label:'Enqueues all in-degree-0 vertices', w:2, test:t=>/indegree\[\w+\]\s*==\s*0|indegree\[\w+\]\s*=\s*0/.test(t) && /enqueue/.test(t), hint:'if indegree[v] == 0 enqueue(Q, v)'},
    {label:'Dequeue-print loop over the queue', w:3, test:t=>/while[\s\S]{0,100}(queue|Q)[\s\S]{0,100}dequeue|dequeue[\s\S]{0,80}print/.test(t), hint:'while Q not empty: v = dequeue; print v'},
-   {label:'Decrements neighbor in-degree and enqueues at 0', w:4, test:t=>/indegree\[\w+\]\s*-\s*-|indegree\[\w+\]\s*-=\s*1/.test(t) && /enqueue/.test(t) && /==\s*0/.test(t), hint:'indegree[u]--; if indegree[u] == 0 enqueue(Q,u)'}
+   {label:'Decrements neighbor in-degree and enqueues at 0', w:4, test:t=>/indegree\[\w+\][^\n]*(--|-=\s*1|-\s*1|=\s*indegree\[\w+\]\s*-)/.test(t) && /enqueue/.test(t) && /==\s*0/.test(t), hint:'indegree[u]--; if indegree[u] == 0 enqueue(Q,u)'}
   ],
   efficiency:[
    {label:'O(V + E) — every vertex enqueued once, every edge scanned once', w:5, test:(t,P)=>P.maxLoop<=2, hint:'Nested loops only for the one-time in-degree count; the main loop is linear.'}
@@ -5104,7 +5104,7 @@ CODE.push(
    {label:'Outer loop covers rows 2..n (or equivalent below-diagonal range)', w:2, test:t=>/for[\s\S]{0,60}(2\s*to\s*n|1\s*to\s*n\s*-\s*1)/.test(t), hint:'for i = 2 to n'},
    {label:'Inner loop bounded by i − 1 (strictly below diagonal)', w:3, test:t=>/j\s*=\s*1\s*to\s*i\s*-\s*1|to\s*i-1/.test(t), hint:'for j = 1 to i - 1'},
    {label:'Swaps A[i][j] with A[j][i]', w:4, test:t=>/temp|swap|exchange/.test(t) && /a\s*\[\s*\w+\s*\]\s*\[\s*\w+\s*\]/.test(t) && /a\s*\[\s*\w+\s*\]\s*\[\s*\w+\s*\]/.test(t), hint:'temp = A[i][j]; A[i][j] = A[j][i]; A[j][i] = temp'},
-   {label:'Does not touch the diagonal', w:1, test:(t,P)=>!/to\s*i\b(?!\s*-)/.test(P.body('transposematrix')), hint:'j must stop at i−1, never reach i.'}
+   {label:'Inner loop stops strictly below the diagonal (j ≤ i−1)', w:3, test:t=>/(to|<|<=)\s*i\s*-\s*1|j\s*<\s*i\b|for\s+j[^\n]*<\s*i/.test(t), hint:'for j = 1 to i - 1 — a full j = 1 to n swaps every pair twice and undoes the transpose.'}
   ],
   efficiency:[
    {label:'O(V²) — visits each off-diagonal pair once', w:5, test:(t,P)=>P.maxLoop===2, hint:'Nested loops over the strict lower triangle.'}
@@ -5121,16 +5121,16 @@ CODE.push(
 
  {id:'party-fun', topic:'t12a', title:'PARTY-FUN — tree DP with include/exclude states',
   prompt:'Write <code>PARTY-FUN(T)</code> and <code>PARTY-HELPER(v, memo)</code> for Giggle\'s party: maximize Σ fun ratings subject to no employee attending with their supervisor; the president (root) MUST attend. Use an n×2 memo table indexed by node id and include-flag (0 = excluded, 1 = included).',
-  starter:'PARTY-FUN(T)\n    memo = new [0..n, 0..1] array\n    for v = 0 to n\n        memo[v][0] = -infinity\n        memo[v][1] = -infinity\n    memo[0][0] = 0\n    memo[0][1] = 0\n    PARTY-HELPER(T.root, memo)\n    return memo[T.root.id][1]\n\nPARTY-HELPER(v, memo)\n    if v == NIL\n        return\n    if memo[v.id][0] != -infinity or memo[v.id][1] != -infinity\n        return\n    PARTY-HELPER(v.left, memo)\n    PARTY-HELPER(v.right, memo)\n    // included: children must be EXCLUDED\n    memo[v.id][1] = \n    // excluded: each child picks its better state\n    memo[v.id][0] = \n', define:['partyfun','partyhelper'], call:[], maxLoop:0,
+  starter:'PARTY-FUN(T)\n    memo = new [0..n, 0..1] array\n    for v = 0 to n\n        memo[v][0] = -infinity\n        memo[v][1] = -infinity\n    memo[0][0] = 0\n    memo[0][1] = 0\n    PARTY-HELPER(T.root, memo)\n    return memo[T.root.id][1]\n\nPARTY-HELPER(v, memo)\n    if v == NIL\n        return\n    if memo[v.id][0] != -infinity or memo[v.id][1] != -infinity\n        return\n    PARTY-HELPER(v.left, memo)\n    PARTY-HELPER(v.right, memo)\n    // included: children must be EXCLUDED\n    memo[v.id][1] = \n    // excluded: each child picks its better state\n    memo[v.id][0] = \n', define:['partyfun','partyhelper'], call:[], maxLoop:1,
   correctness:[
    {label:'Uses a 2-state memo table (include / exclude)', w:3, test:t=>/memo\s*\[|memo\[/.test(t) && /,\s*0|,\s*1|\[0\]|\[1\]|0\.\.1|0\.\.\.1/.test(t), hint:'memo[v.id][0] and memo[v.id][1]'},
-   {label:'Included state adds funRating and forces children excluded (state 0)', w:4, test:t=>/fun(Rating)?\s*\[?v|funRating/.test(t) && /memo\s*\[[^\]]*\]\s*\[\s*0\s*\]|\[\s*0\s*\]/.test(t), hint:'memo[v][1] = funRating[v] + memo[left][0] + memo[right][0]'},
+   {label:'Included state adds funRating and forces children excluded (state 0)', w:4, test:t=>/funrating|\bfun\s*\[|fun\(v/.test(t) && /memo\s*\[[^\]]*\]\s*\[\s*0\s*\]|\[\s*0\s*\]/.test(t), hint:'memo[v][1] = funRating[v] + memo[left][0] + memo[right][0]'},
    {label:'Excluded state takes max of each child\'s two states', w:4, test:t=>/max\s*\(/.test(t) && /memo/.test(t), hint:'memo[v][0] = max(memo[l][0],memo[l][1]) + max(memo[r][0],memo[r][1])'},
    {label:'Memoizes / skips already-computed nodes', w:2, test:t=>/-?inf|computed|already/.test(t) || /!=\s*-/.test(t), hint:'if memo[v.id][*] already set, return early'},
    {label:'Returns memo[root][1] — president included', w:2, test:t=>/return\s+memo[^\n]*\[\s*1\s*\]|root[^\n]*1/.test(t), hint:'return memo[T.root.id][1]'}
   ],
   efficiency:[
-   {label:'O(n) — two states per node, constant work each', w:5, test:(t,P)=>P.maxLoop===0, hint:'Post-order fill of a 2n-entry table; no loops in the helper.'}
+   {label:'O(n) — two states per node, constant work each', w:5, test:(t,P)=>P.maxLoop<=1, hint:'Post-order fill of a 2n-entry table; helper has no loops.'}
   ],
   penalties:[{label:'Tries all subsets without memoization (exponential)', p:3, test:(t,P)=>!/memo/.test(t) && /party-?helper/.test(t), hint:'Without the memo table this is 2^n brute force.'}],
   model:`PARTY-FUN(T)
@@ -5200,7 +5200,7 @@ PARTY-HELPER(v, memo)
 
  {id:'radix-lsd', topic:'t10b', title:'RADIX-SORT with stable COUNTING-SORT passes',
   prompt:'Write <code>RADIX-SORT(A, n, d)</code> sorting d-digit keys least-significant-digit first, where each pass calls your stable <code>COUNTING-SORT(A, n, digit)</code> subroutine. Stability is REQUIRED for correctness — say so in a comment.',
-  starter:'COUNTING-SORT(A, n, digit)\n    // stable sort of A by the given digit position\n    // (count occurrences, prefix sums, place from the END to stay stable)\n    \n\nRADIX-SORT(A, n, d)\n    // LSD radix: process digit positions 1..d, least significant first\n    for digit = 1 to d\n        \n', define:['radixsort','countingsort'], call:['countingsort'], maxLoop:2,
+  starter:'COUNTING-SORT(A, n, digit)\n    // stable sort of A by the given digit position\n    // (count occurrences, prefix sums, place from the END to stay stable)\n    \n\nRADIX-SORT(A, n, d)\n    // LSD radix: process digit positions 1..d, least significant first\n    for digit = 1 to d\n        \n', define:['radixsort','countingsort'], call:['counting-sort'], maxLoop:2,
   correctness:[
    {label:'COUNTING-SORT sorts by the requested digit', w:3, test:(t,P)=>/count|cnt|freq/.test(P.body('countingsort')) && /digit|position|\^|mod/.test(t), hint:'count frequencies of each digit value, prefix-sum, place elements'},
    {label:'COUNTING-SORT is stable (places from the end or preserves order)', w:3, test:t=>/(end|backward|reverse|stable|last)/.test(t) || /for[\s\S]{0,120}(n|length)[\s\S]{0,40}downto|downto/.test(t), hint:'iterate input from last to first when placing, or otherwise preserve prior order'},
