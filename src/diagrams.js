@@ -197,16 +197,17 @@ const ELI5 = {
     '💡 Stuck? Press <b>Hint</b>, and you can always peek at the model answer.']}
 };
 
+function extrasFor(id){
+  const page = document.getElementById('page-' + id); if (!page || page.dataset.extras) return;
+  const e = ELI5[id]; if (!e || !DIAGRAMS[id]){ page.dataset.extras = '1'; return; }
+  page.dataset.extras = '1';
+  const lead = page.querySelector(':scope > p.lead');
+  let anchor = lead && lead.nextElementSibling && lead.nextElementSibling.classList.contains('row') ? lead.nextElementSibling : lead;
+  const html = `<div class="eli5-box kid-only fade"><div class="eli5-head"><span class="eli5-badge">🧒 Simple mode</span><h3>${e.title}</h3></div><ul>${e.pts.map(p => `<li>${p}</li>`).join('')}</ul></div>
+    <div class="card diagram-card"><div class="dg-head"><h3>🖼️ Picture it</h3><span class="pill">diagram</span></div>${DIAGRAMS[id]()}</div>`;
+  if (anchor) anchor.insertAdjacentHTML('afterend', html); else page.insertAdjacentHTML('afterbegin', html);
+}
 function mountExtras(){
-  Object.keys(DIAGRAMS).forEach(id => {
-    const page = document.getElementById('page-' + id); if (!page) return;
-    const lead = page.querySelector(':scope > p.lead');
-    let anchor = lead && lead.nextElementSibling && lead.nextElementSibling.classList.contains('row') ? lead.nextElementSibling : lead;
-    const e = ELI5[id];
-    const html = `<div class="eli5-box kid-only fade"><div class="eli5-head"><span class="eli5-badge">🧒 Simple mode</span><h3>${e.title}</h3></div><ul>${e.pts.map(p => `<li>${p}</li>`).join('')}</ul></div>
-      <div class="card diagram-card"><div class="dg-head"><h3>🖼️ Picture it</h3><span class="pill">diagram</span></div>${DIAGRAMS[id]()}</div>`;
-    if (anchor) anchor.insertAdjacentHTML('afterend', html); else page.insertAdjacentHTML('afterbegin', html);
-  });
   const sw = document.getElementById('eli5-switch');
   const apply = on => { document.body.classList.toggle('eli5', on); sw.checked = on; };
   apply(!!store.eli5);

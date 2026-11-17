@@ -191,13 +191,12 @@ function lectureBlock(id){
   const X = LECTURE[id]; if (!X) return '';
   return `<h2>🎓 Professor's lecture</h2><p class="stat-label">Taught the way the course intends — intuition first, textbook grounding, a worked example, then what exams actually test.</p><div class="deep">${X.map(([h, b]) => `<details class="card deep-item"><summary><h3>${h}</h3></summary><div class="deep-body">${b}</div></details>`).join('')}</div>`;
 }
-function mountLectures(){
-  Object.keys(LECTURE).forEach(id => {
-    const pg = document.getElementById('page-' + id); if (!pg) return;
-    if (pg.querySelector('.lecture-block')) return;
-    const qa = pg.querySelector('.qa');
-    const html = `<div class="lecture-block">${lectureBlock(id)}</div>`;
-    if (qa){ const h = qa.previousElementSibling; if (h && /^H[1-6]$/.test(h.tagName)) h.insertAdjacentHTML('beforebegin', html); else qa.insertAdjacentHTML('beforebegin', html); }
-    else pg.insertAdjacentHTML('beforeend', html);
-  });
+function mountLectureFor(id){
+  const X = LECTURE[id]; if (!X) return;
+  const pg = document.getElementById('page-' + id); if (!pg || pg.querySelector('.lecture-block')) return;
+  const qa = pg.querySelector('.qa');
+  const html = `<div class="lecture-block">${lectureBlock(id)}</div>`;
+  if (qa){ const h = qa.previousElementSibling; if (h && /^H[1-6]$/.test(h.tagName)) h.insertAdjacentHTML('beforebegin', html); else qa.insertAdjacentHTML('beforebegin', html); }
+  else pg.insertAdjacentHTML('beforeend', html);
 }
+function mountLectures(){ Object.keys(LECTURE).forEach(mountLectureFor); }

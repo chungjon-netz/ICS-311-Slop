@@ -52,7 +52,7 @@ p{margin:8px 0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);padding:4px 10px;border-radius:999px;margin-bottom:14px}
 
 /* cards */
-.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px;backdrop-filter:blur(8px)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
@@ -380,6 +380,8 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .deep-item[open]>summary::before{transform:rotate(90deg)}
 .deep-item>summary h3{margin:0}
 .deep-body{margin-top:10px}
+/* skip layout/paint for off-screen heavy blocks (long topic pages) */
+.deep-item,.vcard,.diagram-card,.eli5-box{content-visibility:auto;contain-intrinsic-size:auto 200px}
 .deep-body pre{margin:10px 0}
 .cx td:first-child{white-space:nowrap}
 .tool-out{margin-top:10px}
@@ -2101,16 +2103,17 @@ const ELI5 = {
     '💡 Stuck? Press <b>Hint</b>, and you can always peek at the model answer.']}
 };
 
+function extrasFor(id){
+  const page = document.getElementById('page-' + id); if (!page || page.dataset.extras) return;
+  const e = ELI5[id]; if (!e || !DIAGRAMS[id]){ page.dataset.extras = '1'; return; }
+  page.dataset.extras = '1';
+  const lead = page.querySelector(':scope > p.lead');
+  let anchor = lead && lead.nextElementSibling && lead.nextElementSibling.classList.contains('row') ? lead.nextElementSibling : lead;
+  const html = `<div class="eli5-box kid-only fade"><div class="eli5-head"><span class="eli5-badge">🧒 Simple mode</span><h3>${e.title}</h3></div><ul>${e.pts.map(p => `<li>${p}</li>`).join('')}</ul></div>
+    <div class="card diagram-card"><div class="dg-head"><h3>🖼️ Picture it</h3><span class="pill">diagram</span></div>${DIAGRAMS[id]()}</div>`;
+  if (anchor) anchor.insertAdjacentHTML('afterend', html); else page.insertAdjacentHTML('afterbegin', html);
+}
 function mountExtras(){
-  Object.keys(DIAGRAMS).forEach(id => {
-    const page = document.getElementById('page-' + id); if (!page) return;
-    const lead = page.querySelector(':scope > p.lead');
-    let anchor = lead && lead.nextElementSibling && lead.nextElementSibling.classList.contains('row') ? lead.nextElementSibling : lead;
-    const e = ELI5[id];
-    const html = `<div class="eli5-box kid-only fade"><div class="eli5-head"><span class="eli5-badge">🧒 Simple mode</span><h3>${e.title}</h3></div><ul>${e.pts.map(p => `<li>${p}</li>`).join('')}</ul></div>
-      <div class="card diagram-card"><div class="dg-head"><h3>🖼️ Picture it</h3><span class="pill">diagram</span></div>${DIAGRAMS[id]()}</div>`;
-    if (anchor) anchor.insertAdjacentHTML('afterend', html); else page.insertAdjacentHTML('afterbegin', html);
-  });
   const sw = document.getElementById('eli5-switch');
   const apply = on => { document.body.classList.toggle('eli5', on); sw.checked = on; };
   apply(!!store.eli5);
@@ -5463,16 +5466,15 @@ function lectureBlock(id){
   const X = LECTURE[id]; if (!X) return '';
   return `<h2>🎓 Professor's lecture</h2><p class="stat-label">Taught the way the course intends — intuition first, textbook grounding, a worked example, then what exams actually test.</p><div class="deep">${X.map(([h, b]) => `<details class="card deep-item"><summary><h3>${h}</h3></summary><div class="deep-body">${b}</div></details>`).join('')}</div>`;
 }
-function mountLectures(){
-  Object.keys(LECTURE).forEach(id => {
-    const pg = document.getElementById('page-' + id); if (!pg) return;
-    if (pg.querySelector('.lecture-block')) return;
-    const qa = pg.querySelector('.qa');
-    const html = `<div class="lecture-block">${lectureBlock(id)}</div>`;
-    if (qa){ const h = qa.previousElementSibling; if (h && /^H[1-6]$/.test(h.tagName)) h.insertAdjacentHTML('beforebegin', html); else qa.insertAdjacentHTML('beforebegin', html); }
-    else pg.insertAdjacentHTML('beforeend', html);
-  });
+function mountLectureFor(id){
+  const X = LECTURE[id]; if (!X) return;
+  const pg = document.getElementById('page-' + id); if (!pg || pg.querySelector('.lecture-block')) return;
+  const qa = pg.querySelector('.qa');
+  const html = `<div class="lecture-block">${lectureBlock(id)}</div>`;
+  if (qa){ const h = qa.previousElementSibling; if (h && /^H[1-6]$/.test(h.tagName)) h.insertAdjacentHTML('beforebegin', html); else qa.insertAdjacentHTML('beforebegin', html); }
+  else pg.insertAdjacentHTML('beforeend', html);
 }
+function mountLectures(){ Object.keys(LECTURE).forEach(mountLectureFor); }
 
 // ======================= COURSE ENGINE: MIDTERM GROUPS, PAGES, NAV =======================
 const GROUPS = [
@@ -6613,6 +6615,7 @@ function renderGrade(r, q){
 
 // ======================= TOPIC Q&A WIDGETS =======================
 function mountQA(el){
+  if (el.dataset.on) return; el.dataset.on = '1';
   const topics = (el.dataset.topics || el.dataset.topic || '').split(',').filter(Boolean); let mode = 'mixed';
   el.innerHTML = `<div class="qa-head"><h3>🧠 Topic Q&amp;A <span class="pill">random</span></h3>
     <div class="row"><div class="seg">${[['mixed', 'Mixed'], ['mc', 'Multiple choice'], ['code', 'Pseudocode']].map(([k, l]) => `<button data-m="${k}" class="${k === mode ? 'on' : ''}">${l}</button>`).join('')}</div>
@@ -6756,13 +6759,15 @@ function route(){
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + id));
   document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
   const act = document.querySelector('.nav a.active'); if (act && act.closest('details')) act.closest('details').open = true;
-  mountDeep(document.getElementById('page-' + id));
+  const pg = document.getElementById('page-' + id);
+  mountDeep(pg);
+  if (pg) pg.querySelectorAll('.qa[data-topic], .qa[data-topics]').forEach(mountQA);
+  mountLectureFor(id); extrasFor(id);
   document.querySelector('.sidebar').classList.remove('open');
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
-mountExtras(); mountLectures(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
-document.querySelectorAll('.qa[data-topic], .qa[data-topics]').forEach(mountQA);
+mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
 route();
 
 function mountTheme(){

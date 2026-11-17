@@ -187,6 +187,7 @@ function renderGrade(r, q){
 
 // ======================= TOPIC Q&A WIDGETS =======================
 function mountQA(el){
+  if (el.dataset.on) return; el.dataset.on = '1';
   const topics = (el.dataset.topics || el.dataset.topic || '').split(',').filter(Boolean); let mode = 'mixed';
   el.innerHTML = `<div class="qa-head"><h3>🧠 Topic Q&amp;A <span class="pill">random</span></h3>
     <div class="row"><div class="seg">${[['mixed', 'Mixed'], ['mc', 'Multiple choice'], ['code', 'Pseudocode']].map(([k, l]) => `<button data-m="${k}" class="${k === mode ? 'on' : ''}">${l}</button>`).join('')}</div>
@@ -330,13 +331,15 @@ function route(){
   document.querySelectorAll('.page').forEach(p => p.classList.toggle('hidden', p.id !== 'page-' + id));
   document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.page === id));
   const act = document.querySelector('.nav a.active'); if (act && act.closest('details')) act.closest('details').open = true;
-  mountDeep(document.getElementById('page-' + id));
+  const pg = document.getElementById('page-' + id);
+  mountDeep(pg);
+  if (pg) pg.querySelectorAll('.qa[data-topic], .qa[data-topics]').forEach(mountQA);
+  mountLectureFor(id); extrasFor(id);
   document.querySelector('.sidebar').classList.remove('open');
   window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
-mountExtras(); mountLectures(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
-document.querySelectorAll('.qa[data-topic], .qa[data-topics]').forEach(mountQA);
+mountExtras(); renderHome(); renderVideos(); renderPractice(); mountKruskal(); mountPrim(); mountPS(); mountTheme();
 route();
 
 function mountTheme(){

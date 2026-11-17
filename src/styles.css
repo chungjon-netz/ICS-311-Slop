@@ -44,7 +44,7 @@ p{margin:8px 0}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.25);padding:4px 10px;border-radius:999px;margin-bottom:14px}
 
 /* cards */
-.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px;backdrop-filter:blur(8px)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
 .grid{display:grid;gap:16px}
 .g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
 .g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
@@ -372,6 +372,8 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .deep-item[open]>summary::before{transform:rotate(90deg)}
 .deep-item>summary h3{margin:0}
 .deep-body{margin-top:10px}
+/* skip layout/paint for off-screen heavy blocks (long topic pages) */
+.deep-item,.vcard,.diagram-card,.eli5-box{content-visibility:auto;contain-intrinsic-size:auto 200px}
 .deep-body pre{margin:10px 0}
 .cx td:first-child{white-space:nowrap}
 .tool-out{margin-top:10px}
