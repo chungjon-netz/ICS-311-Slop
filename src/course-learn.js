@@ -17,7 +17,7 @@ Object.assign(LEARN, {
   habit:'Before reading a proof, try writing the three invariant steps yourself, then compare with the notes.'},
  t07:{goal:'Design divide-and-conquer algorithms and solve their recurrences three ways.',
   key:['Divide, conquer, combine. The running time is T(n) = aT(n/b) + D(n) + C(n) (CLRS 2.3).','Merge sort: T(n) = 2T(n/2) + Θ(n) = Θ(n lg n); the Θ(n) MERGE is the combine step.','Recursion tree: add the cost per level, multiply by the number of levels (CLRS 4.4).','Substitution: guess, then prove by induction with the <i>exact</i> hypothesis (CLRS 4.3).','Master theorem: compare f(n) with n^(log_b a) to pick case 1, 2 or 3 (CLRS 4.5).'],
-  mistakes:['Using the master theorem when f(n) is not polynomially larger/smaller (e.g. n lg n vs n).','Proving T(n) ≤ cn + 1 when the hypothesis was T(n) ≤ cn.','Forgetting the regularity condition in case 3.'],
+  mistakes:['Using the master theorem when f(n) is not polynomially larger/smaller (e.g. n / lg n vs n). In CLRS 4e, n lg n vs n IS covered: case 2 with k = 1.','Proving T(n) ≤ cn + 1 when the hypothesis was T(n) ≤ cn.','Forgetting the regularity condition in case 3.'],
   prompts:[['Solve T(n) = 4T(n/2) + n² and name the case.','n^(log₂4) = n² = f(n): case 2, Θ(n² lg n).'],['Why does merge sort need Θ(n) extra space but insertion sort does not?','MERGE copies the two halves into temporary arrays; insertion sort shifts in place.'],['Draw (in your head) the recursion tree for T(n) = 3T(n/4) + n. Which levels dominate?','Level costs shrink by 3/4 each level, a decreasing geometric series: the root dominates, so Θ(n).']]}
 });
 REVIEW.mt1 = {
