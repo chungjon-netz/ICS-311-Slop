@@ -151,32 +151,64 @@ const KIDDEEP = {
   '🗜️ Huffman merges the two rarest letters first. You can prove any best code can be rearranged to match — so greedy never loses.',
   '🔤 A prefix code means no codeword starts another, so decoding is unambiguous: read bits, walk the tree, output at a leaf.',
   '🚧 Greedy is not magic: coin change, 0-1 knapsack and interval scheduling all have counterexamples. Prove it or find the counterexample.',
-  '⚖️ Some greedy picks win (earliest finish, latest start), some lose (shortest activity, fewest overlaps). Each needs a proof or a counterexample.'
+  '⚖️ Some greedy picks win (earliest finish, latest start), some lose (shortest activity, fewest overlaps). Each needs a proof or a counterexample.',
+  '⚖️ To prove a greedy pick is safe: take the best answer, swap in the greedy pick, and show it still works and costs no more — like trading for a piece that fits better.',
+  '🌳 Huffman merges the two rarest letters until one tree remains. Two lemmas make it safe: the rarest pair can always sit deepest, and merging them is like giving them a shared parent.',
+  '🔤 A prefix code means no code starts with another code — read bits, walk the tree, done. Coin-change greedy works because each big coin beats all small ones combined.'
  ],
  t14a: [
   '🌊 BFS waves out ring by ring; the first time you reach a vertex is via the fewest hops — that is a shortest path.',
   '🧭 DFS colors edges: tree (discovery), back (a cycle!), forward, cross. A back edge means the graph has a loop.',
   '🗺️ Sparse graph → adjacency lists (save space). Dense graph → matrix (instant edge checks). Pick by how many edges per vertex.',
   '🧰 BFS: shortest hops, maze solving. DFS: cycles, topo sort, connected groups — the two workhorses of graphs.',
-  '🔀 Transposing (flipping all edges) is easy for a matrix, annoying for adjacency lists — the best trick copies while deleting, peaking at O(V) extra.'
+  '🔀 Transposing (flipping all edges) is easy for a matrix, annoying for adjacency lists — the best trick copies while deleting, peaking at O(V) extra.',
+  '🌊 BFS promise: "everyone in line was reached in order." When a spot pops out, its distance is final — a shorter path would have been found first.',
+  '🧭 DFS paints spots three colors: white (new), gray (on the path now), black (done). A gray neighbor means a cycle; black ones are forward or cross edges.'
  ],
  t14b: [
   '🏁 In a DAG every edge points "finishes earlier → finishes later", so sorting by finish time puts every edge forward.',
   '🧩 SCCs are groups where everyone can reach everyone. DFS once, transpose the graph, DFS again in finish order — each tree is one group.',
   '📋 Topo order schedules tasks with prerequisites; DAG shortest paths and path counting reuse the same order.',
-  '🧮 Doing SCC by hand is pure bookkeeping practice — every later graph algorithm depends on correct discovery/finish times. Kahn is the queue version of topo sort.'
+  '🧮 Doing SCC by hand is pure bookkeeping practice — every later graph algorithm depends on correct discovery/finish times. Kahn is the queue version of topo sort.',
+  '🏁 In a no-cycle graph, whoever finishes LAST started EARLIEST — so listing vertices by finish time puts every arrow pointing forward.',
+  '🧩 Flip every arrow and run DFS again, biggest finish time first. Each tree you get is exactly one "everyone reaches everyone" group.'
  ],
  t18: [
   '🛣️ Shortest paths have nice rules: a piece of a shortest path is itself shortest, and distances only shrink as you relax.',
   '🚫 Dijkstra assumes "done means best forever". A negative edge can teleport you cheaper later, breaking that promise.',
   '🌀 A negative cycle reachable from s makes distances −∞ — go around forever getting cheaper. Bellman-Ford detects it with one extra pass.',
-  '🕸️ In a DAG there are no cycles, so relaxing edges in topo order solves it in one pass — even with negative weights. Flip signs for longest paths.'
+  '🕸️ In a DAG there are no cycles, so relaxing edges in topo order solves it in one pass — even with negative weights. Flip signs for longest paths.',
+  '🔁 Bellman-Ford promise after i rounds: "every guess is at most as good as the best path using i roads or fewer." One more round that changes nothing means done.',
+  '🛣️ In a no-cycle graph, relax roads in order — each road once. Dijkstra settles the closest spot forever, but ONLY if no road has negative time.'
  ],
  t19: [
   '🧭 Ask: is i→j faster through k? d[i,j] = min(old, d[i,k] + d[k,j]). Repeat for every k — the whole chart updates in place.',
   '🗺️ Keep a "who points to j" table; whenever a path improves, update it. Walk it backwards to print the actual route.',
   '🪄 Add a fake source, run Bellman-Ford to get potentials h, then shift every edge by h(u)−h(v) so all weights go non-negative — Dijkstra works after that.',
-  '🎯 Dense graph → Floyd-Warshall (simple n³). Sparse → Johnson or Dijkstra-from-each. Unweighted → BFS from each vertex.'
+  '🎯 Dense graph → Floyd-Warshall (simple n³). Sparse → Johnson or Dijkstra-from-each. Unweighted → BFS from each vertex.',
+  '🧭 Floyd-Warshall: "best path using only towns 1..k as stops." Round k asks: is it faster to stop in town k? The whole chart updates in place.',
+  '🪄 Negative roads break Dijkstra. Trick: add fake distances h to every road so all become non-negative, run Dijkstra, then subtract h back — shortest paths stay the same.'
+ ],
+ ds: [
+  '🤝 Union by rank: always attach the shorter tree under the taller one; ties bump the rank. Rank is a height limit, not the real height.',
+  '📊 m operations on n items cost about m·α(n) — α grows so slowly it is basically 4 forever. You need the result, not the proof.',
+  '🌲 Static graph? Just DFS once. Union-Find wins when edges arrive one at a time — like Kruskal adding them.'
+ ],
+ mst: [
+  '✂️ Safe edge proof: add the cheapest crossing edge, break the cycle it makes by removing an equal-or-heavier edge — still a tree, still cheapest.',
+  '🧩 Every MST algorithm is just "find a safe edge across a cut." Kruskal scans globally, Prim grows one blob.'
+ ],
+ kruskal: [
+  '🔢 Sort edges once, then one pass: take an edge only if its two ends are in different groups yet (union-find answers that fast).',
+  '⏱️ Sorting costs E lg V and dominates; the union-find part is nearly free. Disconnected graph? You get a forest, still minimal.'
+ ],
+ prim: [
+  '🎈 Prim grows one blob: always add the cheapest edge leaving the blob. key[v] = cheapest way into the blob so far.',
+  '📐 Dense graph (like the island matrix)? Use the simple array version, Θ(n²) — a heap just adds a log factor for nothing.'
+ ],
+ fib: [
+  '💤 Fibonacci heap is lazy: do not organize, just pile trees in a list and only sort them when you need the minimum. That makes decrease-key O(1).',
+  '🏷️ The mark bit decides when a node lost two kids and must be cut loose. Pay a little potential now, save big work later.'
  ],
  t20: [
   '🚰 Pipes have capacity limits; water in = water out at every junction. The residual graph shows room left forward AND flow you could cancel backward.',

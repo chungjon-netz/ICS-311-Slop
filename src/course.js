@@ -116,6 +116,7 @@ ELI5.home = {title: 'What is this site?', pts: ['📚 It is a study buddy for IC
 });
 
 ['ds','mst','kruskal','prim','fib'].forEach(id => { const pg = document.getElementById('page-' + id), rr = pg && pg.querySelector(':scope > .res-row'); if (rr) rr.insertAdjacentHTML('afterend', learnBlock(id)); });
+['ds','mst','kruskal','prim','fib'].forEach(id => { const pg = document.getElementById('page-' + id), qa = pg && pg.querySelector('.qa'); if (qa && DEEP[id]) qa.insertAdjacentHTML('beforebegin', deepBlock(id)); });
 // ---- render pages & nav ----
 document.getElementById('page-videos').insertAdjacentHTML('beforebegin', GROUPS.map(g => groupPage(g) + g.topics.filter(id => COURSE.some(t => t.id === id)).map(id => topicPage(TMETA[id])).join('')).join(''));
 const YEAR = 2026;
