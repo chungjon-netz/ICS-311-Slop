@@ -176,6 +176,9 @@ body.eli5 .eli5-toggle{border-color:rgba(251,191,36,.6);background:rgba(251,191,
 .kid-only{display:none}
 body.eli5 .kid-only{display:block}
 body.eli5 figcaption .kid-only{display:inline}
+body.eli5 .pro-only{display:none}
+.eli5-note{margin:14px 0 6px;padding:10px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.08));border:1px solid rgba(251,191,36,.35);font-size:.95rem;line-height:1.5}
+.eli5-note::before{content:"🧒 ";font-weight:700}
 body.eli5 figcaption .pro-only{display:none}
 .eli5-box{margin:22px 0;padding:20px 22px;border-radius:var(--radius);background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(244,114,182,.10));border:1px solid rgba(251,191,36,.35)}
 .eli5-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}

@@ -118,11 +118,13 @@ function mountDeep(page){
 }
 function deepBlock(id){
   const X = DEEP[id]; if (!X) return '';
-  const cxHead = X.cxHead || ['Operation / algorithm', 'Best', 'Average', 'Worst', 'Extra space', 'Why'];
-  return `${(X.viz || []).map(v => `<h2>🔬 ${VIZ[v].title}</h2>${VIZ[v].hint ? `<p class="stat-label">${VIZ[v].hint}</p>` : ''}<div class="card"><div class="stepper" data-viz="${v}"></div></div>`).join('')}
-  ${(X.tools || []).map(([tid, title, hint]) => `<h2>🧮 ${title}</h2>${hint ? `<p class="stat-label">${hint}</p>` : ''}<div class="card"><div class="tool" data-tool="${tid}"></div></div>`).join('')}
-  ${X.cx ? `<h2>⏱️ Time &amp; space complexity</h2><table class="tbl cx"><tr>${cxHead.map(h => `<th>${h}</th>`).join('')}</tr>${X.cx.map(r => `<tr>${r.map((c, i) => `<td>${i ? c : `<b>${c}</b>`}</td>`).join('')}</tr>`).join('')}</table>${X.cxNote ? `<p class="stat-label">${X.cxNote}</p>` : ''}` : ''}
-  ${X.deep ? `<h2>🧭 Deeper dive</h2><div class="deep">${X.deep.map(([h, b]) => `<details class="card deep-item" open><summary><h3>${h}</h3></summary><div class="deep-body">${b}</div></details>`).join('')}</div>` : ''}`;
+  const K = X.kid || {}, cxHead = X.cxHead || ['Operation / algorithm', 'Best', 'Average', 'Worst', 'Extra space', 'Why'];
+  const note = t => t ? `<p class="kid-only eli5-note">${t}</p>` : '';
+  const kv = Array.isArray(K.viz) ? K.viz : null;
+  return `${(X.viz || []).map((v, i) => `${note(kv ? kv[i] : i === 0 ? K.viz : '')}<h2>🔬 ${VIZ[v].title}</h2>${VIZ[v].hint ? `<p class="stat-label">${VIZ[v].hint}</p>` : ''}<div class="card"><div class="stepper" data-viz="${v}"></div></div>`).join('')}
+  ${note(K.tools)}${(X.tools || []).map(([tid, title, hint]) => `<h2>🧮 ${title}</h2>${hint ? `<p class="stat-label">${hint}</p>` : ''}<div class="card"><div class="tool" data-tool="${tid}"></div></div>`).join('')}
+  ${note(K.cx)}${X.cx ? `<h2>⏱️ Time &amp; space complexity</h2><table class="tbl cx"><tr>${cxHead.map(h => `<th>${h}</th>`).join('')}</tr>${X.cx.map(r => `<tr>${r.map((c, i) => `<td>${i ? c : `<b>${c}</b>`}</td>`).join('')}</tr>`).join('')}</table>${X.cxNote ? `<p class="stat-label">${X.cxNote}</p>` : ''}` : ''}
+  ${note(K.deep)}${X.deep ? `<h2>🧭 Deeper dive</h2><div class="deep">${X.deep.map(([h, b], i) => { const e = (KIDDEEP[id] || [])[i]; return `<details class="card deep-item" open><summary><h3>${h}</h3></summary><div class="deep-body">${e ? `<div class="pro-only">${b}</div><div class="kid-only">${e}</div>` : b}</div></details>`; }).join('')}</div>` : ''}`;
 }
 
 // ======================= DEEP DIVES · MIDTERM 1 =======================
@@ -158,6 +160,7 @@ VIZ.stackq = {
 };
 DEEP.t01 = {
   viz: ['stackq'],
+  kid:{viz:'🎬 A movie of a stack and a queue: numbers go in, and a dash makes one leave. Press Next to watch each step!',cx:'📊 Which box is fastest for which job: an unsorted shelf, a sorted shelf, or a chain of cards?',deep:'🔍 Extra puzzles: why a faster computer does not fix a slow recipe, and tricks that remove special cases.'},
   cxHead: ['Operation', 'Unsorted array', 'Sorted array', 'Doubly linked list (+ sentinel)', 'Notes'],
   cx: [['Access k-th element', 'Θ(1)', 'Θ(1)', 'Θ(n)', 'arrays compute the address directly'], ['SEARCH(key)', 'Θ(n)', 'Θ(lg n) binary search', 'Θ(n)', 'lists can only walk'], ['INSERT', 'Θ(1) at end*', 'Θ(n) shift', 'Θ(1) given position', '*if there is spare capacity'], ['DELETE given pointer/index', 'Θ(n) shift (Θ(1) if order does not matter)', 'Θ(n)', 'Θ(1)', 'singly linked lists need the predecessor: Θ(n)'], ['MINIMUM / MAXIMUM', 'Θ(n)', 'Θ(1)', 'Θ(n)', ''], ['Stack PUSH / POP', 'Θ(1)', '—', 'Θ(1) at head', ''], ['Queue ENQUEUE / DEQUEUE', 'Θ(1) circular', '—', 'Θ(1) with tail pointer', '']],
   cxNote: 'No single structure is fast at everything. That is why the course keeps building new ones: heaps (Topic 9), BSTs (8, 11) and hash tables (6) each make a different set of dynamic-set operations fast.',
@@ -209,6 +212,7 @@ VIZ.growth = {
 };
 DEEP.t03 = {
   viz: ['growth'],
+  kid:{viz:'📈 Watch the bars race as the input grows — see which recipes stay tiny and which explode.',cx:'🏷️ A cheat-sheet naming each growth speed and a real algorithm that has it.',deep:'🧠 The math proofs behind the names, the limit test, and sneaky traps like a hidden n.'},
   cxHead: ['Growth rate', 'Name', 'Typical algorithm', 'Doubling n multiplies time by'],
   cx: [['Θ(1)', 'constant', 'array access, PUSH', '1'], ['Θ(lg n)', 'logarithmic', 'binary search, heap insert', 'adds a constant'], ['Θ(n)', 'linear', 'linear search, counting sort (k = O(n))', '2'], ['Θ(n lg n)', 'linearithmic', 'merge sort, heapsort', '≈ 2 (slightly more)'], ['Θ(n²)', 'quadratic', 'insertion sort (worst)', '4'], ['Θ(n³)', 'cubic', 'Floyd-Warshall, naive matrix multiply', '8'], ['Θ(2ⁿ)', 'exponential', 'trying every subset', 'squares it'], ['Θ(n!)', 'factorial', 'trying every ordering', 'far worse']],
   deep: [
@@ -248,6 +252,7 @@ VIZ.isort = {
 };
 DEEP.t02 = {
   viz: ['isort'],
+  kid:{viz:'🎬 Insertion sort: the green cards are always sorted; watch each new card find its place.',cx:'📊 Compare insertion sort with a couple of friends on their best, average and worst days.',deep:'📝 Count the steps line by line, meet inversions (swapped pairs), and learn what one step really is.'},
   cx: [['INSERTION-SORT', 'Θ(n) (sorted input)', 'Θ(n²)', 'Θ(n²) (reverse sorted)', 'Θ(1), in place', 'shifts = inversions: 0 best, n(n−1)/2 worst, n(n−1)/4 expected'], ['Linear search', 'Θ(1)', 'Θ(n)', 'Θ(n)', 'Θ(1)', 'expected ≈ n/2 probes if the key is present and equally likely anywhere'], ['Binary insertion sort', 'Θ(n lg n) compares', 'Θ(n²) moves', 'Θ(n²)', 'Θ(1)', 'binary search finds the spot faster, but shifting still costs Θ(i)']],
   deep: [
     ['Counting the cost line by line', `<p>Give each line a cost c<sub>k</sub> and count how often it runs. Let t<sub>i</sub> be the number of times the while test runs for a given i.</p>${vzTbl(['Line', 'Cost', 'Times'], [['for i = 2 to n', 'c₁', 'n'], ['key = A[i]', 'c₂', 'n − 1'], ['j = i − 1', 'c₄', 'n − 1'], ['while j &gt; 0 and A[j] &gt; key', 'c₅', 'Σ t<sub>i</sub>'], ['A[j + 1] = A[j]', 'c₆', 'Σ (t<sub>i</sub> − 1)'], ['j = j − 1', 'c₇', 'Σ (t<sub>i</sub> − 1)'], ['A[j + 1] = key', 'c₈', 'n − 1']])}<ul class="clean"><li><b>Best case</b> (sorted): t<sub>i</sub> = 1, so T(n) = an + b, <b>Θ(n)</b>.</li><li><b>Worst case</b> (reverse sorted): t<sub>i</sub> = i, Σ<sub>i=2</sub><sup>n</sup> i = n(n+1)/2 − 1, so T(n) = an² + bn + c, <b>Θ(n²)</b>.</li></ul>`],
@@ -308,7 +313,7 @@ TOOLS.master = el => {
   solve();
 };
 DEEP.t07 = {
-  viz: ['msort'], tools: [['master', 'Master theorem calculator (CLRS 4e form)', 'For T(n) = aT(n/b) + n<sup>d</sup> lg<sup>k</sup> n. Try the presets, then predict the case before pressing Solve.']],
+  viz: ['msort'], kid:{viz:'🎬 Merge sort: chop the pile in half, sort each half, then merge. Watch the call stack grow and shrink!',tools:'🧮 A calculator for the master theorem: type a recipe like 2T(n/2) + n and it tells you the answer.',cx:'📊 Speed table for divide-and-conquer champs: merge sort, binary search, Strassen.',deep:'🔍 Why the merge step is correct, and how the master theorem picks case 1, 2 or 3.'}, tools: [['master', 'Master theorem calculator (CLRS 4e form)', 'For T(n) = aT(n/b) + n<sup>d</sup> lg<sup>k</sup> n. Try the presets, then predict the case before pressing Solve.']],
   cx: [['MERGE-SORT', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n)', 'T(n) = 2T(n/2) + Θ(n), case 2'], ['MERGE (n elements)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'each element is copied out and back once'], ['Binary search', 'Θ(1)', 'Θ(lg n)', 'Θ(lg n)', 'Θ(1) iterative', 'T(n) = T(n/2) + Θ(1)'], ['Max subarray (divide &amp; conquer)', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(lg n) stack', 'crossing subarray costs Θ(n)'], ['Strassen matrix multiply', 'Θ(n<sup>lg 7</sup>)', 'Θ(n<sup>lg 7</sup>)', 'Θ(n<sup>lg 7</sup>) ≈ n<sup>2.81</sup>', 'Θ(n²)', 'T(n) = 7T(n/2) + Θ(n²), case 1']],
   deep: [
     ['Why MERGE is correct: its loop invariant', `<p>At the start of each iteration that fills A[k]:</p><ul class="clean"><li>A[p..k−1] holds the k − p smallest elements of L and R, in sorted order;</li><li>L[i] and R[j] are the smallest elements of their arrays not yet copied back.</li></ul><p><b>Maintenance:</b> the smaller of L[i], R[j] is the smallest uncopied element overall, so placing it at A[k] keeps A[p..k] sorted. <b>Termination:</b> k = r + 1, so A[p..r] holds all r − p + 1 elements sorted. Using ≤ (take from L on ties) makes merge sort <b>stable</b>.</p>`],
@@ -349,6 +354,7 @@ VIZ.heap = {
 };
 DEEP.t09 = {
   viz: ['heap'],
+  kid:{viz:'⛰️ Watch a heap fix itself: the biggest card always floats to the top, then heapsort deals out the sorted tail.',cx:'📊 How fast each heap job is: building, sorting, adding, and removing the max.',deep:'🔍 Why building a heap is only linear, how heaps become priority queues, and heapsort vs the other sorts.'},
   cx: [['MAX-HEAPIFY', 'Θ(1)', 'O(lg n)', 'Θ(lg n)', 'Θ(1) iterative', 'floats down one path of height ⌊lg n⌋'], ['BUILD-MAX-HEAP', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(1)', 'Σ (nodes at height h)·O(h) = O(n Σ h/2<sup>h</sup>) = O(n)'], ['HEAPSORT', 'Θ(n lg n)*', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(1), in place', 'n − 1 extractions × O(lg n); not stable'], ['MAX-HEAP-INSERT', 'Θ(1)', 'O(lg n)', 'Θ(lg n)', 'Θ(1)', 'add at the end, then float up'], ['HEAP-MAXIMUM', 'Θ(1)', 'Θ(1)', 'Θ(1)', '—', 'it is A[1]'], ['HEAP-EXTRACT-MAX', 'Θ(lg n)', 'Θ(lg n)', 'Θ(lg n)', 'Θ(1)', 'move last to root, MAX-HEAPIFY'], ['HEAP-INCREASE-KEY', 'Θ(1)', 'O(lg n)', 'Θ(lg n)', 'Θ(1)', 'float up toward the root']],
   cxNote: '*With distinct keys, heapsort\'s best case is still Θ(n lg n).',
   deep: [
@@ -398,6 +404,7 @@ VIZ.bst = {
 };
 DEEP.t08 = {
   viz: ['bst'],
+  kid:{viz:'🌲 A guessing game tree: go left for smaller, right for bigger. Watch inserts, a search and a delete.',cx:'📊 Speed of each BST job — and why a lopsided tree makes everything slow.',deep:'🔍 Finding the successor, the three delete cases, and why height is everything.'},
   cx: [['SEARCH, MIN, MAX', 'Θ(1)', 'O(lg n)*', 'Θ(n)', 'Θ(1) iterative', 'one root-to-leaf path: O(h)'], ['SUCCESSOR / PREDECESSOR', 'Θ(1)', 'O(lg n)*', 'Θ(n)', 'Θ(1)', 'leftmost of right subtree, or first ancestor reached from the left'], ['INSERT', 'Θ(1)', 'O(lg n)*', 'Θ(n)', 'Θ(1)', 'search for the spot, attach a leaf'], ['DELETE', 'Θ(1)', 'O(lg n)*', 'Θ(n)', 'Θ(1)', 'TRANSPLANT is O(1); finding the successor is O(h)'], ['INORDER-TREE-WALK', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(h) stack', 'each node visited once'], ['Build by n inserts', 'Θ(n lg n)', 'Θ(n lg n)*', 'Θ(n²)', 'Θ(n)', 'sorted input gives a path']],
   cxNote: '*Expected height of a BST built from a random permutation is O(lg n). Balanced trees (Topic 11) guarantee O(lg n) in the worst case.',
   deep: [
@@ -434,6 +441,7 @@ VIZ.hire = {
 };
 DEEP.t05a = {
   viz: ['hire'],
+  kid:{viz:'🎲 The hiring game: only new champions get hired. Count how many on average.',cx:'📊 A table of expected-value surprises: hires, coin flips, birthday matches.',deep:'🧮 Indicator switches and linearity of expectation, plus how to shuffle fairly.'},
   cxHead: ['Quantity', 'Value', 'Method'],
   cx: [['Hires, worst case', 'n', 'candidates arrive in increasing quality'], ['Hires, expected (random order)', 'Hₙ = ln n + O(1)', 'indicator X<sub>i</sub> = I{candidate i hired}, E[X<sub>i</sub>] = 1/i'], ['Hiring cost, expected', 'O(c<sub>h</sub> ln n)', 'versus O(c<sub>h</sub> n) worst case'], ['RANDOMIZE-IN-PLACE', 'Θ(n) time', 'swap A[i] with A[RANDOM(i, n)]: every permutation equally likely'], ['Birthday paradox', '≈ √(2n ln 2) people for a 50% match; ≈ 23 when n = 365', 'complement probability or indicator pairs'], ['Balls into bins (coupon collector)', '≈ n ln n tosses to fill all n bins', 'sum of geometric waiting times'], ['Longest streak of heads in n flips', 'Θ(lg n)', 'bound the probability of a streak of length ≥ k']],
   deep: [
@@ -472,6 +480,7 @@ VIZ.qsort = {
 };
 DEEP.t05b = {
   viz: ['qsort'],
+  kid:{viz:'⚡ Quicksort: pick a pivot, small cards left, big cards right, then repeat on each side.',cx:'📊 Best, average and worst speed for quicksort — and why random pivots save it.',deep:'🔍 The indicator-variable proof for the average, and why quicksort wins in practice.'},
   cx: [['RANDOMIZED-QUICKSORT', 'Θ(n lg n)', 'Θ(n lg n) expected', 'Θ(n²) (very unlikely)', 'Θ(lg n) expected stack', 'expected comparisons < 2n ln n ≈ 1.39 n lg n'], ['QUICKSORT, pivot = last', 'Θ(n lg n)', 'Θ(n lg n) on random input', 'Θ(n²) on sorted input', 'Θ(n) stack worst', 'sorted or reverse-sorted input always splits n−1 / 0'], ['PARTITION (n elements)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(1)', 'exactly n − 1 comparisons'], ['Constant-ratio splits (e.g. 9:1)', 'Θ(n lg n)', '', '', '', 'recursion depth log<sub>10/9</sub> n = Θ(lg n)']],
   deep: [
     ['Expected comparisons: the indicator-variable proof', `<p>Rename the elements z₁ &lt; z₂ &lt; … &lt; zₙ by rank. z<sub>i</sub> and z<sub>j</sub> are compared iff one of them is the <b>first</b> pivot chosen from Z<sub>ij</sub> = {z<sub>i</sub>, …, z<sub>j</sub>}. If a pivot strictly between them comes first, they are split apart forever. Every element of Z<sub>ij</sub> is equally likely to be first, so</p><p class="math" style="text-align:center">Pr{z<sub>i</sub> compared with z<sub>j</sub>} = 2 / (j − i + 1)</p><p class="math" style="text-align:center">E[X] = Σ<sub>i&lt;j</sub> 2/(j − i + 1) &lt; Σ<sub>i</sub> Σ<sub>k=1</sub><sup>n</sup> 2/k = O(n lg n).</p><p>Running time is O(n + X), so the expected time is O(n lg n) on <b>every</b> input.</p>`],
@@ -506,6 +515,7 @@ VIZ.hash = {
 };
 DEEP.t06 = {
   viz: ['hash'],
+  kid:{viz:'🗄️ A giant key rack: hashing finds the right hook in one jump. Watch chaining vs open addressing.',cx:'📊 Chaining vs open addressing speeds, and the magic load-factor number α.',deep:'🔍 Picking good hash functions, tombstones, and why clustering ruins linear probing.'},
   cx: [['Chaining: INSERT', 'Θ(1)', 'Θ(1)', 'Θ(1)', 'Θ(n + m)', 'prepend (assumes the key is not already present)'], ['Chaining: SEARCH', 'Θ(1)', 'Θ(1 + α)', 'Θ(n)', '', 'all keys in one chain'], ['Chaining: DELETE', 'Θ(1)', 'Θ(1)', 'Θ(1)', '', 'given a pointer, with doubly linked chains'], ['Open addressing: unsuccessful search / insert', 'Θ(1)', '≤ 1/(1 − α)', 'Θ(n)', 'Θ(m)', 'α must stay below 1'], ['Open addressing: successful search', 'Θ(1)', '≤ (1/α) ln(1/(1 − α))', 'Θ(n)', '', 'α = 0.5 → < 1.39 probes; α = 0.9 → < 2.56'], ['Direct-address table', 'Θ(1)', 'Θ(1)', 'Θ(1)', 'Θ(|U|)', 'only when the universe of keys is small']],
   cxNote: 'Averages assume independent uniform hashing (CLRS 4e terminology). With α = n/m kept constant (resize when it grows), every operation is expected O(1).',
   deep: [
@@ -548,6 +558,7 @@ VIZ.rbt = {
 };
 DEEP.t11 = {
   viz: ['rbt'],
+  kid:{viz:'🔴⚫ Red and black colors keep the tree balanced while it grows. Watch the fix-up cases!',cx:'📊 Every red-black job costs O(lg n); a rotation costs O(1).',deep:'🔍 Why the height stays small, how 2-3-4 boxes hide inside the colors, and the rotation trick.'},
   cx: [['SEARCH / MIN / MAX / SUCC', 'Θ(1)', 'Θ(lg n)', 'Θ(lg n)', 'Θ(1)', 'height ≤ 2 lg(n + 1)'], ['RB-INSERT', 'Θ(lg n)', 'Θ(lg n)', 'Θ(lg n)', 'Θ(1)', 'O(lg n) recolorings, at most 2 rotations'], ['RB-DELETE', 'Θ(lg n)', 'Θ(lg n)', 'Θ(lg n)', 'Θ(1)', 'at most 3 rotations'], ['LEFT/RIGHT-ROTATE', 'Θ(1)', 'Θ(1)', 'Θ(1)', 'Θ(1)', 'changes a constant number of pointers'], ['2-3-4 tree search/insert/delete', 'Θ(lg n)', 'Θ(lg n)', 'Θ(lg n)', 'Θ(1)', 'all leaves at the same depth; node splits on the way down']],
   deep: [
     ['Why the height is at most 2 lg(n + 1)', `<ol><li>Let bh(x) be the number of black nodes on any path from x down to a NIL (not counting x). By induction, the subtree at x has at least 2<sup>bh(x)</sup> − 1 internal nodes.</li><li>Red nodes can't have red children, so at least half the nodes on any root-to-leaf path are black: bh(root) ≥ h/2.</li><li>So n ≥ 2<sup>h/2</sup> − 1, which gives h ≤ 2 lg(n + 1) (Lemma 13.1).</li></ol>`],
@@ -588,6 +599,7 @@ VIZ.rselect = {
 };
 DEEP.t10a = {
   viz: ['rselect'],
+  kid:{viz:'🎯 Find the i-th smallest without sorting: partition, then keep only the side with the answer.',cx:'📊 Finding min or max needs n−1 comparisons; selection is linear on average.',deep:'🔍 The shrinking-geometry argument and the median-of-medians worst-case guarantee.'},
   cx: [['MINIMUM or MAXIMUM', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(1)', 'exactly n − 1 comparisons, optimal'], ['MIN and MAX together', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(1)', 'process in pairs: at most 3⌊n/2⌋ comparisons'], ['RANDOMIZED-SELECT', 'Θ(n)', 'Θ(n) expected', 'Θ(n²)', 'Θ(1) iterative', 'like quicksort, but recurses on one side only'], ['SELECT (median of medians)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(lg n) stack', 'T(n) ≤ T(n/5) + T(7n/10) + Θ(n)'], ['Sort then index', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n lg n)', 'depends on sort', 'simple but slower']],
   deep: [
     ['Why expected Θ(n): the geometric argument', `<p>Call a pivot <b>good</b> if it lands in the middle half (ranks n/4 to 3n/4). That happens with probability 1/2, and then the recursion keeps at most 3n/4 elements. So on average every two partitions shrink the problem by a factor of 3/4, and the total work is bounded by a geometric series:</p><p class="math" style="text-align:center">E[T(n)] ≤ 2cn (1 + 3/4 + (3/4)² + …) = 8cn = O(n).</p><p>Unlike quicksort, we only follow <i>one</i> branch, so the levels don't add up to n each; they shrink.</p>`],
@@ -630,6 +642,7 @@ VIZ.radix = {
 };
 DEEP.t10b = {
   viz: ['csort', 'radix'],
+  kid:{viz:['🔢 Counting sort: count each key, then place — zero comparisons!','🔢 Radix sort: sort by the ones digit, then tens, then hundreds. Stability keeps it correct!'],cx:'📊 The n lg n wall for comparison sorts, and the linear sorts that sneak past it.',deep:'🔍 The decision-tree proof, and why radix sort must go least-significant digit first.'},
   cx: [['Any comparison sort (lower bound)', 'Ω(n lg n)', 'Ω(n lg n)', 'Ω(n lg n)', '—', 'decision tree with n! leaves has height ≥ lg(n!)'], ['COUNTING-SORT', 'Θ(n + k)', 'Θ(n + k)', 'Θ(n + k)', 'Θ(n + k)', 'stable; linear when k = O(n)'], ['RADIX-SORT', 'Θ(d(n + k))', 'Θ(d(n + k))', 'Θ(d(n + k))', 'Θ(n + k)', 'b-bit keys, r-bit digits: Θ((b/r)(n + 2<sup>r</sup>)), best r ≈ lg n'], ['BUCKET-SORT', 'Θ(n)', 'Θ(n) expected', 'Θ(n²)', 'Θ(n)', 'assumes keys uniform on [0, 1)']],
   deep: [
     ['The decision-tree lower bound', `<p>Any comparison sort can be drawn as a binary tree: each internal node is a comparison a<sub>i</sub> ≤ a<sub>j</sub>, each leaf is an output permutation. To be correct on every input, all n! permutations must appear as leaves. A binary tree of height h has at most 2<sup>h</sup> leaves, so</p><p class="math" style="text-align:center">2<sup>h</sup> ≥ n! ⇒ h ≥ lg(n!) = Θ(n lg n)</p><p>(using lg(n!) ≥ lg((n/2)<sup>n/2</sup>) = (n/2) lg(n/2)). The height is the worst-case number of comparisons. So merge sort and heapsort are asymptotically optimal among comparison sorts.</p>`],
@@ -661,6 +674,7 @@ VIZ.queens = {
 };
 DEEP.t12s = {
   viz: ['queens'],
+  kid:{viz:'♛ The n-queens puzzle: try a square, and backtrack the moment a queen is attacked.',cx:'📊 Trying every option can explode — some puzzles have a smarter table method.',deep:'🔍 The backtracking recipe, and the moment it becomes dynamic programming.'},
   cxHead: ['Problem', 'Backtracking cost', 'Better approach', 'Notes'],
   cx: [['n-queens', 'O(n!) placements (far fewer with pruning)', '—', 'pruning by column/diagonal cuts the tree hugely'], ['Subset sum (n items, target T)', 'O(2ⁿ) subsets', 'DP in O(nT) (pseudo-polynomial)', 'each item: include it or not'], ['Text segmentation (n characters)', 'O(2ⁿ) splits', 'memoized/DP in O(n²) calls to IsWord', 'same suffixes recomputed repeatedly'], ['Longest increasing subsequence', 'O(2ⁿ)', 'DP in O(n²) (O(n lg n) with a clever search)', 'state = (index, last value taken)'], ['Permutations / TSP brute force', 'Θ(n!)', 'DP over subsets O(2ⁿ n²)', 'still exponential: TSP is NP-hard (Topic 24)']],
   deep: [
@@ -695,6 +709,7 @@ VIZ.rod = {
 };
 DEEP.t12a = {
   viz: ['rod'],
+  kid:{viz:'🍖 Rod cutting: remember the best price for every length, smallest first.',cx:'📊 DP time ≈ (number of subproblems) × (choices each) — see the pattern.',deep:'🔍 The four DP steps, why plain recursion is exponential, and why greedy fails here.'},
   cxHead: ['Problem', 'Subproblems', 'Choices each', 'Time', 'Space'],
   cx: [['Rod cutting', 'n (r[j])', 'j', 'Θ(n²)', 'Θ(n)'], ['Plain recursive CUT-ROD', '—', '—', 'Θ(2ⁿ)', 'Θ(n) stack'], ['Fibonacci (memoized)', 'n', '1', 'Θ(n)', 'Θ(n), or Θ(1) bottom-up'], ['Matrix-chain multiplication', 'Θ(n²) (i, j)', 'j − i', 'Θ(n³)', 'Θ(n²)'], ['0-1 knapsack (capacity W)', 'nW', '2', 'Θ(nW) (pseudo-polynomial)', 'Θ(nW)']],
   cxNote: 'Rule of thumb: DP time ≈ (number of subproblems) × (choices per subproblem).',
@@ -731,6 +746,7 @@ VIZ.lcs = {
 };
 DEEP.t12b = {
   viz: ['lcs'],
+  kid:{viz:'🧵 Longest common subsequence: fill the grid, then follow the arrows back to read the answer.',cx:'📊 The LCS table costs Θ(mn) time; a trick can shrink the space.',deep:'🔍 Proving it works, subsequence vs substring, and string puzzles that use the same idea.'},
   cx: [['LCS-LENGTH', 'Θ(mn)', 'Θ(mn)', 'Θ(mn)', 'Θ(mn) (c and b tables)', 'one O(1) cell per (i, j)'], ['PRINT-LCS', 'Θ(m + n)', 'Θ(m + n)', 'Θ(m + n)', 'Θ(m + n) stack', 'each step decreases i or j'], ['Length only, two rows', 'Θ(mn)', 'Θ(mn)', 'Θ(mn)', 'Θ(min(m, n))', 'row i only needs row i − 1'], ['Brute force', 'Θ(n 2<sup>m</sup>)', '', '', '', '2<sup>m</sup> subsequences of X, each checked in Θ(n)']],
   deep: [
     ['Optimal substructure of an LCS', `<p>Let Z = z₁…z<sub>k</sub> be any LCS of X = x₁…x<sub>m</sub> and Y = y₁…y<sub>n</sub>.</p><ol><li>If x<sub>m</sub> = y<sub>n</sub>, then z<sub>k</sub> = x<sub>m</sub> and Z<sub>k−1</sub> is an LCS of X<sub>m−1</sub> and Y<sub>n−1</sub>.</li><li>If x<sub>m</sub> ≠ y<sub>n</sub> and z<sub>k</sub> ≠ x<sub>m</sub>, Z is an LCS of X<sub>m−1</sub> and Y.</li><li>If x<sub>m</sub> ≠ y<sub>n</sub> and z<sub>k</sub> ≠ y<sub>n</sub>, Z is an LCS of X and Y<sub>n−1</sub>.</li></ol><p>Each case is a cut-and-paste argument: if the smaller problem had a longer common subsequence, we could build a longer one for the whole problem. This gives the recurrence c[i, j] = c[i−1, j−1] + 1 on a match, else max(c[i−1, j], c[i, j−1]).</p>`],
@@ -770,6 +786,7 @@ VIZ.huff = {
 };
 DEEP.t13 = {
   viz: ['huff'],
+  kid:{viz:'🗜️ Huffman codes: merge the two rarest letters until one tree remains — frequent letters get the shortest codes.',cx:'📊 Huffman vs other greedy champs — and the problems where greedy fails.',deep:'🔍 Why Huffman is optimal, what a prefix code is, and the exchange argument.'},
   cx: [['HUFFMAN (binary heap)', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n)', 'n − 1 merges, each O(lg n) heap operations'], ['HUFFMAN (frequencies pre-sorted, two queues)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'merged nodes come out in non-decreasing order'], ['Activity selection (sorted by finish)', 'Θ(n)', 'Θ(n)', 'Θ(n)', 'Θ(1)', 'one pass; Θ(n lg n) if you must sort first'], ['Fractional knapsack', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n lg n)', 'Θ(n)', 'sort by value/weight, take greedily'], ['0-1 knapsack', '—', '—', 'greedy fails', '', 'needs DP (Topic 12)']],
   deep: [
     ['Greedy-choice property + optimal substructure', `<p>A greedy algorithm is correct when (1) some optimal solution starts with the greedy choice and (2) after making it, what's left is a smaller instance of the same problem. The standard proof is an <b>exchange argument</b>: take any optimal solution, swap its first choice for the greedy one, and show it is no worse.</p><p><b>Activity selection:</b> let a<sub>m</sub> finish earliest. In an optimal set A, replace its earliest-finishing activity with a<sub>m</sub>; nothing overlaps because a<sub>m</sub> finishes no later. Same size, still optimal.</p>`],
@@ -812,6 +829,7 @@ VIZ.bfsdfs = {
 };
 DEEP.t14a = {
   viz: ['bfsdfs'],
+  kid:{viz:'🕸️ Two ways to explore a graph: BFS spreads like ripples (shortest hops), DFS dives deep first. Flip the option to compare!',cx:'📊 Both searches cost Θ(V + E) on lists; a matrix costs more.',deep:'🔍 BFS distances, DFS edge colors (tree, back, forward, cross), and picking a representation.'},
   cx: [['BFS', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V) queue + colors', 'each vertex enqueued once, each list scanned once'], ['DFS', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V) stack', 'each vertex visited once, each edge examined once (twice undirected)'], ['Adjacency list: space', '', '', 'Θ(V + E)', '', 'best for sparse graphs'], ['Adjacency matrix: space', '', '', 'Θ(V²)', '', 'O(1) edge test; BFS/DFS become Θ(V²)'], ['Edge (u, v) present?', 'Θ(1) matrix', '', 'Θ(degree(u)) list', '', '']],
   deep: [
     ['BFS computes shortest paths (unweighted)', `<p>The queue holds vertices in non-decreasing order of d, and differs by at most 1 from front to back. So when v is first discovered from u, no shorter route can exist: v.d = δ(s, v), the fewest edges from s. Following π pointers back from v prints a shortest path in O(length). This fails as soon as edges have weights — that's Topic 18.</p>`],
@@ -839,6 +857,7 @@ VIZ.topo = {
 };
 DEEP.t14b = {
   viz: ['topo'],
+  kid:{viz:'➡️ Topological sort: every time a vertex finishes, it jumps to the front of the line.',cx:'📊 Sorting a DAG, Kahn queue method, and finding strongly connected groups — all linear.',deep:'🔍 Why finishing times give a valid order, and the two-pass SCC trick.'},
   cx: [['TOPOLOGICAL-SORT', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V)', 'one DFS plus O(1) per finish'], ['Kahn\'s algorithm (in-degree queue)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V)', 'repeatedly remove a vertex with in-degree 0'], ['STRONGLY-CONNECTED-COMPONENTS', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E) for Gᵀ', 'DFS, transpose, DFS in decreasing f'], ['Transpose Gᵀ (adjacency lists)', 'Θ(V + E)', '', '', 'Θ(V + E)', '']],
   deep: [
     ['Why decreasing finish time works', `<p>Claim: for every edge (u, v) in a DAG, v.f &lt; u.f. When DFS explores (u, v), v can't be gray (that would be a back edge, i.e. a cycle). If v is white, it becomes u's descendant and finishes first. If v is black, it has already finished. Either way v.f &lt; u.f, so listing vertices by decreasing f puts u before v.</p>`],
@@ -876,6 +895,7 @@ VIZ.sssp = {
 };
 DEEP.t18 = {
   viz: ['sssp'],
+  kid:{viz:'🛣️ Two shortest-path robots: Dijkstra spreads ripples by travel time, Bellman-Ford relaxes every road over and over (and handles negative weights).',cx:'📊 Compare Bellman-Ford, DAG paths and Dijkstra — who handles negative weights?',deep:'🔍 Why Dijkstra needs non-negative weights, negative cycles, and longest paths in a DAG.'},
   cx: [['BELLMAN-FORD', 'Θ(E) with early exit', 'Θ(VE)', 'Θ(VE)', 'Θ(V)', '|V| − 1 passes over all edges; detects negative cycles'], ['DAG-SHORTEST-PATHS', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V + E)', 'Θ(V)', 'relax edges in topological order; negative weights OK'], ['DIJKSTRA (binary heap)', 'O((V + E) lg V)', '', 'O((V + E) lg V)', 'Θ(V)', 'V EXTRACT-MINs + up to E DECREASE-KEYs'], ['DIJKSTRA (array, dense graphs)', 'Θ(V²)', '', 'Θ(V²)', 'Θ(V)', 'linear-scan minimum; best when E ≈ V²'], ['DIJKSTRA (Fibonacci heap)', 'O(V lg V + E)', '', 'O(V lg V + E)', 'Θ(V)', 'O(1) amortized DECREASE-KEY'], ['BFS (unit weights)', 'Θ(V + E)', '', 'Θ(V + E)', 'Θ(V)', 'Topic 14A']],
   deep: [
     ['Properties every algorithm relies on', `<ul class="clean"><li><b>Optimal substructure:</b> any subpath of a shortest path is a shortest path.</li><li><b>Triangle inequality:</b> δ(s, v) ≤ δ(s, u) + w(u, v).</li><li><b>Upper-bound property:</b> v.d ≥ δ(s, v) always, and once equal it never changes.</li><li><b>Path-relaxation property:</b> if the edges of a shortest path are relaxed in order (with anything else mixed in), the last vertex gets the right d. Bellman-Ford's |V| − 1 passes guarantee this because a shortest path has at most |V| − 1 edges.</li></ul>`],
@@ -907,6 +927,7 @@ VIZ.fw.opts = [{id: 'w', label: 'Weights', val: 'clrs', fresh: true, choices: [[
 VIZ.fw.input = o => o.w === 'rand' ? FW_E.map(() => rnd(1, 9)) : FW_E.map(e => e[2]);
 DEEP.t19 = {
   viz: ['fw'],
+  kid:{viz:'🧭 Floyd-Warshall: "what if we could stop in town k?" — the whole distance chart updates each round.',cx:'📊 All-pairs methods compared: Floyd-Warshall, Johnson, Dijkstra-from-each.',deep:'🔍 The DP recurrence, recovering paths, and the Johnson reweighting trick.'},
   cx: [['Run Dijkstra from every vertex (binary heap)', 'O(V(V + E) lg V)', '', 'O(VE lg V)', 'Θ(V²) output', 'non-negative weights only'], ['Run Bellman-Ford from every vertex', 'Θ(V²E)', '', 'Θ(V²E)', 'Θ(V²)', 'Θ(V⁴) on dense graphs'], ['Repeated squaring (min-plus products)', 'Θ(V³ lg V)', '', 'Θ(V³ lg V)', 'Θ(V²)', 'lg V "matrix multiplications"'], ['FLOYD-WARSHALL', 'Θ(V³)', 'Θ(V³)', 'Θ(V³)', 'Θ(V²)', 'negative edges OK, no negative cycles'], ['JOHNSON', 'O(VE lg V)', '', 'O(VE lg V)', 'Θ(V²)', 'Bellman-Ford once + Dijkstra V times; best for sparse graphs'], ['Transitive closure', 'Θ(V³)', '', 'Θ(V³)', 'Θ(V²) bits', 'Floyd-Warshall with OR/AND']],
   deep: [
     ['The Floyd-Warshall recurrence', `<p>Consider a shortest path from i to j whose intermediate vertices all lie in {1, …, k}. Either it doesn't use k (then it's d<sup>(k−1)</sup>[i, j]) or it uses k exactly once, splitting into i ⇝ k and k ⇝ j, each using only {1, …, k−1}:</p><p class="math" style="text-align:center">d<sup>(k)</sup>[i, j] = min(d<sup>(k−1)</sup>[i, j], d<sup>(k−1)</sup>[i, k] + d<sup>(k−1)</sup>[k, j])</p><p>Row k and column k don't change during round k (d[i, k] + d[k, k] = d[i, k] when d[k, k] = 0), which is why updating a single matrix in place is safe.</p>`],
@@ -945,6 +966,7 @@ VIZ.flow = {
 };
 DEEP.t20 = {
   viz: ['flow'],
+  kid:{viz:'🚰 Edmonds-Karp pushes water through pipes until no path remains; the red edges prove the minimum cut.',cx:'📊 Running times for Ford-Fulkerson vs Edmonds-Karp — and matching as a max-flow trick.',deep:'🔍 The flow rules, the min-cut theorem, and reductions like bipartite matching.'},
   cx: [['FORD-FULKERSON (integer capacities)', '', '', 'O(E · |f*|)', 'Θ(V + E)', 'each augmentation adds ≥ 1; each costs O(E)'], ['EDMONDS-KARP', '', '', 'O(VE²)', 'Θ(V + E)', 'O(VE) augmentations, each a BFS in O(E)'], ['Find a min cut from a max flow', 'Θ(V + E)', '', 'Θ(V + E)', '', 'BFS/DFS from s in G_f'], ['Maximum bipartite matching', '', '', 'O(VE)', 'Θ(V + E)', 'unit capacities: |f*| ≤ V/2']],
   deep: [
     ['Flow rules and the residual network', `<ul class="clean"><li><b>Capacity constraint:</b> 0 ≤ f(u, v) ≤ c(u, v).</li><li><b>Flow conservation:</b> at every vertex except s and t, flow in = flow out.</li><li><b>Residual capacity:</b> c<sub>f</sub>(u, v) = c(u, v) − f(u, v) for an edge of G, and c<sub>f</sub>(v, u) = f(u, v) for its reverse. The reverse edge lets a later path "undo" a poor earlier choice.</li><li>CLRS assumes no antiparallel edges; if both (u, v) and (v, u) exist, split one with a new vertex.</li></ul>`],
@@ -980,6 +1002,7 @@ VIZ.sat2clique = {
 };
 DEEP.t24 = {
   viz: ['sat2clique'],
+  kid:{viz:'🧩 Turn a logic formula into a graph: a clique exists exactly when the formula can be satisfied.',cx:'📊 For each puzzle: what proves a yes, how fast you can check it, and which hard problem it comes from.',deep:'🔍 P vs NP in plain words, the two-step NP-completeness proof, and why reduction direction matters.'},
   cxHead: ['Problem', 'Certificate', 'Verify in', 'NP-complete via'],
   cx: [['CIRCUIT-SAT', 'input wire values', 'O(circuit size)', 'first NP-complete problem (Theorem 34.7)'], ['SAT', 'truth assignment', 'O(|φ|)', 'CIRCUIT-SAT ≤ₚ SAT'], ['3-CNF-SAT', 'truth assignment', 'O(|φ|)', 'SAT ≤ₚ 3-CNF-SAT'], ['CLIQUE', 'the k vertices', 'O(k²)', '3-CNF-SAT ≤ₚ CLIQUE'], ['VERTEX-COVER', 'the cover', 'O(E)', 'CLIQUE ≤ₚ VERTEX-COVER (complement graph)'], ['HAM-CYCLE', 'the vertex order', 'O(V)', 'VERTEX-COVER ≤ₚ HAM-CYCLE'], ['TSP (decision)', 'the tour', 'O(V)', 'HAM-CYCLE ≤ₚ TSP'], ['SUBSET-SUM', 'the subset', 'O(n)', '3-CNF-SAT ≤ₚ SUBSET-SUM']],
   deep: [
@@ -1011,6 +1034,7 @@ VIZ.avc = {
 };
 DEEP.t25 = {
   viz: ['avc'],
+  kid:{viz:'👮 Vertex cover: guard both ends of a hallway, repeat — never more than double the best.',cx:'📊 Approximation ratios: vertex cover 2×, metric TSP 2×, set cover about lg n.',deep:'🔍 What a ratio bound really means, the MST tour trick, and rounding an LP.'},
   cxHead: ['Problem', 'Algorithm', 'Ratio', 'Time'],
   cx: [['Vertex cover', 'APPROX-VERTEX-COVER (maximal matching)', '2', 'O(V + E)'], ['Metric TSP (triangle inequality)', 'MST + preorder walk (APPROX-TSP-TOUR)', '2', 'O(V²) on a complete graph'], ['General TSP', 'none possible unless P = NP', '—', '—'], ['Set cover', 'GREEDY-SET-COVER', 'H(max |S|) ≤ ln |X| + 1', 'polynomial'], ['MAX-3-CNF (random assignment)', 'set each variable true with prob. 1/2', '8/7 expected', 'O(n)'], ['Weighted vertex cover', 'LP relaxation + rounding x ≥ 1/2', '2', 'polynomial (LP)'], ['Subset sum (optimization)', 'FPTAS: trim lists by δ = ε/2n', '1 + ε', 'polynomial in n and 1/ε']],
   deep: [
@@ -1045,6 +1069,7 @@ VIZ.sched = {
 };
 DEEP.t22 = {
   viz: ['sched'],
+  kid:{viz:'🧵 A greedy scheduler hands out processors; watch complete steps vs idle ones.',cx:'📊 Work, span and parallelism for each fork-join algorithm.',deep:'🔍 Why greedy scheduling is near-optimal, and how to avoid races.'},
   cxHead: ['Algorithm', 'Work T₁', 'Span T∞', 'Parallelism T₁/T∞'],
   cx: [['P-FIB(n)', 'Θ(φⁿ)', 'Θ(n)', 'Θ(φⁿ / n)'], ['parallel for over n iterations (each O(1))', 'Θ(n)', 'Θ(lg n)', 'Θ(n / lg n)'], ['P-MAT-VEC (n × n)', 'Θ(n²)', 'Θ(n)', 'Θ(n)'], ['P-MATRIX-MULTIPLY (loops, serial inner sum)', 'Θ(n³)', 'Θ(n)', 'Θ(n²)'], ['P-MATRIX-MULTIPLY-RECURSIVE', 'Θ(n³)', 'Θ(lg² n)', 'Θ(n³ / lg² n)'], ['P-MERGE-SORT (parallel merge)', 'Θ(n lg n)', 'Θ(lg³ n)', 'Θ(n / lg² n)']],
   cxNote: 'Work law: T_P ≥ T₁/P. Span law: T_P ≥ T∞. Greedy scheduler: T_P ≤ T₁/P + T∞, so it is near-optimal whenever the parallelism is much larger than P (slackness).',

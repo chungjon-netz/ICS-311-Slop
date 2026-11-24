@@ -1,6 +1,6 @@
 // ======================= PURPOSEFUL-LEARNING CONTENT & MIDTERM REVIEWS =======================
-const LEARN = {};   // id -> {goal, key:[], mistakes:[], prompts:[[q, a]]}
-const REVIEW = {};  // group id -> {chain:[[id, feedsInto]], checklist:[], plan:[]}
+const LEARN = {};   // id -> {goal, key:[], mistakes:[], prompts:[[q, a]], eli5:{goal, key, mistakes, prompts}}
+const REVIEW = {};  // group id -> {chain:[[id, feedsInto]], checklist:[], plan:[], eli5:{chain, checklist, plan}}
 Object.assign(LEARN, {
  t01:{goal:'Describe a problem precisely, pick a data structure by the operations you need, and say what they cost.',
   key:['A <b>problem</b> is an input/output relation; an <b>algorithm</b> is correct only if it works on <i>every</i> instance (CLRS 1.1).','Measure cost as a function of input size n in the RAM model, not seconds on a machine.','An <b>ADT</b> says what operations do; a <b>data structure</b> decides what they cost.','Stack = LIFO, queue = FIFO, both O(1) per operation; linked lists trade O(1) insert/delete for O(n) search (CLRS 10.1–10.2).','Rooted trees: binary nodes store p, left, right; left-child right-sibling handles any branching in O(n) space (CLRS 10.3).'],

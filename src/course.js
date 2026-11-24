@@ -62,22 +62,25 @@ function groupPage(g){
 </section>`;
 }
 
+const kidNote = t => t ? `<p class="kid-only eli5-note">${t}</p>` : '';
 function learnBlock(id){
   const L = LEARN[id]; if (!L) return '';
+  const E = L.eli5 || {};
   return `<div class="learn card"><div class="learn-head"><h2 style="margin:0">🎯 Learn it on purpose</h2><span class="pill">core concepts</span></div>
-  ${L.goal ? `<p class="learn-goal"><b>Goal:</b> ${L.goal}</p>` : ''}
-  <div class="grid g2"><div><h3>🔑 Key ideas to own</h3><ol class="keys">${L.key.map(k => `<li>${k}</li>`).join('')}</ol></div>
-  <div><h3>⚠️ Common mistakes</h3><ul class="clean">${L.mistakes.map(m => `<li>${m}</li>`).join('')}</ul></div></div>
-  <h3>🧠 Check yourself <span class="stat-label" style="font-weight:400">· answer out loud or on paper before you peek</span></h3>
+  ${kidNote(E.goal)}${L.goal ? `<p class="learn-goal"><b>Goal:</b> ${L.goal}</p>` : ''}
+  <div class="grid g2"><div>${kidNote(E.key)}<h3>🔑 Key ideas to own</h3><ol class="keys">${L.key.map(k => `<li>${k}</li>`).join('')}</ol></div>
+  <div>${kidNote(E.mistakes)}<h3>⚠️ Common mistakes</h3><ul class="clean">${L.mistakes.map(m => `<li>${m}</li>`).join('')}</ul></div></div>
+  ${kidNote(E.prompts)}<h3>🧠 Check yourself <span class="stat-label" style="font-weight:400">· answer out loud or on paper before you peek</span></h3>
   <div class="prompts">${L.prompts.map(([q, a], i) => `<details class="prompt"><summary><span class="pn">${i + 1}</span>${q}</summary><div class="pa">${a}</div></details>`).join('')}</div>
   <p class="habit">📌 <b>Study habit:</b> ${L.habit || 'Close the page, write the key ideas from memory, then compare. Re-test yourself tomorrow and again in 3 days.'}</p></div>`;
 }
 function reviewBlock(g){
   const R = REVIEW[g.id]; if (!R) return '';
+  const E = R.eli5 || {};
   return `<h2>🔗 Review: how each topic feeds into the next</h2>
-  <div class="chain">${R.chain.map(([id, txt], i) => `<div class="chain-step"><a class="chain-node" href="#${id}" style="border-color:${TMETA[id].color}"><span class="tnum" style="color:${TMETA[id].color}">${TMETA[id].num}</span> ${TMETA[id].short}</a><div class="chain-txt">${txt}</div>${i < R.chain.length - 1 ? '<div class="chain-arrow">↓</div>' : ''}</div>`).join('')}</div>
-  <div class="grid g2"><div class="card"><h3>✅ Can you…</h3><ul class="clean checklist">${R.checklist.map(x => `<li><label><input type="checkbox"> ${x}</label></li>`).join('')}</ul></div>
-  <div class="card"><h3>🗓️ Review plan</h3><ol>${R.plan.map(x => `<li>${x}</li>`).join('')}</ol></div></div>`;
+  ${kidNote(E.chain)}<div class="chain">${R.chain.map(([id, txt], i) => `<div class="chain-step"><a class="chain-node" href="#${id}" style="border-color:${TMETA[id].color}"><span class="tnum" style="color:${TMETA[id].color}">${TMETA[id].num}</span> ${TMETA[id].short}</a><div class="chain-txt">${txt}</div>${i < R.chain.length - 1 ? '<div class="chain-arrow">↓</div>' : ''}</div>`).join('')}</div>
+  <div class="grid g2"><div class="card">${kidNote(E.checklist)}<h3>✅ Can you…</h3><ul class="clean checklist">${R.checklist.map(x => `<li><label><input type="checkbox"> ${x}</label></li>`).join('')}</ul></div>
+  <div class="card">${kidNote(E.plan)}<h3>🗓️ Review plan</h3><ol>${R.plan.map(x => `<li>${x}</li>`).join('')}</ol></div></div>`;
 }
 function topicCard(id){
   const t = TMETA[id], s = store.byTopic[id], pct = s && s.a ? Math.round(100 * s.c / s.a) : 0;
