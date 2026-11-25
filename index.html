@@ -7297,9 +7297,8 @@ function mountCribGuide(g, C, G){
 }
 if (typeof CRIB_MD !== 'undefined') GROUPS.filter(g => CRIB_MD[g.id]).forEach(mountCrib);
 
-// ======================= MT4 SCREENCAST CHAPTERS =======================
-// YouTube chapter markers (start second, title) for every MT4 screencast, fetched
-// from each video's page. Used by course-learn-mt4.js to embed exact sections.
+// ======================= SCREENCAST CHAPTERS =======================
+// YouTube chapter markers (start second, title) fetched from each video's page.
 // LEARN_CH[videoId] = [tag, title, lengthSeconds, [[start, chapterTitle], ...]]
 const LEARN_CH = {"hWtmauUMYD8":["13A","Topic 13 A Greedy Algorithms and DP",474,[[0,"Introduction"],[33,"Conceptual overview"],[132,"Comparing the strategies"],[240,"Knapsack problem example"],[333,"Algorithm comparison"]]],
 "_-1nKy0bnwE":["13B","Topic 13 B Activity Scheduling",1397,[[0,"Activity scheduling problem"],[133,"Dynamic programming approach"],[444,"Formulating the solution"],[604,"Greedy choice property"],[748,"Proving the greedy choice"],[936,"Iterative greedy algorithm"],[1183,"Algorithm analysis and summary"]]],
@@ -7322,7 +7321,56 @@ const LEARN_CH = {"hWtmauUMYD8":["13A","Topic 13 A Greedy Algorithms and DP",474
 "Ku24z4v9YF8":["19A","Topic 19 A All Pairs Shortest Paths",576,[]],
 "z0reAeK4kl0":["19B","Topic 19 B Johnsons Algorithm",1413,[[0,"Introduction to algorithm"],[35,"The reticulated maze problem"],[66,"Reweighting lemma and proof"],[588,"Johnson's insight"],[802,"Replacing the ocean buoy"],[810,"Divers at work"],[814,"Local supervision"],[817,"Algorithm steps and runtime"],[1373,"Photography on the atoll"],[1385,"Octopus photo setup"],[1395,"Final photograph result"],[1403,"Conclusion and next topics"]]],
 "dzf7x5Z8Ui8":["19C","Topic 19 C Floyd Warshall",1207,[[0,"Introduction to algorithms"],[107,"Dynamic programming basics"],[305,"Matrix multiplication"],[517,"Floyd-Warshall approach"],[703,"Algorithm implementation"],[896,"Trace example"],[1125,"Transitive closure"]]],
-"Sygq1e0xWnM":["MIT19","Lec 19 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4499,[[0,"Introduction and recap"],[49,"All-pairs shortest paths"],[296,"Dynamic programming approach"],[726,"Matrix multiplication method"],[1360,"Improved matrix squaring"],[2188,"Floyd-Warshall algorithm"],[2854,"Transitive closure"],[3214,"Johnson's algorithm"]]]};
+"Sygq1e0xWnM":["MIT19","Lec 19 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4499,[[0,"Introduction and recap"],[49,"All-pairs shortest paths"],[296,"Dynamic programming approach"],[726,"Matrix multiplication method"],[1360,"Improved matrix squaring"],[2188,"Floyd-Warshall algorithm"],[2854,"Transitive closure"],[3214,"Johnson's algorithm"]]],
+"86QY8mBX7Ks":["04A","Topic 04 A Stacks Queues Lists",1637,[[0,"Introduction to structures"],[26,"Understanding stacks"],[220,"Implementing stacks"],[570,"Introduction to queues"],[857,"Queue implementation details"],[1003,"Linked list concepts"],[1344,"List operations and wrap-up"]]],
+"eECZ_lKXsHs":["04B","Topic 04 B Trees and Dynamic Sets",934,[[0,"Introduction to trees"],[38,"Binary tree structure"],[163,"Tree traversal methods"],[298,"N-ary trees and storage"],[438,"Left-child right-sibling"],[636,"Dynamic set ADT"]]],
+"y86z2OrIYQQ":["03A","Topic 03 A Asymptotic Notations",673,[[0,"Introduction to asymptotics"],[59,"Framework for analysis"],[154,"Defining big O notation"],[475,"Examples and applications"]]],
+"4IL2Ir_O_vI":["03B","Topic 03 B Asymptotic Notations: Omega and Theta",1017,[]],
+"uaqLI449XQw":["03C","Topic 03 C Asymptotic Notations: little-o and omega; use in equations; properties",973,[]],
+"f2czg61AtQw":["03D","Topic 03 D Functions and Identities for Analysis",513,[[0,"Intro"],[24,"Monotonicity"],[105,"Exponentials"],[179,"Logarithms"],[389,"Factorials"]]],
+"whjt_N9uYFI":["MIT02","Lec 2 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4231,[[0,"Introduction"],[90,"Big O Notation"],[480,"Equality"],[590,"Big Omega"],[995,"Recurrence"],[1440,"Residual"],[2050,"Office Hours"],[2380,"Recursion Tree"],[2770,"total"],[2824,"binary"],[2917,"master method"],[3435,"recursion"]]],
+"euEquYjVVcQ":["02A","Topic 02 A Insertion Sort",455,[[0,"Introduction to algorithms"],[42,"The sorting problem"],[150,"Incremental strategy"],[303,"Insertion sort in practice"]]],
+"t1ranlQmofQ":["02B","Topic 02 B Loop Invariant of Insertion Sort",377,[]],
+"UtEMLcKHcGc":["02C","Topic 02 C Detailed Analysis of Insertion Sort",1666,[]],
+"JPyuH4qXLZ0":["MIT01","Lec 1 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4835,[]],
+"9BI0Lw1kzkE":["02D","Topic 02 D Merge Sort",687,[]],
+"1JbqqmK7e5s":["02E","Topic 02 E Analysis of Merge Sort",1248,[]],
+"W7rChliGE5M":["07A","Topic 07 A Divide Conquer",876,[]],
+"X2D80jsS3sY":["07B","Topic 07 B Substitution",515,[]],
+"8F2OvQIlGiU":["07C","Topic 07 C Recursion Trees",1148,[]],
+"h4Avr0byu1g":["07D","Topic 07 D Master Method",1066,[]],
+"-EQTVuAhSFY":["MIT03","Lec 3 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4113,[[0,"Introduction to algorithms"],[72,"Divide and conquer concept"],[185,"Steps of divide and conquer"],[285,"Merge sort example"],[405,"Analyzing merge sort"],[567,"Binary search example"],[727,"Powering a number"],[874,"Exponentiation algorithm"],[1072,"Fibonacci numbers"],[1420,"Fast Fibonacci computation"],[1611,"Matrix multiplication proof"],[2026,"Matrix multiplication"],[2214,"Block matrix multiplication"],[2544,"Strassen's algorithm"],[3000,"Strassen's complexity"],[3313,"VLSI tree layout"]]],
+"0zh4IiKaVN0":["09A","Topic 09 A Heap Properties",845,[[0,"Introduction to heaps"],[36,"Heap properties"],[372,"Max and min heaps"],[514,"Array representation"],[750,"Identifying leaves"]]],
+"oAfSx7aRkZM":["09B","Topic 09 B Building Heaps",862,[]],
+"gMwtzAPDupI":["09C","Topic 09 C Analyzing Heap Building",532,[[0,"Introduction"],[12,"correctness"],[163,"analysis"]]],
+"8O5iBigvDIw":["09D","Topic 09 D Applications of Heaps",838,[[0,"Intro"],[15,"Heapsort"],[383,"Priority queues"],[505,"Maximums"],[596,"Increasing Keys"]]],
+"bAxzRuu3Uy4":["08A","Topic 08 A Trees, Binary Trees, and basic quantitative facts",909,[]],
+"LDncFcNOr_I":["08B","Topic 08 B Binary Search Tree Queries",1305,[[0,"Binary search tree basics"],[200,"Tree traversal methods"],[309,"Proof of traversal complexity"],[754,"Searching and extrema"],[966,"Successors and predecessors"]]],
+"qJ7TyaKSf_0":["08C","Topic 08 C Modifying BST",1361,[[0,"BST modification overview"],[65,"BST insertion procedures"],[279,"Conceptual BST deletion"],[780,"BST deletion implementation"],[1293,"BST operation complexity"]]],
+"vx0uWYHIRes":["08D","Topic 08 D Analyzing BST",270,[]],
+"N-Sot-yf3As":["11A","Topic 11 A Balanced and 2 4 Trees",678,[]],
+"W49P7wqdIuE":["11B","Topic 11 B 2 4 Tree Mutation",859,[[0,"Introduction to balance trees"],[47,"Insertion in 2-4 trees"],[208,"Handling node splits"],[344,"Insertion complexity analysis"],[501,"Deletion in 2-4 trees"],[620,"Fusion and underflow"],[731,"Transfer and complexity"],[836,"Moving to red-black trees"]]],
+"a6LaiKa3ES0":["11C","Topic 11 C Red Black Trees",890,[[0,"Introduction"],[30,"Red Black Trees"],[534,"Recap"]]],
+"HlwQ_n56MHQ":["11D","Topic 11 D RBT Mutation",1266,[[0,"Introduction to red black trees"],[15,"Red-black tree insertion"],[138,"Handling insertion violations"],[300,"Restructuring red-black trees"],[453,"Recoloring red-black trees"],[635,"Red-black tree deletion"],[780,"Fixing deletion underflow"],[944,"Advanced deletion scenarios"],[1105,"Comparing balanced trees"]]],
+"O3hI9FdxFOM":["MIT10","Lec 10 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",5031,[[0,"Introduction"],[295,"RedBlack Trees"],[416,"Black Trees"],[540,"Black Paths"],[680,"Red Black Tree"],[1140,"Merge nodes"],[1420,"Black height"],[1680,"Tree height"],[1895,"Queries"],[2430,"Insertion"],[2595,"Recoloring"],[2670,"Inserting"],[2855,"Recolor"],[2970,"Rotate"]]],
+"MgnvWTZgqcA":["05A","Topic 05 A Indicator Random Variables",1054,[[0,"Introduction"],[57,"Indicator Random Variables"],[236,"Review Basic Probability"],[261,"Random Variables"],[378,"Lemma"],[509,"Example"]]],
+"k-jusEhrRik":["05B","Topic 05 B Example Expected Inversions",842,[]],
+"v1ghdc_hwMI":["10A","Topic 10 A Quicksort",1455,[[0,"Introduction to Quicksort"],[266,"The partition procedure"],[514,"Proving algorithm correctness"],[916,"Step-by-step example"]]],
+"qS9oMz4_kTU":["10B","Topic 10 B Quicksort Random Analysis",1397,[[0,"Introduction"],[17,"Quicksort"],[370,"Randomization Strategy"],[507,"Climbing"],[519,"Random Analysis"]]],
+"NMm1BKomO_Y":["06A","Topic 06 A Hash Tables Chaining",501,[[0,"Hash table introduction"],[128,"Hash functions and collisions"],[286,"Chaining for collisions"],[451,"Open addressing introduction"]]],
+"ei7T9Y97u0M":["06B","Topic 06 B Analysis of Chaining",1220,[[0,"Introduction"],[17,"Analysis of Chaining"],[330,"Unsuccessful Search"],[422,"Successful Search"],[480,"Average"],[513,"Notation"],[1050,"Final Answer"]]],
+"jW4wCfz3DwE":["06C","Topic 06 C Hash Functions",751,[]],
+"SGGP_HJNUts":["06D","Topic 06 D Open Addressing",969,[[0,"Open Addressing"],[74,"Formalizing"],[196,"Hash Functions"],[399,"Deletion"],[691,"Double hashing"],[800,"Results of analysis"]]],
+"JZHBa-rLrBA":["MIT07","Lec 7 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4659,[[0,"Introduction"],[120,"Set Operations"],[270,"Direct Access Table"],[580,"Hashing"],[760,"Collisions"],[860,"Chaining"],[1010,"Analysis"],[1195,"Uniform Hashing"],[1320,"Load Factor"],[1760,"Hash Functions"],[2335,"Hash Function"],[2535,"Example"],[2989,"Open Addressing"]]],
+"s7QSM_hlS1U":["MIT08","Lec 8 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4786,[[0,"Introduction"],[300,"Universal Hashing"],[1581,"Product Rule"],[1676,"Theorem"],[2146,"Finite Fields"],[2952,"Perfect Hashing"]]],
+"mR_RUjsJnV8":["MIT06","Lec 6 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4128,[[0,"Introduction"],[37,"Problem"],[213,"Medians"],[300,"Order Statistics"],[367,"Partition"],[450,"Random Partition"],[707,"Random Partition Example"],[919,"Intuition"],[2127,"Recurrence"],[2335,"Summation"],[2691,"Random Pivots"]]],
+"gZmEYyqHefk":["10C","Topic 10 C Bounds on Sorting",1247,[]],
+"0VqawRl3Xzs":["MIT05","Lec 5 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4610,[]],
+"RYPsOJmhwgE":["12A","Topic 12 A Dynamic Programming Intro",1435,[[0,"Introduction to DP"],[28,"Problem solving methods"],[225,"The rod cutting problem"],[842,"Recursive solution"],[861,"Memoization and bottom-up"]]],
+"0tQ3ah0Fddw":["12B","Topic 12 B DP Steps and LCS Example",1032,[[0,"Introduction to DP"],[60,"DP conditions"],[133,"Problem solving steps"],[298,"LCS problem definition"],[423,"Brute force and redundancy"],[560,"Optimal substructure proof"],[780,"Recursive formula"]]],
+"QzgqDJIJtNY":["12D","Topic 12 D DP Applications Summary",1080,[[0,"Introduction"],[20,"Matrix Chain Multiplication"],[377,"Optimal Binary Search Trees"],[813,"Optimal Substructure"],[929,"Summary"]]],
+"V5hZoJ6uK-s":["MIT15","Lec 15 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4260,[[0,"Dynamic Programming"],[473,"Checking Subsequences"],[975,"Theorem"],[1495,"Proof"],[2030,"Code"],[2280,"Recursion"],[2550,"Memoization"]]],
+"dFObo5BeJ0k":["12C","Topic 12 C LCS Example Continued",1073,[[0,"Optimal substructure analysis"],[160,"Dynamic programming solution"],[601,"Step-by-step table example"],[1020,"Review and takeaways"]]]};
 
 // ======================= MT4 LEARNING PATH: LESSON CONTENT =======================
 // LEARN_MT4 = units (big topics). Each lesson has a detailed explanation, a dummy
@@ -8291,14 +8339,591 @@ PRINT-ROUTE(next, i, j)            // O(path length)
  ]
 };
 
-// ======================= MT4 LEARNING PATH PAGE (#mt4-learn) =======================
+// ======================= MT1–MT3 LEARNING PATHS: LESSON CONTENT =======================
+// Same format as learn-mt4-units.js. Clip specs: [videoId, firstChapter?, lastChapter?].
+const LEARN_MT1 = [
+{id: 'adt', topics: ['t01'], title: 'Algorithms, ADTs & Basic Data Structures', notes: 'Topic 01', reading: 'CLRS 4e Ch 1, 10',
+ lessons: [
+  {h: 'What an algorithm is, and what "analysis" means', body: `<p>An <b>algorithm</b> is a finite sequence of unambiguous steps that solves a computational problem. A <b>problem</b> is a relation between inputs and required outputs; one particular input is an <b>instance</b>. An algorithm is <b>correct</b> only if it halts with the right output on <i>every</i> instance. Testing a few inputs is evidence, not proof.</p><p>Analyzing an algorithm means two separate jobs: <b>correctness</b> (proved with loop invariants or induction) and <b>cost</b>. For cost we pick the input size n and the <b>RAM model</b>, where each primitive step (arithmetic, comparison, assignment, array index, call/return) costs O(1), and count steps as a function of n. We discard constants only after the exact count is written down.</p><p>An <b>ADT</b> is a contract (what the operations do); a <b>data structure</b> is an implementation (what they cost). Dynamic sets support SEARCH, INSERT, DELETE, MINIMUM, MAXIMUM, SUCCESSOR and PREDECESSOR.</p>`,
+   kid: 'An algorithm is a recipe that must work for every kitchen, not just yours. An ADT is the menu; the data structure is how the kitchen actually cooks it.',
+   check: ['An algorithm is correct if…', ['it halts with the correct output on every input instance', 'it works on the sample inputs', 'it runs in polynomial time', 'it never uses recursion'], 'Correctness must hold for all instances, and the algorithm must terminate.']},
+  {h: 'Stacks and circular queues', clips: [['86QY8mBX7Ks', 'Understanding stacks', 'Queue implementation details']],
+   body: `<p>A <b>stack</b> is LIFO: PUSH and POP work at S.top, both O(1). POP on an empty stack is an <b>underflow</b>; PUSH on a full array is an <b>overflow</b>.</p><p>A <b>queue</b> is FIFO, implemented in an array as a ring: Q.head is the front, Q.tail is the next free slot, and both wrap from Q.size back to 1. The queue is <b>empty</b> when head = tail and <b>full</b> when head = tail + 1 (mod size), so an array of n slots holds at most <b>n − 1</b> items; the spare slot is what tells full from empty. A count field lets you use all n.</p><p><b>PS1:</b> a linked-list stack with head, <b>tail</b> and a size field supports CATENATE(S, T) in O(1): S.tail.next = T.head.</p>`,
+   kid: 'A stack is a pile of plates: you take the top one. A queue is a lunch line: first in, first out. In a ring-shaped line, one empty spot is kept so you can tell "full" from "empty".',
+   check: ['A circular queue stored in an array of n slots (no count field) can hold at most…', ['n − 1 items', 'n items', 'n + 1 items', 'n/2 items'], 'head = tail means empty, so one slot is sacrificed to distinguish full.']},
+  {h: 'Linked lists, sentinels and rooted trees', clips: [['86QY8mBX7Ks', 'Linked list concepts', 'List operations and wrap-up'], ['eECZ_lKXsHs', 'Binary tree structure', 'Left-child right-sibling']],
+   body: `<p>In a doubly linked list, SEARCH is Θ(n), but INSERT and DELETE (given a pointer) are Θ(1): just relink x.prev and x.next. In a <b>singly</b> linked list DELETE needs the predecessor, so it is Θ(n). A <b>sentinel</b> L.nil makes the list circular so that x.prev.next = x.next and x.next.prev = x.prev never need NIL checks; it simplifies code without changing the asymptotics.</p><p>Binary-tree nodes store p, left and right. For any branching factor, the <b>left-child, right-sibling</b> representation uses two pointers per node, Θ(n) space total; COUNT-CHILDREN walks the sibling list (PS1 P6). Depth is the number of edges from the root; height is the longest downward path to a leaf.</p>`,
+   kid: 'A linked list is a chain of paper clips. A dummy clip at the front means you never have to handle "the end of the chain" as a special case.',
+   check: ['Given a pointer to node x, deleting x from a DOUBLY linked list costs…', ['Θ(1)', 'Θ(lg n)', 'Θ(n)', 'Θ(n²)'], 'Only x.prev and x.next are relinked.']}
+ ]},
+{id: 'growth', topics: ['t03'], title: 'Growth of Functions & Asymptotic Notation', notes: 'Topic 03', reading: 'CLRS 4e Ch 3, App. A',
+ extra: [['whjt_N9uYFI', 'Big O Notation', 'Big Omega']],
+ lessons: [
+  {h: 'O, Ω, Θ, o and ω, defined precisely', clips: [['y86z2OrIYQQ', 'Framework for analysis', 'Examples and applications'], ['4IL2Ir_O_vI']],
+   body: `<table class="tbl"><tr><th>Notation</th><th>Definition (for all n ≥ n₀)</th><th>Like</th></tr><tr><td>f = O(g)</td><td>∃ c &gt; 0: f(n) ≤ c·g(n)</td><td>≤</td></tr><tr><td>f = Ω(g)</td><td>∃ c &gt; 0: f(n) ≥ c·g(n)</td><td>≥</td></tr><tr><td>f = Θ(g)</td><td>∃ c₁, c₂: c₁g(n) ≤ f(n) ≤ c₂g(n)</td><td>=</td></tr><tr><td>f = o(g)</td><td>∀ c &gt; 0: f(n) &lt; c·g(n)</td><td>&lt;</td></tr><tr><td>f = ω(g)</td><td>∀ c &gt; 0: f(n) &gt; c·g(n)</td><td>&gt;</td></tr></table><p><b>Theorem 3.1:</b> Θ ⇔ O and Ω. The big notations say "there exists a c"; the little ones say "for every c", so o ⇒ O but not conversely. If f = g, then O, Ω, Θ hold and o, ω fail. To prove 3n² + 10n + 5 = Θ(n²): c₁ = 3 works for n ≥ 1, and c₂ = 4 works for n ≥ 11.</p>`,
+   kid: 'Big-O means "grows at most this fast", Big-Omega "at least this fast", Big-Theta "exactly this kind of growth". Little-o means "strictly slower".',
+   check: ['If f(n) = g(n) for all n, which statement is FALSE?', ['f = o(g)', 'f = O(g)', 'f = Θ(g)', 'f = Ω(g)'], 'Little-o requires f < c·g for every c > 0, which fails for c = 1.']},
+  {h: 'The limit test and the growth ladder', clips: [['uaqLI449XQw']],
+   body: `<p>Compute L = lim f(n)/g(n). L = 0 ⇒ f = o(g); 0 &lt; L &lt; ∞ ⇒ Θ; L = ∞ ⇒ ω. If the limit doesn't exist the test is silent (n and n^(1+sin n) are incomparable). L'Hôpital: lg n vs √n gives 2/(√n ln 2) → 0, so lg n = o(√n).</p><p><b>Ladder:</b> 1 &lt; lg* n &lt; lg lg n &lt; lg n &lt; lgᵏ n &lt; n^ε &lt; √n &lt; n &lt; n lg n &lt; n² &lt; 2ⁿ &lt; 3ⁿ &lt; n! &lt; nⁿ. Polylogs lose to every polynomial, polynomials lose to every exponential, n^1.01 beats n lg n, 2^(2n) is not O(2ⁿ), and lg(n!) = Θ(n lg n). Properties: transitivity (all five), reflexivity (O, Ω, Θ), symmetry (Θ), and f = O(g) ⇔ g = Ω(f).</p>`,
+   kid: 'Line the functions up like runners in a very long race. Logs are slow walkers, polynomials are bikes, exponentials are rockets.',
+   check: ['lim f(n)/g(n) = 5. Then…', ['f = Θ(g)', 'f = o(g)', 'f = ω(g)', 'nothing can be concluded'], 'A positive finite limit means the same growth rate.']},
+  {h: 'Logs, exponents and sums you will need', clips: [['f2czg61AtQw', 'Exponentials', 'Factorials']],
+   body: `<ul><li>log_b a = log_c a / log_c b, so the base of a log is only a constant factor. a^(log_b c) = c^(log_b a), so 3^(lg n) = n^(lg 3).</li><li>Σ i = n(n + 1)/2; Σ i² = Θ(n³); Σₖ₌₀ⁿ xᵏ = (x^(n+1) − 1)/(x − 1); for x &lt; 1, Σ xᵏ = 1/(1 − x) and Σ k xᵏ = x/(1 − x)², so Σ k/2ᵏ = 2.</li><li>Hₙ = Σ 1/k = ln n + O(1); Σ lg k = Θ(n lg n); Stirling gives n! ≈ √(2πn)(n/e)ⁿ.</li><li>x − 1 &lt; ⌊x⌋ ≤ x ≤ ⌈x⌉ &lt; x + 1.</li></ul><p><b>Trap:</b> Σᵢ₌₁ⁿ O(1) is O(n), not O(1); a hidden constant cannot hide an n.</p>`,
+   kid: 'A few math facts do most of the work: adding 1 + 2 + … + n gives about n²/2, and halving again and again only takes about lg n steps.',
+   check: ['Σ from i = 1 to n of O(1) is…', ['O(n)', 'O(1)', 'O(lg n)', 'O(n²)'], 'There are n terms; the constant cannot absorb n.']}
+ ]},
+{id: 'correct', topics: ['t02'], title: 'Proving Correctness & Analyzing Insertion Sort', notes: 'Topic 02', reading: 'CLRS 4e 2.1–2.2',
+ lessons: [
+  {h: 'Insertion sort', clips: [['euEquYjVVcQ', 'The sorting problem', 'Insertion sort in practice']], viz: 'isort',
+   body: `<pre><code>INSERTION-SORT(A, n)
+  for i = 2 to n
+      key = A[i];  j = i − 1
+      while j > 0 and A[j] > key
+          A[j + 1] = A[j];  j = j − 1
+      A[j + 1] = key</code></pre><p>The sorted prefix A[1..i−1] grows by one element per iteration: shift every larger element one slot right and drop key into the gap. It sorts <b>in place</b> (Θ(1) extra space) and is <b>stable</b>, because the test is strictly A[j] &gt; key, so equal keys are never jumped.</p>`,
+   kid: 'Sort playing cards in your hand: pick up one card at a time and slide it left until it fits.',
+   check: ['Why is insertion sort stable?', ['The test A[j] > key is strict, so equal keys never pass each other', 'It uses extra memory', 'It sorts from right to left', 'It compares every pair'], 'An equal key stops the shifting loop.']},
+  {h: 'The loop-invariant proof', clips: [['t1ranlQmofQ']],
+   body: `<p><b>Invariant:</b> at the start of each for iteration, A[1..i−1] consists of the elements originally in A[1..i−1], in sorted order.</p><ul><li><b>Initialization:</b> i = 2, so A[1..1] is one element, trivially sorted.</li><li><b>Maintenance:</b> the while loop shifts A[i−1], A[i−2], … right until it finds A[j] ≤ key, then key goes into A[j+1]; A[1..i] is now the original A[1..i], sorted. (Formally, an inner invariant: A[j+2..i] holds the old A[j+1..i−1], all &gt; key.)</li><li><b>Termination:</b> the loop ends at i = n + 1, so A[1..n] is sorted. Termination is where the invariant meets the exit condition.</li></ul><p>Other invariants to know: <b>linear search</b> x ∉ A[1..i−1]; <b>binary search</b> "if x ∈ A then x ∈ A[left..right]" (PS2 P6); <b>selection sort</b> A[1..i−1] holds the i − 1 smallest, sorted.</p>`,
+   kid: 'A loop invariant is a promise that is true before the loop, stays true every lap, and at the end tells you the job is done.',
+   check: ['Which part of a loop-invariant proof uses the exit condition of the loop?', ['Termination', 'Initialization', 'Maintenance', 'None of them'], 'Termination combines the invariant with why the loop stopped.']},
+  {h: 'Line-by-line cost: best, worst, average', clips: [['UtEMLcKHcGc']],
+   body: `<p>Give each line a cost cᵢ and count how often it runs; let tᵢ be the number of while tests for a given i. Then T(n) = Σ cᵢ · (times line i runs).</p><ul><li><b>Best case</b> (already sorted): tᵢ = 1, so T(n) = an + b = <b>Θ(n)</b>.</li><li><b>Worst case</b> (reverse sorted): tᵢ = i, and Σ i = n(n + 1)/2 − 1, so T(n) = <b>Θ(n²)</b>.</li><li><b>Average:</b> about i/2 shifts, still Θ(n²).</li></ul><p>Every shift fixes exactly one <b>inversion</b> (a pair i &lt; j with A[i] &gt; A[j]), so the running time is Θ(n + #inversions); a random permutation has n(n − 1)/4 expected inversions. For nested loops, <b>sum</b> the inner count t(i) instead of multiplying.</p>`,
+   kid: 'Already-sorted cards: one quick look each. Backwards cards: every card slides all the way, so the work grows like n².',
+   check: ['Worst-case input for insertion sort:', ['A reverse-sorted array', 'A sorted array', 'All equal keys', 'A random array'], 'Every key must shift past all earlier elements.']}
+ ]},
+{id: 'dc', topics: ['t07'], title: 'Divide & Conquer, Merge Sort & Recurrences', notes: 'Topic 07', reading: 'CLRS 4e 2.3, Ch 4',
+ extra: [['whjt_N9uYFI', 'Recurrence', 'master method'], ['-EQTVuAhSFY', 'Divide and conquer concept', 'Analyzing merge sort']],
+ lessons: [
+  {h: 'Merge sort and the MERGE invariant', clips: [['9BI0Lw1kzkE'], ['1JbqqmK7e5s']], viz: 'msort',
+   body: `<p>Divide the array in half, sort each half recursively, and <b>MERGE</b> the two sorted halves in Θ(n) by repeatedly copying the smaller front element. T(n) = 2T(n/2) + Θ(n) = <b>Θ(n lg n)</b>: lg n + 1 levels, each costing cn.</p><p><b>MERGE invariant:</b> A[p..k−1] holds the k − p smallest elements of L and R in sorted order, and L[i], R[j] are the smallest elements not yet copied. Taking from L on ties (≤) makes merge sort <b>stable</b>. It is <b>not</b> in place: Θ(n) extra space. Correctness of MERGE-SORT is by strong induction on n.</p>`,
+   kid: 'Split the pile in half, sort each half, then merge by always taking the smaller top card.',
+   check: ['Merge sort is stable because MERGE…', ['takes from the left half when the keys are equal (≤)', 'copies into a new array', 'runs in Θ(n)', 'is recursive'], 'Using ≤ keeps equal keys in their original order.']},
+  {h: 'Substitution and recursion trees', clips: [['X2D80jsS3sY'], ['8F2OvQIlGiU']],
+   body: `<p><b>Substitution:</b> guess the form, then prove it by induction with the <b>exact</b> same constant. T(n) = 2T(n/2) + n ≤ cn lg n − cn + n ≤ cn lg n for c ≥ 1. Trap: "T(n) ≤ cn + n = O(n)" is wrong, because cn + n is not ≤ cn. If the right guess fails by a lower-order term, subtract one: guess cn − d.</p><p><b>Recursion tree:</b> per level, write (#nodes) × (cost per node). 2T(n/2) + cn has cn per level over lg n levels, so Θ(n lg n). 3T(n/4) + cn² shrinks geometrically, so the root wins: Θ(n²). T(n/3) + T(2n/3) + cn is Θ(n lg n). Use the tree to guess, and substitution to prove (Exercise 3 wants all three methods).</p>`,
+   kid: 'Draw all the helpers in a tree and add up how much work each row does. Equal rows: multiply by the number of rows. Shrinking rows: the top row wins.',
+   check: ['What is wrong with "T(n) ≤ cn + n = O(n)" in a substitution proof?', ['The induction must prove T(n) ≤ cn with the same c', 'Nothing, it is correct', 'The base case is missing', 'It should be O(n lg n) by definition'], 'The hypothesis was T ≤ cn, and cn + n is not ≤ cn.']},
+  {h: 'The master theorem', clips: [['h4Avr0byu1g']],
+   body: `<p>For T(n) = aT(n/b) + f(n), compare f with n^(log_b a):</p><ol><li>f = O(n^(log_b a − ε)) ⇒ Θ(n^(log_b a)).</li><li>f = Θ(n^(log_b a) lgᵏ n) ⇒ Θ(n^(log_b a) lg^(k+1) n).</li><li>f = Ω(n^(log_b a + ε)) and af(n/b) ≤ cf(n) for some c &lt; 1 ⇒ Θ(f(n)).</li></ol><p>Examples: 9T(n/3) + n = Θ(n²); T(2n/3) + 1 = Θ(lg n); 3T(n/4) + n lg n = Θ(n lg n); 2T(n/2) + n lg n = Θ(n lg² n); 2T(n/2) + n / lg n is a <b>gap</b> (Θ(n lg lg n) by other means). It does not apply to T(n − 1) + n or unequal splits. Strassen: 7T(n/2) + Θ(n²) = Θ(n^(lg 7)). Local max (PS2): T(n/2) + Θ(1) = Θ(lg n).</p>`,
+   kid: 'Compare the work at the top with the number of leaves at the bottom. Whichever is bigger wins; if they tie, multiply by lg n.',
+   check: ['Solve T(n) = 4T(n/2) + n².', ['Θ(n² lg n)', 'Θ(n²)', 'Θ(n³)', 'Θ(n lg n)'], 'n^(log₂ 4) = n² equals f(n): case 2.']}
+ ]}
+];
+
+const LEARN_MT2 = [
+{id: 'heap', topics: ['t09'], title: 'Heaps, Heapsort & Priority Queues', notes: 'Topic 09', reading: 'CLRS 4e Ch 6',
+ lessons: [
+  {h: 'Heap shape and MAX-HEAPIFY', clips: [['0zh4IiKaVN0', 'Heap properties', 'Identifying leaves']],
+   body: `<p>A heap is a nearly complete binary tree stored in A[1..n]: PARENT(i) = ⌊i/2⌋, LEFT(i) = 2i, RIGHT(i) = 2i + 1. The <b>max-heap property</b> is A[PARENT(i)] ≥ A[i], so the max is A[1]. The height is ⌊lg n⌋, and the leaves are ⌊n/2⌋ + 1..n.</p><p><b>MAX-HEAPIFY(A, i)</b> assumes both subtrees of i are heaps, swaps A[i] with its larger child if needed, and recurses down that child: T(n) ≤ T(2n/3) + Θ(1) = O(lg n), i.e. O(h).</p>`,
+   kid: 'A heap is a pyramid where every boss is taller than the people right under them, so the tallest is always on top.',
+   check: ['In a 1-indexed heap, the left child of index i is at…', ['2i', '2i + 1', '⌊i/2⌋', 'i + 1'], 'LEFT(i) = 2i, RIGHT(i) = 2i + 1.']},
+  {h: 'BUILD-MAX-HEAP is Θ(n)', clips: [['gMwtzAPDupI', 'correctness', 'analysis']], viz: 'heap',
+   body: `<p>BUILD-MAX-HEAP calls MAX-HEAPIFY for i = ⌊n/2⌋ down to 1. <b>Invariant:</b> at the start of each iteration, nodes i + 1, …, n are roots of max-heaps (initially they are leaves). A node at height h costs O(h), and there are at most ⌈n/2^(h+1)⌉ such nodes, so the total is O(n Σ h/2ʰ) = O(2n) = <b>Θ(n)</b>. Building by n inserts would cost Θ(n lg n) worst case (PS3 P2).</p>`,
+   kid: 'Half the people are already at the bottom and do nothing; only a few near the top have far to sink, so building the pyramid is fast.',
+   check: ['BUILD-MAX-HEAP on n elements runs in…', ['Θ(n)', 'Θ(n lg n)', 'Θ(lg n)', 'Θ(n²)'], 'Σ h/2ʰ converges to 2.']},
+  {h: 'Heapsort and priority queues', clips: [['8O5iBigvDIw', 'Heapsort', 'Increasing Keys']],
+   body: `<p><b>HEAPSORT:</b> build, then for i = n down to 2 swap A[1] with A[i], shrink the heap and heapify the root. Invariant: A[1..i] is a heap of the i smallest, and A[i+1..n] holds the n − i largest in order. Θ(n lg n), <b>in place, not stable</b>.</p><p><b>Priority queue:</b> MAXIMUM Θ(1); EXTRACT-MAX moves the last element to the root and heapifies, O(lg n); INCREASE-KEY floats the key up (invariant: at most one violation, A[i] vs its parent), O(lg n); INSERT appends −∞ and increases it. Top-k (PS3 P1): BUILD plus k EXTRACT-MAXes = O(n + k lg n).</p>`,
+   kid: 'Heapsort keeps taking the tallest person off the top of the pyramid and putting them at the end of the line.',
+   check: ['Heapsort is…', ['in place but not stable', 'stable and in place', 'stable but not in place', 'neither'], 'Swapping the root across the array breaks stability.']}
+ ]},
+{id: 'bst', topics: ['t08'], title: 'Binary Search Trees', notes: 'Topic 08', reading: 'CLRS 4e Ch 12',
+ lessons: [
+  {h: 'The BST property, walks and queries', clips: [['LDncFcNOr_I', 'Binary search tree basics', 'Successors and predecessors']], viz: 'bst',
+   body: `<p>For every node x: keys in x.left's subtree ≤ x.key ≤ keys in x.right's subtree. The <b>inorder walk</b> prints the keys sorted in Θ(n). SEARCH, MINIMUM (follow left), MAXIMUM (follow right), SUCCESSOR and PREDECESSOR all follow one path, so they are <b>O(h)</b>.</p><p><b>SUCCESSOR(x):</b> if x has a right subtree, take its minimum; otherwise climb until you arrive from a left child. <b>Exercise 5:</b> if x has two children, its successor has no left child.</p>`,
+   kid: 'A BST is the "higher or lower?" guessing game: smaller numbers go left, bigger go right.',
+   check: ['If node x has a right subtree, SUCCESSOR(x) is…', ['the minimum of x.right', 'x.p', 'the maximum of x.left', 'the root'], 'The smallest key larger than x is in its right subtree.']},
+  {h: 'Insert, delete and why height matters', clips: [['qJ7TyaKSf_0', 'BST insertion procedures', 'BST operation complexity'], ['vx0uWYHIRes']],
+   body: `<p>INSERT walks down with a trailing pointer y and attaches z as y's child. DELETE has three cases: no left child (TRANSPLANT z with z.right), no right child (TRANSPLANT with z.left), or two children: take y = MIN(z.right); if y ≠ z.right, first replace y by y.right and give y z's right subtree; then TRANSPLANT z with y and give y z's left subtree.</p><p>Everything is O(h), and h ranges from ⌊lg n⌋ to n − 1: inserting sorted keys builds a path. A randomly built BST has expected height O(lg n) (Thm 12.4), but you rarely control the order, which motivates red-black trees.</p>`,
+   kid: 'If you add numbers already in order, the tree becomes one long skinny line and searching gets slow.',
+   check: ['Inserting 1, 2, 3, …, n into an empty BST gives height…', ['n − 1', '⌊lg n⌋', 'n/2', '√n'], 'Each key becomes the right child of the previous one.']}
+ ]},
+{id: 'rbt', topics: ['t11'], title: '2-3-4 Trees & Red-Black Trees', notes: 'Topic 11', reading: 'Sedgewick Ch 15 · CLRS 4e Ch 13',
+ extra: [['O3hI9FdxFOM', 'RedBlack Trees', 'Tree height']],
+ lessons: [
+  {h: '2-3-4 trees: perfect balance by splitting', clips: [['N-Sot-yf3As'], ['W49P7wqdIuE', 'Insertion in 2-4 trees', 'Transfer and complexity']],
+   body: `<p>Nodes hold 1, 2 or 3 keys (2-, 3-, 4-nodes), and <b>all leaves have the same depth</b>, so the height is Θ(lg n). <b>Insert:</b> split every 4-node on the way down (the middle key moves up), then insert into the leaf; the tree only grows when the root splits. <b>Delete:</b> swap with the successor in a leaf; on underflow, <b>transfer</b> a key from a sibling through the parent or <b>fuse</b> with a sibling and the parent key.</p>`,
+   kid: 'Each box can hold up to 3 numbers. When a box gets too full, the middle number moves up and the box splits, so the tree stays perfectly even.',
+   check: ['When does a 2-3-4 tree grow in height?', ['Only when the root splits', 'On every insert', 'When a leaf becomes a 3-node', 'On deletion'], 'Height grows at the top, so all leaves stay level.']},
+  {h: 'Red-black properties and the height bound', clips: [['a6LaiKa3ES0']],
+   body: `<p>(1) every node is red or black, (2) the root is black, (3) NIL leaves are black, (4) a red node has black children, (5) every path from a node down has the same black-height. <b>Lemma 13.1:</b> the subtree at x has ≥ 2^(bh(x)) − 1 internal nodes, and bh(root) ≥ h/2, so <b>h ≤ 2 lg(n + 1)</b>.</p><p>A black node plus its red children is one 2-3-4 node: 2-node = black, 3-node = black with one red child, 4-node = black with two red children. A color flip is a 4-node split.</p>`,
+   kid: 'A red-black tree is a 2-3-4 tree drawn with only two kids per node; the red kids are the extra keys squeezed into the same box.',
+   check: ['A 4-node of a 2-3-4 tree corresponds in a red-black tree to…', ['a black node with two red children', 'a red node with two black children', 'three black nodes', 'a black node with one red child'], 'Merge the red children into their black parent.']},
+  {h: 'Rotations and RB-INSERT-FIXUP', clips: [['HlwQ_n56MHQ', 'Red-black tree insertion', 'Recoloring red-black trees']], viz: 'rbt',
+   body: `<p>Insert as in a BST and color the node <b>red</b> (black-heights stay equal). While z.p is red, look at the <b>uncle</b>: (1) red uncle ⇒ recolor parent and uncle black, grandparent red, move z up two levels; (2) black uncle and z is an inner child ⇒ rotate at the parent to make a line; (3) black uncle, outer child ⇒ recolor and rotate the grandparent. Finally color the root black. Invariant: at most one violation, of property 2 or 4. Rotations are O(1) and keep the inorder order; insert does ≤ 2 rotations and delete ≤ 3, both O(lg n).</p>`,
+   kid: 'If a red kid has a red parent, check the uncle: red uncle means repaint everyone, black uncle means twist the family (rotate) and repaint.',
+   check: ['A newly inserted node in RB-INSERT is colored…', ['red', 'black', 'its parent\'s color', 'red only if it is a left child'], 'Red keeps black-heights equal; only red-red may need fixing.']}
+ ]},
+{id: 'prob', topics: ['t05a'], title: 'Probabilistic Analysis & Indicator Variables', notes: 'Topic 05A', reading: 'CLRS 4e 5.1–5.4',
+ lessons: [
+  {h: 'The hiring problem and indicator random variables', clips: [['MgnvWTZgqcA', 'Indicator Random Variables', 'Example']], viz: 'hire',
+   body: `<p>HIRE-ASSISTANT hires whenever a candidate beats the best so far. Worst case: n hires. With a random order, let Xᵢ = I{candidate i is hired}; candidate i is hired iff they are the best of the first i, which happens with probability 1/i. <b>Lemma 5.1:</b> E[I{A}] = Pr{A}. By <b>linearity of expectation</b> (which needs no independence), E[hires] = Σ 1/i = Hₙ = ln n + O(1).</p><p>Recipe: write the count as a sum of indicators, find each probability, add them up.</p>`,
+   kid: 'An indicator is a light switch: 1 if something happened, 0 if not. The average of a switch is just the chance it turns on.',
+   check: ['Linearity of expectation requires the random variables to be…', ['nothing: it holds even for dependent variables', 'independent', 'identically distributed', 'indicators only'], 'Sums always split; only products need independence.']},
+  {h: 'Worked expectations and randomizing the input', clips: [['k-jusEhrRik']],
+   body: `<ul><li>Inversions of a random permutation: C(n, 2) pairs, each inverted with probability ½ ⇒ <b>n(n − 1)/4</b>.</li><li>Fixed points of a random permutation: n · 1/n = <b>1</b>.</li><li>Position of a key in a random permutation (Exercise 8): (n + 1)/2. Exercise 7: n rolls of an s-sided die total n(s + 1)/2.</li><li>Birthday pairs among k people: C(k, 2)/n.</li></ul><p><b>Probabilistic analysis</b> assumes a random input; a <b>randomized algorithm</b> flips its own coins, so the bound holds for every input. RANDOMLY-PERMUTE swaps A[i] with A[RANDOM(i, n)]; its invariant gives each (i − 1)-permutation probability (n − i + 1)!/n!, so the result is uniform. Swapping with RANDOM(1, n) is biased.</p>`,
+   kid: 'Instead of hoping the line is shuffled, shuffle it yourself. Then no sneaky order can make you slow.',
+   check: ['Expected number of inversions in a uniformly random permutation of n distinct elements:', ['n(n − 1)/4', 'n(n − 1)/2', 'n/2', 'n lg n'], 'Each of the C(n,2) pairs is inverted with probability 1/2.']}
+ ]},
+{id: 'qsort', topics: ['t05b'], title: 'Quicksort & Randomized Quicksort', notes: 'Topic 05B', reading: 'CLRS 4e Ch 7',
+ lessons: [
+  {h: 'PARTITION and its invariant', clips: [['v1ghdc_hwMI', 'The partition procedure', 'Step-by-step example']], viz: 'qsort',
+   body: `<pre><code>PARTITION(A, p, r)
+  x = A[r];  i = p − 1
+  for j = p to r − 1
+      if A[j] ≤ x:  i = i + 1;  swap A[i], A[j]
+  swap A[i + 1], A[r];  return i + 1</code></pre><p><b>Invariant:</b> A[p..i] ≤ x, A[i+1..j−1] &gt; x, and A[r] = x. At the end the pivot is swapped between the two regions, so A[p..q−1] ≤ A[q] &lt; A[q+1..r]. Θ(n). Trace: ⟨2, 8, 7, 1, 3, 5, 6, 4⟩ becomes ⟨2, 1, 3, 4, 7, 5, 6, 8⟩ and returns q = 4.</p>`,
+   kid: 'Pick a leader. Everyone shorter goes to the left group, everyone taller to the right group, and the leader stands in the middle.',
+   check: ['After PARTITION returns q, which is guaranteed?', ['A[p..q−1] ≤ A[q] < A[q+1..r]', 'A is sorted', 'A[q] is the median', 'q = (p + r)/2'], 'The pivot lands in its final sorted position.']},
+  {h: 'Worst, best and expected running time', clips: [['qS9oMz4_kTU', 'Randomization Strategy', 'Random Analysis']],
+   body: `<p>Worst case: every split is 0 : n − 1 (sorted input with the last element as pivot), T(n) = T(n − 1) + Θ(n) = <b>Θ(n²)</b>. Any constant split, even 99 : 1, has depth Θ(lg n), so Θ(n lg n).</p><p><b>Expected time with a random pivot:</b> the running time is O(n + X), X = number of comparisons. The i-th and j-th smallest are compared iff one of them is the first pivot chosen from z<sub>i</sub>..z<sub>j</sub>, with probability 2/(j − i + 1), so E[X] = Σ 2/(j − i + 1) = O(n lg n) on <b>every</b> input. With many equal keys, use the <b>three-way partition</b> (PS5) so all-equal input is Θ(n).</p>`,
+   kid: 'Always picking the shortest kid as leader makes one empty group every time, which is slow. Picking the leader at random makes that super unlikely.',
+   check: ['In randomized quicksort, z_i and z_j are compared with probability…', ['2/(j − i + 1)', '1/n', '1/2', '1/(j − i)'], 'One of them must be the first pivot chosen from z_i..z_j.']}
+ ]},
+{id: 'hash', topics: ['t06'], title: 'Hash Tables', notes: 'Topic 06', reading: 'CLRS 4e 11.1–11.4',
+ extra: [['JZHBa-rLrBA', 'Hashing', 'Load Factor'], ['s7QSM_hlS1U', 'Universal Hashing', 'Theorem']],
+ lessons: [
+  {h: 'Chaining and its analysis', clips: [['NMm1BKomO_Y', 'Hash functions and collisions', 'Chaining for collisions'], ['ei7T9Y97u0M', 'Analysis of Chaining', 'Final Answer']], viz: 'hash',
+   body: `<p>Slot j holds a linked list of the keys with h(k) = j. INSERT is Θ(1) (prepend) and DELETE is Θ(1) with doubly linked chains. With <b>load factor α = n/m</b> and independent uniform hashing, both unsuccessful and successful searches take <b>Θ(1 + α)</b> expected time (Thms 11.1, 11.2), so with m = Θ(n) every operation is O(1) on average. The worst case is Θ(n), when every key lands in one slot.</p>`,
+   kid: 'A hash table is a wall of mailboxes. A rule tells you which box each letter goes in, and if two letters land in one box, that box keeps a little list.',
+   check: ['With chaining and uniform hashing, expected search time is…', ['Θ(1 + α)', 'Θ(α²)', 'Θ(lg n)', 'Θ(n)'], 'Hash in O(1), then scan a chain of expected length α.']},
+  {h: 'Hash functions and universal hashing', clips: [['jW4wCfz3DwE']],
+   body: `<ul><li><b>Division:</b> h(k) = k mod m, with m a prime not near a power of 2 (with m = 2ᵖ only the low bits matter).</li><li><b>Multiplication:</b> h(k) = ⌊m (kA mod 1)⌋, A ≈ 0.618; m can be a power of 2.</li><li><b>Universal hashing:</b> pick h at random from a family where any two keys collide with probability ≤ 1/m, e.g. ((ak + b) mod p) mod m. No adversary can force bad behavior.</li></ul>`,
+   kid: 'A good rule spreads the letters evenly across the mailboxes. Picking the rule at random means nobody can plan to jam one box.',
+   check: ['For the division method h(k) = k mod m, a good m is…', ['a prime not too close to a power of 2', 'a power of 2', 'a power of 10', 'any even number'], 'Powers of 2 only look at the low-order bits.']},
+  {h: 'Open addressing, probing and tombstones', clips: [['SGGP_HJNUts', 'Open Addressing', 'Results of analysis']],
+   body: `<p>All keys live in the table (α ≤ 1). The probe sequence must hit every slot: linear (h′(k) + i) mod m has <b>primary clustering</b>; quadratic has secondary clustering; <b>double hashing</b> (h₁(k) + i·h₂(k)) mod m is closest to uniform if h₂(k) is coprime to m. Expected probes: unsuccessful ≤ 1/(1 − α), successful ≤ (1/α) ln(1/(1 − α)).</p><p><b>Deletion (Exercise 9):</b> write DELETED, not NIL. Searches skip DELETED and stop only at NIL; inserts may reuse a DELETED slot. Writing NIL breaks the probe chain for keys stored further along.</p>`,
+   kid: 'If a mailbox is full, try the next one, and the next. When you remove a letter, leave a "moved out" sign so people searching know to keep looking.',
+   check: ['Why must open-addressing DELETE write DELETED instead of NIL?', ['A NIL would stop later searches before reaching keys further along the probe sequence', 'NIL wastes memory', 'DELETED is faster to write', 'Chaining requires it'], 'Search stops at the first NIL.']}
+ ]}
+];
+
+const LEARN_MT3 = [
+{id: 'select', topics: ['t10a'], title: 'Selection & Order Statistics', notes: 'Topic 10', reading: 'CLRS 4e Ch 9',
+ extra: [['mR_RUjsJnV8', 'Medians', 'Random Pivots']],
+ lessons: [
+  {h: 'Minimum, maximum and the selection problem',
+   body: `<p>The i-th <b>order statistic</b> is the i-th smallest element; the median is at ⌊(n + 1)/2⌋. Finding the minimum takes exactly <b>n − 1</b> comparisons, which is optimal, because every non-minimum must lose once. Finding <b>both</b> min and max takes 3⌊n/2⌋: compare elements in pairs, then the smaller with the min and the larger with the max. The <b>selection problem</b> asks for the i-th smallest without sorting (sorting costs Θ(n lg n)).</p>`,
+   kid: 'To find the shortest kid you only need everyone except the winner to lose one height contest.',
+   check: ['Minimum comparisons needed to find the minimum of n elements:', ['n − 1', 'n', 'n/2', 'lg n'], 'Every non-minimum element must lose at least once.']},
+  {h: 'RANDOMIZED-SELECT', viz: 'rselect',
+   body: `<pre><code>RANDOMIZED-SELECT(A, p, r, i)
+  if p == r: return A[p]
+  q = RANDOMIZED-PARTITION(A, p, r);  k = q − p + 1
+  if i == k: return A[q]
+  if i < k: return RANDOMIZED-SELECT(A, p, q − 1, i)
+  return RANDOMIZED-SELECT(A, q + 1, r, i − k)</code></pre><p>Like quicksort, but it recurses into <b>one</b> side, adjusting the rank to i − k on the right. A pivot lands in the middle half with probability ≥ ½ and then at most 3n/4 elements remain, so the expected work is a geometric series: <b>Θ(n) expected</b>. Worst case Θ(n²).</p>`,
+   kid: 'Pick a random kid, split into shorter and taller, and only keep looking in the group that must contain the one you want.',
+   check: ['When RANDOMIZED-SELECT recurses into the right side, the new rank is…', ['i − k', 'i', 'k − i', 'i + k'], 'The k elements up to and including the pivot are discarded.']},
+  {h: 'SELECT: worst-case linear (median of medians)',
+   body: `<ol><li>Split into groups of 5 and find each group's median.</li><li>Recursively SELECT the median x of those ⌈n/5⌉ medians.</li><li>Partition around x: at least 3n/10 − 6 elements fall on each side.</li><li>Recurse on the side containing rank i (≤ 7n/10 + 6 elements).</li></ol><p>T(n) ≤ T(n/5) + T(7n/10 + 6) + O(n) = <b>Θ(n)</b>, because 1/5 + 7/10 &lt; 1 (substitution works for n ≥ 140 with c ≥ 20a). Groups of 3 fail (Θ(n lg n)); groups of 7 work. Uses (Exercise 10, PS6): the median minimizes Σ abs(yᵢ − p) for the oil pipeline; a SELECT median pivot makes quicksort Θ(n lg n) worst case; the k smallest in sorted order cost Θ(n + k lg k).</p>`,
+   kid: 'Make teams of 5, find each team\'s middle kid, then the middle of those middles. That leader is never too short or too tall.',
+   check: ['Why does SELECT use groups of 5 rather than 3?', ['So the recursive sizes n/5 + 7n/10 sum to less than n', 'Because 5 is prime', 'To make it stable', 'Groups of 3 are slower to sort'], 'With 3, the fractions sum to 1 and the bound becomes n lg n.']}
+ ]},
+{id: 'linsort', topics: ['t10b'], title: 'Lower Bounds & Linear-Time Sorts', notes: 'Topic 10', reading: 'CLRS 4e Ch 8',
+ lessons: [
+  {h: 'The Ω(n lg n) decision-tree lower bound', clips: [['gZmEYyqHefk']],
+   body: `<p>Any comparison sort is a binary <b>decision tree</b>: internal nodes are comparisons, leaves are output permutations, and the height is the worst-case number of comparisons. Correctness needs at least n! leaves, and a tree of height h has ≤ 2ʰ leaves, so h ≥ lg(n!) ≥ (n/2) lg(n/2) = <b>Ω(n lg n)</b> (Thm 8.1). Merge sort and heapsort are asymptotically optimal (Cor 8.2). The same counting gives Ω(n lg(n/k)) for k-sorted arrays (PS7).</p>`,
+   kid: 'Each yes/no question splits the possible orders in two. With n! possible orders, you need about n lg n questions.',
+   check: ['A decision tree that sorts n elements must have at least…', ['n! leaves', '2ⁿ leaves', 'n² leaves', 'n leaves'], 'One leaf per possible output permutation.']},
+  {h: 'Counting sort', viz: 'csort',
+   body: `<p>For integer keys in 0..k: count each key in C, turn C into prefix sums (C[v] = number of keys ≤ v), then place elements from <b>j = n down to 1</b> at B[C[A[j]]] and decrement. The backwards loop makes it <b>stable</b>. Θ(n + k) time and space, not in place; linear when k = O(n). Trace: ⟨2, 5, 3, 0, 2, 3, 0, 3⟩ gives prefix sums [2, 2, 4, 7, 7, 8] and output ⟨0, 0, 2, 2, 3, 3, 3, 5⟩.</p>`,
+   kid: 'If every number is small, just count them: "three 2s, one 5", then write them out in order.',
+   check: ['Why does counting sort fill the output from j = n down to 1?', ['To make it stable', 'To make it in place', 'To handle negative keys', 'To make it Θ(n)'], 'The last copy of each key gets the highest free slot.']},
+  {h: 'Radix sort and bucket sort', viz: 'radix',
+   body: `<p><b>Radix sort:</b> sort by each digit, <b>least significant first</b>, with a <b>stable</b> sort. Θ(d(n + k)) (Lemma 8.3); with b-bit keys and r-bit digits, Θ((b/r)(n + 2ʳ)) (Lemma 8.4). <b>Invariant (Exercise 11):</b> after pass i, the keys are sorted by their low i digits; when two keys tie on digit i, stability keeps the earlier correct order. Integers 0..n³ − 1 sort in Θ(n) in base n.</p><p><b>Bucket sort</b> (keys uniform on [0, 1)): n buckets, insertion-sort each, concatenate. E[nᵢ²] = 2 − 1/n gives expected Θ(n); worst case Θ(n²). <b>Stabilize any sort</b> by sorting (key, index) pairs.</p>`,
+   kid: 'Radix sort is sorting mail by the last digit of the zip code, then the next digit, keeping ties in order each time.',
+   check: ['Radix sort requires the per-digit sort to be…', ['stable', 'in place', 'comparison based', 'randomized'], 'Stability preserves the order from the earlier digits.']}
+ ]},
+{id: 'backtrack', topics: ['t12s'], title: 'Backtracking & Recursion', notes: 'Topic 12A', reading: 'Erickson Ch 1–2',
+ lessons: [
+  {h: 'The backtracking recipe and n-queens', viz: 'queens',
+   body: `<p>Build a solution one decision at a time; try every option still legal; recurse; if it fails, <b>undo</b> the choice and try the next; <b>prune</b> branches that can't succeed. The recursion explores a tree of partial solutions, so the cost is (#nodes) × (work per node), usually exponential. Prove correctness by induction on the decisions left.</p><p><b>n-queens:</b> place one queen per row; column j is legal if no earlier queen has Q[i] = j or abs(Q[i] − j) = r − i (same diagonal).</p>`,
+   kid: 'Walk a corn maze: at a dead end, walk back to the last fork and try the other path.',
+   check: ['What is "pruning" in backtracking?', ['Abandoning a branch as soon as it cannot lead to a valid solution', 'Deleting tree nodes', 'Sorting the input', 'Removing the base case'], 'It shrinks the explored recursion tree.']},
+  {h: 'Subset sum, CUT-STICK and when to switch to DP',
+   body: `<p><b>Subset sum:</b> SS(i, T) = TRUE if T = 0; FALSE if T &lt; 0 or i &gt; n; otherwise SS(i + 1, T) or SS(i + 1, T − X[i]). T(n) = 2T(n − 1) + O(1) = O(2ⁿ). The distinct states (i, T) give a DP in O(nT), which is pseudo-polynomial.</p><p><b>CUT-STICK (Exercise 12)</b> counts the compositions of n: 2^(n−1), in Θ(2ⁿ) time because the same CUT-STICK(j) is recomputed through every prefix. <b>PS7:</b> almost-palindrome is Θ(n) with one branch at the first mismatch; the treasure hunt marks cells, tries four moves, and un-marks on failure. When the recursion tree repeats the same arguments, memoize: that is dynamic programming.</p>`,
+   kid: 'For each item you decide "take it or skip it". That is 2 choices, n times, so 2ⁿ possibilities unless you remember answers you already worked out.',
+   check: ['The recurrence T(n) = 2T(n − 1) + O(1) solves to…', ['Θ(2ⁿ)', 'Θ(n²)', 'Θ(n lg n)', 'Θ(n)'], 'The work doubles at each of n levels.']}
+ ]},
+{id: 'dp', topics: ['t12a'], title: 'Dynamic Programming', notes: 'Topic 12A', reading: 'CLRS 4e 14.1–14.3 · Erickson Ch 3',
+ extra: [['V5hZoJ6uK-s', 'Dynamic Programming', 'Memoization']],
+ lessons: [
+  {h: 'Rod cutting: from 2ⁿ recursion to Θ(n²)', clips: [['RYPsOJmhwgE', 'The rod cutting problem', 'Memoization and bottom-up']], viz: 'rod',
+   body: `<p>rₙ = max over 1 ≤ i ≤ n of (pᵢ + rₙ₋ᵢ), with r₀ = 0. Plain recursion makes 1 + Σ T(j) = 2ⁿ calls because it recomputes the same lengths. <b>Memoized</b> (top-down with a table) or <b>bottom-up</b> (fill r[1..n] in increasing j), each length is solved once with j choices: <b>Θ(n²)</b>. Keep s[j], the size of the first piece, to print the cuts. For CLRS prices 1, 5, 8, 9, 10, 17, 17, 20, 24, 30: r = 1, 5, 8, 10, 13, 17, 18, 22, 25, 30.</p>`,
+   kid: 'Don\'t solve the same little puzzle twice: write each answer in a chart and look it up next time.',
+   check: ['Bottom-up rod cutting for a rod of length n runs in…', ['Θ(n²)', 'Θ(2ⁿ)', 'Θ(n)', 'Θ(n³)'], 'n subproblems × up to n choices each.']},
+  {h: 'The four steps and the elements of DP', clips: [['0tQ3ah0Fddw', 'DP conditions', 'Problem solving steps']],
+   body: `<ol><li>Characterize the structure of an optimal solution.</li><li>Define its value recursively.</li><li>Compute the values bottom-up (or memoized).</li><li>Construct a solution from the stored choices.</li></ol><p>DP needs <b>optimal substructure</b> (proved by cut-and-paste) and <b>overlapping subproblems</b>. Subproblems must be independent: unweighted <b>shortest</b> simple path has optimal substructure, but <b>longest</b> simple path does not. Running time ≈ (#subproblems) × (choices each). Greedy can fail where DP succeeds: prices 1, 20, 33, 36 give greedy 34 but DP 40.</p>`,
+   kid: 'A problem is DP-friendly when the best answer is built from best answers to smaller pieces, and those pieces repeat a lot.',
+   check: ['Which problem does NOT have optimal substructure?', ['Longest simple path in a general graph', 'Shortest path', 'LCS', 'Rod cutting'], 'Combining two longest subpaths can repeat vertices.']},
+  {h: 'Matrix chain and the PS8 / Exercise 13 DPs', clips: [['QzgqDJIJtNY', 'Matrix Chain Multiplication']],
+   body: `<p><b>Matrix chain:</b> m[i, j] = min over i ≤ k &lt; j of (m[i, k] + m[k+1, j] + p<sub>i−1</sub>p<sub>k</sub>p<sub>j</sub>), filled by increasing chain length: Θ(n³) time, Θ(n²) space.</p><ul><li><b>Coin change (PS8):</b> C[v] = 1 + min C[v − c[i]], Θ(nk).</li><li><b>Checkerboard (PS8):</b> D[r, c] = best of 3 predecessors + payment, Θ(n²).</li><li><b>Party planning (Exercise 13):</b> in[v] = fun(v) + Σ out[child]; out[v] = Σ max(in, out) over children; post-order, Θ(n).</li><li><b>0-1 knapsack:</b> K[i, w] = max(K[i−1, w], K[i−1, w − wᵢ] + vᵢ), Θ(nW).</li></ul>`,
+   kid: 'The same chart trick works for coins, game boards and party guest lists: decide what one box of the chart means, then fill it from smaller boxes.',
+   check: ['Matrix-chain multiplication with DP runs in…', ['Θ(n³)', 'Θ(n²)', 'Θ(2ⁿ)', 'Θ(n lg n)'], 'Θ(n²) subproblems × O(n) split points.']}
+ ]},
+{id: 'lcs', topics: ['t12b'], title: 'LCS & Optimal Binary Search Trees', notes: 'Topic 12B', reading: 'CLRS 4e 14.4–14.5',
+ lessons: [
+  {h: 'LCS: optimal substructure and the recurrence', clips: [['0tQ3ah0Fddw', 'LCS problem definition', 'Recursive formula']],
+   body: `<p>A <b>subsequence</b> keeps order but may skip characters (a substring must be contiguous). <b>Theorem 14.1:</b> if x<sub>m</sub> = y<sub>n</sub>, an LCS ends with that character plus an LCS of the shorter prefixes; otherwise it is an LCS of X<sub>m−1</sub> and Y, or of X and Y<sub>n−1</sub>.</p><p class="math" style="text-align:center">c[i, j] = c[i−1, j−1] + 1 if xᵢ = yⱼ, else max(c[i−1, j], c[i, j−1])</p><p>with c[i, 0] = c[0, j] = 0. Brute force is Θ(n 2ᵐ).</p>`,
+   kid: 'Find the longest list of letters that appears in both words in the same order. If the last letters match, keep them; otherwise drop one last letter and take the better result.',
+   check: ['If x_i = y_j, then c[i, j] equals…', ['c[i−1, j−1] + 1', 'max(c[i−1, j], c[i, j−1])', 'c[i−1, j] + 1', '0'], 'The matching character extends the LCS of the shorter prefixes.']},
+  {h: 'Filling the table and printing the LCS', clips: [['dFObo5BeJ0k', 'Dynamic programming solution', 'Review and takeaways']], viz: 'lcs',
+   body: `<p>Fill c row by row in <b>Θ(mn)</b>, storing arrows ↖ ↑ ← in b. PRINT-LCS walks back from (m, n) in Θ(m + n): diagonal on a match, otherwise toward the neighbor equal to c[i, j]. The length alone needs only two rows, Θ(min(m, n)) space. Example: ABCBDAB and BDCABA have LCS length 4 (BCBA). Related: longest palindromic subsequence (Exercise 13) p[i, j] = 2 + p[i+1, j−1] on equal ends, else max(p[i+1, j], p[i, j−1]), filled by increasing length.</p>`,
+   kid: 'Make a grid with one word on top and one down the side. A match means "diagonal plus one"; otherwise copy the bigger neighbor. The bottom-right box is the answer.',
+   check: ['The LCS-LENGTH algorithm on strings of length m and n runs in…', ['Θ(mn)', 'Θ(m + n)', 'Θ(2ᵐ)', 'Θ(mn lg n)'], 'Each of the (m+1)(n+1) cells takes O(1).']},
+  {h: 'Optimal binary search trees', clips: [['QzgqDJIJtNY', 'Optimal Binary Search Trees', 'Summary']],
+   body: `<p>Given search probabilities pᵢ for keys and qᵢ for gaps, minimize the expected search cost. Any subtree of an optimal BST is optimal for its key range. With w(i, j) = Σ p + Σ q over the range, e[i, i−1] = q<sub>i−1</sub> and</p><p class="math" style="text-align:center">e[i, j] = min over i ≤ r ≤ j of (e[i, r−1] + e[r+1, j] + w(i, j))</p><p>Making r the root pushes every node one level deeper, adding w(i, j). Θ(n³) (Knuth's trick gives Θ(n²)). Greedy (most probable key at the root) is not always optimal.</p>`,
+   kid: 'Put the words people look up most often near the top of the tree, but use the chart to check, because "most popular on top" isn\'t always best.',
+   check: ['The optimal-BST DP algorithm runs in…', ['Θ(n³)', 'Θ(n²)', 'Θ(n lg n)', 'Θ(2ⁿ)'], 'Θ(n²) subproblems × O(n) root choices.']}
+ ]}
+];
+
+// ======================= MT1–MT3 LEARNING PATHS: GENERATED UNIT TESTS =======================
+// Same format as learn-mt4-gen.js; merged into LEARN_GEN.
+Object.assign(LEARN_GEN, {
+ adt: [() => ({id: 'learn-minstack', topic: 't01', title: 'Stack that remembers its minimum',
+  prompt: `A ${lgPick(['text editor\'s undo stack', 'stock-price tracker', 'browser history'])} needs PUSH, POP and MIN, all in <b>O(1)</b>. Modify the array stack to keep a second stack M of running minimums (memory): M's top is always the minimum of S. Write <code>PUSH(S, M, x)</code>, <code>POP(S, M)</code> and <code>MIN(M)</code>, with underflow checks.`,
+  starter: 'PUSH(S, M, x)\n    \n\nPOP(S, M)\n    \n\nMIN(M)\n    \n', define: ['push', 'pop', 'min'], call: [], maxLoop: 0,
+  correctness: [
+   {label: 'PUSH stores x on S', w: 2, test: lgIn('push', /s\s*\[[^\]]*\]\s*=\s*x|push[^\n]*\bs\b[^\n]*x/), hint: 'S.top = S.top + 1; S[S.top] = x'},
+   {label: 'PUSH stores min(x, current minimum) on M', w: 3, test: lgIn('push', /min\s*\(|<\s*m\s*\[|x\s*<=?/), hint: 'M[top] = min(x, M[top − 1]) (or x if empty)'},
+   {label: 'POP checks for underflow', w: 2, test: lgIn('pop', /underflow|empty|==\s*0/), hint: 'if S.top == 0 error "underflow"'},
+   {label: 'POP removes from both stacks', w: 2, test: lgIn('pop', /top\s*=\s*\w+\.top\s*-\s*1|top\s*-=\s*1|top--/), hint: 'S.top = S.top − 1 (M shares the same top)'},
+   {label: 'MIN returns the top of M', w: 2, test: lgIn('min', /return[^\n]*m\s*\[/), hint: 'return M[M.top]'}],
+  efficiency: [{label: 'Every operation is O(1): no loops', w: 10, test: (t, P) => P.maxLoop === 0, hint: 'Never scan the stack to find the minimum.'}],
+  model: `PUSH(S, M, x)                 // O(1); M[i] = min of S[1..i]
+    S.top = S.top + 1
+    S[S.top] = x
+    if S.top == 1
+        M[S.top] = x
+    else M[S.top] = min(x, M[S.top - 1])
+
+POP(S, M)                     // O(1)
+    if S.top == 0
+        error "underflow"
+    S.top = S.top - 1         // M shares the same top index
+    return S[S.top + 1]
+
+MIN(M)                        // O(1): the memory pays off
+    if S.top == 0
+        error "underflow"
+    return M[S.top]`})],
+ growth: [() => ({id: 'learn-fastpow', topic: 't03', title: 'Fast exponentiation: Θ(n) down to Θ(lg n)',
+  prompt: `Computing x^n by multiplying n times is Θ(n). Make it run in <b>Θ(lg n)</b> multiplications by repeated squaring: x^n = (x^(n/2))² for even n and x · x^(n−1) for odd n. Write <code>FAST-POWER(x, n)</code> (recursive) and state its recurrence in a comment.`,
+  starter: 'FAST-POWER(x, n)\n    \n', define: ['fastpower'], call: ['fast-power|fastpower'], maxLoop: 1,
+  correctness: [
+   {label: 'Base case n = 0 returns 1', w: 2, test: lgRx(/n\s*==\s*0[\s\S]{0,40}return\s+1/), hint: 'if n == 0 return 1'},
+   {label: 'Recurses on n / 2', w: 3, test: lgRx(/fast-?power\s*\(\s*x\s*,\s*(n\s*\/\s*2|⌊n\s*\/\s*2⌋|n\s*div\s*2|n\s*\/\/\s*2)/), hint: 'h = FAST-POWER(x, ⌊n/2⌋)'},
+   {label: 'Squares the half result', w: 3, test: lgRx(/(\w+)\s*\*\s*\1\b|\^\s*2|\*\*\s*2/), hint: 'return h * h'},
+   {label: 'Handles odd n with one extra x', w: 2, test: lgRx(/mod\s*2|%\s*2|odd|even/), hint: 'if n is odd return x * h * h'}],
+  efficiency: [{label: 'One recursive call per level: T(n) = T(n/2) + Θ(1) = Θ(lg n)', w: 10, test: (t, P) => (P.body('fastpower').match(/fast-?power\s*\(/g) || []).length === 1, hint: 'Store the half result instead of calling twice (two calls give Θ(n)).'}],
+  model: `FAST-POWER(x, n)               // T(n) = T(n/2) + Θ(1) = Θ(lg n)
+    if n == 0
+        return 1
+    h = FAST-POWER(x, ⌊n / 2⌋)     // one call, result remembered
+    if n mod 2 == 0
+        return h * h
+    return x * h * h`})],
+ correct: [() => ({id: 'learn-binary-insertion', topic: 't02', title: 'Insertion sort with binary search for the slot',
+  prompt: `Modify INSERTION-SORT so it finds the insertion point of key with <b>binary search</b> on the sorted prefix A[1..i−1] (Θ(lg i) comparisons) instead of scanning. Shifting still costs Θ(i), so state both counts in comments. Write <code>BINARY-INSERTION-SORT(A, n)</code> and <code>FIND-SLOT(A, lo, hi, key)</code>; keep it <b>stable</b> (insert after equal keys).`,
+  starter: 'BINARY-INSERTION-SORT(A, n)\n    \n\nFIND-SLOT(A, lo, hi, key)\n    \n', define: ['binaryinsertionsort', 'findslot'], call: ['find-slot'], maxLoop: 2,
+  correctness: [
+   {label: 'Outer loop i = 2 to n with key = A[i]', w: 2, test: t => /for\s+i\s*=\s*2/.test(t) && /key\s*=\s*a\s*\[\s*i\s*\]/.test(t), hint: 'for i = 2 to n: key = A[i]'},
+   {label: 'Finds the slot with FIND-SLOT on A[1..i−1]', w: 2, test: lgRx(/find-?slot\s*\(/), hint: 'pos = FIND-SLOT(A, 1, i − 1, key)'},
+   {label: 'FIND-SLOT halves the range', w: 3, test: lgIn('findslot', /mid\s*=|\/\s*2/), hint: 'mid = ⌊(lo + hi)/2⌋'},
+   {label: 'Stable: equal keys go to the right (<= moves lo up)', w: 1, test: lgIn('findslot', /<=\s*key|key\s*>=|>\s*key/), hint: 'if A[mid] ≤ key: lo = mid + 1'},
+   {label: 'Shifts A[pos..i−1] right and drops key in', w: 2, test: t => /a\s*\[\s*\w+\s*\+\s*1\s*\]\s*=\s*a\s*\[\s*\w+\s*\]/.test(t) && /=\s*key/.test(t), hint: 'A[j + 1] = A[j] for j = i − 1 downto pos; A[pos] = key'}],
+  efficiency: [{label: 'Binary search: O(lg i) comparisons per key', w: 5, test: lgIn('findslot', /while|find-?slot\s*\(/), hint: 'Halve lo..hi until it is empty.'},
+   {label: 'At most two nested loops', w: 5, test: (t, P) => P.maxLoop <= 2, hint: 'Outer loop + shift loop.'}],
+  model: `BINARY-INSERTION-SORT(A, n)     // Θ(n lg n) comparisons, still Θ(n²) shifts
+    for i = 2 to n
+        key = A[i]
+        pos = FIND-SLOT(A, 1, i - 1, key)
+        for j = i - 1 downto pos      // shift A[pos..i-1] right
+            A[j + 1] = A[j]
+        A[pos] = key
+
+FIND-SLOT(A, lo, hi, key)          // first index whose value > key (stable)
+    while lo <= hi
+        mid = ⌊(lo + hi) / 2⌋
+        if A[mid] <= key
+            lo = mid + 1
+        else hi = mid - 1
+    return lo`})],
+ dc: [() => ({id: 'learn-merge-cutoff', topic: 't07', title: 'Merge sort that skips sorted merges and uses insertion sort on small pieces',
+  prompt: `Make merge sort run smoother on ${lgPick(['nearly sorted logs', 'sensor readings that are mostly in order', 'a leaderboard that changes a little each day'])}: (1) for subarrays of size ≤ ${lgPick([8, 16, 32])} call INSERTION-SORT instead of recursing, and (2) skip MERGE entirely when A[q] ≤ A[q + 1] (the halves are already in order). Write <code>HYBRID-MERGE-SORT(A, p, r)</code>; assume MERGE and INSERTION-SORT(A, p, r) exist.`,
+  starter: 'HYBRID-MERGE-SORT(A, p, r)\n    \n', define: ['hybridmergesort'], call: ['merge', 'insertion-sort|insertionsort', 'hybrid-merge-sort'], maxLoop: 0,
+  correctness: [
+   {label: 'Small subarrays go to insertion sort', w: 3, test: lgRx(/r\s*-\s*p[^\n]*<=?\s*\d+[\s\S]{0,60}insertion-?sort\s*\(/), hint: 'if r − p + 1 ≤ 16: INSERTION-SORT(A, p, r); return'},
+   {label: 'Splits at the midpoint', w: 2, test: lgRx(/q\s*=\s*⌊?\s*\(\s*p\s*\+\s*r\s*\)\s*\/\s*2/), hint: 'q = ⌊(p + r)/2⌋'},
+   {label: 'Recurses on both halves', w: 2, test: (t, P) => (P.body('hybridmergesort').match(/hybrid-?merge-?sort\s*\(/g) || []).length >= 2, hint: 'HYBRID-MERGE-SORT(A, p, q); HYBRID-MERGE-SORT(A, q + 1, r)'},
+   {label: 'Skips MERGE when A[q] ≤ A[q + 1]', w: 3, test: lgRx(/a\s*\[\s*q\s*\]\s*(<=|>)\s*a\s*\[\s*q\s*\+\s*1\s*\]/), hint: 'if A[q] > A[q + 1]: MERGE(A, p, q, r)'}],
+  efficiency: [{label: 'Still Θ(n lg n) worst case (one merge per level)', w: 5, test: lgRx(/\bmerge\s*\(/), hint: 'MERGE when needed.'},
+   {label: 'Θ(n) on already sorted input thanks to the skip test', w: 5, test: lgRx(/a\s*\[\s*q\s*\]\s*(<=|>)/), hint: 'Sorted halves need no merge.'}],
+  model: `HYBRID-MERGE-SORT(A, p, r)        // Θ(n lg n) worst, Θ(n) on sorted input
+    if r - p + 1 <= 16
+        INSERTION-SORT(A, p, r)        // small pieces: lower overhead
+        return
+    q = ⌊(p + r) / 2⌋
+    HYBRID-MERGE-SORT(A, p, q)
+    HYBRID-MERGE-SORT(A, q + 1, r)
+    if A[q] > A[q + 1]                 // halves not already in order
+        MERGE(A, p, q, r)`})],
+ heap: [() => ({id: 'learn-kth-largest-heap', topic: 't09', title: 'k-th largest in a stream with a size-k min-heap',
+  prompt: `${lgPick(['A leaderboard', 'A trending-topics service', 'A stock screener'])} sees n values one at a time and must report the k-th largest. Keeping all n values is too much memory: keep a <b>min-heap of size k</b> holding the k largest seen so far. Write <code>KTH-LARGEST(A, n, k)</code> that returns it in O(n lg k), using MIN-HEAP-INSERT, HEAP-MINIMUM and HEAP-EXTRACT-MIN.`,
+  starter: 'KTH-LARGEST(A, n, k)\n    \n', define: ['kthlargest'], call: ['insert', 'minimum', 'extractmin'], maxLoop: 1,
+  correctness: [
+   {label: 'Starts with an empty min-heap', w: 1, test: lgRx(/=\s*(empty|new|\{\s*\}|\[\s*\])/), hint: 'H = empty min-heap'},
+   {label: 'Inserts while the heap has fewer than k items', w: 2, test: lgRx(/<\s*k[\s\S]{0,80}insert/), hint: 'if H.size < k: MIN-HEAP-INSERT(H, A[i])'},
+   {label: 'Replaces the minimum when a larger value arrives', w: 3, test: t => /minimum\s*\(/.test(t) && /extractmin\s*\(/.test(t), hint: 'elif A[i] > HEAP-MINIMUM(H): HEAP-EXTRACT-MIN(H); MIN-HEAP-INSERT(H, A[i])'},
+   {label: 'Returns the heap minimum', w: 2, test: lgRx(/return[^\n]*minimum/), hint: 'return HEAP-MINIMUM(H)'}],
+  efficiency: [{label: 'Heap never exceeds k: O(n lg k) time, O(k) memory', w: 6, test: lgRx(/<\s*k/), hint: 'Do not insert all n values.'},
+   {label: 'No full sort', w: 4, test: t => !/\bsort/.test(t), hint: 'Sorting is Θ(n lg n).'}],
+  model: `KTH-LARGEST(A, n, k)            // O(n lg k) time, O(k) memory
+    H = empty min-heap             // holds the k largest seen so far
+    for i = 1 to n
+        if H.size < k
+            MIN-HEAP-INSERT(H, A[i])
+        else if A[i] > HEAP-MINIMUM(H)
+            HEAP-EXTRACT-MIN(H)
+            MIN-HEAP-INSERT(H, A[i])
+    return HEAP-MINIMUM(H)         // smallest of the k largest`})],
+ bst: [() => ({id: 'learn-bst-size', topic: 't08', title: 'BST that remembers subtree sizes: k-th smallest in O(h)',
+  prompt: `Augment a BST so each node stores x.size, the number of nodes in its subtree. Modify TREE-INSERT to update sizes on the way down, and use the sizes to find the <b>k-th smallest</b> key in O(h) instead of an O(n) inorder walk. Write <code>SIZE-INSERT(T, z)</code> and <code>KTH-SMALLEST(x, k)</code>.`,
+  starter: 'SIZE-INSERT(T, z)\n    \n\nKTH-SMALLEST(x, k)\n    \n', define: ['sizeinsert', 'kthsmallest'], call: ['kth-smallest'], maxLoop: 1,
+  correctness: [
+   {label: 'New node starts with size 1', w: 1, test: lgRx(/z\.size\s*=\s*1/), hint: 'z.size = 1'},
+   {label: 'Increments size on every node passed', w: 3, test: lgIn('sizeinsert', /size\s*=\s*\w+\.size\s*\+\s*1|size\s*\+=\s*1|size\+\+/), hint: 'x.size = x.size + 1 while walking down'},
+   {label: 'Insert walks down by key and attaches z', w: 2, test: (t, P) => /<\s*\w+\.key/.test(P.body('sizeinsert')) && /\.(left|right)\s*=\s*z/.test(P.body('sizeinsert')), hint: 'standard TREE-INSERT walk'},
+   {label: 'Rank of x is left size + 1', w: 2, test: lgIn('kthsmallest', /\.left\.size\s*\+\s*1|size\s*\(\s*x\.left\s*\)\s*\+\s*1/), hint: 'r = x.left.size + 1 (0 if NIL)'},
+   {label: 'Goes left, returns x, or goes right with k − r', w: 3, test: lgIn('kthsmallest', /k\s*-\s*r/), hint: 'if k < r go left; if k == r return x; else KTH-SMALLEST(x.right, k − r)'}],
+  efficiency: [{label: 'O(h): one root-to-leaf path, no inorder walk', w: 10, test: (t, P) => !/inorder/.test(t) && (P.fn('kthsmallest') || {}).maxLoop !== 2, hint: 'Use the stored sizes.'}],
+  model: `SIZE-INSERT(T, z)                 // O(h); keeps x.size correct
+    z.size = 1
+    y = NIL
+    x = T.root
+    while x != NIL
+        x.size = x.size + 1          // z will be in x's subtree
+        y = x
+        if z.key < x.key
+            x = x.left
+        else x = x.right
+    z.p = y
+    if y == NIL
+        T.root = z
+    else if z.key < y.key
+        y.left = z
+    else y.right = z
+
+KTH-SMALLEST(x, k)                // O(h) using the size memory
+    r = SIZE(x.left) + 1             // rank of x in its subtree
+    if k == r
+        return x
+    if k < r
+        return KTH-SMALLEST(x.left, k)
+    return KTH-SMALLEST(x.right, k - r)`})],
+ rbt: [() => ({id: 'learn-rb-range', topic: 't11', title: 'Range count in a balanced tree in O(lg n + m)',
+  prompt: `A ${lgPick(['calendar app', 'price-range filter', 'IP allow-list'])} stores keys in a red-black tree (height ≤ 2 lg(n + 1)). Modify the inorder walk to <b>prune</b> subtrees that cannot contain keys in [lo, hi], so listing the m keys in range costs O(lg n + m) instead of Θ(n). Write <code>RANGE-REPORT(x, lo, hi)</code>.`,
+  starter: 'RANGE-REPORT(x, lo, hi)\n    \n', define: ['rangereport'], call: ['range-report'], maxLoop: 0,
+  correctness: [
+   {label: 'Stops at NIL', w: 2, test: lgRx(/if\s+x\s*==\s*(nil|t\.nil)|x\s*!=\s*(nil|t\.nil)/), hint: 'if x == T.nil return'},
+   {label: 'Goes left only if lo < x.key', w: 3, test: lgRx(/lo\s*<\s*x\.key|x\.key\s*>\s*lo/), hint: 'if lo < x.key: RANGE-REPORT(x.left, lo, hi)'},
+   {label: 'Reports x when lo ≤ x.key ≤ hi', w: 3, test: lgRx(/lo\s*<=\s*x\.key[\s\S]{0,40}hi|x\.key\s*>=\s*lo/), hint: 'if lo ≤ x.key ≤ hi: print x.key'},
+   {label: 'Goes right only if x.key < hi', w: 2, test: lgRx(/x\.key\s*<\s*hi|hi\s*>\s*x\.key/), hint: 'if x.key < hi: RANGE-REPORT(x.right, lo, hi)'}],
+  efficiency: [{label: 'Prunes both sides (O(lg n + m))', w: 10, test: t => /lo\s*<\s*x\.key|x\.key\s*>\s*lo/.test(t) && /x\.key\s*<\s*hi|hi\s*>\s*x\.key/.test(t), hint: 'Never visit a subtree that is entirely out of range.'}],
+  model: `RANGE-REPORT(x, lo, hi)           // inorder walk with pruning: O(lg n + m)
+    if x == T.nil
+        return
+    if lo < x.key                    // left subtree may hold keys ≥ lo
+        RANGE-REPORT(x.left, lo, hi)
+    if lo <= x.key and x.key <= hi
+        print x.key
+    if x.key < hi                    // right subtree may hold keys ≤ hi
+        RANGE-REPORT(x.right, lo, hi)`})],
+ prob: [() => ({id: 'learn-reservoir', topic: 't05a', title: 'Reservoir sampling: a uniform pick with O(1) memory',
+  prompt: `A ${lgPick(['log stream', 'stream of tweets', 'sensor feed'])} is too long to store, but we want <b>one item chosen uniformly at random</b>. Modify the hiring-style scan: keep one candidate and replace it with item i with probability 1/i. Write <code>RESERVOIR-PICK(A, n)</code> using RANDOM(1, i), and in a comment state why each item ends up chosen with probability 1/n.`,
+  starter: 'RESERVOIR-PICK(A, n)\n    \n', define: ['reservoirpick'], call: ['random'], maxLoop: 1,
+  correctness: [
+   {label: 'Starts with the first item', w: 2, test: lgRx(/=\s*a\s*\[\s*1\s*\]/), hint: 'pick = A[1]'},
+   {label: 'Scans items 2..n once', w: 2, test: lgRx(/for\s+i\s*=\s*2\s+to\s+n/), hint: 'for i = 2 to n'},
+   {label: 'Replaces with probability 1/i', w: 4, test: lgRx(/random\s*\(\s*1\s*,\s*i\s*\)\s*==\s*1|random\s*\(\s*1\s*,\s*i\s*\)\s*==\s*i/), hint: 'if RANDOM(1, i) == 1: pick = A[i]'},
+   {label: 'Returns the pick', w: 1, test: lgRx(/return\s+\w+/), hint: 'return pick'},
+   {label: 'Comment explains the 1/n argument', w: 1, test: (t, P) => /1\s*\/\s*n|1\/n/.test(P.src), hint: 'Pr = (1/i) · Π (1 − 1/j) for j > i = 1/n'}],
+  efficiency: [{label: 'One pass, O(1) extra memory', w: 10, test: (t, P) => P.maxLoop <= 1 && !/new\s+array|copy/.test(t), hint: 'Never store the stream.'}],
+  model: `RESERVOIR-PICK(A, n)              // one pass, O(1) memory
+    pick = A[1]
+    for i = 2 to n
+        if RANDOM(1, i) == 1          // probability 1/i
+            pick = A[i]
+    return pick
+    // item i survives with (1/i)·(i/(i+1))·…·((n−1)/n) = 1/n`})],
+ qsort: [() => ({id: 'learn-qsort-tail', topic: 't05b', title: 'Quicksort with O(lg n) stack: recurse on the smaller side',
+  prompt: `Deterministic or not, quicksort's recursion can be n levels deep on bad splits, ${lgPick(['blowing the call stack on an embedded system', 'crashing on adversarial input', 'wasting memory on huge arrays'])}. Modify RANDOMIZED-QUICKSORT to <b>recurse only on the smaller side</b> and loop on the larger side, so the stack depth is O(lg n) worst case. Write <code>SMALL-STACK-QUICKSORT(A, p, r)</code>; assume RANDOMIZED-PARTITION exists.`,
+  starter: 'SMALL-STACK-QUICKSORT(A, p, r)\n    \n', define: ['smallstackquicksort'], call: ['randomized-partition|partition', 'small-stack-quicksort'], maxLoop: 1,
+  correctness: [
+   {label: 'Loops while the range has 2+ elements', w: 2, test: lgRx(/while\s+p\s*<\s*r/), hint: 'while p < r'},
+   {label: 'Partitions with a random pivot', w: 2, test: lgRx(/partition\s*\(/), hint: 'q = RANDOMIZED-PARTITION(A, p, r)'},
+   {label: 'Compares the two side sizes', w: 2, test: lgRx(/q\s*-\s*p\s*<|r\s*-\s*q\s*>|<\s*r\s*-\s*q/), hint: 'if q − p < r − q'},
+   {label: 'Recurses on the smaller side', w: 2, test: (t, P) => (P.body('smallstackquicksort').match(/small-?stack-?quicksort\s*\(/g) || []).length >= 1, hint: 'SMALL-STACK-QUICKSORT(A, p, q − 1)'},
+   {label: 'Continues the loop on the larger side', w: 2, test: lgRx(/p\s*=\s*q\s*\+\s*1|r\s*=\s*q\s*-\s*1/), hint: 'p = q + 1 (or r = q − 1)'}],
+  efficiency: [{label: 'Only the smaller side uses recursion ⇒ O(lg n) stack', w: 10, test: t => /p\s*=\s*q\s*\+\s*1/.test(t) && /r\s*=\s*q\s*-\s*1/.test(t), hint: 'Update p or r instead of a second recursive call.'}],
+  model: `SMALL-STACK-QUICKSORT(A, p, r)     // expected Θ(n lg n), stack O(lg n)
+    while p < r
+        q = RANDOMIZED-PARTITION(A, p, r)
+        if q - p < r - q                   // left side is smaller
+            SMALL-STACK-QUICKSORT(A, p, q - 1)
+            p = q + 1                      // loop on the larger right side
+        else
+            SMALL-STACK-QUICKSORT(A, q + 1, r)
+            r = q - 1                      // loop on the larger left side`})],
+ hash: [() => ({id: 'learn-hash-resize', topic: 't06', title: 'Chained hash table that doubles to keep α ≤ 1',
+  prompt: `A ${lgPick(['username directory', 'cache of web pages', 'symbol table in a compiler'])} keeps growing, so α = n/m creeps up and searches slow down. Modify chained HASH-INSERT to <b>double m and rehash every key</b> when α would exceed 1, keeping searches Θ(1 + α) = O(1) and inserts O(1) amortized. Write <code>INSERT-RESIZE(T, k)</code> and <code>REHASH(T)</code>; assume h(k, m) and LIST-PREPEND exist.`,
+  starter: 'INSERT-RESIZE(T, k)\n    \n\nREHASH(T)\n    \n', define: ['insertresize', 'rehash'], call: ['rehash', 'list-prepend|prepend'], maxLoop: 2,
+  correctness: [
+   {label: 'Checks the load factor before inserting', w: 2, test: lgIn('insertresize', /t\.n\s*(\+\s*1\s*)?>\s*t\.m|n\s*\/\s*m|alpha|α/), hint: 'if T.n + 1 > T.m: REHASH(T)'},
+   {label: 'Prepends the key to its chain', w: 2, test: lgRx(/prepend\s*\(/), hint: 'LIST-PREPEND(T[h(k, T.m)], k)'},
+   {label: 'Updates the key count', w: 1, test: lgRx(/t\.n\s*=\s*t\.n\s*\+\s*1|t\.n\s*\+=\s*1/), hint: 'T.n = T.n + 1'},
+   {label: 'REHASH allocates a table of size 2m', w: 2, test: lgIn('rehash', /2\s*\*\s*t\.m|2\s*t\.m|t\.m\s*\*\s*2/), hint: 'new table with 2·T.m empty chains'},
+   {label: 'REHASH reinserts every key with the new m', w: 3, test: lgIn('rehash', /for[\s\S]*for[\s\S]*h\s*\(/), hint: 'for each slot, for each key: prepend into new slot h(key, 2m)'}],
+  efficiency: [{label: 'Doubling (not +1) gives O(1) amortized inserts', w: 6, test: lgIn('rehash', /2\s*\*|\*\s*2/), hint: 'Growing by a constant amount gives Θ(n) amortized.'},
+   {label: 'Rehashing is Θ(n + m), done rarely', w: 4, test: (t, P) => P.maxLoop <= 2, hint: 'One pass over the old table.'}],
+  model: `INSERT-RESIZE(T, k)              // O(1) amortized; keeps α ≤ 1
+    if T.n + 1 > T.m
+        REHASH(T)
+    LIST-PREPEND(T[h(k, T.m)], k)
+    T.n = T.n + 1
+
+REHASH(T)                        // Θ(n + m), but only when m doubles
+    old = T.table
+    oldm = T.m
+    T.m = 2 * T.m
+    T.table = new array of T.m empty lists
+    for j = 0 to oldm - 1
+        for each key x in old[j]
+            LIST-PREPEND(T[h(x, T.m)], x)`})],
+ select: [() => ({id: 'learn-iter-select', topic: 't10a', title: 'Iterative RANDOMIZED-SELECT with O(1) extra space',
+  prompt: `Quickselect recurses into only one side, so the recursion is a tail call. Modify RANDOMIZED-SELECT into a <b>loop</b> that narrows [p, r] and adjusts the rank, using O(1) extra space. Write <code>ITERATIVE-SELECT(A, p, r, i)</code> that returns the i-th smallest of A[p..r] in expected Θ(n); assume RANDOMIZED-PARTITION exists.`,
+  starter: 'ITERATIVE-SELECT(A, p, r, i)\n    \n', define: ['iterativeselect'], call: ['randomized-partition|partition'], maxLoop: 1,
+  correctness: [
+   {label: 'Loops until one element remains', w: 2, test: lgRx(/while\s+p\s*<\s*r|while\s+true|loop/), hint: 'while p < r'},
+   {label: 'Partitions and computes the pivot rank k = q − p + 1', w: 3, test: t => /partition\s*\(/.test(t) && /k\s*=\s*q\s*-\s*p\s*\+\s*1/.test(t), hint: 'q = RANDOMIZED-PARTITION(A, p, r); k = q − p + 1'},
+   {label: 'Returns the pivot when i == k', w: 2, test: lgRx(/i\s*==\s*k[\s\S]{0,30}return\s+a\s*\[\s*q\s*\]/), hint: 'if i == k return A[q]'},
+   {label: 'Narrows left with r = q − 1', w: 1, test: lgRx(/r\s*=\s*q\s*-\s*1/), hint: 'if i < k: r = q − 1'},
+   {label: 'Narrows right with p = q + 1 and i = i − k', w: 2, test: t => /p\s*=\s*q\s*\+\s*1/.test(t) && /i\s*=\s*i\s*-\s*k/.test(t), hint: 'else: p = q + 1; i = i − k'}],
+  efficiency: [{label: 'No recursion: O(1) extra space', w: 6, test: lgNoSelfCall('iterativeselect', 'iterative-?select'), hint: 'Replace the tail call by updating p, r, i.'},
+   {label: 'One side per round ⇒ expected Θ(n)', w: 4, test: (t, P) => P.maxLoop <= 1, hint: 'A single loop.'}],
+  model: `ITERATIVE-SELECT(A, p, r, i)      // expected Θ(n), O(1) extra space
+    while p < r
+        q = RANDOMIZED-PARTITION(A, p, r)
+        k = q - p + 1                    // rank of the pivot in A[p..r]
+        if i == k
+            return A[q]
+        if i < k
+            r = q - 1                    // answer is on the left
+        else
+            p = q + 1                    // answer is on the right
+            i = i - k                    // adjust the rank
+    return A[p]`})],
+ linsort: [() => { const k = lgPick([9, 99, 255]); return {id: 'learn-counting-neg', topic: 't10b', title: 'Counting sort for keys in a range [lo, hi]',
+  prompt: `Readings from ${lgPick(['a thermometer (−40..' + k + ')', 'an exam with negative scores allowed', 'elevation data including below sea level'])} are integers in [lo, hi], possibly negative, with hi − lo = O(n). Modify COUNTING-SORT to <b>offset</b> every key by lo so the count array is C[0..hi − lo]. Keep it stable and Θ(n + (hi − lo)). Write <code>RANGE-COUNTING-SORT(A, B, n, lo, hi)</code>.`,
+  starter: 'RANGE-COUNTING-SORT(A, B, n, lo, hi)\n    \n', define: ['rangecountingsort'], call: [], maxLoop: 1,
+  correctness: [
+   {label: 'Count array sized hi − lo + 1, all zeros', w: 2, test: lgRx(/hi\s*-\s*lo/), hint: 'let C[0..hi − lo] be zeros'},
+   {label: 'Counts with the offset A[j] − lo', w: 3, test: lgRx(/c\s*\[\s*a\s*\[\s*j\s*\]\s*-\s*lo\s*\][^\n]*\+\s*1|c\s*\[\s*a\s*\[\s*j\s*\]\s*-\s*lo\s*\]\s*\+=/), hint: 'C[A[j] − lo] = C[A[j] − lo] + 1'},
+   {label: 'Turns counts into prefix sums', w: 2, test: lgRx(/c\s*\[\s*\w+\s*\]\s*=\s*c\s*\[\s*\w+\s*\]\s*\+\s*c\s*\[\s*\w+\s*-\s*1\s*\]/), hint: 'C[v] = C[v] + C[v − 1]'},
+   {label: 'Places elements from j = n down to 1', w: 2, test: lgRx(/for\s+j\s*=\s*n\s+downto\s+1/), hint: 'for j = n downto 1 (stable)'},
+   {label: 'Writes B[C[A[j] − lo]] and decrements', w: 1, test: lgRx(/b\s*\[\s*c\s*\[\s*a\s*\[\s*j\s*\]\s*-\s*lo\s*\]\s*\]\s*=/), hint: 'B[C[A[j] − lo]] = A[j]; C[A[j] − lo]−−'}],
+  efficiency: [{label: 'No comparisons between keys: Θ(n + (hi − lo))', w: 6, test: t => !/(^|[^-\w])sort\s*\(|if[^\n]*a\s*\[\s*\w+\s*\]\s*[<>]/.test(t), hint: 'Index by value instead of comparing.'},
+   {label: 'Only single loops', w: 4, test: (t, P) => P.maxLoop <= 1, hint: 'Count, prefix-sum, place.'}],
+  model: `RANGE-COUNTING-SORT(A, B, n, lo, hi)   // stable, Θ(n + (hi − lo))
+    let C[0..hi - lo] be a new array of zeros
+    for j = 1 to n
+        C[A[j] - lo] = C[A[j] - lo] + 1        // offset makes indices ≥ 0
+    for v = 1 to hi - lo
+        C[v] = C[v] + C[v - 1]                 // number of keys ≤ v + lo
+    for j = n downto 1                         // backwards keeps it stable
+        B[C[A[j] - lo]] = A[j]
+        C[A[j] - lo] = C[A[j] - lo] - 1`}; }],
+ backtrack: [() => { const T = lgPick([10, 15, 21]); return {id: 'learn-subset-memo', topic: 't12s', title: 'Subset sum with pruning and a memo',
+  prompt: `For ${lgPick(['packing a ' + T + '-minute playlist', 'choosing coins worth ' + T + ' cents', 'filling a ' + T + '-kg truck'])}, the plain backtracking SUBSET-SUM is O(2ⁿ). Make it smarter: (1) <b>prune</b> when T &lt; 0, and (2) <b>memoize</b> each (i, T) state the first time it is solved, so the time becomes O(nT). Write <code>SUBSET-SUM-MEMO(X, n, T)</code> and the recursive helper <code>SS(X, i, T)</code>.`,
+  starter: 'SUBSET-SUM-MEMO(X, n, T)\n    \n\nSS(X, i, T)\n    \n', define: ['subsetsummemo', 'ss'], call: ['ss'], maxLoop: 1,
+  correctness: [
+   {label: 'Base case T == 0 is TRUE', w: 2, test: lgRx(/t\s*==\s*0[\s\S]{0,30}return\s+true/), hint: 'if T == 0 return TRUE'},
+   {label: 'Prunes T < 0 or no items left', w: 2, test: lgRx(/t\s*<\s*0|i\s*>\s*n/), hint: 'if T < 0 or i > n return FALSE'},
+   {label: 'Reuses a stored answer', w: 2, test: lgIn('ss', /memo\s*\[[^\]]*\]\s*!=|if[^\n]*memo/), hint: 'if memo[i, T] ≠ NIL return memo[i, T]'},
+   {label: 'Tries excluding and including X[i]', w: 3, test: lgIn('ss', /ss\s*\([^)]*i\s*\+\s*1[^)]*-\s*x\s*\[/), hint: 'SS(X, i + 1, T) or SS(X, i + 1, T − X[i])'},
+   {label: 'Stores the answer before returning', w: 1, test: lgIn('ss', /memo\s*\[[^\]]*\]\s*=/), hint: 'memo[i, T] = result'}],
+  efficiency: [{label: 'Memo makes it O(nT) instead of O(2ⁿ)', w: 7, test: lgRx(/memo/), hint: 'Each (i, T) is solved once.'},
+   {label: 'Memo is cleared once, not per call', w: 3, test: lgIn('subsetsummemo', /memo/), hint: 'Initialize the table in SUBSET-SUM-MEMO.'}],
+  model: `SUBSET-SUM-MEMO(X, n, T)           // O(nT) states, each O(1)
+    let memo[1..n+1, 0..T] be a new table, every entry NIL
+    return SS(X, 1, T)
+
+SS(X, i, T)                        // can a subset of X[i..n] sum to T?
+    if T == 0
+        return TRUE
+    if T < 0 or i > n
+        return FALSE                  // prune
+    if memo[i, T] != NIL
+        return memo[i, T]             // reuse a solved state
+    result = SS(X, i + 1, T) or SS(X, i + 1, T - X[i])
+    memo[i, T] = result
+    return result`}; }],
+ dp: [() => ({id: 'learn-rod-cost', topic: 't12a', title: 'Rod cutting where every cut costs c, with the cuts remembered',
+  prompt: `A ${lgPick(['lumber mill', 'steel shop', 'fabric store'])} pays a fixed <b>cost c for every cut</b>. Modify BOTTOM-UP-CUT-ROD so revenue = Σ prices − c × (number of cuts), keep s[j] (the first piece) as memory, and print the optimal pieces. Write <code>CUT-ROD-COST(p, n, c)</code> returning r and s, and <code>PRINT-PIECES(s, n)</code>.`,
+  starter: 'CUT-ROD-COST(p, n, c)\n    \n\nPRINT-PIECES(s, n)\n    \n', define: ['cutrodcost', 'printpieces'], call: [], maxLoop: 2,
+  correctness: [
+   {label: 'r[0] = 0 and lengths filled in increasing order', w: 2, test: t => /r\s*\[\s*0\s*\]\s*=\s*0/.test(t) && /for\s+j\s*=\s*1\s+to\s+n/.test(t), hint: 'r[0] = 0; for j = 1 to n'},
+   {label: 'No cut: sell the whole length j', w: 2, test: lgRx(/=\s*p\s*\[\s*j\s*\]/), hint: 'q = p[j]; s[j] = j'},
+   {label: 'A first cut at i < j subtracts c', w: 3, test: lgRx(/p\s*\[\s*i\s*\]\s*\+\s*r\s*\[\s*j\s*-\s*i\s*\]\s*-\s*c/), hint: 'p[i] + r[j − i] − c for i = 1 to j − 1'},
+   {label: 'Remembers the best first piece in s[j]', w: 2, test: lgRx(/s\s*\[\s*j\s*\]\s*=\s*i/), hint: 's[j] = i'},
+   {label: 'PRINT-PIECES follows s until n = 0', w: 1, test: lgIn('printpieces', /n\s*=\s*n\s*-\s*s\s*\[\s*n\s*\]/), hint: 'print s[n]; n = n − s[n]'}],
+  efficiency: [{label: 'Bottom-up Θ(n²): two nested loops, no recursion', w: 6, test: (t, P) => P.maxLoop === 2 && !/cut-?rod-?cost\s*\(/.test(P.body('cutrodcost')), hint: 'Fill r[1..n] in order.'},
+   {label: 'Reconstruction is O(n) from s', w: 4, test: (t, P) => P.hasFn('printpieces'), hint: 'Use the stored choices.'}],
+  model: `CUT-ROD-COST(p, n, c)             // Θ(n²), every cut costs c
+    let r[0..n] and s[1..n] be new arrays
+    r[0] = 0
+    for j = 1 to n
+        q = p[j]                      // sell length j uncut
+        s[j] = j
+        for i = 1 to j - 1
+            if p[i] + r[j - i] - c > q
+                q = p[i] + r[j - i] - c
+                s[j] = i              // remember the best first piece
+        r[j] = q
+    return (r, s)
+
+PRINT-PIECES(s, n)                // O(n) from the stored choices
+    while n > 0
+        print s[n]
+        n = n - s[n]`})],
+ lcs: [() => ({id: 'learn-lcs-tworow', topic: 't12b', title: 'LCS length in two rows of memory',
+  prompt: `Comparing ${lgPick(['two long DNA strands', 'two versions of a large file', 'two transcripts'])} with the full (m + 1) × (n + 1) table uses Θ(mn) memory. Row i of the table only needs row i − 1, so modify LCS-LENGTH to keep just <b>two rows</b>: Θ(mn) time, Θ(n) space. Write <code>LCS-TWO-ROWS(X, Y, m, n)</code> returning the length.`,
+  starter: 'LCS-TWO-ROWS(X, Y, m, n)\n    \n', define: ['lcstworows'], call: [], maxLoop: 2,
+  correctness: [
+   {label: 'Two rows initialized to 0', w: 2, test: lgRx(/(prev|old|above)[^\n]*0|=\s*0/), hint: 'prev[0..n] = 0'},
+   {label: 'Match: diagonal + 1 from the previous row', w: 3, test: lgRx(/x\s*\[\s*i\s*\]\s*==\s*y\s*\[\s*j\s*\][\s\S]{0,60}(prev|old|above)\s*\[\s*j\s*-\s*1\s*\]\s*\+\s*1/), hint: 'if X[i] == Y[j]: cur[j] = prev[j − 1] + 1'},
+   {label: 'Mismatch: max of above and left', w: 3, test: lgRx(/max\s*\(\s*(prev|old|above)\s*\[\s*j\s*\]\s*,\s*(cur|row|new)\s*\[\s*j\s*-\s*1\s*\]|max\s*\(\s*(cur|row|new)\s*\[\s*j\s*-\s*1\s*\]\s*,\s*(prev|old|above)\s*\[\s*j\s*\]/), hint: 'else cur[j] = max(prev[j], cur[j − 1])'},
+   {label: 'Swaps the rows after each i', w: 1, test: lgRx(/swap|prev\s*=\s*cur/), hint: 'swap prev and cur'},
+   {label: 'Returns the last cell', w: 1, test: lgRx(/return[^\n]*\[\s*n\s*\]/), hint: 'return prev[n]'}],
+  efficiency: [{label: 'Θ(n) space: no m × n table', w: 6, test: t => !/c\s*\[\s*i\s*,\s*j\s*\]|c\s*\[\s*i\s*\]\s*\[\s*j\s*\]|\[\s*0\s*\.\.\s*m\s*,/.test(t), hint: 'Only two rows of length n + 1.'},
+   {label: 'Θ(mn) time: two nested loops', w: 4, test: (t, P) => P.maxLoop === 2, hint: 'Same loops as LCS-LENGTH.'}],
+  model: `LCS-TWO-ROWS(X, Y, m, n)          // Θ(mn) time, Θ(n) space
+    let prev[0..n] and cur[0..n] be new arrays of zeros
+    for i = 1 to m
+        cur[0] = 0
+        for j = 1 to n
+            if X[i] == Y[j]
+                cur[j] = prev[j - 1] + 1          // diagonal + 1
+            else cur[j] = max(prev[j], cur[j - 1])  // above or left
+        swap prev and cur                         // row i becomes "previous"
+    return prev[n]`})]
+});
+
+// ======================= LEARNING PATH PAGES (#mt<n>-learn) =======================
 // Renders LEARN_MT4 (learn-mt4-units.js) as a guided lecture: lessons with dummy
 // notes, exact screencast sections (learn-chapters.js), visualizers and quick
 // checks, plus a generated pseudocode unit test (learn-mt4-gen.js) after each unit.
-const LRN_KEY = 'ics311-learn-mt4';
-const lrnState = (() => { try { return JSON.parse(localStorage.getItem(LRN_KEY)) || {}; } catch (e) { return {}; } })();
-lrnState.checks = lrnState.checks || {};
-const lrnSave = () => { try { localStorage.setItem(LRN_KEY, JSON.stringify(lrnState)); } catch (e) {} };
 const lrnTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 // [videoId, fromChapter?, toChapter?] → {id, start, end, label}, using the real YouTube chapters
 function lrnClip([id, from, to]){
@@ -8335,39 +8960,38 @@ function lrnUnitHTML(u, n){
 }
 const lrnTestIds = u => LEARN_GEN[u.id].map(f => f().id);
 const lrnPassed = u => lrnTestIds(u).some(id => (store.code[id] || 0) >= 90);
-function lrnProgress(){
-  let done = 0, total = 0, units = 0;
-  LEARN_MT4.forEach(u => {
-    const ks = u.lessons.map((l, i) => l.check ? lrnCheckId(u, i) : null).filter(Boolean), ok = ks.filter(k => lrnState.checks[k]).length, pass = lrnPassed(u);
-    done += ok; total += ks.length; units += pass;
+function lrnProgress(gid){
+  const units = LEARN_PATHS[gid], st = lrnStates[gid]; let done = 0, total = 0, passed = 0;
+  units.forEach(u => {
+    const ks = u.lessons.map((l, i) => l.check ? lrnCheckId(u, i) : null).filter(Boolean), ok = ks.filter(k => st.checks[k]).length, pass = lrnPassed(u);
+    done += ok; total += ks.length; passed += pass;
     document.querySelectorAll(`.lrn-uprog[data-u="${u.id}"]`).forEach(el => { el.textContent = `${ok}/${ks.length} checks · test ${pass ? 'passed ✓' : 'not passed'}`; el.style.color = pass && ok === ks.length ? 'var(--good)' : ''; });
   });
-  const pct = Math.round(100 * (done + units * 3) / (total + LEARN_MT4.length * 3));
-  document.querySelectorAll('.lrn-prog').forEach(el => el.innerHTML = `<div class="row" style="justify-content:space-between"><b>Your progress: ${pct}%</b><span class="stat-label">${done}/${total} knowledge checks correct · ${units}/${LEARN_MT4.length} unit tests passed</span></div><div class="meter" style="margin-top:8px"><span style="width:${pct}%;background:var(--good)"></span></div>`);
+  const pct = Math.round(100 * (done + passed * 3) / (total + units.length * 3));
+  document.querySelectorAll(`#page-${gid}-learn .lrn-prog`).forEach(el => el.innerHTML = `<div class="row" style="justify-content:space-between"><b>Your progress: ${pct}%</b><span class="stat-label">${done}/${total} knowledge checks correct · ${passed}/${units.length} unit tests passed</span></div><div class="meter" style="margin-top:8px"><span style="width:${pct}%;background:var(--good)"></span></div>`);
 }
-function lrnMountTest(box, u){
+function lrnMountTest(box, u, gid){
   const body = box.querySelector('.lrn-test-body');
   const gen = () => { const fs = LEARN_GEN[u.id], last = box.dataset.last; let f = pick(fs);
     if (fs.length > 1) while (f().id === last) f = pick(fs);
     const q = f(); box.dataset.last = q.id;
-    renderQuestion(body, {kind: 'code', topic: q.topic, q, generated: true}, () => { lrnProgress(); renderHome(); }); };
+    renderQuestion(body, {kind: 'code', topic: q.topic, q, generated: true}, () => { lrnProgress(gid); renderHome(); }); };
   box.querySelector('.lrn-new').onclick = gen;
   gen();
 }
-(function mountLearnMT4(){
-  if (typeof LEARN_MT4 === 'undefined') return;
-  const g = GROUPS.find(x => x.id === 'mt4'), nL = LEARN_MT4.reduce((s, u) => s + u.lessons.length, 0);
-  document.getElementById('page-videos').insertAdjacentHTML('beforebegin', `<section class="page hidden learn-page" id="page-mt4-learn">
-    <div class="row" style="gap:8px"><a class="eyebrow" href="#mt4" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} Midterm 4 · ${g.date}</a><span class="eyebrow">🎓 Learning path</span></div>
-    <h1>🎓 Midterm 4 <span class="grad">Learning Path</span></h1>
-    <p class="lead">A guided lecture through every MT4 topic: ${LEARN_MT4.length} units and ${nL} lessons. Each lesson gives a detailed explanation, a dummy note in plain language, the exact screencast sections that cover it, and a quick knowledge check. Each unit ends with a generated pseudocode problem that modifies the algorithm you just learned.</p>
-    <div class="row"><a class="btn" href="#mt4">← Midterm 4 overview</a><a class="btn" href="#mt4-crib">📝 Crib sheet</a><button class="btn primary" data-practice="mt4">🎯 Practice Midterm 4</button><button class="btn ghost" data-lrn-all="open">⊞ Expand all</button><button class="btn ghost" data-lrn-all="close">⊟ Collapse all</button></div>
+function mountLearnPath(g, units){
+  const gid = g.id, tag = g.name.replace('Midterm ', 'MT'), nL = units.reduce((s, u) => s + u.lessons.length, 0), st = lrnStates[gid];
+  document.getElementById('page-videos').insertAdjacentHTML('beforebegin', `<section class="page hidden learn-page" id="page-${gid}-learn">
+    <div class="row" style="gap:8px"><a class="eyebrow" href="#${gid}" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} ${g.name} · ${g.date}</a><span class="eyebrow">🎓 Learning path</span></div>
+    <h1>🎓 ${g.name} <span class="grad">Learning Path</span></h1>
+    <p class="lead">A guided lecture through every ${tag} topic: ${units.length} units and ${nL} lessons. Each lesson gives a detailed explanation, a dummy note in plain language, the exact screencast sections that cover it, and a quick knowledge check. Each unit ends with a generated pseudocode problem that modifies the algorithm you just learned.</p>
+    <div class="row"><a class="btn" href="#${gid}">← ${g.name} overview</a><a class="btn" href="#${gid}-crib">📝 Crib sheet</a><button class="btn primary" data-practice="${gid}">🎯 Practice ${g.name}</button><button class="btn ghost" data-lrn-all="open">⊞ Expand all</button><button class="btn ghost" data-lrn-all="close">⊟ Collapse all</button></div>
     <div class="card lrn-prog" style="margin-top:16px"></div>
-    <div class="callout cyan"><b>How to use it:</b> read the lesson, then watch only the screencast section listed under it (clips start and stop at the right chapter). Answer the knowledge check before moving on. Finish each unit by writing the generated pseudocode problem from memory, and use 🎲 for a new variant until you can score 90%+.</div>
-    <div class="card"><h3 style="margin-top:0">📑 Units</h3><div class="crib-toc-grid">${LEARN_MT4.map((u, i) => `<a href="javascript:void 0" data-jump="lrn-${u.id}">Unit ${i + 1} · ${u.title}</a>`).join('')}</div></div>
-    ${LEARN_MT4.map((u, i) => lrnUnitHTML(u, i + 1)).join('')}
+    <div class="callout cyan"><b>How to use it:</b> read the lesson, then watch only the screencast section listed under it (clips start and stop at the right chapter; videos without chapter markers play in full). Answer the knowledge check before moving on. Finish each unit by writing the generated pseudocode problem from memory, and use 🎲 for a new variant until you can score 90%+.</div>
+    <div class="card"><h3 style="margin-top:0">📑 Units</h3><div class="crib-toc-grid">${units.map((u, i) => `<a href="javascript:void 0" data-jump="lrn-${u.id}">Unit ${i + 1} · ${u.title}</a>`).join('')}</div></div>
+    ${units.map((u, i) => lrnUnitHTML(u, i + 1)).join('')}
     <div class="card lrn-prog" style="margin-top:16px"></div></section>`);
-  const pg = document.getElementById('page-mt4-learn');
+  const pg = document.getElementById(`page-${gid}-learn`);
   pg.addEventListener('click', e => {
     const j = e.target.closest('[data-jump]');
     if (j){ const t = document.getElementById(j.dataset.jump); if (t.tagName === 'DETAILS') t.open = true; t.scrollIntoView({behavior: 'smooth', block: 'start'}); return; }
@@ -8379,21 +9003,29 @@ function lrnMountTest(box, u){
     box.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === ans) x.classList.add('correct'); });
     if (!ok) b.classList.add('wrong');
     box.querySelector('.lrn-why').innerHTML = `<div class="explain ${ok ? 'good' : 'bad'} fade"><b>${ok ? '✓ Correct!' : '✗ Not quite.'}</b> ${box.dataset.why}${ok ? '' : ' <span class="stat-label">Reread the lesson above, then try the 🎯 practice quiz.</span>'}</div>`;
-    if (ok){ lrnState.checks[box.dataset.k] = 1; lrnSave(); }
-    record(box.dataset.topic, ok ? 1 : 0); lrnProgress();
+    if (ok){ st.checks[box.dataset.k] = 1; lrnSave(gid); }
+    record(box.dataset.topic, ok ? 1 : 0); lrnProgress(gid);
   });
-  LEARN_MT4.forEach(u => lrnMountTest(pg.querySelector(`.lrn-test[data-u="${u.id}"]`), u));
-  // ---- entry points: sidebar link under Midterm 4 + a container on the MT4 overview ----
-  const nav = document.querySelector('#nav a.gover[href="#mt4"]');
-  if (nav) nav.insertAdjacentHTML('afterend', `<a href="#mt4-learn" data-page="mt4-learn" class="gover"><span class="dot" style="background:linear-gradient(135deg,${g.color},#22d3ee)"></span>🎓 Learning path</a>`);
-  const ov = document.querySelector('#page-mt4 .crib-link') || document.querySelector('#page-mt4 > .row');
+  units.forEach(u => lrnMountTest(pg.querySelector(`.lrn-test[data-u="${u.id}"]`), u, gid));
+  const nav = document.querySelector(`#nav a.gover[href="#${gid}"]`);
+  if (nav) nav.insertAdjacentHTML('afterend', `<a href="#${gid}-learn" data-page="${gid}-learn" class="gover"><span class="dot" style="background:linear-gradient(135deg,${g.color},#22d3ee)"></span>🎓 Learning path</a>`);
+  const ov = document.querySelector(`#page-${gid} .crib-link`) || document.querySelector(`#page-${gid} > .row`);
   if (ov) ov.insertAdjacentHTML('afterend', `<div class="card crib-link" style="margin-top:18px;border-color:${g.color}66">
-    <div class="row" style="justify-content:space-between;gap:12px"><h2 style="margin:0">🎓 Midterm 4 Learning Path</h2><span class="pill" style="color:${g.color}">${LEARN_MT4.length} units · ${nL} lessons</span></div>
-    <p class="stat-label" style="margin:10px 0 12px">Learn every MT4 topic in order: detailed lessons with dummy notes, the exact screencast sections and MIT lectures, knowledge checks between lessons, and a generated pseudocode test after every unit.</p>
-    <div class="chips">${LEARN_MT4.map((u, i) => `<span class="pill">Unit ${i + 1} · ${u.title}</span>`).join(' ')}</div>
-    <div class="row" style="margin-top:14px"><a class="btn primary" href="#mt4-learn">🎓 Start the learning path →</a></div></div>`);
-  setTimeout(lrnProgress, 0);   // `store` (app.js) is initialized after this file runs
-})();
+    <div class="row" style="justify-content:space-between;gap:12px"><h2 style="margin:0">🎓 ${g.name} Learning Path</h2><span class="pill" style="color:${g.color}">${units.length} units · ${nL} lessons</span></div>
+    <p class="stat-label" style="margin:10px 0 12px">Learn every ${tag} topic in order: detailed lessons with dummy notes, the exact screencast sections and MIT lectures, knowledge checks between lessons, and a generated pseudocode test after every unit.</p>
+    <div class="chips">${units.map((u, i) => `<span class="pill">Unit ${i + 1} · ${u.title}</span>`).join(' ')}</div>
+    <div class="row" style="margin-top:14px"><a class="btn primary" href="#${gid}-learn">🎓 Start the learning path →</a></div></div>`);
+  setTimeout(() => lrnProgress(gid), 0);   // `store` (app.js) is initialized after this file runs
+}
+const LEARN_PATHS = {};
+[['mt1', 'LEARN_MT1'], ['mt2', 'LEARN_MT2'], ['mt3', 'LEARN_MT3'], ['mt4', 'LEARN_MT4']].forEach(([id, v]) => { try { LEARN_PATHS[id] = eval(v); } catch (e) {} });
+const lrnStates = {};
+const lrnSave = gid => { try { localStorage.setItem('ics311-learn-' + gid, JSON.stringify(lrnStates[gid])); } catch (e) {} };
+GROUPS.filter(g => LEARN_PATHS[g.id]).forEach(g => {
+  try { lrnStates[g.id] = JSON.parse(localStorage.getItem('ics311-learn-' + g.id)) || {}; } catch (e) { lrnStates[g.id] = {}; }
+  lrnStates[g.id].checks = lrnStates[g.id].checks || {};
+  mountLearnPath(g, LEARN_PATHS[g.id]);
+});
 
 // ======================= STATE =======================
 const STORE_KEY = 'mstlab-v1';
