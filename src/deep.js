@@ -124,7 +124,7 @@ function deepBlock(id){
   return `${(X.viz || []).map((v, i) => `${note(kv ? kv[i] : i === 0 ? K.viz : '')}<h2>🔬 ${VIZ[v].title}</h2>${VIZ[v].hint ? `<p class="stat-label">${VIZ[v].hint}</p>` : ''}<div class="card"><div class="stepper" data-viz="${v}"></div></div>`).join('')}
   ${note(K.tools)}${(X.tools || []).map(([tid, title, hint]) => `<h2>🧮 ${title}</h2>${hint ? `<p class="stat-label">${hint}</p>` : ''}<div class="card"><div class="tool" data-tool="${tid}"></div></div>`).join('')}
   ${note(K.cx)}${X.cx ? `<h2>⏱️ Time &amp; space complexity</h2><table class="tbl cx"><tr>${cxHead.map(h => `<th>${h}</th>`).join('')}</tr>${X.cx.map(r => `<tr>${r.map((c, i) => `<td>${i ? c : `<b>${c}</b>`}</td>`).join('')}</tr>`).join('')}</table>${X.cxNote ? `<p class="stat-label">${X.cxNote}</p>` : ''}` : ''}
-  ${note(K.deep)}${X.deep ? `<h2>🧭 Deeper dive</h2><div class="deep">${X.deep.map(([h, b], i) => { const e = (KIDDEEP[id] || [])[i]; return `<details class="card deep-item" open><summary><h3>${h}</h3></summary><div class="deep-body">${e ? `<div class="pro-only">${b}</div><div class="kid-only">${e}</div>` : b}</div></details>`; }).join('')}</div>` : ''}`;
+  ${note(K.deep)}${(() => { const items = (X.deep || []).map((d, i) => [d, i]).filter(([d]) => !/^Professor's corner/.test(d[0])); return items.length ? `<h2>🧭 Deeper dive</h2><div class="deep">${items.map(([[h, b], i]) => { const e = (KIDDEEP[id] || [])[i]; return `<details class="card deep-item" open><summary><h3>${h}</h3></summary><div class="deep-body">${e ? `<div class="pro-only">${b}</div><div class="kid-only">${e}</div>` : b}</div></details>`; }).join('')}</div>` : ''; })()}`;
 }
 
 // ======================= DEEP DIVES · MIDTERM 1 =======================

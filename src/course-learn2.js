@@ -196,7 +196,8 @@ const KIDDEEP = {
  ],
  mst: [
   '✂️ Safe edge proof: add the cheapest crossing edge, break the cycle it makes by removing an equal-or-heavier edge — still a tree, still cheapest.',
-  '🧩 Every MST algorithm is just "find a safe edge across a cut." Kruskal scans globally, Prim grows one blob.'
+  '🧩 Every MST algorithm is just "find a safe edge across a cut." Kruskal scans globally, Prim grows one blob.',
+  '⚖️ Three pretend algorithms judged: deleting heavy edges first is correct (mirror trick), ignoring weights is wrong, and "add then drop the heaviest on the cycle" is correct.'
  ],
  kruskal: [
   '🔢 Sort edges once, then one pass: take an edge only if its two ends are in different groups yet (union-find answers that fast).',
@@ -235,3 +236,183 @@ const KIDDEEP = {
   '🚀 Speedup ≤ processors AND ≤ parallelism T₁/T∞. More processors than parallelism cannot help — that is the ceiling.'
  ]
 };
+
+// ======================= DUMMY MODE: PROFESSOR'S LECTURE REWRITES =======================
+// KIDLEC[id][i] is the 5-year-old rewrite of LECTURE[id][i]; corner items reuse KIDDEEP.
+const KIDLEC = {
+ ds: [
+  '👥 Groups that keep merging: the only question is "are we on the same team yet?" — and the trick is never rewriting the whole list.',
+  '📖 The book\'s Chapter 19 teaches the same trick: point one team name at another, then flatten paths as you search.',
+  '🔗 Tiny example: 8 kids each on their own team — merge always makes the smaller-rank team follow the bigger one.',
+  '⚠️ Watch out: rank is a height-limit sticker, not the real height — and the α(n) number grows so slowly it is basically constant.'
+ ],
+ mst: [
+  '🗺️ Cheapest way to connect every town with no loops — like laying the least pipe between all the houses.',
+  '📖 Book Chapter 23 proves the safe-edge rule: the cheapest edge across any gap is always safe to use.',
+  '✂️ Example: a cut with crossing costs 8, 2, 6 — the 2 is safe; swap it in and drop something heavier.',
+  '⚠️ Ties mean many right answers with the same total cost — and the cut must respect edges you already picked.'
+ ],
+ kruskal: [
+  '🧮 Sort every edge by price, then grab each one unless it would make a loop — union-find is the loop detector.',
+  '📖 Book §23.2 writes it exactly this way; sorting costs E lg E and the union-find part is nearly free.',
+  '🛤️ Tiny example: edges priced 1, 2, 3, 1 — take the 1s and the 2, skip the 3 that closes a loop.',
+  '⚠️ Sort once, one pass only. A "loop" means same team, not nearby on the map — and a disconnected graph gives a forest.'
+ ],
+ prim: [
+  '🎈 Grow one blob of connected towns; each step add the cheapest road leaving the blob.',
+  '📖 Book §23.2: a priority queue hands you the cheapest crossing edge over and over.',
+  '🚗 Example: start at s, cheapest exit is b (cost 3), then a drops to 2 through b — always take the min.',
+  '⚠️ key[v] means "cheapest road INTO the blob", not cheapest overall — update only when the blob improves it.'
+ ],
+ fib: [
+  '😴 Lazy heap: let a messy pile of tree-tops sit around; only tidy it when you need the smallest.',
+  '📖 Book Chapter 20 (3rd edition): potential = trees + 2·marks pays for the tidying later.',
+  '✂️ Example: lose one child → mark it; lose a second → snip it off and let it join the pile.',
+  '⚠️ "O(1)" here means amortized — average over a whole bunch of ops, not guaranteed every single time.'
+ ],
+ t01: [
+  '🧺 Different boxes for different jobs: a stack is last-in-first-out plates, a queue is a first-in-first-out line.',
+  '📖 Book Chapters 1 & 10 list each box\'s price: stack pop is instant, list search may walk everything.',
+  '📚 Example: a queue with head/tail pointers — enqueue writes at tail, dequeue reads at head, both instant, no shifting.',
+  '⚠️ "Fast" depends on the job — no single box wins everything; pick by the operation you need most.'
+ ],
+ t03: [
+  '📏 Big-O is about the SHAPE of growth, not exact counts — like saying "this recipe feeds a crowd" without counting bites.',
+  '📖 Book Chapter 3 defines O, Ω, Θ and the little versions; logs grow slow, powers explode.',
+  '🧮 Example: find-x costs fx(n) steps; since fx(n) ≤ n always, worst case = n steps = Θ(n), best = 1 step.',
+  '⚠️ O only caps the top — for exact answers say Θ; log bases do not matter but exponents do.'
+ ],
+ t02: [
+  '🔁 Loop invariant = a promise that stays true every lap: "everything I checked so far was not x".',
+  '📖 Book §2.1–2.2 proves it for insertion sort: true before, kept true each round, useful at the end.',
+  '🔍 Example: searching for 5 in a list — each failed check adds "not in the checked part" to the promise.',
+  '⚠️ The promise must help at the finish line — "the loop is still running" proves nothing.'
+ ],
+ t07: [
+  '✂️ Split the job in half, do each half, glue the results — like sorting a deck by splitting, sorting piles, merging.',
+  '📖 Book Chapter 4: write the recurrence T(n) = 2T(n/2) + n, then solve by tree, guessing, or the Master rule.',
+  '🌳 Example: stupid_sort does 3 sub-jobs of n/3 plus an n² combine — the n² wins, answer Θ(n²).',
+  '⚠️ Master theorem needs combine cost vs n^(log_b a) — and case 3 needs the extra regularity check.'
+ ],
+ t09: [
+  '⛰️ A heap is a mountain rule: every parent taller than its kids — tallest always on top.',
+  '📖 Book Chapter 6: parent at ⌊i/2⌋, kids at 2i and 2i+1 inside a plain array; sift-down costs lg n.',
+  '🧱 Example: building a heap bottom-up is O(n), not n lg n — most nodes sit near the bottom.',
+  '⚠️ A heap is NOT sorted — only parent ≥ kids. Sorted order comes out one extract at a time.'
+ ],
+ t08: [
+  '🌳 A BST keeps order by position: left = smaller, right = bigger — like a filing system.',
+  '📖 Book Chapter 12: search, insert, successor, delete all cost O(h) — height is everything.',
+  '🔀 Example: successor = go right once then all the way left; or climb until you come from a left branch.',
+  '⚠️ "BST" alone does not promise lg n — sorted insert order makes a stick with h = n. Balance comes in Topic 11.'
+ ],
+ t11: [
+  '⚖️ Red-black trees = 2-3-4 trees wearing a binary costume — same balance, different paint.',
+  '📖 Book Chapter 13 (Sedgewick ch. 15 for 2-4 trees): a red node plus its red kids = one fat node.',
+  '🔄 Example: insert into a full node → split it, push the middle key up; rotations fix colors in O(1).',
+  '⚠️ Height is at most twice optimal — loose but guaranteed; the factor 2 is the price of binary.'
+ ],
+ t05a: [
+  '🎲 Expected value = weighted average of outcomes — no need to actually roll the dice.',
+  '📖 Book §5.1–5.3: E[X] = Σ x·Pr[X=x]; indicator variables turn counting into probabilities.',
+  '🧮 Example: die rolled n times — each face expected n/s times, total expectation n(s+1)/2.',
+  '⚠️ Linearity needs NO independence — sums always split; only products need independence.'
+ ],
+ t05b: [
+  '🎲 Random pivot = the algorithm picks a random card to split by, so no input can trick it worst-case.',
+  '📖 Book Ch. 7 & 9: RANDOMIZED-SELECT discards one side per round — expected O(n).',
+  '📊 Example: k sits at position Y in a random permutation; E[Y] = (n+1)/2 — half the array on average.',
+  '⚠️ "Expected O(n lg n)" still allows a rare O(n²) — always say which bound you mean.'
+ ],
+ t06: [
+  '🗄️ Hash table = a mail sorter: compute the slot from the key, poke it in; collisions probe nearby.',
+  '📖 Book §11.1–11.4: load factor α = n/m decides probe lengths; expected O(1) if α stays small.',
+  '🪦 Example: deleting writes DELETED, not blank — blank would hide keys stored further down the probe chain.',
+  '⚠️ Tombstones pile up: worst-case delete is Θ(m), not Θ(n) — rehash before the table clogs.'
+ ],
+ t10a: [
+  '🏆 Selection = find the i-th smallest without sorting everything — cheaper than a full sort.',
+  '📖 Book Chapter 9: Ω(n) lower bound (must look at every element); SELECT does it in O(n).',
+  '⛽ Example: the pipeline height minimizing total spurs = the MEDIAN of the well heights.',
+  '⚠️ Even n → the median is a range, not a point; median-of-medians guarantees a near-middle pivot.'
+ ],
+ t10b: [
+  '🚧 Comparison sorting has a speed limit: about n lg n questions — proven by counting possible orders.',
+  '📖 Book Chapter 8: decision trees need lg(n!) ≈ n lg n comparisons; counting/radix sort cheat the limit.',
+  '🔢 Example: keys in 0..k → counting sort is Θ(n+k) = O(n) when k = O(n).',
+  '⚠️ The limit only applies to comparison sorts — integer keys let you count instead of compare.'
+ ],
+ t12s: [
+  '🧗 Backtracking = try a move, go deeper, undo if stuck — DFS over choices instead of vertices.',
+  '📖 Erickson Ch. 2 (linked PDFs): pruning early is the whole art — check constraints ASAP.',
+  '👑 Example: N-queens — place row by row, kill branches on column/diagonal conflicts immediately.',
+  '⚠️ Still exponential worst case — exact search with early exit, not polynomial magic.'
+ ],
+ t12a: [
+  '🧠 DP = recursion + a notebook: write answers down so you never solve the same subproblem twice.',
+  '📖 Book Ch. 14: needs optimal substructure AND overlapping subproblems — rod cutting is the model.',
+  '🪵 Example: cut(i) = best of price(j) + cut(i−j) — fill the table bottom-up, O(n²) vs 2ⁿ naive.',
+  '⚠️ BOTH conditions required — recursion alone is not enough; watch the table fill order.'
+ ],
+ t12b: [
+  '📜 LCS = longest shared subsequence — same items in same order, gaps allowed.',
+  '📖 Book Ch. 14–15: c[i][j] = LCS of first i of X and first j of Y; match → diagonal +1, else max of neighbors.',
+  '🧩 Example: X=ABCBDAB, Y=BDCABA → LCS length 4 (BCBA or BDAB).',
+  '⚠️ Subsequence ≠ substring — no contiguity needed; and you must take max() when chars differ.'
+ ],
+ t13: [
+  '⚡ Greedy = always grab the locally best piece — works only when you can prove it never hurts.',
+  '📖 Book Ch. 16: activity selection (earliest finish) and Huffman coding are the provable cases.',
+  '📅 Example: pick activities earliest-finishing first; Huffman merges the two rarest symbols each step.',
+  '⚠️ Greedy without proof is a guess — coin change with bad coins breaks it instantly.'
+ ],
+ t14a: [
+  '🕸️ Graphs = dots and lines; BFS spreads like a ripple (queue), DFS dives like a mole (stack).',
+  '📖 Book §§20.1–20.3: BFS gives shortest paths unweighted; DFS gives finish times for later tricks.',
+  '🌀 Example: BFS visits distance-1 neighbors first — first arrival IS the shortest path.',
+  '⚠️ BFS needs a queue, DFS a stack — and O(V+E) assumes adjacency LISTS, not matrices.'
+ ],
+ t14b: [
+  '📋 Topo sort = order tasks so prerequisites come first — only possible when there are no cycles.',
+  '📖 Book §§20.4–20.5: reversed DFS finish times give the order; Kosaraju finds SCCs in two passes.',
+  '🔁 Example: A→B, A→C, B→D, C→D — reversed finish order puts A first, D last.',
+  '⚠️ Back edge to a gray vertex = cycle = no valid order; SCC ≠ weakly connected component.'
+ ],
+ t18: [
+  '🛣️ Shortest paths: BFS for unweighted, Dijkstra for non-negative weights, Bellman-Ford if negatives lurk.',
+  '📖 Book §§22.1–22.3: relaxation d[v] = min(d[v], d[u]+w) is the one mechanic everything shares.',
+  '🏔️ Example: Dijkstra settles the smallest tentative distance next — settled means final (if w ≥ 0).',
+  '⚠️ Negative edges break the "settled is final" idea — use Bellman-Ford; a V-th pass that still relaxes = negative cycle.'
+ ],
+ t19: [
+  '🌐 All-pairs shortest paths = the full distance table between every pair of cities.',
+  '📖 Book Ch. 23: Floyd-Warshall (DP, O(V³), negatives OK) vs Johnson (Bellman-Ford + V×Dijkstra, sparse wins).',
+  '🧮 Example: FW updates d[i][j] = min(d[i][j], d[i][k]+d[k][j]) for each k — in-place is safe.',
+  '⚠️ Negative cycle ⇒ distances are −∞ — detect first; FW needs O(V²) space, not O(V³).'
+ ],
+ t20: [
+  '🚰 Max flow = push the most water through pipes without exceeding any pipe\'s width.',
+  '📖 Book §§24.1–24.3: the residual network lets you undo flow; max-flow min-cut theorem certifies optimality.',
+  '🔄 Example: BFS finds the shortest augmenting path each round until none remains — that is Edmonds-Karp.',
+  '⚠️ Flow must balance at every middle vertex; the min cut is the PROOF your flow is maximum.'
+ ],
+ t24: [
+  '🧩 NP-complete = puzzles where checking an answer is easy but finding one might be impossibly hard.',
+  '📖 Book Chapter 34: prove NP-hardness by reduction — solve the known-hard one and you solve yours.',
+  '🔗 Example: CLIQUE ≤ VERTEX-COVER — complement the graph; a k-clique becomes an (n−k)-cover.',
+  '⚠️ The reduction must run in polynomial time; NP-complete = in NP AND NP-hard — both halves required.'
+ ],
+ t25: [
+  '📐 Approximation = a provably-near-best answer in polynomial time when exact is too slow.',
+  '📖 Book Chapter 35: vertex cover has a 2-approx via maximal matching; set cover is about ln n.',
+  '🪢 Example: take both endpoints of each matched edge → |C| = 2|M| ≤ 2·OPT.',
+  '⚠️ The ratio is a worst-case guarantee, not typical; metric TSP needs the triangle inequality.'
+ ],
+ t22: [
+  '👯 Parallel = split chores across friends; speedup is limited by the longest dependency chain.',
+  '📖 Work/span laws: T₁ = total work, T∞ = longest path; greedy scheduling gets within 2× of optimal.',
+  '🌿 Example: P-FIB — work is φⁿ (huge), span is n (small) → parallelism φⁿ/n, tons of speedup available.',
+  '⚠️ Two lower bounds: T_P ≥ T₁/P and T_P ≥ T∞; a race is two strands writing the same spot.'
+ ]
+};
+

@@ -188,12 +188,15 @@ t22: [
 };
 
 function lectureBlock(id){
-  const X = LECTURE[id]; if (!X) return '';
-  return `<h2>🎓 Professor's lecture</h2><p class="stat-label">Taught the way the course intends — intuition first, textbook grounding, a worked example, then what exams actually test.</p><div class="deep">${X.map(([h, b]) => `<details class="card deep-item"><summary><h3>${h}</h3></summary><div class="deep-body">${b}</div></details>`).join('')}</div>`;
+  const X = LECTURE[id] || [];
+  const corner = (((DEEP[id] || {}).deep) || []).map((d, i) => [d, i]).filter(([d]) => /^Professor's corner/.test(d[0]));
+  const items = [...X.map((d, i) => [d, (KIDLEC[id] || [])[i]]), ...corner.map(([d, i]) => [d, (KIDDEEP[id] || [])[i]])];
+  if (!items.length) return '';
+  return `<h2>🎓 Professor's lecture</h2><p class="stat-label">Taught the way the course intends — intuition first, textbook grounding, a worked example, then what exams actually test.</p><div class="deep">${items.map(([[h, b], k]) => `<details class="card deep-item"><summary><h3>${h}</h3></summary><div class="deep-body">${k ? `<div class="pro-only">${b}</div><div class="kid-only">${k}</div>` : b}</div></details>`).join('')}</div>`;
 }
 function mountLectureFor(id){
-  const X = LECTURE[id]; if (!X) return;
   const pg = document.getElementById('page-' + id); if (!pg || pg.querySelector('.lecture-block')) return;
+  if (!lectureBlock(id)) return;
   const qa = pg.querySelector('.qa');
   const html = `<div class="lecture-block">${lectureBlock(id)}</div>`;
   if (qa){ const h = qa.previousElementSibling; if (h && /^H[1-6]$/.test(h.tagName)) h.insertAdjacentHTML('beforebegin', html); else qa.insertAdjacentHTML('beforebegin', html); }
