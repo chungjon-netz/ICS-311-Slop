@@ -376,6 +376,23 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .deep-item[open]>summary::before{transform:rotate(90deg)}
 .deep-item>summary h3{margin:0}
 .deep-body{margin-top:10px}
+/* MT4 crib sheet page */
+.crib-sec{margin:16px 0;min-width:0}
+.crib-sec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px}
+.crib-sec>summary::-webkit-details-marker{display:none}
+.crib-sec>summary::before{content:'▸';color:var(--accent);font-size:1.2rem;transition:transform .15s}
+.crib-sec[open]>summary::before{transform:rotate(90deg)}
+.crib-sec>summary h2{margin:0;font-size:1.35rem}
+.crib-body{margin-top:12px;min-width:0}
+.crib-body h3{margin:22px 0 8px;color:var(--accent2)}
+.crib-body li{margin:4px 0}
+.crib-body li>ul,.crib-body li>ol{margin:4px 0}
+.crib-tw{max-width:100%;overflow-x:auto}
+.crib-top{margin-top:12px;text-align:right;font-size:.85rem}
+.crib-toc{margin:18px 0}
+.crib-toc-grid{display:grid;gap:6px 18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.crib-toc-grid a{padding:4px 0}
+.crib .callout code,.crib-body p code{word-break:break-word}
 /* skip layout/paint only for the uniform-height video-card grid —
    variable-height blocks (.deep-item, .page>.card, .diagram-card, ...)
    must NOT use content-visibility: estimate→real size swaps during

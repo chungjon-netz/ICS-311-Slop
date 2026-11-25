@@ -1,7 +1,8 @@
-import pathlib
+import json, pathlib
 s = pathlib.Path('src')
 html = (s/'index.html').read_text(encoding='utf-8')
-js = '\n'.join((s/f).read_text(encoding='utf-8') for f in ['graph.js','questions.js','grader.js','course-code.js','links.js','diagrams.js','course-mt1.js','course-mt2.js','course-mt3.js','course-after.js','course-final.js','course-learn.js','course-learn2.js','deep.js','course-w1-6.js','course-w7-11.js','course-w7-11-prof.js','course-mt4-prof.js','lecture.js','course.js','course-ps.js','app.js'])
+crib = 'const MT4_CRIB_MD = ' + json.dumps(pathlib.Path('MT4-Crib-Sheet.md').read_text(encoding='utf-8'), ensure_ascii=False) + ';'
+js = '\n'.join([crib] + [(s/f).read_text(encoding='utf-8') for f in ['graph.js','questions.js','grader.js','course-code.js','links.js','diagrams.js','course-mt1.js','course-mt2.js','course-mt3.js','course-after.js','course-final.js','course-learn.js','course-learn2.js','deep.js','course-w1-6.js','course-w7-11.js','course-w7-11-prof.js','course-mt4-prof.js','lecture.js','course.js','course-ps.js','course-mt4-crib.js','app.js']])
 html = html.replace('/*__CSS__*/', (s/'styles.css').read_text(encoding='utf-8')).replace('/*__JS__*/', js.replace('</script>', '<\\/script>'))
 pathlib.Path('dist').mkdir(exist_ok=True)
 (pathlib.Path('dist')/'index.html').write_text(html, encoding='utf-8')
