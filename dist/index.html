@@ -402,6 +402,26 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .crib-toc-grid{display:grid;gap:6px 18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .crib-toc-grid a{padding:4px 0}
 .crib .callout code,.crib-body p code{word-break:break-word}
+/* MT4 learning path */
+.lrn-unit{margin:18px 0;min-width:0}
+.lrn-unit>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.lrn-unit>summary::-webkit-details-marker{display:none}
+.lrn-unit>summary::before{content:'▸';color:var(--accent);font-size:1.2rem;transition:transform .15s}
+.lrn-unit[open]>summary::before{transform:rotate(90deg)}
+.lrn-unit>summary h2{margin:0;font-size:1.35rem;flex:1}
+.lrn-num{color:var(--accent2);font-weight:800;margin-right:4px}
+.lrn-res{gap:6px;margin:12px 0 4px}
+.lrn-lesson{border-top:1px solid var(--border);padding-top:16px;margin-top:18px;min-width:0}
+.lrn-lesson h3{margin:0 0 10px}
+.lrn-body pre{margin:10px 0}
+.lrn-dummy{margin:12px 0;padding:10px 14px;border-radius:12px;border:1px dashed rgba(250,204,21,.55);background:rgba(250,204,21,.08)}
+.lrn-dummy-tag{font-weight:700;color:var(--warn);margin-right:6px}
+.lrn-clips,.lrn-viz{margin:12px 0}
+.lrn-clips .vgrid{margin-top:8px}
+.lrn-check{margin:14px 0 4px;padding:14px;border-radius:12px;border:1px solid var(--border);background:var(--panel2)}
+.lrn-q{margin-bottom:10px}
+.lrn-test{margin-top:22px;border-color:rgba(139,92,246,.5)}
+.lrn-test-body{margin-top:12px}
 /* inline equations: serif math font + outline so they stand out mid-sentence */
 .crib .m{font-family:Cambria,"Cambria Math","STIX Two Text","Times New Roman",serif;font-size:1.06em;padding:0 .24em;margin:0 .04em;border:1px solid rgba(139,92,246,.45);border-radius:5px;background:rgba(139,92,246,.10);-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .crib .m sub,.crib .m sup{font-size:.72em}
@@ -7133,6 +7153,1104 @@ function mountCrib(g){
     <div class="row" style="margin-top:14px"><a class="btn primary" href="#${g.id}-crib">📝 Open the crib sheet →</a>${cribDl(g, '')}</div></div>`);
 }
 if (typeof CRIB_MD !== 'undefined') GROUPS.filter(g => CRIB_MD[g.id]).forEach(mountCrib);
+
+// ======================= MT4 SCREENCAST CHAPTERS =======================
+// YouTube chapter markers (start second, title) for every MT4 screencast, fetched
+// from each video's page. Used by course-learn-mt4.js to embed exact sections.
+// LEARN_CH[videoId] = [tag, title, lengthSeconds, [[start, chapterTitle], ...]]
+const LEARN_CH = {"hWtmauUMYD8":["13A","Topic 13 A Greedy Algorithms and DP",474,[[0,"Introduction"],[33,"Conceptual overview"],[132,"Comparing the strategies"],[240,"Knapsack problem example"],[333,"Algorithm comparison"]]],
+"_-1nKy0bnwE":["13B","Topic 13 B Activity Scheduling",1397,[[0,"Activity scheduling problem"],[133,"Dynamic programming approach"],[444,"Formulating the solution"],[604,"Greedy choice property"],[748,"Proving the greedy choice"],[936,"Iterative greedy algorithm"],[1183,"Algorithm analysis and summary"]]],
+"UgJk87jazLQ":["13C","Topic 13 C Huffman Codes",1025,[[0,"Intro"],[24,"Huffman Codes"],[207,"Binary Tree Representation of Prefix Codes"],[437,"Huffman's Algorithm"],[841,"Informal Correctness"]]],
+"IdStgDmUlXM":["14A","Topic 14 A Graphs Definitions",757,[[0,"Introduction to graphs"],[56,"Applications of graph theory"],[149,"Graph definitions"],[266,"Degrees and paths"],[365,"Cycles and DAGs"],[456,"Connectivity and subgraphs"],[564,"Graph types and weighting"],[637,"Graph analysis"]]],
+"pyDxf58rK_0":["14B","Topic 14 B Graph ADT Representations",1350,[[0,"Graph ADT methods"],[255,"Basic graph representations"],[506,"Representation examples"],[703,"Complexity and tradeoff analysis"],[1113,"Modern graph representations"]]],
+"A8SKOFseOyU":["14C","Topic 14 C BFS",960,[[0,"Introduction"],[39,"BFS"],[441,"Code"],[718,"Aggregate Analysis"]]],
+"emiWSGizJlc":["14D","Topic 14 D DFS Introduction",615,[[0,"Introduction"],[46,"DFS vs BDF"],[273,"DFS pseudocode"],[572,"Example"]]],
+"HMPaUoGfsPo":["14E","Topic 14 E DFS Example Properties",1012,[[0,"Introduction"],[35,"Example Graph"],[513,"Edge Classification"],[716,"Theorems"],[842,"White Path Theorem"]]],
+"FPEMBWg_WlY":["MIT16","Lec 16 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",5047,[[0,"Introduction"],[760,"Adjacency List"],[940,"Handshaking Lemma"],[1413,"Minimum Spanning Tree"],[1713,"Example"],[2273,"Theorem"],[2883,"Greedy Algorithms"],[2943,"Greedy Choice Property"],[3093,"Graph"],[3303,"Cut Paste"],[3363,"Notation"]]],
+"TZDQHplPrNo":["14F","Topic 14 F DFS Applications TS SCC",1553,[[0,"Introduction"],[34,"Topological sort"],[188,"recursive DFS"],[575,"strongly connected components"],[618,"weakly connected components"],[690,"DFS Algorithm"],[752,"Example"],[979,"Conceptual Argument"],[1423,"Component Graph"]]],
+"Mx-dvvSE4Qc":["17A","Topic 17 A MST",996,[[0,"Introduction"],[179,"Minimum Spanning Trees"],[343,"Example"],[427,"Generic Algorithm"],[541,"Safe Edge Theorem"]]],
+"1BnpXYm7LKY":["17B","Topic 17 B MST Kruskal",765,[]],
+"qegY0R78QMQ":["17C","Topic 17 C MST Prim",887,[]],
+"S7rzpWwICo8":["18A","Topic 18 A Shortest Paths",1118,[[0,"Shortest path definitions"],[155,"Variations of the problem"],[228,"Negative weights and cycles"],[477,"Optimal substructure"],[684,"Relaxation and algorithm basics"],[895,"Shortest path properties"]]],
+"4Iy0RalrsXo":["18B","Topic 18 B Bellman-Ford and DAG Shortest Paths",1218,[[0,"Introduction"],[20,"BellmanFord"],[683,"correctness"],[832,"interlude"],[1008,"DAG Example"]]],
+"0wfNtfhHlqE":["18C","Topic 18 C Dijkstra's Shortest Paths Algorithm",1188,[[0,"Introduction to Dijkstra"],[25,"Dijkstra vs Prim's Algorithm"],[180,"Algorithm Steps and Setup"],[340,"Example Execution"],[548,"Negative Weight Issue"],[681,"Proof of Correctness"],[808,"Maintaining Shortest Paths"],[1003,"Complexity and Conclusion"]]],
+"xhG2DyCX3uA":["MIT17","Lec 17 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",5074,[[0,"Introduction and foundations"],[1733,"Dijkstra's algorithm"],[2020,"Correctness and applications"]]],
+"Ttezuzs39nk":["MIT18","Lec 18 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4637,[[0,"Introduction"],[98,"Bellmanford"],[437,"Negative Weights"],[615,"Edge Order"],[1120,"Proof"],[1548,"Induction"],[1983,"Complications"],[2148,"Linear Programming"],[2538,"Linear Programming Algorithms"],[2838,"Difference Constraints"],[2978,"Constraint Graph"],[3198,"Negative Weight Cycles"]]],
+"Ku24z4v9YF8":["19A","Topic 19 A All Pairs Shortest Paths",576,[]],
+"z0reAeK4kl0":["19B","Topic 19 B Johnsons Algorithm",1413,[[0,"Introduction to algorithm"],[35,"The reticulated maze problem"],[66,"Reweighting lemma and proof"],[588,"Johnson's insight"],[802,"Replacing the ocean buoy"],[810,"Divers at work"],[814,"Local supervision"],[817,"Algorithm steps and runtime"],[1373,"Photography on the atoll"],[1385,"Octopus photo setup"],[1395,"Final photograph result"],[1403,"Conclusion and next topics"]]],
+"dzf7x5Z8Ui8":["19C","Topic 19 C Floyd Warshall",1207,[[0,"Introduction to algorithms"],[107,"Dynamic programming basics"],[305,"Matrix multiplication"],[517,"Floyd-Warshall approach"],[703,"Algorithm implementation"],[896,"Trace example"],[1125,"Transitive closure"]]],
+"Sygq1e0xWnM":["MIT19","Lec 19 | MIT 6.046J / 18.410J Introduction to Algorithms (SMA 5503), Fall 2005",4499,[[0,"Introduction and recap"],[49,"All-pairs shortest paths"],[296,"Dynamic programming approach"],[726,"Matrix multiplication method"],[1360,"Improved matrix squaring"],[2188,"Floyd-Warshall algorithm"],[2854,"Transitive closure"],[3214,"Johnson's algorithm"]]]};
+
+// ======================= MT4 LEARNING PATH: LESSON CONTENT =======================
+// LEARN_MT4 = units (big topics). Each lesson has a detailed explanation, a dummy
+// note (plain-language version), screencast sections (clip specs resolved against
+// the real YouTube chapters in learn-chapters.js), an optional step-through
+// visualizer, and a quick knowledge check. Each unit ends with a generated
+// pseudocode test from learn-mt4-gen.js.
+//   clip spec: [videoId, firstChapterTitle?, lastChapterTitle?]  (omit titles = whole video)
+//   check:     [question, [correct, wrong, wrong, wrong], explanation]
+const LEARN_MT4 = [
+{id: 'greedy', topics: ['t13'], title: 'Greedy Algorithms & Huffman Codes', notes: 'Topic 13', reading: 'CLRS 4e Ch 15 (15.1–15.3)',
+ extra: [['FPEMBWg_WlY', 'Greedy Algorithms', 'Greedy Choice Property']],
+ lessons: [
+  {h: 'What "greedy" means, and how it differs from DP', clips: [['hWtmauUMYD8', 'Conceptual overview', 'Comparing the strategies']],
+   body: `<p>A <b>greedy algorithm</b> builds a solution one piece at a time, and at every step it takes the choice that looks best <i>right now</i>, then never revisits it. That makes greedy algorithms short and fast, but they are only correct for problems with two properties:</p><ol><li><b>Greedy-choice property:</b> some optimal solution contains the greedy choice, so committing to it early can't lose.</li><li><b>Optimal substructure:</b> once the choice is made, what remains is a smaller instance of the same problem, and an optimal answer to it combined with the choice is optimal overall.</li></ol><p>Compare dynamic programming (Topic 12): DP also needs optimal substructure, but it makes its choice <b>after</b> solving every candidate subproblem and comparing them. Greedy makes the choice <b>before</b>, leaving exactly one subproblem. That's why greedy is usually Θ(n) or Θ(n lg n) where the DP version is Θ(n²) or worse.</p>`,
+   kid: 'Greedy is like always grabbing the biggest cookie on the plate right now. Sometimes that is the smartest plan, sometimes it isn\'t, and you have to prove which one it is.',
+   check: ['Greedy algorithms differ from dynamic programming because greedy…', ['commits to a choice before solving the remaining subproblem', 'always considers every subproblem', 'never needs optimal substructure', 'only works on graphs'], 'Greedy commits first and leaves one subproblem; DP solves all candidate subproblems and then chooses.']},
+  {h: 'The knapsack example: where greedy works and where it fails', clips: [['hWtmauUMYD8', 'Knapsack problem example', 'Algorithm comparison']],
+   body: `<p>A thief has a knapsack of capacity W and items with weight wᵢ and value vᵢ.</p><ul><li><b>Fractional knapsack</b> (you may take part of an item): sort by value density vᵢ / wᵢ and take the densest items first, then a fraction of the next one. This greedy is optimal. If an optimal solution held less of the densest item, swapping weight from a less dense item into it would increase the value without exceeding W.</li><li><b>0-1 knapsack</b> (each item is all or nothing): the same greedy fails. With W = 50 and items (10 kg, $60), (20 kg, $100), (30 kg, $120), density-greedy takes the first two for $160, but the optimum is items 2 + 3 for $220. Indivisibility breaks the exchange argument, so 0-1 knapsack needs DP in Θ(nW).</li></ul><p>The lesson the professor wants you to keep: <b>a greedy rule is a claim that needs a proof</b>. When you can't find the exchange argument, look for a small counterexample.</p>`,
+   kid: 'If you can cut the gold bars, always take the shiniest gold per kilo first. If you can\'t cut anything, that shortcut can trick you into a worse bag.',
+   check: ['Which knapsack version is solved optimally by taking the highest value/weight first?', ['Fractional knapsack', '0-1 knapsack', 'Both', 'Neither'], 'Fractional allows partial items, so the exchange argument works; 0-1 needs DP.']},
+  {h: 'Activity selection: the problem and the greedy choice', clips: [['_-1nKy0bnwE', 'Activity scheduling problem', 'Formulating the solution'], ['_-1nKy0bnwE', 'Greedy choice property', 'Proving the greedy choice']],
+   body: `<p>You're given n activities with start times sᵢ and finish times fᵢ. Pick the <b>largest</b> set of mutually compatible activities, where two activities are compatible if one finishes before the other starts.</p><p>A DP formulation exists: S<sub>ij</sub> is the set of activities between aᵢ and aⱼ, and c[i, j] = max over k of c[i, k] + c[k, j] + 1, which costs Θ(n³). The greedy insight makes it unnecessary.</p><p><b>Theorem (CLRS 15.1):</b> if a<sub>m</sub> has the earliest finish time, then a<sub>m</sub> is in some maximum-size compatible set.</p><p><b>Exchange proof:</b> take any optimal set A, and let a<sub>j</sub> be its earliest-finishing activity. If a<sub>j</sub> = a<sub>m</sub>, you're done. Otherwise replace a<sub>j</sub> with a<sub>m</sub>. Since f<sub>m</sub> ≤ f<sub>j</sub> ≤ the start of A's second activity, the new set is still compatible and the same size, so it's also optimal and it contains a<sub>m</sub>. Then recurse on the activities that start after f<sub>m</sub>, which is optimal substructure.</p>`,
+   kid: 'To fit the most activities into your day, always pick the one that ends earliest. It leaves you the most time for everything else.',
+   check: ['Which greedy rule is provably optimal for activity selection?', ['Earliest finish time', 'Shortest duration', 'Earliest start time', 'Fewest overlaps'], 'Earliest finish leaves the most remaining time; the exchange argument swaps it into any optimal solution.']},
+  {h: 'The iterative algorithm, its cost, and the four strategies (Exercise 15)', clips: [['_-1nKy0bnwE', 'Iterative greedy algorithm', 'Algorithm analysis and summary']],
+   body: `<pre><code>GREEDY-ACTIVITY-SELECTOR(s, f, n)   // sorted by finish time
+  A = {a1};  k = 1
+  for m = 2 to n
+      if s[m] ≥ f[k]                 // compatible with the last pick
+          A = A ∪ {am};  k = m
+  return A</code></pre><p>The loop is Θ(n), plus Θ(n lg n) if you must sort first. The hidden invariant: after each step, A is compatible and can be extended to an optimal solution.</p><table class="tbl"><tr><th>Rule (Exercise 15)</th><th>Verdict</th><th>Why</th></tr><tr><td>Earliest finish</td><td>optimal</td><td>exchange argument</td></tr><tr><td>Latest start</td><td>optimal</td><td>earliest finish on the time-reversed instance</td></tr><tr><td>Shortest duration</td><td>fails</td><td>a short activity can block two long compatible ones</td></tr><tr><td>Fewest overlaps</td><td>fails</td><td>the exercise's instance: greedy gets 3, optimal gets 4</td></tr><tr><td>Weighted values</td><td>needs DP</td><td>no local rule is provably safe</td></tr></table>`,
+   kid: 'Go down the list in finishing order and keep every activity that starts after the last one you kept. That\'s the whole algorithm.',
+   check: ['"Pick the compatible activity with the latest START time" is…', ['optimal, by symmetry with earliest finish', 'never optimal', 'optimal only when activities are the same length', 'the same as shortest duration'], 'Reverse time: latest start becomes earliest finish, and the same proof applies.']},
+  {h: 'Prefix codes and code trees', clips: [['UgJk87jazLQ', 'Huffman Codes', 'Binary Tree Representation of Prefix Codes']],
+   body: `<p>To compress text we give each character a binary codeword. A <b>fixed-length</b> code with n characters needs ⌈lg n⌉ bits each. A <b>variable-length</b> code gives frequent characters short codewords. To decode without separators, we need a <b>prefix code</b>: no codeword is a prefix of another.</p><p>A prefix code is a binary tree with the characters at the leaves; 0 means go left and 1 means go right. To decode, walk from the root and output a character at each leaf. The cost of a tree T is</p><p class="math" style="text-align:center">B(T) = Σ<sub>c</sub> c.freq · d<sub>T</sub>(c)</p><p>where d<sub>T</sub>(c) is the depth of c, which is also its codeword length. An optimal code tree is always <b>full</b>: every internal node has two children. Otherwise a node with one child could be removed, shortening some codewords. So a code for n characters has n leaves and n − 1 internal nodes.</p>`,
+   kid: 'Common letters get short secret codes and rare letters get long ones. Because no code starts with another code, you can read the message without spaces.',
+   check: ['Why must the code tree of an optimal prefix code be FULL?', ['A node with one child could be removed, shortening codewords', 'Prefix codes require a balanced tree', 'Full trees are easier to store', 'Huffman merges three trees at a time'], 'A single child wastes a bit on every codeword below it.']},
+  {h: 'Huffman\'s algorithm and why it is optimal', clips: [['UgJk87jazLQ', 'Huffman\'s Algorithm', 'Informal Correctness']], viz: 'huff',
+   body: `<pre><code>HUFFMAN(C)
+  n = |C|;  Q = C               // min-priority queue on freq
+  for i = 1 to n − 1
+      z.left  = x = EXTRACT-MIN(Q)
+      z.right = y = EXTRACT-MIN(Q)
+      z.freq  = x.freq + y.freq
+      INSERT(Q, z)
+  return EXTRACT-MIN(Q)         // root</code></pre><p>There are n − 1 merges, each costing O(lg n) with a binary heap, so the total is <b>Θ(n lg n)</b>. If the frequencies are already sorted, two FIFO queues make it Θ(n); that's this unit's generated test.</p><p><b>Why it's optimal:</b></p><ul><li><b>Greedy-choice lemma:</b> some optimal tree has the two least-frequent characters x, y as siblings at maximum depth. Swapping them down can't increase B, because the characters they displace are at least as frequent.</li><li><b>Optimal-substructure lemma:</b> merging x and y into z with freq x + y gives B(T) = B(T′) + x.freq + y.freq, so an optimal T′ expands to an optimal T.</li></ul><p><b>Trace (CLRS):</b> a45 b13 c12 d16 e9 f5 merge into 14, 25, 30, 55, 100. The codes are a = 0, c = 100, b = 101, d = 111, f = 1100, e = 1101, so B = 224 versus 300 for a fixed 3-bit code.</p>`,
+   kid: 'Keep gluing the two rarest letters together into a team until one big tree is left. Rare letters end up deep (long codes) and common ones stay near the top (short codes).',
+   check: ['Huffman\'s algorithm on n characters with a binary heap runs in…', ['Θ(n lg n)', 'Θ(n)', 'Θ(n²)', 'Θ(2ⁿ)'], 'n − 1 merges, each with O(lg n) heap operations.']},
+  {h: 'When greedy coin change works (PS9) and when it fails',
+   body: `<p>For coins 1, c, c², …, cᵏ, greedy change is optimal: take ⌊n / d⌋ of the largest coin, keep n mod d, and move down. An optimal solution never uses c or more copies of any smaller coin cⁱ, because c copies could be replaced by one cⁱ⁺¹. So the optimal answer is exactly the base-c expansion of n, which is what greedy produces. That's Θ(k) time.</p><p>For arbitrary coins the same rule fails: with {1, 3, 4} and n = 6, greedy gives 4 + 1 + 1 (3 coins) but 3 + 3 uses 2. That's why coin change in general is the DP of PS8 (Θ(nk)).</p><div class="callout">The pattern for every "is this greedy correct?" question: try to break it on 2–4 items first. If it survives, prove it with an exchange argument, then state the running time (usually a sort plus one pass).</div>`,
+   kid: 'With coins like 1, 2, 4, 8 you can always grab the biggest one that fits. With weird coins like 1, 3, 4 that trick sometimes gives you extra coins.',
+   check: ['Greedy change on coins {1, 3, 4} for 6 cents gives…', ['3 coins (4+1+1), but 2 coins (3+3) is optimal', 'the optimal 2 coins', '6 coins', 'an error'], 'This is the classic counterexample showing greedy needs a proof.']}
+ ]},
+
+{id: 'bfs', topics: ['t14a'], title: 'Graphs, Representations, BFS & DFS', notes: 'Topic 14A', reading: 'CLRS 4e 20.1–20.3 · Erickson Ch 5',
+ extra: [['FPEMBWg_WlY', 'Introduction', 'Handshaking Lemma']],
+ lessons: [
+  {h: 'Graph vocabulary you must use precisely', clips: [['IdStgDmUlXM', 'Graph definitions', 'Connectivity and subgraphs']],
+   body: `<p>A graph G = (V, E) has vertices V and edges E. In a <b>directed</b> graph an edge is an ordered pair (u, v); in an <b>undirected</b> graph it's an unordered pair.</p><ul><li><b>Degree:</b> in undirected graphs Σ deg(v) = 2|E| (the handshaking lemma). In directed graphs each vertex has an in-degree and an out-degree.</li><li><b>Path:</b> a sequence of edges. It's <b>simple</b> if no vertex repeats. A <b>cycle</b> starts and ends at the same vertex. A directed acyclic graph is a <b>DAG</b>.</li><li><b>Connected</b> (undirected): every pair has a path. <b>Strongly connected</b> (directed): every pair has paths both ways.</li><li>Sparse means |E| ≈ |V|; dense means |E| ≈ |V|². Running times are written in V and E, for example Θ(V + E).</li></ul>`,
+   kid: 'A graph is dots connected by lines. Count the lines touching each dot and add them up: you get twice the number of lines, because each line touches two dots.',
+   check: ['In an undirected graph, the sum of all vertex degrees equals…', ['2|E|', '|E|', '|V|', '|V| + |E|'], 'Each edge contributes 1 to the degree of each of its two endpoints.']},
+  {h: 'Representations and their trade-offs (Exercise 16)', clips: [['pyDxf58rK_0', 'Basic graph representations', 'Complexity and tradeoff analysis']],
+   body: `<table class="tbl"><tr><th>Operation</th><th>Adjacency list</th><th>Adjacency matrix</th></tr><tr><td>Space</td><td>Θ(V + E)</td><td>Θ(V²)</td></tr><tr><td>Is (u, v) an edge?</td><td>O(deg u)</td><td>O(1)</td></tr><tr><td>List the neighbours of u</td><td>Θ(deg u)</td><td>Θ(V)</td></tr><tr><td>BFS / DFS</td><td>Θ(V + E)</td><td>Θ(V²)</td></tr></table><p>Use lists for sparse graphs and a matrix for dense graphs or when you need many edge queries. <b>Exercise 16 (transpose Gᵀ):</b></p><ul><li>Matrix: swap A[i][j] with A[j][i] below the diagonal, O(V²) time and O(1) extra space.</li><li>Matrix with an "is-transposed" bit: O(1) to transpose, but every access pays a branch.</li><li>Edge list: swap the endpoints, O(E).</li><li>Adjacency lists: rebuild in O(V + E). Copying while deleting keeps the <i>live</i> extra space at O(V).</li></ul>`,
+   kid: 'A list says "here are my friends"; a big grid says yes or no for every pair. Few friendships: use the list. Almost everyone is friends: the grid is fine.',
+   check: ['BFS on a graph stored as an adjacency MATRIX costs…', ['Θ(V²)', 'Θ(V + E)', 'Θ(E lg V)', 'Θ(V)'], 'Listing the neighbours of each vertex scans a whole row: V rows × V entries.']},
+  {h: 'Breadth-first search: the algorithm and its invariants', clips: [['A8SKOFseOyU', 'BFS', 'Code']], viz: 'bfsdfs',
+   body: `<pre><code>BFS(G, s)
+  for each u ∈ G.V − {s}: u.color = WHITE; u.d = ∞; u.π = NIL
+  s.color = GRAY;  s.d = 0;  ENQUEUE(Q, s)
+  while Q ≠ ∅
+      u = DEQUEUE(Q)
+      for each v ∈ G.Adj[u]
+          if v.color == WHITE          // mark on DISCOVERY
+              v.color = GRAY; v.d = u.d + 1; v.π = u
+              ENQUEUE(Q, v)
+      u.color = BLACK</code></pre><p>Colors: white means undiscovered, gray means discovered and in the queue, black means finished.</p><p><b>Invariant 1:</b> the queue holds vertices in non-decreasing d order, and the first and last d differ by at most 1.</p><p><b>Invariant 2:</b> when u is dequeued, u.d = δ(s, u), the fewest-edges distance. The π pointers form the <b>breadth-first tree</b>, and following them back from v prints a shortest path in O(length).</p><div class="callout warn">Classic bug: marking vertices when they're <b>dequeued</b> instead of when they're <b>discovered</b>. Then a vertex can be enqueued many times.</div>`,
+   kid: 'BFS is ripples in a pond: first everyone 1 step away, then everyone 2 steps away. The first time a ripple reaches you is the shortest way there.',
+   check: ['When should BFS mark a vertex as discovered?', ['When it is first seen and enqueued', 'When it is dequeued', 'When it turns black', 'Only at the end'], 'Marking at enqueue time guarantees each vertex enters the queue once: Θ(V + E).']},
+  {h: 'Why BFS is Θ(V + E) and why it finds shortest paths', clips: [['A8SKOFseOyU', 'Aggregate Analysis']],
+   body: `<p><b>Aggregate analysis:</b> each vertex is enqueued at most once (only while white), so there are O(V) queue operations. Each adjacency list is scanned exactly once, when its vertex is dequeued, and the lists have total length Θ(E) (2E undirected). Total <b>Θ(V + E)</b>.</p><p><b>Correctness (CLRS 20.2):</b></p><ol><li>For any edge (u, v), δ(s, v) ≤ δ(s, u) + 1.</li><li>v.d ≥ δ(s, v) always (induction on ENQUEUE).</li><li>The queue is ordered by d with a spread of at most 1.</li><li>Suppose some vertex got the wrong d, and take the one with the smallest δ. Its predecessor on a shortest path was dequeued earlier with the correct d, and would have discovered it with exactly δ. Contradiction.</li></ol><p>This only works because every edge has weight 1. With weights, the first time you reach a vertex need not be the cheapest, which is why Dijkstra (Unit 7) replaces the FIFO queue with a priority queue.</p>`,
+   kid: 'Every dot gets in line once and every line gets looked at once, so the work is (dots + lines).',
+   check: ['BFS distances are shortest paths when…', ['every edge has the same (unit) weight', 'the graph is a DAG', 'the graph is dense', 'always, even with weights'], 'BFS counts edges; weighted graphs need Dijkstra or Bellman-Ford.']},
+  {h: 'Depth-first search and timestamps', clips: [['emiWSGizJlc', 'DFS vs BDF', 'Example']],
+   body: `<pre><code>DFS(G)                          DFS-VISIT(G, u)
+  for each u: u.color = WHITE     time = time + 1;  u.d = time
+  time = 0                        u.color = GRAY
+  for each u ∈ G.V                for each v ∈ G.Adj[u]
+      if u.color == WHITE             if v.color == WHITE
+          DFS-VISIT(G, u)                 v.π = u;  DFS-VISIT(G, v)
+                                  u.color = BLACK
+                                  time = time + 1;  u.f = time</code></pre><p>DFS goes as deep as possible, then backtracks. Every vertex gets a <b>discovery time</b> u.d and a <b>finish time</b> u.f, with 1 ≤ u.d &lt; u.f ≤ 2|V|. The π pointers form a <b>depth-first forest</b>, because the outer loop restarts from every white vertex.</p><p>The cost is Θ(V + E): each vertex is visited once and each edge examined once (twice in undirected graphs). Exams make you compute d/f tables by hand. Always follow the stated adjacency order (usually alphabetical), and increment the clock on both discover and finish.</p>`,
+   kid: 'DFS explores a cave: go down one tunnel as far as you can, then walk back and try the next one. Write down when you enter and when you leave each room.',
+   check: ['In DFS, the clock (time) is incremented…', ['both when a vertex is discovered and when it finishes', 'only on discovery', 'only on finish', 'once per edge'], 'That is why timestamps range from 1 to 2|V|.']},
+  {h: 'Edge classification, the parenthesis theorem and the white-path theorem', clips: [['HMPaUoGfsPo', 'Edge Classification', 'White Path Theorem']],
+   body: `<table class="tbl"><tr><th>v's color when (u, v) is explored</th><th>Edge type</th><th>Meaning</th></tr><tr><td>white</td><td>tree</td><td>v discovered through this edge</td></tr><tr><td>gray</td><td>back</td><td>v is an ancestor ⇒ a <b>cycle</b></td></tr><tr><td>black, u.d &lt; v.d</td><td>forward</td><td>v is a non-child descendant</td></tr><tr><td>black, u.d &gt; v.d</td><td>cross</td><td>another subtree or another tree</td></tr></table><ul><li><b>Parenthesis theorem:</b> for any u, v, the intervals [u.d, u.f] and [v.d, v.f] are either disjoint or nested. v is a descendant of u ⇔ u.d &lt; v.d &lt; v.f &lt; u.f.</li><li><b>White-path theorem:</b> v becomes a descendant of u ⇔ when u is discovered there is a path u ⇝ v made entirely of white vertices.</li><li><b>Undirected graphs</b> have only tree and back edges.</li><li><b>A directed graph is acyclic ⇔ DFS finds no back edges.</b></li></ul>`,
+   kid: 'If you walk into a room that is still "open" (gray) on your current path, you went in a circle. That\'s a back edge, and it means a cycle.',
+   check: ['During DFS, exploring an edge to a GRAY vertex means…', ['a back edge, so the graph has a cycle', 'a tree edge', 'a cross edge', 'nothing special'], 'Gray vertices are on the current recursion path, so the edge closes a cycle.']},
+  {h: 'Applications: bipartite test and number maze (PS10)',
+   body: `<ul><li><b>Bipartite test (PS10 1b):</b> run BFS and give each newly discovered vertex the color 1 − u.color. If any edge joins two vertices of the same color, the graph has an odd cycle and is <b>not bipartite</b>. That's Θ(V + E). A graph is bipartite ⇔ it has no odd cycle.</li><li><b>Number maze (PS10 P2):</b> each square is a vertex. From a square labeled k you can jump exactly k squares in 4 directions, so there are at most 4 edges per square. "Fewest moves" means BFS, Θ(n²). Return "no solution" if (n, n) is never reached. Don't backtrack over all paths, which is exponential.</li><li><b>Connected components:</b> restart BFS or DFS from every unvisited vertex, Θ(V + E).</li><li><b>Undirected cycle detection:</b> a visited neighbour that isn't the parent.</li></ul><p>The modeling skill being tested: turn the story into vertices (states) and edges (moves), then recognize "fewest steps" ⇒ BFS.</p>`,
+   kid: 'To split kids into two teams where friends are always on opposite teams, color them red, blue, red, blue as you go. If two friends end up the same color, it can\'t be done.',
+   check: ['BFS 2-coloring finds an edge between two vertices of the same color. Therefore…', ['the graph has an odd cycle and is not bipartite', 'the graph is bipartite', 'the graph is a tree', 'BFS made an error'], 'Same-color neighbours mean an odd cycle, and no 2-coloring exists.']}
+ ]},
+
+{id: 'topo', topics: ['t14b'], title: 'Topological Sort & Strongly Connected Components', notes: 'Topic 14B', reading: 'CLRS 4e 20.4–20.5',
+ lessons: [
+  {h: 'Topological sort with DFS finish times', clips: [['TZDQHplPrNo', 'Topological sort', 'recursive DFS']], viz: 'topo',
+   body: `<p>A <b>topological order</b> of a DAG lists its vertices so that every edge (u, v) has u before v. Think of scheduling tasks with prerequisites. It exists <b>iff</b> the graph is acyclic.</p><pre><code>TOPOLOGICAL-SORT(G)
+  call DFS(G) to compute finish times v.f
+  as each vertex finishes, insert it at the FRONT of a list
+  return the list            // decreasing finish time; Θ(V + E)</code></pre><p><b>Trace:</b> A→B, A→D, B→C, B→E, D→E, E→F, C→F, G→F, H→C with alphabetical DFS gives A 1/12, B 2/9, C 3/6, F 4/5, E 7/8, D 10/11, G 13/14, H 15/16. Sorted by decreasing f, that's <b>H, G, A, D, B, E, C, F</b>. Check that every edge points left to right.</p>`,
+   kid: 'Socks before shoes, underwear before pants. List the chores so every "before" rule is obeyed. Whoever finishes last in DFS goes first in the list.',
+   check: ['TOPOLOGICAL-SORT outputs vertices in order of…', ['decreasing finish time', 'increasing discovery time', 'increasing finish time', 'BFS distance'], 'Insert each vertex at the front of the list when it finishes.']},
+  {h: 'Why finish times work, and detecting cycles',
+   body: `<p><b>Lemma:</b> in a DAG, every edge (u, v) has <b>u.f &gt; v.f</b>.</p><p><b>Proof</b>, by cases on v's color when DFS explores (u, v):</p><ul><li><b>White:</b> v becomes u's descendant and finishes first.</li><li><b>Gray:</b> that would be a back edge, which means a cycle, which is impossible in a DAG.</li><li><b>Black:</b> v has already finished.</li></ul><p>In every case v.f &lt; u.f, so decreasing f puts u before v. ∎</p><p><b>Cycle detection:</b> a directed graph has a cycle ⇔ DFS finds a back edge (an edge to a gray vertex). If you see one, no topological order exists, so report "impossible." The <b>uniqueness</b> check: the topological order is unique ⇔ every pair of consecutive vertices is joined by an edge (a Hamiltonian path).</p>`,
+   kid: 'In a no-loop graph, if you must do A before B, then A always gets "closed" after B in DFS, so A lands earlier in the list.',
+   check: ['A topological order exists if and only if the directed graph…', ['has no cycle (is a DAG)', 'is strongly connected', 'has no isolated vertices', 'is a tree'], 'Any cycle makes a consistent order impossible.']},
+  {h: 'Kahn\'s algorithm (Exercise 17)',
+   body: `<pre><code>KAHN(G)
+  compute indeg[v] for every v            // Θ(V + E)
+  Q = all vertices with indeg 0
+  while Q ≠ ∅
+      u = DEQUEUE(Q);  output u
+      for each v ∈ Adj[u]
+          indeg[v] = indeg[v] − 1
+          if indeg[v] == 0: ENQUEUE(Q, v)</code></pre><p>Two observations give the Θ(V + E) analysis:</p><ol><li>Each vertex enters the queue <b>at most once</b>, because its in-degree hits 0 exactly once.</li><li>Each edge is scanned once, when its tail is dequeued.</li></ol><p>If fewer than |V| vertices are output, the leftover vertices all have positive in-degree, so following incoming edges must eventually loop: there's a <b>cycle</b>. On the DAG above with an alphabetical queue: A, G, H, B, D, C, E, F.</p>`,
+   kid: 'Repeatedly do any chore that has no unfinished "before" chores left. If you get stuck with chores left over, there\'s a loop in the rules.',
+   check: ['Kahn\'s algorithm finishes but some vertices still have in-degree > 0. This means…', ['the graph has a cycle', 'the graph is disconnected', 'the algorithm has a bug', 'the graph is bipartite'], 'Every DAG has a source; positive leftover in-degrees force a cycle.']},
+  {h: 'Strongly connected components: definitions', clips: [['TZDQHplPrNo', 'strongly connected components', 'weakly connected components']],
+   body: `<p>A <b>strongly connected component (SCC)</b> of a directed graph is a <b>maximal</b> set of vertices in which every vertex can reach every other. A <b>weakly connected component</b> ignores edge directions. Don't confuse the two.</p><ul><li>Every vertex is in exactly one SCC.</li><li>G and its transpose Gᵀ (every edge reversed) have <b>the same SCCs</b>, because mutual reachability doesn't care about reversing every edge.</li><li>Contract each SCC into one vertex to get the <b>component graph</b> G<sup>SCC</sup>, which is always a <b>DAG</b>. If two components could reach each other, they would be one component.</li></ul>`,
+   kid: 'An SCC is a neighborhood where you can drive from any house to any other house and back, even with one-way streets.',
+   check: ['The component graph G^SCC is always…', ['a DAG', 'a tree', 'strongly connected', 'complete'], 'A cycle among components would merge them into one SCC.']},
+  {h: 'Kosaraju\'s two-pass algorithm and why it works', clips: [['TZDQHplPrNo', 'DFS Algorithm', 'Component Graph']],
+   body: `<ol><li>Run DFS(G) to compute finish times u.f.</li><li>Compute Gᵀ in Θ(V + E).</li><li>Run DFS(Gᵀ), with the main loop taking vertices in <b>decreasing u.f</b>.</li><li>Each tree of the second DFS forest is one SCC.</li></ol><p>The total is <b>Θ(V + E)</b>.</p><p><b>Key lemma:</b> if there is an edge from SCC C to SCC C′, then f(C) &gt; f(C′), where f(C) is the largest finish time in C. So the vertex with the highest finish time lies in a <b>source</b> component of G<sup>SCC</sup>. In Gᵀ that component has no outgoing edges, so the second DFS can't escape it. The same argument repeats for the next-highest unvisited vertex.</p><p><b>Exercise 17</b> makes you build the full d/f/π tables with alphabetical tie-breaking. Its answer is the SCCs {l}, {k}, {a, b, c}, {d, e, h}, {i}, {j}, {f, g}.</p><div class="callout warn">Classic mistakes: running pass 2 on G instead of Gᵀ, using increasing f, or sorting by discovery time.</div>`,
+   kid: 'Explore once and note who finished last. Flip every one-way street. Explore again starting from the last-finisher: each exploration gets stuck inside exactly one neighborhood.',
+   check: ['Kosaraju\'s second DFS runs on…', ['Gᵀ, in decreasing order of the first pass\'s finish times', 'G, in increasing finish time', 'Gᵀ, in alphabetical order', 'the component graph'], 'The transpose traps each DFS tree inside one SCC.']}
+ ]},
+
+{id: 'ds', topics: ['ds'], title: 'Disjoint Sets (Union-Find)', notes: 'Topic 16', reading: 'CLRS 4e Ch 19 (19.1–19.4); Lemmas 19.11–19.13, Thm 19.14',
+ lessons: [
+  {h: 'The ADT and its classic use: connected components',
+   body: `<p>A disjoint-set structure maintains a collection of non-overlapping sets, each identified by a <b>representative</b> member. There are three operations:</p><ul><li><b>MAKE-SET(x):</b> create the singleton {x}.</li><li><b>FIND-SET(x):</b> return the representative of x's set.</li><li><b>UNION(x, y):</b> merge the sets containing x and y.</li></ul><p>We analyze sequences of m operations, n of which are MAKE-SETs. At most n − 1 UNIONs can actually merge sets.</p><pre><code>CONNECTED-COMPONENTS(G)
+  for each v ∈ G.V: MAKE-SET(v)
+  for each (u, v) ∈ G.E
+      if FIND-SET(u) ≠ FIND-SET(v): UNION(u, v)
+SAME-COMPONENT(u, v)
+  return FIND-SET(u) == FIND-SET(v)</code></pre><p>For a <b>static</b> graph, a single DFS or BFS is simpler. Union-Find wins when edges <b>arrive over time</b>, as in Kruskal. It can't delete edges.</p>`,
+   kid: 'Kids are sorted into teams. MAKE-SET gives each kid their own team, UNION merges two teams, and FIND-SET asks "who is your team captain?"',
+   check: ['Starting from n singletons, at most how many UNIONs can actually merge sets?', ['n − 1', 'n', 'n/2', 'unlimited'], 'Each successful union reduces the number of sets by one.']},
+  {h: 'Linked-list representation and weighted union',
+   body: `<p>Each set is a linked list whose head is the representative, and every node points back to the head.</p><ul><li>MAKE-SET and FIND-SET are O(1).</li><li>UNION appends one list to the other and must update the back-pointer of every appended node.</li><li>Naively that can total Θ(n²) for n unions, i.e. Θ(n) amortized per operation.</li></ul><p><b>Weighted-union heuristic:</b> always append the <b>shorter</b> list. A node's pointer changes only when it's in the smaller list, and then its set at least doubles. So each node is updated at most ⌈lg n⌉ times, and m operations cost <b>O(m + n lg n)</b>.</p>`,
+   kid: 'When two teams merge, the smaller team changes its name tags. Each kid\'s team at least doubles every time they relabel, so nobody relabels very often.',
+   check: ['With linked lists and the weighted-union heuristic, m operations on n elements cost…', ['O(m + n lg n)', 'O(m α(n))', 'O(mn)', 'O(m)'], 'Each element\'s back-pointer moves at most lg n times.']},
+  {h: 'Forests: union by rank and path compression',
+   body: `<pre><code>MAKE-SET(x):  x.p = x;  x.rank = 0
+FIND-SET(x)                       // path compression
+  if x ≠ x.p:  x.p = FIND-SET(x.p)
+  return x.p
+LINK(x, y)                        // union by rank
+  if x.rank > y.rank:  y.p = x
+  else  x.p = y
+        if x.rank == y.rank:  y.rank = y.rank + 1
+UNION(x, y):  LINK(FIND-SET(x), FIND-SET(y))</code></pre><ul><li>Each set is a tree, and its root (x.p == x) is the representative.</li><li><b>Union by rank:</b> the lower-rank root goes under the higher-rank root. On a tie, <b>y</b> becomes the parent and its rank goes up by 1.</li><li><b>Rank is an upper bound on height</b>, not the height itself, because path compression shrinks trees without updating ranks.</li><li>A rank-r root has ≥ 2ʳ nodes, so rank ≤ ⌊lg n⌋.</li><li>FIND-SET is two-pass: up to the root, then every node on the path is re-pointed at the root as the recursion unwinds. It is <b>not tail-recursive</b>, because the unwinding does the compression.</li></ul>`,
+   kid: 'When teams merge, the shorter tree hangs under the taller one. When you ask "who\'s my captain?", everyone you passed on the way gets a direct line to the captain for next time.',
+   check: ['With union by rank, two roots of EQUAL rank are linked. Then…', ['the new root\'s rank increases by 1', 'both ranks increase', 'no rank changes', 'the child\'s rank becomes 0'], 'Equal heights stacked can grow the height bound by one.']},
+  {h: 'The amortized bound: O(m α(n))',
+   body: `<p>With both heuristics, a sequence of m operations costs <b>O(m α(n))</b>, where α is the inverse Ackermann function. The course cites:</p><ul><li><b>Lemma 19.11:</b> MAKE-SET is O(1) amortized.</li><li><b>Lemmas 19.12–19.13:</b> LINK and FIND-SET are O(α(n)) amortized.</li><li><b>Theorem 19.14:</b> m operations cost O(m α(n)).</li></ul><p>You need the result, not the potential-function proof. α(n) ≤ 4 for every n you will ever see, so this is "effectively constant", but say "O(α(n)) amortized", not "O(1)".</p><table class="tbl"><tr><th>Heuristics</th><th>m operations</th></tr><tr><td>none (forest)</td><td>Θ(mn) worst</td></tr><tr><td>union by rank only</td><td>O(m lg n)</td></tr><tr><td>linked list + weighted union</td><td>O(m + n lg n)</td></tr><tr><td>rank + compression</td><td>O(m α(n))</td></tr></table>`,
+   kid: 'With both tricks, every team question is answered almost instantly. The "almost" number is never bigger than 4 in real life.',
+   check: ['How should you state the per-operation cost of union-find with both heuristics?', ['O(α(n)) amortized', 'O(1) worst case', 'O(lg n) worst case', 'O(n)'], 'α grows unimaginably slowly, but the bound is amortized and not literally constant.']}
+ ]},
+
+{id: 'mst', topics: ['mst', 'kruskal', 'prim'], title: 'Minimum Spanning Trees: Kruskal & Prim', notes: 'Topic 17', reading: 'CLRS 4e Ch 21',
+ extra: [['FPEMBWg_WlY', 'Minimum Spanning Tree', 'Cut Paste']],
+ lessons: [
+  {h: 'The MST problem and GENERIC-MST', clips: [['Mx-dvvSE4Qc', 'Minimum Spanning Trees', 'Generic Algorithm']],
+   body: `<p>Given a connected, undirected, weighted graph, a <b>spanning tree</b> connects all V vertices with exactly V − 1 edges and no cycle. A <b>minimum spanning tree</b> minimizes the total weight. A minimum connector is always a tree, because any cycle contains an edge whose removal keeps the graph connected and lowers the cost.</p><pre><code>GENERIC-MST(G, w)
+  A = ∅
+  while A is not a spanning tree        // runs V − 1 times
+      find an edge (u, v) that is SAFE for A
+      A = A ∪ {(u, v)}
+  return A</code></pre><p><b>Invariant:</b> A is a subset of some MST. A <b>safe</b> edge is one that can be added while keeping that true. Kruskal and Prim are two ways of finding safe edges.</p>`,
+   kid: 'An MST is the cheapest way to connect every town with roads, with no loops: like laying the least pipe that still reaches every house.',
+   check: ['How many edges does every spanning tree of a connected graph with V vertices have?', ['V − 1', 'V', 'E', 'V + 1'], 'A tree on V vertices always has V − 1 edges.']},
+  {h: 'Cuts, light edges and the Safe Edge Theorem (the most-asked proof)', clips: [['Mx-dvvSE4Qc', 'Safe Edge Theorem']],
+   body: `<p>A <b>cut</b> (S, V − S) splits the vertices. An edge <b>crosses</b> it if one endpoint is on each side. The cut <b>respects</b> A if no edge of A crosses it. A <b>light</b> edge is a minimum-weight edge among those crossing the cut.</p><p><b>Theorem:</b> if A ⊆ some MST T, the cut respects A, and (u, v) is light across it, then (u, v) is safe.</p><p><b>Proof (reproduce this from memory):</b></p><ol><li>If (u, v) ∈ T, we're done.</li><li>Otherwise T has a unique path u ⇝ v. Since u and v are on opposite sides, some edge (x, y) on that path crosses the cut.</li><li>(x, y) ∉ A, because the cut respects A.</li><li>T′ = T − (x, y) + (u, v) is a spanning tree, and w(T′) ≤ w(T) because (u, v) is light. So T′ is an MST containing A ∪ {(u, v)}. ∎</li></ol><p><b>Corollaries and facts:</b></p><ul><li>A light edge joining two components of (V, A) is safe.</li><li>Distinct weights ⇒ the MST is unique.</li><li>The cycle property: the strictly heaviest edge on a cycle is in no MST.</li><li>Adding a constant to every weight doesn't change the MST (but it does change shortest paths).</li></ul>`,
+   kid: 'Draw a line splitting the towns into two groups. The cheapest road crossing that line is always safe to build. If a plan skips it, swap it in for a pricier crossing road and the plan only gets cheaper.',
+   check: ['In the safe-edge proof, why can\'t the removed edge (x, y) belong to A?', ['Because the cut respects A, so no A-edge crosses it', 'Because (x, y) is the heaviest edge in the graph', 'Because A is empty', 'Because (x, y) is light'], '(x, y) crosses the cut, and a respecting cut is crossed by no edge of A.']},
+  {h: 'Kruskal\'s algorithm', clips: [['1BnpXYm7LKY']],
+   body: `<pre><code>MST-KRUSKAL(G, w)
+  A = ∅
+  for each v ∈ G.V: MAKE-SET(v)
+  sort G.E by weight                     // once
+  for each (u, v) in sorted order
+      if FIND-SET(u) ≠ FIND-SET(v)
+          A = A ∪ {(u, v)};  UNION(u, v)
+  return A</code></pre><ul><li>A is a <b>forest</b> that merges over time. Each accepted edge is a light edge between two components, so it's safe by the corollary.</li><li>Cost: O(E lg E) for sorting, which equals <b>O(E lg V)</b> because E ≤ V². The O(E α(V)) union-find work is dominated by the sort.</li><li>Reject (u, v) when u and v are in the same <b>set</b>, not when they're "adjacent in A".</li><li>A disconnected graph gives a minimum spanning forest.</li></ul><p><b>Trace:</b> edges a–c 1, b–c 2, d–e 2, a–b 4, b–d 5, c–d 8, c–e 10. Kruskal accepts a–c, b–c and d–e, rejects a–b, accepts b–d, and rejects the rest. Weight <b>10</b>.</p>`,
+   kid: 'Sort every road by price and take each road unless it would make a loop. The union-find "team captain" check is the loop detector.',
+   check: ['Which step dominates Kruskal\'s running time?', ['Sorting the edges: O(E lg V)', 'The MAKE-SET loop', 'The UNION calls', 'Checking connectivity with DFS'], 'Union-find work is O(E α(V)), smaller than the sort.']},
+  {h: 'Prim\'s algorithm and choosing an implementation', clips: [['qegY0R78QMQ']],
+   body: `<pre><code>MST-PRIM(G, w, r)
+  for each u: u.key = ∞; u.π = NIL; INSERT(Q, u)
+  DECREASE-KEY(Q, r, 0)
+  while Q ≠ ∅
+      u = EXTRACT-MIN(Q)
+      for each v ∈ G.Adj[u]
+          if v ∈ Q and w(u, v) < v.key
+              v.π = u;  DECREASE-KEY(Q, v, w(u, v))</code></pre><p>Prim grows <b>one tree</b>. <b>v.key</b> is the lightest edge from v to the tree; it is <i>not</i> a distance. The cut is (tree, rest). The invariant is A = {(v, v.π) : v ∉ Q, v ≠ r}.</p><table class="tbl"><tr><th>Implementation</th><th>Time</th><th>Best for</th></tr><tr><td>binary heap</td><td>O(E lg V)</td><td>sparse</td></tr><tr><td>Fibonacci heap</td><td>O(E + V lg V)</td><td>sparse, large</td></tr><tr><td>array scan</td><td>Θ(V²)</td><td>dense (PS11 P4)</td></tr></table><p>The <b>Prim vs Dijkstra</b> difference is only the key: Prim uses w(u, v), while Dijkstra uses u.d + w(u, v).</p>`,
+   kid: 'Prim grows one blob of connected towns. Each step it adds the cheapest road leaving the blob.',
+   check: ['In MST-PRIM, v.key is…', ['the weight of the lightest edge connecting v to the current tree', 'the distance from r to v', 'v\'s degree', 'v\'s rank'], 'That is exactly a light edge across the cut (tree, rest).']},
+  {h: 'MST facts the exams test, and Exercise 18',
+   body: `<ul><li><b>Equal weights (PS11 P3):</b> every spanning tree is an MST, so a DFS/BFS tree in Θ(V + E) is enough. Don't sort or use a heap.</li><li><b>Max spanning tree:</b> negate the weights or sort descending. Negative weights are fine for MSTs.</li><li>An MST is <b>not</b> a shortest-path tree. Its u–v path minimizes the <i>maximum</i> edge (bottleneck), not the sum.</li></ul><table class="tbl"><tr><th>Exercise 18 algorithm</th><th>Verdict</th></tr><tr><td>A: sort descending, delete any edge whose removal keeps G connected (reverse-delete)</td><td>correct (cycle property)</td></tr><tr><td>B: arbitrary order, add if no cycle</td><td>wrong: a triangle counterexample</td></tr><tr><td>C: add every edge, drop the max edge of any cycle formed</td><td>correct (invariant: T is the MSF of the edges seen)</td></tr></table>`,
+   kid: 'Cheapest-network questions are about connecting everyone for the least total money, not about the fastest trip between two towns.',
+   check: ['Adding 5 to every edge weight of a connected graph…', ['does not change which spanning tree is minimum', 'changes the MST', 'makes the MST unique', 'breaks Kruskal'], 'Every spanning tree has V − 1 edges, so all totals shift by 5(V − 1).']}
+ ]},
+
+{id: 'fib', topics: ['fib'], title: 'Fibonacci Heaps (supplement)', notes: 'Topic 16', reading: 'CLRS 3e Ch 19 (not in the 4e print edition)',
+ lessons: [
+  {h: 'Why Fibonacci heaps exist',
+   body: `<p>Prim and Dijkstra do V EXTRACT-MINs and up to E DECREASE-KEYs. With a binary heap each costs O(lg V), giving O((V + E) lg V). A Fibonacci heap makes <b>DECREASE-KEY O(1) amortized</b>, which gives <b>O(V lg V + E)</b>. That's a real gain on sparse graphs with many key updates.</p><table class="tbl"><tr><th>Operation</th><th>Binary heap</th><th>Fibonacci heap (amortized)</th></tr><tr><td>INSERT</td><td>Θ(lg n)</td><td>O(1)</td></tr><tr><td>MINIMUM</td><td>Θ(1)</td><td>O(1)</td></tr><tr><td>EXTRACT-MIN</td><td>Θ(lg n)</td><td>O(lg n)</td></tr><tr><td>DECREASE-KEY</td><td>Θ(lg n)</td><td>O(1)</td></tr><tr><td>UNION</td><td>Θ(n)</td><td>O(1)</td></tr></table>`,
+   kid: 'A Fibonacci heap is a lazy priority queue. It doesn\'t tidy up until it absolutely has to, which makes "this item got more urgent" super cheap.',
+   check: ['Using a Fibonacci heap, Dijkstra runs in…', ['O(V lg V + E)', 'O((V + E) lg V)', 'O(V²)', 'O(VE)'], 'V EXTRACT-MINs at O(lg V) plus E DECREASE-KEYs at O(1) amortized.']},
+  {h: 'Structure and lazy operations',
+   body: `<p>A Fibonacci heap is a <b>root list</b> of min-heap-ordered trees, plus a pointer H.min. Each node stores p, child, left/right siblings (a circular doubly linked list), degree and mark.</p><ul><li><b>INSERT:</b> add a singleton tree to the root list. O(1).</li><li><b>UNION:</b> concatenate the root lists. O(1).</li><li><b>EXTRACT-MIN:</b> remove H.min, move its children to the root list, then <b>CONSOLIDATE</b>: repeatedly link two roots of equal degree (the larger key becomes a child) until all root degrees differ, then find the new min. This is the only time the heap gets tidied.</li></ul>`,
+   kid: 'Adding things is instant: just drop a new pile on the floor. Only when you need the smallest do you merge same-size piles so things don\'t get too messy.',
+   check: ['When does a Fibonacci heap consolidate its root list?', ['Only during EXTRACT-MIN', 'On every INSERT', 'On every DECREASE-KEY', 'Never'], 'Laziness: the work is postponed until a minimum must actually be removed.']},
+  {h: 'DECREASE-KEY, CUT and CASCADING-CUT',
+   body: `<pre><code>FIB-DECREASE-KEY(H, x, k)
+  x.key = k;  y = x.p
+  if y ≠ NIL and x.key < y.key
+      CUT(H, x, y);  CASCADING-CUT(H, y)
+  if x.key < H.min.key:  H.min = x
+CUT(H, x, y):  remove x from y's children; y.degree−−
+               add x to the root list; x.p = NIL; x.mark = FALSE
+CASCADING-CUT(H, y)
+  z = y.p
+  if z ≠ NIL
+      if y.mark == FALSE:  y.mark = TRUE
+      else  CUT(H, y, z);  CASCADING-CUT(H, z)</code></pre><p>The <b>mark</b> bit records "this node has lost a child since it became a child." The first loss sets the mark. A second loss cuts the node too, and the cut cascades upward. This limits how much a tree can be thinned out, which is what keeps degrees small. <b>FIB-DELETE(H, x)</b> = DECREASE-KEY to −∞, then EXTRACT-MIN, which is O(lg n) amortized. That's this unit's generated test.</p>`,
+   kid: 'If a parent loses one child, it gets a sticker. If it loses a second child, it gets cut loose too, and its own parent might get a sticker.',
+   check: ['A marked node loses another child. What happens?', ['It is cut to the root list and the cut cascades to its parent', 'It is deleted', 'Its mark is ignored', 'The heap is rebuilt'], 'Second loss ⇒ cut; that is the cascading cut.']},
+  {h: 'The degree bound and the potential function',
+   body: `<p><b>Child-degree lemma:</b> if x has children y₁ … yₖ in the order they were linked, then yᵢ.degree ≥ i − 2. When yᵢ was linked it had degree ≥ i − 1, and it can lose at most one child without being cut.</p><p><b>Size lemma:</b> a node of degree k roots a subtree of size ≥ F<sub>k+2</sub> ≥ φᵏ, where φ = (1 + √5)/2 ≈ 1.618 and φ² = φ + 1. The minimum sizes 1, 2, 3, 5, 8, … are Fibonacci numbers.</p><p>So the max degree is <b>D(n) ≤ ⌊log<sub>φ</sub> n⌋ = O(lg n)</b>, which makes EXTRACT-MIN O(lg n) amortized. For example, D(1000) ≤ 14.</p><p><b>Potential:</b> Φ(H) = t(H) + 2·m(H), the number of trees plus twice the number of marks. Its credit pays for consolidation and cascading cuts. Always say "<b>amortized</b>".</p>`,
+   kid: 'Because a node can only lose one kid before being cut, every node with many children must have a big family tree underneath, so no node can have too many kids.',
+   check: ['A Fibonacci-heap node of degree k roots a subtree with at least…', ['F(k+2) ≥ φᵏ nodes', '2ᵏ nodes', 'k nodes', 'k² nodes'], 'The minimum sizes follow the Fibonacci recurrence.']}
+ ]},
+
+{id: 'sssp', topics: ['t18'], title: 'Single-Source Shortest Paths', notes: 'Topic 18', reading: 'CLRS 4e 22.1–22.3, 22.5',
+ extra: [['xhG2DyCX3uA', 'Dijkstra\'s algorithm', 'Correctness and applications'], ['Ttezuzs39nk', 'Bellmanford', 'Induction'], ['Ttezuzs39nk', 'Difference Constraints', 'Negative Weight Cycles']],
+ lessons: [
+  {h: 'The problem, its variants, and negative cycles', clips: [['S7rzpWwICo8', 'Shortest path definitions', 'Negative weights and cycles']],
+   body: `<p>The weight of a path is the sum of its edge weights, and δ(s, v) is the minimum over all s ⇝ v paths (∞ if v is unreachable). The <b>single-source</b> problem asks for δ(s, v) for every v. Variants:</p><ul><li>Single-destination: run on Gᵀ.</li><li>Single pair: no asymptotically faster method is known.</li><li>All pairs: Unit 8.</li></ul><p><b>Negative edges</b> are allowed by some algorithms. But a <b>negative-weight cycle reachable from s</b> makes the distances of everything reachable from it −∞, because you can go around once more. Negative cycles that aren't reachable don't matter. Without negative cycles, shortest paths are <b>simple</b>, so they have at most V − 1 edges.</p>`,
+   kid: 'Every road has a travel time. If a loop of roads had a negative total time (a time machine!), you could drive around it forever and the "fastest" route would be infinitely fast.',
+   check: ['If a negative-weight cycle is reachable from s, the distances to vertices reachable from that cycle are…', ['−∞ (undefined)', '0', 'unchanged', '∞'], 'Going around the cycle again always lowers the cost.']},
+  {h: 'Optimal substructure, relaxation and its properties', clips: [['S7rzpWwICo8', 'Optimal substructure', 'Shortest path properties']],
+   body: `<pre><code>INITIALIZE-SINGLE-SOURCE(G, s):  v.d = ∞, v.π = NIL for all v;  s.d = 0
+RELAX(u, v, w):  if v.d > u.d + w(u, v)
+                     v.d = u.d + w(u, v);  v.π = u</code></pre><ul><li><b>Optimal substructure:</b> subpaths of shortest paths are shortest paths (cut-and-paste).</li><li><b>Triangle inequality:</b> δ(s, v) ≤ δ(s, u) + w(u, v).</li><li><b>Upper bound:</b> v.d ≥ δ(s, v) always, and once equal it never changes.</li><li><b>No-path:</b> if v is unreachable, v.d stays ∞.</li><li><b>Convergence:</b> if u.d = δ(s, u) and (u, v) is the last edge of a shortest path, relaxing it gives v.d = δ(s, v).</li><li><b>Path relaxation:</b> relaxing the edges of a shortest path <i>in order</i>, even with other relaxations mixed in, gives the correct d at the end.</li></ul><p>Every algorithm in this unit is "relax edges in a clever order."</p>`,
+   kid: 'Relax a road: "Is going through this road faster than my current best guess? Then update my guess." Every shortest-path robot just relaxes roads in a smart order.',
+   check: ['RELAX(u, v, w) updates v when…', ['v.d > u.d + w(u, v)', 'v.d < u.d + w(u, v)', 'w(u, v) < 0', 'u.d > v.d'], 'The route through u is strictly shorter than v\'s current estimate.']},
+  {h: 'Bellman-Ford and its |V| − 1 lemma', clips: [['4Iy0RalrsXo', 'BellmanFord', 'correctness']], viz: 'sssp',
+   body: `<pre><code>BELLMAN-FORD(G, w, s)
+  INITIALIZE-SINGLE-SOURCE(G, s)
+  for i = 1 to |G.V| − 1
+      for each edge (u, v) ∈ G.E: RELAX(u, v, w)
+  for each edge (u, v) ∈ G.E
+      if v.d > u.d + w(u, v): return FALSE   // negative cycle
+  return TRUE</code></pre><p>The cost is <b>Θ(VE)</b>.</p><p><b>Lemma:</b> after pass i, v.d ≤ the weight of every s ⇝ v path with at most i edges. Prove it by induction on i: the last edge of an i-edge path gets relaxed in pass i, after its prefix was bounded in pass i − 1. A shortest simple path has ≤ V − 1 edges, so V − 1 passes suffice (this is path relaxation).</p><p><b>Negative-cycle check:</b> if some edge can still be relaxed, summing around the cycle gives a contradiction unless the cycle's weight is negative. <b>Early exit:</b> if a full pass changes nothing, stop. That's this unit's first generated test.</p><p><b>Trace (CLRS):</b> s 0, t 2, x 4, y 7, z −2, returning TRUE.</p>`,
+   kid: 'Bellman-Ford fixes every road\'s guess, over and over, (number of towns − 1) times. If a guess can still improve after that, there\'s a time-machine loop somewhere.',
+   check: ['Bellman-Ford makes how many relaxation passes before the negative-cycle check?', ['|V| − 1', '|V|', '|E|', 'lg V'], 'A shortest simple path has at most |V| − 1 edges.']},
+  {h: 'Shortest paths in a DAG', clips: [['4Iy0RalrsXo', 'DAG Example']],
+   body: `<pre><code>DAG-SHORTEST-PATHS(G, w, s)
+  topologically sort G
+  INITIALIZE-SINGLE-SOURCE(G, s)
+  for each u in topological order
+      for each v ∈ G.Adj[u]: RELAX(u, v, w)</code></pre><p>The cost is <b>Θ(V + E)</b>, and negative weights are fine because a DAG has no cycles. <b>Why it's correct:</b> every path appears in topological order, so its edges are relaxed in order, which is the path-relaxation property. Each edge is relaxed exactly once.</p><p><b>Longest paths</b> in a DAG (critical-path or PERT scheduling): negate the weights, or initialize to −∞ and relax with &lt;. That's this unit's third generated test. In general graphs, the longest simple path is NP-hard.</p>`,
+   kid: 'With no loops, just do the roads in "before and after" order once each. Every road\'s starting point is already finished when you get to it.',
+   check: ['DAG-SHORTEST-PATHS with negative edge weights…', ['works, in Θ(V + E)', 'fails because of the negative edges', 'needs Bellman-Ford', 'needs Dijkstra'], 'No cycles means no negative cycles; topological order relaxes every path in order.']},
+  {h: 'Dijkstra\'s algorithm (and how it differs from Prim)', clips: [['0wfNtfhHlqE', 'Introduction to Dijkstra', 'Example Execution']],
+   body: `<pre><code>DIJKSTRA(G, w, s)               // requires w ≥ 0
+  INITIALIZE-SINGLE-SOURCE(G, s)
+  S = ∅;  Q = G.V                  // min-priority queue keyed on d
+  while Q ≠ ∅
+      u = EXTRACT-MIN(Q);  S = S ∪ {u}
+      for each v ∈ G.Adj[u]
+          RELAX(u, v, w)           // plus DECREASE-KEY</code></pre><p>Dijkstra is greedy: settle the closest unsettled vertex, then relax its out-edges. Its structure is identical to Prim's. The only change is the key: <b>Prim uses w(u, v); Dijkstra uses u.d + w(u, v)</b>.</p><p><b>Trace (CLRS):</b> the vertices are extracted in the order s, y, z, t, x with final d = 0, 5, 7, 8, 9.</p>`,
+   kid: 'Dijkstra always finishes the closest unfinished town next, like ripples that spread by travel time instead of by number of roads.',
+   check: ['Dijkstra and Prim have the same structure. The difference is…', ['the key: total distance u.d + w(u, v) vs single edge weight w(u, v)', 'Dijkstra uses a stack', 'Prim requires non-negative weights', 'Dijkstra sorts the edges'], 'Everything else (EXTRACT-MIN loop, relax neighbours) is the same.']},
+  {h: 'Why Dijkstra is correct, and why negative edges break it', clips: [['0wfNtfhHlqE', 'Negative Weight Issue', 'Complexity and Conclusion']],
+   body: `<p><b>Invariant:</b> at the start of each iteration, v.d = δ(s, v) for every v ∈ S.</p><p><b>Proof by contradiction:</b></p><ol><li>Let u be the first vertex added to S with u.d ≠ δ(s, u).</li><li>On a shortest path s ⇝ u, let y be the first vertex not in S, and x its predecessor (x ∈ S, so x.d is correct).</li><li>(x, y) was relaxed, so y.d = δ(s, y) by convergence.</li><li>Since <b>w ≥ 0</b>, δ(s, y) ≤ δ(s, u) ≤ u.d.</li><li>But Dijkstra chose u, so u.d ≤ y.d. Hence everything is equal, and u.d = δ(s, u), a contradiction.</li></ol><p><b>The w ≥ 0 assumption is used exactly in step 4.</b></p><p><b>Counterexample:</b> s→a 2, a→c 1, s→b 4, b→a −3. Dijkstra settles a at 2 and c at 3. The true distance to c is 2, but c is never updated. Adding a constant to every edge does <b>not</b> fix this, because it penalizes paths with more edges. Use Bellman-Ford, or Johnson's reweighting.</p><table class="tbl"><tr><th>Priority queue</th><th>Time</th></tr><tr><td>binary heap</td><td>O((V + E) lg V)</td></tr><tr><td>Fibonacci heap</td><td>O(V lg V + E)</td></tr><tr><td>array (dense graphs)</td><td>Θ(V²)</td></tr></table>`,
+   kid: 'Dijkstra promises "once I finish a town, its time is final." A negative road could make a later route cheaper, and that breaks the promise.',
+   check: ['Why can\'t you fix negative edges for Dijkstra by adding a constant to every edge?', ['It penalizes paths with more edges, changing which path is shortest', 'It makes the graph cyclic', 'Dijkstra rejects positive weights', 'It is too slow'], 'A path with k edges grows by k·c, so different paths shift by different amounts.']},
+  {h: 'Difference constraints: Bellman-Ford as a solver (extra, MIT 18)',
+   body: `<p>A system of constraints of the form xⱼ − xᵢ ≤ b<sub>k</sub> can be solved with shortest paths. Make a vertex per variable and an edge i → j with weight b<sub>k</sub> for each constraint, plus a source s with 0-weight edges to every vertex. Run Bellman-Ford from s:</p><ul><li>If it finds a <b>negative cycle</b>, the system is <b>infeasible</b>.</li><li>Otherwise xᵢ = δ(s, i) is a solution, because the triangle inequality δ(s, j) ≤ δ(s, i) + b<sub>k</sub> is exactly the constraint.</li></ul><p>This is CLRS 22.4. It's also the same "super-source + Bellman-Ford" trick that Johnson's algorithm uses in Unit 8.</p>`,
+   kid: 'Rules like "x can be at most 3 more than y" become roads with lengths. If the roads form a time-machine loop, the rules can\'t all be true at once.',
+   check: ['In the constraint graph, Bellman-Ford finds a negative cycle. The difference-constraint system is…', ['infeasible', 'feasible with all x = 0', 'feasible with x = δ', 'undefined'], 'Summing the constraints around the cycle gives 0 ≤ (negative number).']}
+ ]},
+
+{id: 'apsp', topics: ['t19'], title: 'All-Pairs Shortest Paths', notes: 'Topic 19', reading: 'CLRS 4e Ch 23',
+ extra: [['Sygq1e0xWnM', 'All-pairs shortest paths', 'Improved matrix squaring'], ['Sygq1e0xWnM', 'Floyd-Warshall algorithm', 'Johnson\'s algorithm']],
+ lessons: [
+  {h: 'The problem and the brute-force options', clips: [['Ku24z4v9YF8']],
+   body: `<p>Compute δ(u, v) for every pair. The output is a V × V matrix. The obvious approach is to run a single-source algorithm from each vertex:</p><table class="tbl"><tr><th>Method</th><th>Time</th><th>Notes</th></tr><tr><td>V × Dijkstra (binary heap)</td><td>O(VE lg V)</td><td>w ≥ 0 only</td></tr><tr><td>V × Dijkstra (Fibonacci heap)</td><td>O(V² lg V + VE)</td><td>w ≥ 0 only</td></tr><tr><td>V × Bellman-Ford</td><td>O(V² E), up to O(V⁴)</td><td>negative edges OK</td></tr><tr><td>V × BFS</td><td>Θ(V(V + E))</td><td>unweighted</td></tr></table><p>The two dedicated algorithms are <b>Floyd-Warshall</b>, Θ(V³) (best for dense graphs, negative edges OK), and <b>Johnson's</b> algorithm, O(V² lg V + VE) (best for sparse graphs with negative edges).</p>`,
+   kid: 'Instead of the fastest trip from one town, we want a whole chart of the fastest trip between every pair of towns.',
+   check: ['Running Dijkstra from every vertex is valid only when…', ['all edge weights are non-negative', 'the graph is a DAG', 'the graph is dense', 'there are negative edges but no negative cycles'], 'Each Dijkstra run needs w ≥ 0; Johnson reweights to get there.']},
+  {h: 'The matrix-multiplication method', clips: [['dzf7x5Z8Ui8', 'Dynamic programming basics', 'Matrix multiplication']],
+   body: `<p>Let l<sup>(m)</sup><sub>ij</sub> be the shortest i ⇝ j weight using <b>at most m edges</b>. Then</p><p class="math" style="text-align:center">l<sup>(m)</sup><sub>ij</sub> = min over k of ( l<sup>(m−1)</sup><sub>ik</sub> + w<sub>kj</sub> )</p><p>This looks like matrix multiplication with (min, +) in place of (+, ·). Computing L<sup>(1)</sup>, L<sup>(2)</sup>, …, L<sup>(n−1)</sup> one edge at a time costs Θ(V⁴).</p><p><b>Repeated squaring</b> (L<sup>(2m)</sup> = L<sup>(m)</sup> ⊗ L<sup>(m)</sup>) reaches m ≥ n − 1 in ⌈lg(n − 1)⌉ products, so <b>Θ(V³ lg V)</b>. It still loses to Floyd-Warshall, but it shows how the DP builds up path lengths.</p>`,
+   kid: 'First find the best trips using 1 road, then 2 roads, then 4 roads, doubling each time, like matrix multiplication with "min" and "+".',
+   check: ['All-pairs shortest paths by repeated squaring of the min-plus product takes…', ['Θ(V³ lg V)', 'Θ(V³)', 'Θ(V⁴)', 'Θ(V² lg V)'], 'lg V squarings, each Θ(V³).']},
+  {h: 'Floyd-Warshall: the k-intermediate DP', clips: [['dzf7x5Z8Ui8', 'Floyd-Warshall approach', 'Trace example']], viz: 'fw',
+   body: `<p>Define d<sup>(k)</sup><sub>ij</sub> = the shortest i ⇝ j path whose <b>intermediate</b> vertices all lie in {1, …, k}. Such a path either avoids k, or uses it exactly once (simple paths don't repeat vertices):</p><p class="math" style="text-align:center">d<sup>(k)</sup><sub>ij</sub> = min( d<sup>(k−1)</sup><sub>ij</sub>, d<sup>(k−1)</sup><sub>ik</sub> + d<sup>(k−1)</sup><sub>kj</sub> )</p><pre><code>FLOYD-WARSHALL(W, n)
+  D = W
+  for k = 1 to n                 // k MUST be the outer loop
+      for i = 1 to n
+          for j = 1 to n
+              D[i, j] = min(D[i, j], D[i, k] + D[k, j])
+  return D</code></pre><ul><li>The cost is <b>Θ(n³)</b> time and <b>Θ(n²)</b> space if you update in place. In-place is safe because row k and column k don't change during round k (d<sub>kk</sub> = 0).</li><li>Negative edges are fine. A negative diagonal entry d<sub>ii</sub> &lt; 0 means a negative cycle.</li><li><b>Paths:</b> keep a predecessor matrix (π<sub>ij</sub> = π<sub>kj</sub> when the route through k wins) or a next-hop matrix (next<sub>ij</sub> = next<sub>ik</sub>). That's this unit's generated test.</li></ul>`,
+   kid: 'Ask, for every pair of towns: "is it faster if I\'m allowed to stop in town k?" Do that for k = 1, then 2, then 3. The chart updates in place.',
+   check: ['In Floyd-Warshall, which loop must be outermost?', ['the intermediate vertex k', 'the source i', 'the destination j', 'any order works'], 'Round k may only use paths whose intermediates are in {1..k−1}, all already computed.']},
+  {h: 'Transitive closure', clips: [['dzf7x5Z8Ui8', 'Transitive closure']],
+   body: `<p>If we only need to know <b>whether</b> j is reachable from i, run Floyd-Warshall on booleans, with OR in place of min and AND in place of +:</p><p class="math" style="text-align:center">t<sup>(k)</sup><sub>ij</sub> = t<sup>(k−1)</sup><sub>ij</sub> ∨ ( t<sup>(k−1)</sup><sub>ik</sub> ∧ t<sup>(k−1)</sup><sub>kj</sub> )</p><p>Initialize t<sub>ij</sub> = 1 if i = j or (i, j) ∈ E. That's still Θ(n³), but with 1-bit entries and very cheap operations. An alternative is BFS or DFS from every vertex, Θ(V(V + E)), which is better for sparse graphs.</p>`,
+   kid: 'Same chart trick, but every box just says yes or no: "can I get there at all?"',
+   check: ['The transitive-closure version of Floyd-Warshall replaces min and + with…', ['OR and AND', 'AND and OR', 'max and ×', 'XOR and +'], 't_ij = t_ij OR (t_ik AND t_kj).']},
+  {h: 'Johnson\'s algorithm: reweighting', clips: [['z0reAeK4kl0', 'Reweighting lemma and proof', 'Johnson\'s insight'], ['z0reAeK4kl0', 'Algorithm steps and runtime']],
+   body: `<ol><li>Add a new vertex s with a 0-weight edge to every vertex. Run Bellman-Ford from s to get <b>h(v) = δ(s, v)</b>, or report a negative cycle.</li><li>Reweight: <b>ŵ(u, v) = w(u, v) + h(u) − h(v)</b>.</li><li>Run Dijkstra from every vertex using ŵ. Convert back: <b>δ(u, v) = δ̂(u, v) − h(u) + h(v)</b>.</li></ol><ul><li><b>Lemma 1 (ŵ ≥ 0):</b> by the triangle inequality, h(v) ≤ h(u) + w(u, v).</li><li><b>Lemma 2 (paths preserved):</b> for any path P from u to v, ŵ(P) = w(P) + h(u) − h(v), because the h terms <b>telescope</b>. Every u ⇝ v path shifts by the same amount, so the shortest paths stay shortest. Negative cycles stay negative.</li></ul><p>The cost is one Bellman-Ford, O(VE), plus V Dijkstras: <b>O(V² lg V + VE)</b> with a Fibonacci heap, or O(VE lg V) with a binary heap.</p><table class="tbl"><tr><th>Graph</th><th>Choose</th></tr><tr><td>dense, any weights</td><td>Floyd-Warshall</td></tr><tr><td>sparse, negative edges</td><td>Johnson</td></tr><tr><td>sparse, non-negative</td><td>V × Dijkstra</td></tr><tr><td>unweighted</td><td>V × BFS</td></tr></table>`,
+   kid: 'Shift every road time with a per-town "height" so no road is negative, run the fast Dijkstra robot from every town, then shift the answers back. Every route between the same two towns shifts by the same amount, so the winner never changes.',
+   check: ['Why does Johnson\'s reweighting preserve shortest paths?', ['Every u ⇝ v path changes by the same amount h(u) − h(v)', 'All weights become 0', 'Bellman-Ford sorts the edges', 'Dijkstra ignores the weights'], 'The h terms telescope along any path.']}
+ ]}
+];
+
+// ======================= MT4 LEARNING PATH: GENERATED UNIT TESTS =======================
+// Each unit ends with a pseudocode problem that MODIFIES an algorithm from the unit
+// (early exit, extra memory, a faster data structure…). LEARN_GEN[unit] is a list of
+// variant factories; each call picks a story and parameters, and returns a challenge
+// object in the same format as CODE (graded by gradeCode in grader.js).
+const lgPick = a => a[Math.floor(Math.random() * a.length)];
+const lgRx = re => t => re.test(t);
+const lgIn = (names, re) => (t, P) => re.test(P.body(names));
+const lgCount = (names, re, n) => (t, P) => (P.body(names).match(new RegExp(re.source, 'g')) || []).length >= n;
+const lgNoSelfCall = (name, pat) => (t, P) => P.hasFn(name) && !new RegExp('\\b' + pat + '\\s*\\(').test(P.body(name));
+
+const LEARN_GEN = {
+ greedy: [
+  () => { const ctx = lgPick(['a text-compression service whose character counts are produced already sorted', 'a sensor network that reports symbol frequencies in non-decreasing order', 'a file-format team that keeps frequency tables sorted on disk']);
+   return {id: 'learn-huffman-sorted', topic: 't13', title: 'Θ(n) Huffman for pre-sorted frequencies',
+    prompt: `In <b>${ctx}</b>, the n frequencies arrive sorted: C[1..n] is in non-decreasing order of freq. Modify HUFFMAN so it runs in <b>Θ(n)</b> instead of Θ(n lg n): replace the min-priority queue with <b>two FIFO queues</b>. Q1 holds the leaves in order; Q2 receives the merged nodes (they are created in non-decreasing order, so Q2 stays sorted too). Write <code>HUFFMAN-SORTED(C, n)</code> and a helper <code>TAKE-MIN(Q1, Q2)</code> that removes and returns the smaller front element.`,
+    starter: 'HUFFMAN-SORTED(C, n)\n    \n\nTAKE-MIN(Q1, Q2)\n    \n', define: ['huffmansorted', 'takemin'], call: ['take-min', 'enqueue', 'dequeue'], maxLoop: 1,
+    correctness: [
+     {label: 'Performs n − 1 merges', w: 2, test: lgRx(/n\s*-\s*1/), hint: 'for i = 1 to n − 1'},
+     {label: 'Takes the two smallest trees each round', w: 2, test: lgCount('huffmansorted', /take-?min\s*\(/, 2), hint: 'x = TAKE-MIN(Q1, Q2); y = TAKE-MIN(Q1, Q2)'},
+     {label: 'New node frequency is the sum', w: 2, test: lgRx(/freq\s*=\s*\w+\.freq\s*\+\s*\w+\.freq/), hint: 'z.freq = x.freq + y.freq'},
+     {label: 'Links both children', w: 1, test: t => /\.left\s*=/.test(t) && /\.right\s*=/.test(t), hint: 'z.left = x; z.right = y'},
+     {label: 'Merged node goes into the second queue', w: 2, test: lgRx(/enqueue\s*\(\s*q2/), hint: 'ENQUEUE(Q2, z)'},
+     {label: 'TAKE-MIN handles an empty queue and compares the fronts', w: 2, test: lgIn('takemin', /empty/) , hint: 'if Q2 is empty return DEQUEUE(Q1) … compare HEAD(Q1).freq with HEAD(Q2).freq'},
+     {label: 'Returns the root', w: 1, test: lgIn('huffmansorted', /\breturn\b/), hint: 'return TAKE-MIN(Q1, Q2)'}],
+    efficiency: [
+     {label: 'No heap / priority queue (that is the Θ(n lg n) part)', w: 5, test: t => !/heap|priority|extractmin/.test(t), hint: 'Two sorted FIFO queues replace the heap.'},
+     {label: 'TAKE-MIN is O(1): no loops', w: 5, test: (t, P) => P.hasFn('takemin') && !(P.fn('takemin').maxLoop), hint: 'Only compare the two fronts.'}],
+    penalties: [{label: 'Re-sorts inside the algorithm', p: 3, test: lgRx(/\bsort\s*\(|\bsort\s+(c|q|the)\b/), hint: 'The input is already sorted.'}],
+    model: `HUFFMAN-SORTED(C, n)          // C sorted by freq; Θ(n) with two FIFO queues
+    Q1 = queue of the n leaves, in the order of C
+    Q2 = empty queue               // merged nodes appear in non-decreasing order
+    for i = 1 to n - 1
+        x = TAKE-MIN(Q1, Q2)
+        y = TAKE-MIN(Q1, Q2)
+        z = new node
+        z.left = x
+        z.right = y
+        z.freq = x.freq + y.freq
+        ENQUEUE(Q2, z)
+    return TAKE-MIN(Q1, Q2)        // the root of the code tree
+
+TAKE-MIN(Q1, Q2)                  // O(1): smaller of the two fronts
+    if Q2 is empty
+        return DEQUEUE(Q1)
+    if Q1 is empty
+        return DEQUEUE(Q2)
+    if HEAD(Q1).freq <= HEAD(Q2).freq
+        return DEQUEUE(Q1)
+    return DEQUEUE(Q2)`}; },
+  () => { const c = lgPick([2, 3, 5, 10]), ctx = lgPick(['a vending machine', 'an arcade token dispenser', 'a transit-card kiosk']);
+   return {id: 'learn-change-counts', topic: 't13', title: 'Greedy change that remembers each coin used',
+    prompt: `<b>${ctx[0].toUpperCase() + ctx.slice(1)}</b> uses coins d[1..k] = 1, ${c}, ${c}², …, ${c}^(k−1) (powers of ${c}, so greedy is optimal). Modify GREEDY-CHANGE so it also <b>remembers how many of each coin</b> it used. Write <code>CHANGE-WITH-COUNTS(n, d, k)</code> that returns the array used[1..k] and the total number of coins, in Θ(k).`,
+    starter: 'CHANGE-WITH-COUNTS(n, d, k)\n    \n', define: ['changewithcounts'], call: [], maxLoop: 1,
+    correctness: [
+     {label: 'Allocates the used[] array', w: 1, test: lgRx(/used/), hint: 'let used[1..k] be a new array'},
+     {label: 'Goes from the largest coin down', w: 2, test: lgRx(/downto|step\s*-\s*1|,\s*-\s*1\s*\)/), hint: 'for i = k downto 1'},
+     {label: 'Takes as many of the coin as fit (division)', w: 3, test: lgRx(/used\s*\[\s*\w+\s*\]\s*=[^\n]*n\s*(\/|div|\/\/)/), hint: 'used[i] = ⌊n / d[i]⌋'},
+     {label: 'Keeps the remainder', w: 2, test: lgRx(/\bmod\b|%|n\s*=\s*n\s*-/), hint: 'n = n mod d[i]'},
+     {label: 'Accumulates the total', w: 1, test: lgRx(/total\s*=\s*total\s*\+|total\s*\+=/), hint: 'total = total + used[i]'},
+     {label: 'Returns the counts and the total', w: 1, test: lgRx(/return[^\n]*used/), hint: 'return (used, total)'}],
+    efficiency: [
+     {label: 'One iteration per denomination: Θ(k)', w: 5, test: (t, P) => P.maxLoop <= 1 && !/while[^\n]*n\s*>=/.test(t), hint: 'Never subtract one coin at a time.'},
+     {label: 'Uses division and mod', w: 5, test: lgRx(/\bmod\b|%|\bdiv\b|\/\//), hint: '⌊n / d⌋ coins in one step.'}],
+    model: `CHANGE-WITH-COUNTS(n, d, k)     // d = 1, c, c^2, ...; Θ(k)
+    let used[1..k] be a new array
+    total = 0
+    for i = k downto 1              // largest coin first (greedy choice)
+        used[i] = ⌊n / d[i]⌋         // remember how many of this coin
+        n = n mod d[i]
+        total = total + used[i]
+    return (used, total)`}; }
+ ],
+ bfs: [
+  () => { const [ctx, s, t] = lgPick([['a subway map', 'Ala Moana', 'UH Mānoa'], ['a social network', 'you', 'a recruiter'], ['a game level graph', 'spawn', 'exit']]);
+   return {id: 'learn-bfs-path', topic: 't14a', title: 'BFS with early exit and path memory',
+    prompt: `On <b>${ctx}</b> (unweighted graph, adjacency lists), we only care about the fewest-hop route from <b>${s}</b> (vertex s) to <b>${t}</b> (vertex t). Modify BFS so it <b>stops as soon as t is discovered</b> and returns the actual path s ⇝ t, reconstructed from the π pointers (or NIL if t is unreachable). Write <code>BFS-PATH(G, s, t)</code> and <code>BUILD-PATH(s, t)</code>.`,
+    starter: 'BFS-PATH(G, s, t)\n    \n\nBUILD-PATH(s, t)\n    \n', define: ['bfspath', 'buildpath'], call: ['enqueue', 'dequeue', 'build-path'], maxLoop: 2,
+    correctness: [
+     {label: 'Initializes every vertex (unvisited, π = NIL)', w: 1, test: lgRx(/(visited|color|\.d)\s*=\s*(false|white|inf)/), hint: 'u.visited = false; u.π = NIL'},
+     {label: 'Runs BFS with a FIFO queue from s', w: 2, test: t => /enqueue\s*\(\s*\w+\s*,\s*s\s*\)/.test(t) && /dequeue/.test(t), hint: 'ENQUEUE(Q, s); u = DEQUEUE(Q)'},
+     {label: 'Records the parent on discovery', w: 2, test: lgRx(/\.(pi|parent)\s*=\s*u\b/), hint: 'v.π = u'},
+     {label: 'Stops as soon as t is found', w: 2, test: lgRx(/if\s+\(?\s*\w+\s*==\s*t\b/), hint: 'if v == t: return BUILD-PATH(s, t)'},
+     {label: 'BUILD-PATH walks the π pointers back from t', w: 2, test: lgIn('buildpath', /=\s*\w+\.(pi|parent)/), hint: 'x = x.π until NIL'},
+     {label: 'Reports an unreachable target', w: 1, test: lgIn('bfspath', /return\s+(nil|null|none|false|-1|"no)/), hint: 'return NIL after the queue empties'}],
+    efficiency: [
+     {label: 'Marks vertices when DISCOVERED (each enqueued once)', w: 5, test: lgRx(/if[^\n]*(not\s+\w+\.visited|white|==\s*false|==\s*inf|!\s*\w+\.visited)/), hint: 'Only enqueue undiscovered vertices.'},
+     {label: 'Uses adjacency lists, not a scan of all vertices per step', w: 5, test: lgRx(/adj/), hint: 'for each v in G.Adj[u]'}],
+    penalties: [{label: 'Scans all vertices for every dequeued vertex (Θ(V²))', p: 3, test: (t, P) => P.lines.some(l => l.loopDepth >= 1 && /\b(for|foreach)\b[^\n]*(g\.v|vertices)/.test(l.t)), hint: 'Iterate over G.Adj[u] instead.'}],
+    model: `BFS-PATH(G, s, t)               // stops early; O(V + E) worst case
+    for each vertex u in G.V
+        u.visited = false
+        u.π = NIL
+    s.visited = true
+    Q = empty queue
+    ENQUEUE(Q, s)
+    while Q is not empty
+        u = DEQUEUE(Q)
+        for each v in G.Adj[u]
+            if not v.visited                  // first discovery
+                v.visited = true
+                v.π = u
+                if v == t
+                    return BUILD-PATH(s, t)   // early exit
+                ENQUEUE(Q, v)
+    return NIL                        // t is unreachable
+
+BUILD-PATH(s, t)                   // O(path length), uses the π memory
+    path = empty list
+    x = t
+    while x != NIL
+        add x to the front of path
+        x = x.π
+    return path`}; },
+  () => { const ctx = lgPick(['a road network where every road takes one hour', 'a network of routers with unit-latency links', 'a friendship graph']);
+   return {id: 'learn-bfs-count', topic: 't14a', title: 'BFS that counts shortest paths (memoized counts)',
+    prompt: `In <b>${ctx}</b>, we need not only δ(s, v) but also <b>how many different shortest paths</b> reach each vertex. Modify BFS so every vertex keeps a count: count[s] = 1, and each u at distance d adds its count to every neighbour at distance d + 1. Write <code>COUNT-SHORTEST-PATHS(G, s)</code> in Θ(V + E).`,
+    starter: 'COUNT-SHORTEST-PATHS(G, s)\n    \n', define: ['countshortestpaths'], call: ['enqueue', 'dequeue'], maxLoop: 2,
+    correctness: [
+     {label: 'Distances start at ∞ and counts at 0', w: 2, test: t => /\.d\s*=\s*inf|d\s*\[\s*\w+\s*\]\s*=\s*inf/.test(t) && /count[^\n]*=\s*0/.test(t), hint: 'u.d = ∞; u.count = 0'},
+     {label: 'Source has distance 0 and count 1', w: 2, test: t => /s\.d\s*=\s*0|d\s*\[\s*s\s*\]\s*=\s*0/.test(t) && /s\.count\s*=\s*1|count\s*\[\s*s\s*\]\s*=\s*1/.test(t), hint: 's.d = 0; s.count = 1'},
+     {label: 'Discovers new vertices at distance u.d + 1', w: 2, test: lgRx(/(\.d|d\s*\[\s*\w+\s*\])\s*=\s*(\w+\.d|d\s*\[\s*u\s*\])\s*\+\s*1/), hint: 'v.d = u.d + 1'},
+     {label: 'Adds u.count when u is on a shortest path to v', w: 3, test: lgRx(/count[^\n]*=[^\n]*count[^\n]*\+[^\n]*count|count[^\n]*\+=[^\n]*count/), hint: 'if v.d == u.d + 1: v.count = v.count + u.count'},
+     {label: 'Checks the distance relation v.d == u.d + 1', w: 1, test: lgRx(/==\s*(\w+\.d|d\s*\[\s*u\s*\])\s*\+\s*1/), hint: 'if v.d == u.d + 1'}],
+    efficiency: [
+     {label: 'Each vertex enqueued once (on first discovery)', w: 5, test: lgRx(/if[^\n]*==\s*inf/), hint: 'Enqueue only when v.d == ∞.'},
+     {label: 'Single BFS pass, Θ(V + E)', w: 5, test: (t, P) => P.maxLoop <= 2 && /adj/.test(t), hint: 'No repeated BFS per vertex.'}],
+    model: `COUNT-SHORTEST-PATHS(G, s)       // BFS + memoized path counts; Θ(V + E)
+    for each vertex u in G.V
+        u.d = ∞
+        u.count = 0
+    s.d = 0
+    s.count = 1
+    Q = empty queue
+    ENQUEUE(Q, s)
+    while Q is not empty
+        u = DEQUEUE(Q)
+        for each v in G.Adj[u]
+            if v.d == ∞                  // first discovery
+                v.d = u.d + 1
+                ENQUEUE(Q, v)
+            if v.d == u.d + 1            // u lies on a shortest path to v
+                v.count = v.count + u.count
+    return the count fields`}; },
+  () => ({id: 'learn-dfs-stack', topic: 't14a', title: 'DFS without recursion (explicit stack + cursor memory)',
+    prompt: `Deep recursion can overflow the call stack on a ${lgPick(['million-vertex web crawl', 'long chain of dependencies', 'maze with a very long corridor'])}. Modify DFS to use an <b>explicit stack</b> and still produce the same discovery and finish times. Each vertex remembers a cursor u.next into its adjacency list, so every edge is examined once. Write <code>DFS-STACK(G)</code>, <code>VISIT-STACK(G, s)</code> and <code>NEXT-WHITE(G, u)</code>.`,
+    starter: 'DFS-STACK(G)\n    \n\nVISIT-STACK(G, s)\n    \n\nNEXT-WHITE(G, u)\n    \n', define: ['dfsstack', 'visitstack', 'nextwhite'], call: ['push', 'pop', 'next-white', 'visit-stack'], maxLoop: 2,
+    correctness: [
+     {label: 'Colors every vertex white and resets the clock', w: 1, test: t => /white/.test(t) && /time\s*=\s*0/.test(t), hint: 'u.color = WHITE; time = 0'},
+     {label: 'Restarts from every white vertex', w: 1, test: lgIn('dfsstack', /visit-?stack\s*\(/), hint: 'if u.color == WHITE: VISIT-STACK(G, u)'},
+     {label: 'Stamps discovery times when pushing', w: 2, test: lgRx(/\.d\s*=\s*time/), hint: 'time = time + 1; v.d = time'},
+     {label: 'Uses a stack (push / top / pop)', w: 2, test: t => /push\s*\(/.test(t) && /pop\s*\(/.test(t), hint: 'PUSH(S, v); POP(S)'},
+     {label: 'Stamps finish times when popping', w: 2, test: lgRx(/\.f\s*=\s*time/), hint: 'u.color = BLACK; u.f = time'},
+     {label: 'Resumes each adjacency list with a cursor', w: 2, test: lgRx(/\.next|cursor|index|\.ptr/), hint: 'u.next = u.next + 1'}],
+    efficiency: [
+     {label: 'No recursion inside VISIT-STACK', w: 5, test: lgNoSelfCall('visitstack', 'visit-?stack'), hint: 'The whole point is an explicit stack.'},
+     {label: 'Each edge examined once (cursor never restarts)', w: 5, test: lgRx(/\.next\s*=\s*\w+\.next\s*\+\s*1|\.next\s*\+=\s*1|\+\+/), hint: 'Advance u.next instead of rescanning Adj[u].'}],
+    model: `DFS-STACK(G)                       // same d/f times as recursive DFS
+    for each vertex u in G.V
+        u.color = WHITE
+        u.next = 1                     // cursor into G.Adj[u]
+    time = 0
+    for each vertex u in G.V
+        if u.color == WHITE
+            VISIT-STACK(G, u)
+
+VISIT-STACK(G, s)                  // explicit stack instead of recursion
+    S = empty stack
+    time = time + 1
+    s.d = time
+    s.color = GRAY
+    PUSH(S, s)
+    while S is not empty
+        u = TOP(S)
+        v = NEXT-WHITE(G, u)
+        if v != NIL
+            v.π = u
+            time = time + 1
+            v.d = time
+            v.color = GRAY
+            PUSH(S, v)
+        else
+            POP(S)
+            u.color = BLACK
+            time = time + 1
+            u.f = time
+
+NEXT-WHITE(G, u)                   // resumes where u's last scan stopped
+    while u.next <= length(G.Adj[u])
+        v = G.Adj[u][u.next]
+        u.next = u.next + 1
+        if v.color == WHITE
+            return v
+    return NIL`})
+ ],
+ topo: [
+  () => { const ctx = lgPick(['a course-prerequisite DAG', 'a build system\'s dependency DAG', 'a recipe\'s step DAG']);
+   return {id: 'learn-dag-paths', topic: 't14b', title: 'Count s ⇝ t paths in a DAG with memoized DFS',
+    prompt: `In <b>${ctx}</b>, count how many different directed paths lead from s to t. Plain DFS that explores every path is exponential. Modify DFS to <b>memoize</b> the number of paths from each vertex (computed once, when it finishes), giving Θ(V + E). Write <code>COUNT-PATHS(G, s, t)</code> and the recursive helper <code>PATHS-FROM(G, u, t)</code>.`,
+    starter: 'COUNT-PATHS(G, s, t)\n    \n\nPATHS-FROM(G, u, t)\n    \n', define: ['countpaths', 'pathsfrom'], call: ['paths-from'], maxLoop: 1,
+    correctness: [
+     {label: 'Clears the memo for every vertex', w: 1, test: lgIn('countpaths', /=\s*(nil|null|none|-1|undefined)/), hint: 'u.paths = NIL'},
+     {label: 'Base case: one path from t to itself', w: 2, test: lgRx(/if\s+\w+\s*==\s*t[\s\S]{0,40}return\s+1/), hint: 'if u == t return 1'},
+     {label: 'Returns the memo when already computed', w: 2, test: lgIn('pathsfrom', /if[^\n]*\.paths\s*!=|if[^\n]*memo\s*\[[^\]]*\]\s*!=/), hint: 'if u.paths ≠ NIL return u.paths'},
+     {label: 'Sums the counts of all out-neighbours', w: 3, test: lgIn('pathsfrom', /adj[\s\S]*\+\s*paths-?from\s*\(|adj[\s\S]*\+=\s*paths-?from/), hint: 'total = total + PATHS-FROM(G, v, t)'},
+     {label: 'Stores the result before returning', w: 2, test: lgIn('pathsfrom', /\.paths\s*=\s*total|memo\s*\[[^\]]*\]\s*=/), hint: 'u.paths = total'}],
+    efficiency: [
+     {label: 'Memoization: each vertex solved once ⇒ Θ(V + E)', w: 6, test: lgIn('pathsfrom', /\.paths|memo/), hint: 'Without the memo the same subpaths are recounted exponentially often.'},
+     {label: 'No path enumeration / no extra sort', w: 4, test: t => !/sort|all\s+paths/.test(t), hint: 'Counting does not need the paths themselves.'}],
+    model: `COUNT-PATHS(G, s, t)              // number of s ⇝ t paths in a DAG; Θ(V + E)
+    for each vertex u in G.V
+        u.paths = NIL                  // memo: not computed yet
+    return PATHS-FROM(G, s, t)
+
+PATHS-FROM(G, u, t)                // DFS that memoizes on finish
+    if u == t
+        return 1
+    if u.paths != NIL
+        return u.paths                 // reuse the memo
+    total = 0
+    for each v in G.Adj[u]
+        total = total + PATHS-FROM(G, v, t)
+    u.paths = total
+    return total`}; },
+  () => ({id: 'learn-kahn-cycle', topic: 't14b', title: 'Kahn\'s topological sort that reports a cycle',
+    prompt: `A ${lgPick(['package manager', 'spreadsheet recalculation engine', 'course planner'])} must either print a valid order or say the input is impossible. Modify Kahn's algorithm so that, besides the order, it <b>detects a cycle</b>: if fewer than |V| vertices were output, return "CYCLE". Write <code>TOPO-OR-CYCLE(G)</code> in Θ(V + E).`,
+    starter: 'TOPO-OR-CYCLE(G)\n    \n', define: ['topoorcycle'], call: ['enqueue', 'dequeue'], maxLoop: 2,
+    correctness: [
+     {label: 'Starts every in-degree at 0', w: 1, test: lgRx(/indeg\w*\s*=\s*0|indeg\w*\s*\[\s*\w+\s*\]\s*=\s*0/), hint: 'u.indeg = 0'},
+     {label: 'Counts in-degrees from the adjacency lists', w: 2, test: lgRx(/indeg\w*[^\n]*=[^\n]*indeg\w*[^\n]*\+\s*1|indeg\w*[^\n]*\+=\s*1|indeg\w*[^\n]*\+\+/), hint: 'v.indeg = v.indeg + 1'},
+     {label: 'Queues every source (in-degree 0)', w: 2, test: t => /if[^\n]*indeg\w*[^\n]*==\s*0/.test(t) && /enqueue/.test(t), hint: 'if u.indeg == 0: ENQUEUE(Q, u)'},
+     {label: 'Decrements out-neighbours and queues new sources', w: 2, test: lgRx(/indeg\w*[^\n]*-\s*1|indeg\w*[^\n]*-=\s*1|indeg\w*[^\n]*--/), hint: 'v.indeg = v.indeg − 1; if 0, ENQUEUE'},
+     {label: 'Compares the output size with |V| to detect a cycle', w: 2, test: t => /cycle/.test(t) && /<\s*\|?\s*(g\.v|v|n)|!=\s*\|?\s*(g\.v|v|n)|count|length|size/.test(t), hint: 'if length(order) < |G.V| return "CYCLE"'},
+     {label: 'Returns the order otherwise', w: 1, test: lgRx(/return\s+order|return\s+l\b|return\s+list/), hint: 'return order'}],
+    efficiency: [
+     {label: 'Each vertex enqueued once, each edge scanned once: Θ(V + E)', w: 6, test: (t, P) => P.maxLoop <= 2, hint: 'Only the in-degree count needs a nested loop.'},
+     {label: 'Uses a queue of sources (no repeated scan for in-degree 0)', w: 4, test: lgRx(/enqueue/), hint: 'Never rescan all vertices looking for sources.'}],
+    model: `TOPO-OR-CYCLE(G)                  // Kahn's algorithm + cycle report; Θ(V + E)
+    for each vertex u in G.V
+        u.indeg = 0
+    for each vertex u in G.V
+        for each v in G.Adj[u]
+            v.indeg = v.indeg + 1
+    Q = empty queue
+    for each vertex u in G.V
+        if u.indeg == 0
+            ENQUEUE(Q, u)
+    order = empty list
+    while Q is not empty
+        u = DEQUEUE(Q)
+        append u to order
+        for each v in G.Adj[u]
+            v.indeg = v.indeg - 1
+            if v.indeg == 0
+                ENQUEUE(Q, v)
+    if length(order) < |G.V|
+        return "CYCLE"            // leftover vertices lie on a cycle
+    return order`})
+ ],
+ ds: [
+  () => ({id: 'learn-uf-size', topic: 'ds', title: 'Union by size with a SET-SIZE query',
+    prompt: `A ${lgPick(['social app shows "your group has N members"', 'network monitor reports the size of each connected cluster', 'game tracks how many tiles each region contains'])}. Modify the disjoint-set forest to use <b>union by size</b> instead of rank and to <b>remember each set's size</b> at its root, so <code>SET-SIZE(x)</code> answers in O(α(n)). Write <code>MAKE-SET(x)</code>, <code>FIND-SET(x)</code> (with path compression), <code>UNION(x, y)</code> and <code>SET-SIZE(x)</code>.`,
+    starter: 'MAKE-SET(x)\n    \n\nFIND-SET(x)\n    \n\nUNION(x, y)\n    \n\nSET-SIZE(x)\n    \n', define: ['makeset', 'findset', 'union', 'setsize'], call: ['findset'], maxLoop: 1,
+    correctness: [
+     {label: 'MAKE-SET: own parent, size 1', w: 2, test: (t, P) => /\.p\s*=\s*x\b|parent\s*\[\s*x\s*\]\s*=\s*x/.test(P.body('makeset')) && /size[^\n]*=\s*1/.test(P.body('makeset')), hint: 'x.p = x; x.size = 1'},
+     {label: 'FIND-SET compresses the path', w: 2, test: lgIn('findset', /\.p\s*=\s*findset\s*\(/), hint: 'x.p = FIND-SET(x.p)'},
+     {label: 'UNION finds both roots and skips equal roots', w: 2, test: (t, P) => (P.body('union').match(/findset\s*\(/g) || []).length >= 2 && /==/.test(P.body('union')), hint: 'a = FIND-SET(x); b = FIND-SET(y); if a == b return'},
+     {label: 'Attaches the smaller set under the larger', w: 2, test: lgIn('union', /size\s*<|size\s*>|<\s*\w+\.size|>\s*\w+\.size/), hint: 'if a.size < b.size swap a and b; b.p = a'},
+     {label: 'Updates the size of the new root', w: 2, test: lgIn('union', /size\s*=\s*\w+\.size\s*\+\s*\w+\.size|size\s*\+=\s*\w+\.size/), hint: 'a.size = a.size + b.size'},
+     {label: 'SET-SIZE reads the size at the root', w: 2, test: lgIn('setsize', /findset\s*\([^)]*\)\s*\.size|\.size/), hint: 'return FIND-SET(x).size'}],
+    efficiency: [
+     {label: 'Path compression keeps finds near O(1)', w: 4, test: lgIn('findset', /\.p\s*=\s*findset/), hint: 'Compress during FIND-SET.'},
+     {label: 'Union by size keeps trees shallow', w: 4, test: lgIn('union', /size/), hint: 'Compare sizes before linking.'},
+     {label: 'SET-SIZE has no loops (answer stored at the root)', w: 2, test: (t, P) => P.hasFn('setsize') && !/\b(for|while)\b/.test(P.body('setsize')), hint: 'Never count members.'}],
+    model: `MAKE-SET(x)
+    x.p = x
+    x.size = 1
+
+FIND-SET(x)                       // path compression
+    if x != x.p
+        x.p = FIND-SET(x.p)
+    return x.p
+
+UNION(x, y)                       // union by size: smaller root goes under larger
+    a = FIND-SET(x)
+    b = FIND-SET(y)
+    if a == b
+        return
+    if a.size < b.size
+        swap a and b
+    b.p = a
+    a.size = a.size + b.size      // remember the merged size at the root
+
+SET-SIZE(x)                       // O(α(n)): the size lives at the root
+    return FIND-SET(x).size`}),
+  () => ({id: 'learn-uf-iterative', topic: 'ds', title: 'Iterative two-pass FIND-SET (no recursion)',
+    prompt: `On ${lgPick(['an embedded device with a tiny call stack', 'a GPU kernel where recursion is not allowed', 'a huge union-find over a billion pixels'])}, recursion is not an option. Modify FIND-SET to be <b>iterative</b> but keep full path compression: pass 1 climbs to the root, pass 2 re-points every node on the path at the root. Write <code>FIND-SET(x)</code>, <code>UNION(x, y)</code> and <code>LINK(x, y)</code> (union by rank).`,
+    starter: 'FIND-SET(x)\n    \n\nUNION(x, y)\n    \n\nLINK(x, y)\n    \n', define: ['findset', 'union', 'link'], call: ['findset', 'link'], maxLoop: 1,
+    correctness: [
+     {label: 'Pass 1 climbs parent pointers to the root', w: 3, test: lgIn('findset', /while[^\n]*!=[^\n]*\.p[\s\S]{0,60}=\s*\w+\.p/), hint: 'root = x; while root ≠ root.p: root = root.p'},
+     {label: 'Pass 2 saves the next node before rewiring', w: 2, test: lgIn('findset', /\w+\s*=\s*x\.p/), hint: 'next = x.p'},
+     {label: 'Pass 2 points each node at the root', w: 3, test: lgIn('findset', /x\.p\s*=\s*root|\.p\s*=\s*r\b/), hint: 'x.p = root'},
+     {label: 'UNION links the two roots', w: 2, test: lgIn('union', /link\s*\(/), hint: 'LINK(FIND-SET(x), FIND-SET(y))'},
+     {label: 'LINK uses rank and increments it on ties', w: 2, test: (t, P) => /rank[^\n]*(>|<)/.test(P.body('link')) && /rank[^\n]*(\+\s*1|\+\+|\+=)/.test(P.body('link')), hint: 'if x.rank > y.rank … else … if equal y.rank++'}],
+    efficiency: [
+     {label: 'No recursion in FIND-SET', w: 5, test: lgNoSelfCall('findset', 'findset'), hint: 'Two while loops replace the recursion.'},
+     {label: 'Full path compression (every node on the path re-pointed)', w: 5, test: lgIn('findset', /\.p\s*=\s*root|\.p\s*=\s*r\b/), hint: 'The second pass is what makes later finds cheap.'}],
+    model: `FIND-SET(x)                       // iterative two-pass path compression
+    root = x
+    while root != root.p          // pass 1: find the root
+        root = root.p
+    while x != root               // pass 2: re-point the path at the root
+        next = x.p
+        x.p = root
+        x = next
+    return root
+
+UNION(x, y)
+    LINK(FIND-SET(x), FIND-SET(y))
+
+LINK(x, y)                        // union by rank
+    if x == y
+        return
+    if x.rank > y.rank
+        y.p = x
+    else
+        x.p = y
+        if x.rank == y.rank
+            y.rank = y.rank + 1`})
+ ],
+ mst: [
+  () => { const k = lgPick([2, 3, 4, 5]), ctx = lgPick(['customer locations for delivery zones', 'documents by similarity distance', 'stars by distance into galaxies']);
+   return {id: 'learn-k-cluster', topic: 'kruskal', title: `Kruskal stopped early: ${k}-clustering`,
+    prompt: `Group <b>${ctx}</b> into exactly <b>k = ${k}</b> clusters (single-linkage clustering). Modify Kruskal so it keeps a counter of how many components remain and <b>stops as soon as there are k</b>; the accepted edges form the clusters. Write <code>K-CLUSTER(G, w, k)</code> using MAKE-SET, FIND-SET and UNION. Running time O(E lg V).`,
+    starter: 'K-CLUSTER(G, w, k)\n    \n', define: ['kcluster'], call: ['makeset', 'findset', 'union'], maxLoop: 1,
+    correctness: [
+     {label: 'MAKE-SET for every vertex', w: 1, test: lgRx(/makeset\s*\(/), hint: 'for each v ∈ G.V: MAKE-SET(v)'},
+     {label: 'Counts components, starting at |V|', w: 2, test: lgRx(/(comp\w*|count|clusters?|c)\s*=\s*\|?\s*(g\.v|v|n)\b/), hint: 'components = |G.V|'},
+     {label: 'Sorts edges by weight once', w: 2, test: lgRx(/sort/), hint: 'sort G.E into non-decreasing order by w'},
+     {label: 'Accepts only edges joining different sets', w: 2, test: lgRx(/findset\s*\([^)]*\)\s*!=\s*findset\s*\(/), hint: 'if FIND-SET(u) ≠ FIND-SET(v)'},
+     {label: 'UNIONs and decrements the component counter', w: 2, test: t => /\bunion\s*\(/.test(t) && /(comp\w*|count|clusters?)\s*=\s*\w+\s*-\s*1|(comp\w*|count|clusters?)\s*-=\s*1|--/.test(t), hint: 'UNION(u, v); components = components − 1'},
+     {label: 'Stops when k components remain', w: 2, test: lgRx(/==\s*k\b|<=\s*k\b|>\s*k\b/), hint: 'if components == k: break'}],
+    efficiency: [
+     {label: 'Sorts once, outside the loop', w: 4, test: (t, P) => P.lines.some(l => /sort/.test(l.t) && l.loopDepth === 0), hint: 'Sorting inside the loop multiplies the cost.'},
+     {label: 'Union-Find cycle test (no DFS per edge)', w: 3, test: lgRx(/findset/), hint: 'FIND-SET is O(α(V)) amortized.'},
+     {label: 'Early exit instead of building the whole MST', w: 3, test: lgRx(/break|return\s+a\b/), hint: 'Stop at k components.'}],
+    penalties: [{label: 'Detects cycles with DFS/BFS', p: 3, test: lgRx(/\b(dfs|bfs)\b|haspath|reachable/), hint: 'Use FIND-SET.'}],
+    model: `K-CLUSTER(G, w, k)               // Kruskal with early exit; O(E lg V)
+    for each vertex v in G.V
+        MAKE-SET(v)
+    components = |G.V|
+    A = ∅
+    sort G.E into non-decreasing order by w
+    for each edge (u, v) in G.E, in sorted order
+        if components == k
+            break                     // exactly k clusters remain
+        if FIND-SET(u) != FIND-SET(v)
+            A = A ∪ {(u, v)}
+            UNION(u, v)
+            components = components - 1
+    return A`}; },
+  () => { const n = lgPick([50, 200, 1000]), ctx = lgPick(['fiber links between campus buildings', 'water pipes between farms', 'power lines between villages']);
+   return {id: 'learn-prim-dense', topic: 'prim', title: 'Prim for a dense distance matrix (array, no heap)',
+    prompt: `Plan the cheapest <b>${ctx}</b> for n = ${n} sites; every pair can be connected, and W[i][j] is the cost (an n × n matrix, so E = Θ(n²)). Modify MST-PRIM for this dense input: drop the heap, keep an <b>inTree[] flag</b> and the arrays key[] and parent[] as memory, and find the next vertex with a linear scan. Return the total cost and the parent array in <b>Θ(n²)</b>. Write <code>DENSE-PRIM(W, n)</code> and <code>CHEAPEST(key, inTree, n)</code>.`,
+    starter: 'DENSE-PRIM(W, n)\n    \n\nCHEAPEST(key, inTree, n)\n    \n', define: ['denseprim', 'cheapest'], call: ['cheapest'], maxLoop: 2,
+    correctness: [
+     {label: 'Keys start at ∞, root key 0', w: 2, test: t => /key[^\n]*=\s*inf/.test(t) && /key\s*\[\s*\w+\s*\]\s*=\s*0/.test(t), hint: 'key[v] = ∞; key[1] = 0'},
+     {label: 'Picks the cheapest vertex not yet in the tree', w: 2, test: lgRx(/cheapest\s*\(/), hint: 'u = CHEAPEST(key, inTree, n)'},
+     {label: 'Marks it as in the tree and adds its key to the total', w: 2, test: t => /intree\s*\[\s*u\s*\]\s*=\s*true/.test(t) && /total\s*=\s*total\s*\+|total\s*\+=/.test(t), hint: 'inTree[u] = true; total = total + key[u]'},
+     {label: 'Updates neighbours from the matrix row and records the parent', w: 3, test: t => /w\s*\[\s*u\s*\]\s*\[\s*v\s*\]\s*<\s*key|w\s*\[\s*u\s*,\s*v\s*\]\s*<\s*key/.test(t) && /parent\s*\[\s*v\s*\]\s*=\s*u/.test(t), hint: 'if not inTree[v] and W[u][v] < key[v]: key[v] = W[u][v]; parent[v] = u'},
+     {label: 'Returns the total and parent array', w: 1, test: lgRx(/return[^\n]*(total|parent)/), hint: 'return (total, parent)'}],
+    efficiency: [
+     {label: 'No heap and no sorting: Θ(n²), optimal for dense input', w: 5, test: t => !/bheap|bsort|extractmin|decreasekey/.test(t), hint: 'A heap adds a lg n factor for nothing here.'},
+     {label: 'Only two nested loops', w: 5, test: (t, P) => P.maxLoop <= 2, hint: 'n rounds × Θ(n) scan.'}],
+    model: `DENSE-PRIM(W, n)                 // array Prim for a complete graph; Θ(n²)
+    for v = 1 to n
+        key[v] = ∞
+        inTree[v] = false
+        parent[v] = NIL
+    key[1] = 0
+    total = 0
+    for step = 1 to n
+        u = CHEAPEST(key, inTree, n)  // Θ(n) linear scan for the minimum key
+        inTree[u] = true
+        total = total + key[u]
+        for v = 1 to n
+            if not inTree[v] and W[u][v] < key[v]
+                key[v] = W[u][v]
+                parent[v] = u
+    return (total, parent)
+
+CHEAPEST(key, inTree, n)          // vertex outside the tree with the smallest key
+    best = NIL
+    for v = 1 to n
+        if not inTree[v] and (best == NIL or key[v] < key[best])
+            best = v
+    return best`}; }
+ ],
+ fib: [
+  () => ({id: 'learn-fib-delete', topic: 'fib', title: 'FIB-DELETE built from DECREASE-KEY and EXTRACT-MIN',
+    prompt: `A ${lgPick(['task scheduler must cancel jobs', 'Dijkstra variant must drop vertices', 'trading engine must withdraw orders'])} that are already in a Fibonacci heap. Add <code>FIB-DELETE(H, x)</code> by reusing the heap's own operations: decrease x's key to −∞ (so it becomes the minimum) and then extract the minimum. Also write <code>FIB-DECREASE-KEY(H, x, k)</code>, <code>CUT(H, x, y)</code> and <code>CASCADING-CUT(H, y)</code>. Assume FIB-EXTRACT-MIN exists.`,
+    starter: 'FIB-DELETE(H, x)\n    \n\nFIB-DECREASE-KEY(H, x, k)\n    \n\nCUT(H, x, y)\n    \n\nCASCADING-CUT(H, y)\n    \n', define: ['fibdelete', 'decreasekey', 'cut', 'cascadingcut'], call: ['decreasekey', 'extractmin', 'cut', 'cascadingcut'], maxLoop: 0,
+    correctness: [
+     {label: 'DELETE decreases the key to −∞', w: 2, test: lgIn('fibdelete', /decreasekey\s*\([^)]*-\s*inf/), hint: 'FIB-DECREASE-KEY(H, x, −∞)'},
+     {label: 'DELETE then extracts the minimum', w: 2, test: lgIn('fibdelete', /extractmin\s*\(/), hint: 'FIB-EXTRACT-MIN(H)'},
+     {label: 'DECREASE-KEY cuts x when heap order breaks', w: 2, test: lgIn('decreasekey', /<\s*y\.key|y\.key\s*>|\.p\.key/), hint: 'if y ≠ NIL and x.key < y.key: CUT(H, x, y); CASCADING-CUT(H, y)'},
+     {label: 'DECREASE-KEY updates H.min', w: 1, test: lgIn('decreasekey', /h\.min\s*=\s*x/), hint: 'if x.key < H.min.key: H.min = x'},
+     {label: 'CUT moves x to the root list, clears p and mark, fixes degree', w: 2, test: (t, P) => /degree/.test(P.body('cut')) && /rootlist|root/.test(P.body('cut')) && /mark\s*=\s*false/.test(P.body('cut')), hint: 'remove from child list; y.degree − 1; add to root list; x.p = NIL; x.mark = FALSE'},
+     {label: 'CASCADING-CUT marks once, cuts and recurses the second time', w: 3, test: (t, P) => /mark\s*=\s*true/.test(P.body('cascadingcut')) && /\bcut\s*\(/.test(P.body('cascadingcut')) && /cascadingcut\s*\(/.test(P.body('cascadingcut')), hint: 'if y.mark == FALSE: y.mark = TRUE else CUT(H, y, z); CASCADING-CUT(H, z)'}],
+    efficiency: [
+     {label: 'DELETE reuses the heap operations (O(lg n) amortized)', w: 5, test: (t, P) => !/\b(for|while)\b/.test(P.body('fibdelete')), hint: 'No searching or rebuilding the heap.'},
+     {label: 'CUT and DECREASE-KEY are O(1) work apart from the cascade', w: 5, test: (t, P) => !/\b(for|while)\b/.test(P.body('cut')) && !/\b(for|while)\b/.test(P.body('decreasekey')), hint: 'No loops in CUT or DECREASE-KEY.'}],
+    model: `FIB-DELETE(H, x)                  // O(lg n) amortized
+    FIB-DECREASE-KEY(H, x, -∞)      // x becomes the minimum
+    FIB-EXTRACT-MIN(H)
+
+FIB-DECREASE-KEY(H, x, k)          // O(1) amortized
+    if k > x.key
+        error "new key is greater than current key"
+    x.key = k
+    y = x.p
+    if y != NIL and x.key < y.key
+        CUT(H, x, y)
+        CASCADING-CUT(H, y)
+    if x.key < H.min.key
+        H.min = x
+
+CUT(H, x, y)                       // O(1)
+    remove x from the child list of y
+    y.degree = y.degree - 1
+    add x to the root list of H
+    x.p = NIL
+    x.mark = FALSE
+
+CASCADING-CUT(H, y)                // second lost child ⇒ cut y too
+    z = y.p
+    if z != NIL
+        if y.mark == FALSE
+            y.mark = TRUE
+        else
+            CUT(H, y, z)
+            CASCADING-CUT(H, z)`}),
+  () => ({id: 'learn-fib-potential', topic: 'fib', title: 'DECREASE-KEY that remembers the potential Φ = t + 2m',
+    prompt: `To ${lgPick(['verify the amortized analysis experimentally', 'instrument a Fibonacci heap for a profiler', 'teach the potential method with live numbers'])}, the heap must keep two counters: H.trees (roots in the root list) and H.marks (marked nodes), so Φ(H) = H.trees + 2·H.marks is always available in O(1). Modify <code>CUT(H, x, y)</code> and <code>CASCADING-CUT(H, y)</code> to maintain both counters, and write <code>POTENTIAL(H)</code>.`,
+    starter: 'CUT(H, x, y)\n    \n\nCASCADING-CUT(H, y)\n    \n\nPOTENTIAL(H)\n    \n', define: ['cut', 'cascadingcut', 'potential'], call: ['cut', 'cascadingcut'], maxLoop: 0,
+    correctness: [
+     {label: 'CUT moves x to the root list and fixes y.degree', w: 2, test: (t, P) => /degree/.test(P.body('cut')) && /root/.test(P.body('cut')), hint: 'remove x from y\'s child list; y.degree − 1; add x to the root list'},
+     {label: 'CUT adds one tree', w: 2, test: lgIn('cut', /trees\s*=\s*h\.trees\s*\+\s*1|trees\s*\+=\s*1|trees\+\+/), hint: 'H.trees = H.trees + 1'},
+     {label: 'CUT un-marks x and decrements H.marks if x was marked', w: 2, test: (t, P) => /mark\s*=\s*false/.test(P.body('cut')) && /marks\s*=\s*h\.marks\s*-\s*1|marks\s*-=\s*1|marks--/.test(P.body('cut')), hint: 'if x.mark: H.marks = H.marks − 1; x.mark = FALSE'},
+     {label: 'CASCADING-CUT marks y the first time and counts it', w: 2, test: (t, P) => /mark\s*=\s*true/.test(P.body('cascadingcut')) && /marks\s*=\s*h\.marks\s*\+\s*1|marks\s*\+=\s*1|marks\+\+/.test(P.body('cascadingcut')), hint: 'y.mark = TRUE; H.marks = H.marks + 1'},
+     {label: 'Otherwise cuts y and recurses on its parent', w: 2, test: (t, P) => /\bcut\s*\(/.test(P.body('cascadingcut')) && /cascadingcut\s*\(/.test(P.body('cascadingcut')), hint: 'CUT(H, y, z); CASCADING-CUT(H, z)'},
+     {label: 'POTENTIAL returns trees + 2·marks', w: 2, test: lgIn('potential', /trees\s*\+\s*2\s*\*?\s*\(?\s*h?\.?marks|2\s*\*\s*h\.marks\s*\+\s*h\.trees/), hint: 'return H.trees + 2 * H.marks'}],
+    efficiency: [
+     {label: 'POTENTIAL is O(1) (counters, not a traversal)', w: 5, test: (t, P) => P.hasFn('potential') && !/\b(for|while)\b/.test(P.body('potential')), hint: 'Never walk the heap to count.'},
+     {label: 'CUT is O(1)', w: 5, test: (t, P) => !/\b(for|while)\b/.test(P.body('cut')), hint: 'Only pointer updates.'}],
+    model: `CUT(H, x, y)                       // O(1); keeps the counters exact
+    remove x from the child list of y
+    y.degree = y.degree - 1
+    add x to the root list of H
+    H.trees = H.trees + 1
+    x.p = NIL
+    if x.mark == TRUE
+        H.marks = H.marks - 1
+    x.mark = FALSE
+
+CASCADING-CUT(H, y)
+    z = y.p
+    if z != NIL
+        if y.mark == FALSE
+            y.mark = TRUE              // first lost child: mark it
+            H.marks = H.marks + 1
+        else
+            CUT(H, y, z)               // second lost child: cut it
+            CASCADING-CUT(H, z)
+
+POTENTIAL(H)                       // Φ(H) = t(H) + 2 m(H), O(1)
+    return H.trees + 2 * H.marks`})
+ ],
+ sssp: [
+  () => ({id: 'learn-bf-early', topic: 't18', title: 'Bellman-Ford that stops when nothing changes',
+    prompt: `On ${lgPick(['a currency-exchange graph (negative log rates)', 'a road network with toll rebates (negative edges)', 'a difference-constraints system'])}, most passes of Bellman-Ford change nothing near the end. Make it run smoother: have <code>RELAX</code> return whether it improved v.d, track a <b>changed</b> flag per pass, and <b>stop early</b> when a whole pass changes nothing. Keep the negative-cycle check. Write <code>BELLMAN-FORD-FAST(G, w, s)</code>, <code>RELAX(u, v, w)</code> and <code>INITIALIZE-SINGLE-SOURCE(G, s)</code>.`,
+    starter: 'BELLMAN-FORD-FAST(G, w, s)\n    \n\nRELAX(u, v, w)\n    \n\nINITIALIZE-SINGLE-SOURCE(G, s)\n    \n', define: ['bellmanfordfast', 'relax', 'initializesinglesource'], call: ['initializesinglesource', 'relax'], maxLoop: 2,
+    correctness: [
+     {label: 'Initializes d = ∞, s.d = 0', w: 1, test: t => /=\s*inf/.test(t) && /s\.d\s*=\s*0/.test(t), hint: 'v.d = ∞; s.d = 0'},
+     {label: 'At most |V| − 1 passes over every edge', w: 2, test: lgRx(/-\s*1[\s\S]{0,120}(edge|g\.e)/), hint: 'for i = 1 to |G.V| − 1: for each edge (u, v)'},
+     {label: 'RELAX returns whether it improved v.d', w: 2, test: (t, P) => /return\s+true/.test(P.body('relax')) && /return\s+false/.test(P.body('relax')), hint: 'return TRUE after updating, FALSE otherwise'},
+     {label: 'Tracks a changed flag per pass', w: 2, test: lgRx(/changed\s*=\s*false[\s\S]*changed\s*=\s*true|\w+\s*=\s*false[\s\S]*if\s+relax/), hint: 'changed = FALSE; if RELAX(u, v, w): changed = TRUE'},
+     {label: 'Stops early when a pass changes nothing', w: 2, test: lgRx(/if\s+not\s+\w+|if\s+!\s*\w+|if\s+\w+\s*==\s*false/), hint: 'if not changed: return TRUE'},
+     {label: 'Final pass detects a negative cycle', w: 2, test: lgRx(/return\s+false/), hint: 'if v.d > u.d + w(u, v): return FALSE'}],
+    efficiency: [
+     {label: 'Early exit: Θ(E) when the distances settle in one pass', w: 6, test: lgRx(/changed|improved|updated/), hint: 'Stop as soon as a full pass is quiet.'},
+     {label: 'No extra nested loops beyond passes × edges', w: 4, test: (t, P) => P.maxLoop <= 2, hint: 'Passes × edges is the whole algorithm.'}],
+    model: `BELLMAN-FORD-FAST(G, w, s)         // stops early once distances settle
+    INITIALIZE-SINGLE-SOURCE(G, s)
+    for i = 1 to |G.V| - 1
+        changed = false
+        for each edge (u, v) in G.E
+            if RELAX(u, v, w)
+                changed = true
+        if not changed
+            return true                  // quiet pass: all d are final
+    for each edge (u, v) in G.E
+        if v.d > u.d + w(u, v)
+            return false                 // reachable negative-weight cycle
+    return true
+
+RELAX(u, v, w)                       // reports whether v.d improved
+    if v.d > u.d + w(u, v)
+        v.d = u.d + w(u, v)
+        v.π = u
+        return true
+    return false
+
+INITIALIZE-SINGLE-SOURCE(G, s)
+    for each vertex v in G.V
+        v.d = ∞
+        v.π = NIL
+    s.d = 0`}),
+  () => { const [ctx, t] = lgPick([['a GPS app on a road map', 'the destination'], ['a robot on a warehouse floor graph', 'the charging dock'], ['a game AI on a weighted nav-mesh', 'the player']]);
+   return {id: 'learn-dijkstra-target', topic: 't18', title: 'Dijkstra that stops at the target and returns the route',
+    prompt: `In <b>${ctx}</b> (non-negative weights), we only need the shortest route from s to <b>${t}</b> (vertex t). Modify Dijkstra to <b>stop as soon as t is extracted</b> (its distance is final by Dijkstra's invariant) and return t.d together with the route rebuilt from π. Write <code>DIJKSTRA-TARGET(G, w, s, t)</code> and <code>BUILD-PATH(s, t)</code>; assume INITIALIZE-SINGLE-SOURCE exists.`,
+    starter: 'DIJKSTRA-TARGET(G, w, s, t)\n    \n\nBUILD-PATH(s, t)\n    \n', define: ['dijkstratarget', 'buildpath'], call: ['initializesinglesource', 'extractmin', 'decreasekey', 'build-path'], maxLoop: 2,
+    correctness: [
+     {label: 'Initializes and fills a min-priority queue', w: 1, test: t => /initializesinglesource|=\s*inf/.test(t) && /\bq\s*=|insert\s*\(|priority|minheap/.test(t), hint: 'INITIALIZE-SINGLE-SOURCE(G, s); Q = G.V'},
+     {label: 'Repeatedly extracts the closest vertex', w: 2, test: t => /while/.test(t) && /extractmin\s*\(/.test(t), hint: 'u = EXTRACT-MIN(Q)'},
+     {label: 'Stops when t is extracted', w: 2, test: lgRx(/if\s+\(?\s*u\s*==\s*t\b/), hint: 'if u == t: return (t.d, BUILD-PATH(s, t))'},
+     {label: 'Relaxes the out-edges of u', w: 2, test: lgRx(/(\.d|d\s*\[\s*v\s*\])\s*>\s*(u\.d|d\s*\[\s*u\s*\])\s*\+|relax\s*\(/), hint: 'if v.d > u.d + w(u, v) …'},
+     {label: 'Updates π and the queue key', w: 2, test: t => /\.(pi|parent)\s*=\s*u\b|relax\s*\(/.test(t) && /decreasekey/.test(t), hint: 'v.π = u; DECREASE-KEY(Q, v, v.d)'},
+     {label: 'BUILD-PATH follows π back from t', w: 1, test: lgIn('buildpath', /=\s*\w+\.(pi|parent)/), hint: 'x = x.π'}],
+    efficiency: [
+     {label: 'Uses a min-priority queue: O((V + E) lg V) worst case', w: 5, test: lgRx(/extractmin/), hint: 'A heap finds the minimum in O(lg V).'},
+     {label: 'Early exit at t', w: 5, test: lgRx(/u\s*==\s*t/), hint: 'Everything after t is extracted is wasted work.'}],
+    penalties: [{label: 'Scans all of Q to find the minimum', p: 3, test: (t, P) => P.lines.some(l => l.loopDepth >= 1 && /\b(for|foreach)\b[^\n]*(\bin\s+q\b|g\.v)/.test(l.t)), hint: 'Let the heap find it.'}],
+    model: `DIJKSTRA-TARGET(G, w, s, t)       // w ≥ 0; stops once t is settled
+    INITIALIZE-SINGLE-SOURCE(G, s)
+    Q = G.V                         // min-priority queue keyed by d
+    while Q is not empty
+        u = EXTRACT-MIN(Q)
+        if u == t
+            return (t.d, BUILD-PATH(s, t))   // t.d is final now
+        for each v in G.Adj[u]
+            if v.d > u.d + w(u, v)
+                v.d = u.d + w(u, v)
+                v.π = u
+                DECREASE-KEY(Q, v, v.d)
+    return ∞                        // t unreachable
+
+BUILD-PATH(s, t)                   // follow π pointers: O(path length)
+    path = empty list
+    x = t
+    while x != NIL
+        add x to the front of path
+        x = x.π
+    return path`}; },
+  () => ({id: 'learn-dag-longest', topic: 't18', title: 'Critical path: longest paths in a DAG',
+    prompt: `A ${lgPick(['construction project', 'software release plan', 'conference schedule'])} is a DAG of tasks; w(u, v) is the duration of u. The project takes as long as the <b>longest</b> path from start s. Modify DAG-SHORTEST-PATHS to compute <b>longest</b> paths (critical path) in Θ(V + E): initialize to −∞ and relax "upwards". Write <code>DAG-LONGEST-PATHS(G, w, s)</code>; assume TOPOLOGICAL-SORT exists.`,
+    starter: 'DAG-LONGEST-PATHS(G, w, s)\n    \n', define: ['daglongestpaths'], call: ['topological-sort|toposort|topo-sort'], maxLoop: 2,
+    correctness: [
+     {label: 'Topologically sorts first', w: 2, test: lgRx(/topologicalsort|topological-sort|toposort|topo-sort/), hint: 'order = TOPOLOGICAL-SORT(G)'},
+     {label: 'Initializes every d to −∞ and s.d = 0', w: 2, test: t => /=\s*-\s*inf/.test(t) && /s\.d\s*=\s*0/.test(t), hint: 'v.d = −∞; s.d = 0'},
+     {label: 'Processes vertices in topological order', w: 2, test: lgRx(/for[^\n]*(in|of)\s+(order|topo|l\b|list)/), hint: 'for each u in order'},
+     {label: 'Relaxes for LONGER paths (v.d < u.d + w)', w: 3, test: lgRx(/(\.d|d\s*\[\s*v\s*\])\s*<\s*(u\.d|d\s*\[\s*u\s*\])\s*\+/), hint: 'if v.d < u.d + w(u, v): v.d = u.d + w(u, v); v.π = u'},
+     {label: 'Records the predecessor', w: 1, test: lgRx(/\.(pi|parent)\s*=\s*u\b/), hint: 'v.π = u'}],
+    efficiency: [
+     {label: 'One relaxation per edge: Θ(V + E)', w: 6, test: (t, P) => P.maxLoop <= 2 && !/-\s*1[\s\S]{0,60}edge/.test(t), hint: 'No |V| − 1 passes needed in a DAG.'},
+     {label: 'No Dijkstra / priority queue (wrong for longest paths)', w: 4, test: t => !/extractmin|dijkstra|heap/.test(t), hint: 'Topological order is enough.'}],
+    model: `DAG-LONGEST-PATHS(G, w, s)        // critical path; Θ(V + E)
+    order = TOPOLOGICAL-SORT(G)
+    for each vertex v in G.V
+        v.d = -∞
+        v.π = NIL
+    s.d = 0
+    for each vertex u in order       // every edge into v is relaxed before v is used
+        for each v in G.Adj[u]
+            if v.d < u.d + w(u, v)     // relax for a LONGER path
+                v.d = u.d + w(u, v)
+                v.π = u
+    return the d values`})
+ ],
+ apsp: [
+  () => ({id: 'learn-fw-paths', topic: 't19', title: 'Floyd-Warshall that remembers next hops',
+    prompt: `A ${lgPick(['router builds its forwarding table', 'transit app precomputes every trip', 'game precomputes NPC routes'])}: distances are not enough, we must print the actual route between any pair. Modify FLOYD-WARSHALL to keep a <b>next-hop matrix</b> next[i, j] (the vertex after i on a shortest i ⇝ j path) and update it whenever going through k wins. Write <code>FW-PATHS(W, n)</code> and <code>PRINT-ROUTE(next, i, j)</code>.`,
+    starter: 'FW-PATHS(W, n)\n    \n\nPRINT-ROUTE(next, i, j)\n    \n', define: ['fwpaths', 'printroute'], call: [], maxLoop: 3,
+    correctness: [
+     {label: 'Starts D from W', w: 1, test: lgRx(/\bd\s*=\s*(copy|w\b)|d\s*\[\s*i\s*,\s*j\s*\]\s*=\s*w/), hint: 'D = copy of W'},
+     {label: 'Initializes next[i, j] = j for direct edges, NIL otherwise', w: 2, test: lgRx(/next\s*\[\s*i\s*,\s*j\s*\]\s*=\s*j|next\s*\[\s*i\s*\]\s*\[\s*j\s*\]\s*=\s*j/), hint: 'if W[i, j] < ∞: next[i, j] = j'},
+     {label: 'k is the outermost loop', w: 2, test: t => { const k = t.search(/\bfor\b[^\n]*\bk\s*(=|in)/), i = t.lastIndexOf('for i', k); return k >= 0 && (i < 0 || i < k) && /for\s+i[\s\S]*for\s+k[\s\S]*for\s+i/.test(t) || (k >= 0 && t.indexOf('for i') > k); }, hint: 'for k = 1 to n, then i, then j'},
+     {label: 'Updates D[i, j] through k', w: 2, test: lgRx(/d\s*\[\s*i\s*(,|\]\s*\[)\s*k\s*\]\s*\+\s*d\s*\[\s*k\s*(,|\]\s*\[)\s*j\s*\]/), hint: 'if D[i, k] + D[k, j] < D[i, j]'},
+     {label: 'Next hop through k is next[i, k]', w: 2, test: lgRx(/next\s*\[\s*i\s*(,|\]\s*\[)\s*j\s*\]\s*=\s*next\s*\[\s*i\s*(,|\]\s*\[)\s*k\s*\]/), hint: 'next[i, j] = next[i, k]'},
+     {label: 'PRINT-ROUTE walks next[] until j', w: 1, test: lgIn('printroute', /while[^\n]*!=\s*j|i\s*=\s*next/), hint: 'while i ≠ j: i = next[i, j]; print i'}],
+    efficiency: [
+     {label: 'Exactly three nested loops: Θ(n³)', w: 5, test: (t, P) => P.maxLoop === 3, hint: 'k, i, j.'},
+     {label: 'Route printing is O(path length), not a new search', w: 5, test: (t, P) => P.hasFn('printroute') && !/dijkstra|bfs|for\s+k/.test(P.body('printroute')), hint: 'Just follow next[].'}],
+    model: `FW-PATHS(W, n)                    // distances + next-hop memory; Θ(n³)
+    D = copy of W
+    for i = 1 to n
+        for j = 1 to n
+            if W[i, j] < ∞
+                next[i, j] = j
+            else next[i, j] = NIL
+    for k = 1 to n                   // allow k as an intermediate
+        for i = 1 to n
+            for j = 1 to n
+                if D[i, k] + D[k, j] < D[i, j]
+                    D[i, j] = D[i, k] + D[k, j]
+                    next[i, j] = next[i, k]   // first hop toward k
+    return (D, next)
+
+PRINT-ROUTE(next, i, j)            // O(path length)
+    if next[i, j] == NIL
+        print "no route"
+        return
+    print i
+    while i != j
+        i = next[i, j]
+        print i`}),
+  () => ({id: 'learn-closure', topic: 't19', title: 'Transitive closure: Floyd-Warshall on booleans',
+    prompt: `For ${lgPick(['an access-control system ("can role i eventually reach resource j?")', 'a citation graph ("does paper i build on paper j?")', 'a flight network ("can I get from i to j at all?")'])} we only need <b>reachability</b>, not distances. Modify Floyd-Warshall to work on booleans: replace min with OR and + with AND, so it uses bits instead of numbers. Write <code>TRANSITIVE-CLOSURE(G, n)</code> that returns T[1..n, 1..n] in Θ(n³).`,
+    starter: 'TRANSITIVE-CLOSURE(G, n)\n    \n', define: ['transitiveclosure'], call: [], maxLoop: 3,
+    correctness: [
+     {label: 'T[i, j] starts TRUE for i = j or an edge (i, j)', w: 3, test: lgRx(/i\s*==\s*j[^\n]*or|or[^\n]*i\s*==\s*j/), hint: 'T[i, j] = (i == j) or ((i, j) ∈ G.E)'},
+     {label: 'k is the outermost loop', w: 2, test: t => { const k = t.search(/\bfor\b[^\n]*\bk\s*(=|in)/); return k >= 0 && /for\s+k[\s\S]*for\s+i[\s\S]*for\s+j/.test(t.slice(k)); }, hint: 'for k, then i, then j'},
+     {label: 'Combines with OR and AND', w: 4, test: lgRx(/t\s*\[\s*i\s*(,|\]\s*\[)\s*j\s*\]\s*=\s*t\s*\[\s*i\s*(,|\]\s*\[)\s*j\s*\]\s*(or|\|\|)\s*\(?\s*t\s*\[\s*i\s*(,|\]\s*\[)\s*k\s*\]\s*(and|&&)\s*t\s*\[\s*k/), hint: 'T[i, j] = T[i, j] or (T[i, k] and T[k, j])'},
+     {label: 'Returns T', w: 1, test: lgRx(/return\s+t\b/), hint: 'return T'}],
+    efficiency: [
+     {label: 'Three nested loops: Θ(n³) with 1-bit entries', w: 5, test: (t, P) => P.maxLoop === 3, hint: 'Same loop structure as Floyd-Warshall.'},
+     {label: 'No numeric distances or +/min needed', w: 5, test: t => !/\bmin\s*\(|inf/.test(t), hint: 'Booleans only.'}],
+    model: `TRANSITIVE-CLOSURE(G, n)          // boolean Floyd-Warshall; Θ(n³)
+    for i = 1 to n
+        for j = 1 to n
+            T[i, j] = (i == j) or ((i, j) in G.E)
+    for k = 1 to n                   // allow k as an intermediate stop
+        for i = 1 to n
+            for j = 1 to n
+                T[i, j] = T[i, j] or (T[i, k] and T[k, j])
+    return T`})
+ ]
+};
+
+// ======================= MT4 LEARNING PATH PAGE (#mt4-learn) =======================
+// Renders LEARN_MT4 (learn-mt4-units.js) as a guided lecture: lessons with dummy
+// notes, exact screencast sections (learn-chapters.js), visualizers and quick
+// checks, plus a generated pseudocode unit test (learn-mt4-gen.js) after each unit.
+const LRN_KEY = 'ics311-learn-mt4';
+const lrnState = (() => { try { return JSON.parse(localStorage.getItem(LRN_KEY)) || {}; } catch (e) { return {}; } })();
+lrnState.checks = lrnState.checks || {};
+const lrnSave = () => { try { localStorage.setItem(LRN_KEY, JSON.stringify(lrnState)); } catch (e) {} };
+const lrnTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+// [videoId, fromChapter?, toChapter?] → {id, start, end, label}, using the real YouTube chapters
+function lrnClip([id, from, to]){
+  const [tag, , len, ch] = LEARN_CH[id] || [id, '', 0, []];
+  const i = from ? ch.findIndex(c => c[1] === from) : -1, j = to ? ch.findIndex(c => c[1] === to) : i;
+  if (i < 0) return {id, start: 0, end: 0, label: `${tag} · full video${len ? ` (${lrnTime(len)})` : ''}`, ok: !from};
+  const start = ch[i][0], end = j + 1 < ch.length ? ch[j + 1][0] : len;
+  return {id, start, end, label: `${tag} · ${from}${to && to !== from ? ' → ' + to : ''} (${lrnTime(start)}–${lrnTime(end)})`, ok: j >= 0};
+}
+const lrnClips = (specs, cap) => specs && specs.length ? `<div class="lrn-clips"><div class="stat-label">${cap}</div><div class="vgrid">${specs.map(lrnClip).map(c => ytLite(c.id, c.label, c.start || '', c.end || '')).join('')}</div></div>` : '';
+const lrnCheckId = (u, i) => `${u.id}-${i + 1}`;
+function lrnCheckHTML(u, i, [q, opts, why]){
+  const order = shuffle(opts.map((_, k) => k));
+  return `<div class="lrn-check" data-k="${lrnCheckId(u, i)}" data-topic="${u.topics[0]}" data-ans="${order.indexOf(0)}" data-why="${esc(why)}">
+    <div class="lrn-q"><span class="pill">✅ Knowledge check</span> ${q}</div>
+    <div class="opts">${order.map((k, n) => `<button class="opt" data-i="${n}"><span class="k">${'ABCD'[n]}</span><span>${opts[k]}</span></button>`).join('')}</div><div class="lrn-why"></div></div>`;
+}
+function lrnUnitHTML(u, n){
+  const notes = SCHED.notes[u.notes], vids = new Set(u.lessons.flatMap(l => (l.clips || []).map(c => c[0])));
+  const chips = u.topics.map(id => TMETA[id] ? `<a class="pill" href="#${id}" style="color:${TMETA[id].color}">${TMETA[id].num || ''} ${TMETA[id].short}</a>` : '').join(' ');
+  return `<details class="card lrn-unit" id="lrn-${u.id}" open><summary><h2><span class="lrn-num">Unit ${n}</span> ${u.title}</h2><span class="pill lrn-uprog" data-u="${u.id}"></span></summary>
+    <div class="row lrn-res">${chips}<span class="pill">📖 ${u.reading}</span>${notes ? `<a class="pill" href="${notes}" target="_blank" rel="noopener">📝 ${u.notes} lecture notes ↗</a>` : ''}<span class="pill">🎬 ${vids.size ? vids.size + ' screencast' + (vids.size > 1 ? 's' : '') + ', split into sections' : 'no course screencast; use the notes'}</span></div>
+    ${u.lessons.map((l, i) => `<div class="lrn-lesson" id="lrn-${u.id}-${i + 1}">
+      <h3><span class="lrn-num">${n}.${i + 1}</span> ${l.h}</h3>
+      <div class="lrn-body">${l.body}</div>
+      <div class="lrn-dummy"><span class="lrn-dummy-tag">🧒 Dummy note</span> ${l.kid}</div>
+      ${lrnClips(l.clips, '🎬 Watch the matching screencast section')}
+      ${l.viz && VIZ[l.viz] ? `<div class="lrn-viz"><div class="stat-label">🔬 ${VIZ[l.viz].title}${VIZ[l.viz].hint ? ' · ' + VIZ[l.viz].hint : ''}</div><div class="card"><div class="stepper" data-viz="${l.viz}"></div></div></div>` : ''}
+      ${l.check ? lrnCheckHTML(u, i, l.check) : ''}</div>`).join('')}
+    ${lrnClips(u.extra, '🎓 Extra video lectures (MIT 6.046J, the sections that match this unit)')}
+    <div class="card lrn-test" data-u="${u.id}"><div class="row" style="justify-content:space-between;gap:10px"><h3 style="margin:0">✍️ Unit ${n} test · write pseudocode for a generated problem</h3><button class="btn sm lrn-new">🎲 New generated problem</button></div>
+      <p class="stat-label" style="margin:6px 0 0">Each problem modifies an algorithm from this unit (an early exit, extra memory, a faster data structure). Graded like the Practice Arena: Correctness 40% · Modularity 30% · Efficiency 30%. Score 90%+ to pass the unit.</p><div class="lrn-test-body"></div></div>
+  </details>`;
+}
+const lrnTestIds = u => LEARN_GEN[u.id].map(f => f().id);
+const lrnPassed = u => lrnTestIds(u).some(id => (store.code[id] || 0) >= 90);
+function lrnProgress(){
+  let done = 0, total = 0, units = 0;
+  LEARN_MT4.forEach(u => {
+    const ks = u.lessons.map((l, i) => l.check ? lrnCheckId(u, i) : null).filter(Boolean), ok = ks.filter(k => lrnState.checks[k]).length, pass = lrnPassed(u);
+    done += ok; total += ks.length; units += pass;
+    document.querySelectorAll(`.lrn-uprog[data-u="${u.id}"]`).forEach(el => { el.textContent = `${ok}/${ks.length} checks · test ${pass ? 'passed ✓' : 'not passed'}`; el.style.color = pass && ok === ks.length ? 'var(--good)' : ''; });
+  });
+  const pct = Math.round(100 * (done + units * 3) / (total + LEARN_MT4.length * 3));
+  document.querySelectorAll('.lrn-prog').forEach(el => el.innerHTML = `<div class="row" style="justify-content:space-between"><b>Your progress: ${pct}%</b><span class="stat-label">${done}/${total} knowledge checks correct · ${units}/${LEARN_MT4.length} unit tests passed</span></div><div class="meter" style="margin-top:8px"><span style="width:${pct}%;background:var(--good)"></span></div>`);
+}
+function lrnMountTest(box, u){
+  const body = box.querySelector('.lrn-test-body');
+  const gen = () => { const fs = LEARN_GEN[u.id], last = box.dataset.last; let f = pick(fs);
+    if (fs.length > 1) while (f().id === last) f = pick(fs);
+    const q = f(); box.dataset.last = q.id;
+    renderQuestion(body, {kind: 'code', topic: q.topic, q, generated: true}, () => { lrnProgress(); renderHome(); }); };
+  box.querySelector('.lrn-new').onclick = gen;
+  gen();
+}
+(function mountLearnMT4(){
+  if (typeof LEARN_MT4 === 'undefined') return;
+  const g = GROUPS.find(x => x.id === 'mt4'), nL = LEARN_MT4.reduce((s, u) => s + u.lessons.length, 0);
+  document.getElementById('page-videos').insertAdjacentHTML('beforebegin', `<section class="page hidden learn-page" id="page-mt4-learn">
+    <div class="row" style="gap:8px"><a class="eyebrow" href="#mt4" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} Midterm 4 · ${g.date}</a><span class="eyebrow">🎓 Learning path</span></div>
+    <h1>🎓 Midterm 4 <span class="grad">Learning Path</span></h1>
+    <p class="lead">A guided lecture through every MT4 topic: ${LEARN_MT4.length} units and ${nL} lessons. Each lesson gives a detailed explanation, a dummy note in plain language, the exact screencast sections that cover it, and a quick knowledge check. Each unit ends with a generated pseudocode problem that modifies the algorithm you just learned.</p>
+    <div class="row"><a class="btn" href="#mt4">← Midterm 4 overview</a><a class="btn" href="#mt4-crib">📝 Crib sheet</a><button class="btn primary" data-practice="mt4">🎯 Practice Midterm 4</button><button class="btn ghost" data-lrn-all="open">⊞ Expand all</button><button class="btn ghost" data-lrn-all="close">⊟ Collapse all</button></div>
+    <div class="card lrn-prog" style="margin-top:16px"></div>
+    <div class="callout cyan"><b>How to use it:</b> read the lesson, then watch only the screencast section listed under it (clips start and stop at the right chapter). Answer the knowledge check before moving on. Finish each unit by writing the generated pseudocode problem from memory, and use 🎲 for a new variant until you can score 90%+.</div>
+    <div class="card"><h3 style="margin-top:0">📑 Units</h3><div class="crib-toc-grid">${LEARN_MT4.map((u, i) => `<a href="javascript:void 0" data-jump="lrn-${u.id}">Unit ${i + 1} · ${u.title}</a>`).join('')}</div></div>
+    ${LEARN_MT4.map((u, i) => lrnUnitHTML(u, i + 1)).join('')}
+    <div class="card lrn-prog" style="margin-top:16px"></div></section>`);
+  const pg = document.getElementById('page-mt4-learn');
+  pg.addEventListener('click', e => {
+    const j = e.target.closest('[data-jump]');
+    if (j){ const t = document.getElementById(j.dataset.jump); if (t.tagName === 'DETAILS') t.open = true; t.scrollIntoView({behavior: 'smooth', block: 'start'}); return; }
+    const a = e.target.closest('[data-lrn-all]');
+    if (a){ pg.querySelectorAll('details.lrn-unit').forEach(d => d.open = a.dataset.lrnAll === 'open'); return; }
+    const b = e.target.closest('.lrn-check .opt'); if (!b) return;
+    const box = b.closest('.lrn-check'); if (box.dataset.done) return; box.dataset.done = 1;
+    const ans = +box.dataset.ans, ok = +b.dataset.i === ans;
+    box.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === ans) x.classList.add('correct'); });
+    if (!ok) b.classList.add('wrong');
+    box.querySelector('.lrn-why').innerHTML = `<div class="explain ${ok ? 'good' : 'bad'} fade"><b>${ok ? '✓ Correct!' : '✗ Not quite.'}</b> ${box.dataset.why}${ok ? '' : ' <span class="stat-label">Reread the lesson above, then try the 🎯 practice quiz.</span>'}</div>`;
+    if (ok){ lrnState.checks[box.dataset.k] = 1; lrnSave(); }
+    record(box.dataset.topic, ok ? 1 : 0); lrnProgress();
+  });
+  LEARN_MT4.forEach(u => lrnMountTest(pg.querySelector(`.lrn-test[data-u="${u.id}"]`), u));
+  // ---- entry points: sidebar link under Midterm 4 + a container on the MT4 overview ----
+  const nav = document.querySelector('#nav a.gover[href="#mt4"]');
+  if (nav) nav.insertAdjacentHTML('afterend', `<a href="#mt4-learn" data-page="mt4-learn" class="gover"><span class="dot" style="background:linear-gradient(135deg,${g.color},#22d3ee)"></span>🎓 Learning path</a>`);
+  const ov = document.querySelector('#page-mt4 .crib-link') || document.querySelector('#page-mt4 > .row');
+  if (ov) ov.insertAdjacentHTML('afterend', `<div class="card crib-link" style="margin-top:18px;border-color:${g.color}66">
+    <div class="row" style="justify-content:space-between;gap:12px"><h2 style="margin:0">🎓 Midterm 4 Learning Path</h2><span class="pill" style="color:${g.color}">${LEARN_MT4.length} units · ${nL} lessons</span></div>
+    <p class="stat-label" style="margin:10px 0 12px">Learn every MT4 topic in order: detailed lessons with dummy notes, the exact screencast sections and MIT lectures, knowledge checks between lessons, and a generated pseudocode test after every unit.</p>
+    <div class="chips">${LEARN_MT4.map((u, i) => `<span class="pill">Unit ${i + 1} · ${u.title}</span>`).join(' ')}</div>
+    <div class="row" style="margin-top:14px"><a class="btn primary" href="#mt4-learn">🎓 Start the learning path →</a></div></div>`);
+  setTimeout(lrnProgress, 0);   // `store` (app.js) is initialized after this file runs
+})();
 
 // ======================= STATE =======================
 const STORE_KEY = 'mstlab-v1';
