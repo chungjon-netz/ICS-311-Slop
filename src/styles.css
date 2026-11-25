@@ -393,6 +393,11 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .crib-toc-grid{display:grid;gap:6px 18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
 .crib-toc-grid a{padding:4px 0}
 .crib .callout code,.crib-body p code{word-break:break-word}
+/* inline equations: serif math font + outline so they stand out mid-sentence */
+.crib .m{font-family:Cambria,"Cambria Math","STIX Two Text","Times New Roman",serif;font-size:1.06em;padding:0 .24em;margin:0 .04em;border:1px solid rgba(139,92,246,.45);border-radius:5px;background:rgba(139,92,246,.10);-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.crib .m sub,.crib .m sup{font-size:.72em}
+.crib pre .m,.crib code .m{all:unset}
+.crib td .m,.crib th .m{border:none;background:none;padding:0}
 /* skip layout/paint only for the uniform-height video-card grid —
    variable-height blocks (.deep-item, .page>.card, .diagram-card, ...)
    must NOT use content-visibility: estimate→real size swaps during

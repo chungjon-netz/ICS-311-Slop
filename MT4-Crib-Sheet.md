@@ -433,11 +433,11 @@ CUT(H, x, y)                      CASCADING-CUT(H, y)
 - **Potential:** Φ = t(H) + 2·m(H), where t = #trees and m = #marked nodes.
 - **Degree lemmas:**
   - The i-th child (in link order) satisfies **yᵢ.degree ≥ i − 2**.
-  - **size(x) ≥ F_{k+2} ≥ φᵏ** for degree k, with φ = (1+√5)/2 ≈ 1.618 and φ² = φ + 1.
+  - **size(x) ≥ F_(k+2) ≥ φᵏ** for degree k, with φ = (1+√5)/2 ≈ 1.618 and φ² = φ + 1.
   - Minimum sizes s₀=1, s₁=2, s₂=3, s₃=5, s₄=8, … give the Fibonacci numbers.
   - Therefore **D(n) ≤ ⌊log_φ n⌋ = O(lg n)**, which is why EXTRACT-MIN is O(lg n) amortized.
 - F: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, … Example: D(1000) ≤ ⌊ln 1000 / ln φ⌋ = **14**.
-- MAX-DEGREE(n): the largest k with F_{k+2} ≤ n. Compute it iteratively in O(lg n).
+- MAX-DEGREE(n): the largest k with F_(k+2) ≤ n. Compute it iteratively in O(lg n).
 - **Always say "amortized."** These bounds are not worst-case per operation.
 
 ---
@@ -569,16 +569,54 @@ h = (0, 0, −2). ŵ(1,2) = 3, ŵ(2,3) = 0, ŵ(1,3) = 4.
 
 ---
 
-## 8. Pathways: how to attack a problem you've never seen
+## 8. Every lemma, theorem and loop invariant on MT4 (index)
 
-### 8.1 Step 0: read the problem like the professor wrote it
+| # | Statement | Where | Proof idea |
+|---|---|---|---|
+| 1 | Activity selection: the earliest-finishing activity is in some optimal solution | CLRS 15.1 | exchange with the first activity of an optimal solution |
+| 2 | Greedy needs the greedy-choice property **and** optimal substructure | CLRS 15.2 | definitions |
+| 3 | Huffman greedy choice: the two rarest characters can be deepest siblings | CLRS 15.3 | swap with the deepest pair; B(T) can't increase |
+| 4 | Huffman optimal substructure: B(T) = B(T′) + x.freq + y.freq | CLRS 15.3 | merging x, y into z |
+| 5 | Greedy change is optimal for coins 1, c, …, cᵏ | PS9 1(a) | optimal uses ≤ c − 1 of each smaller coin ⇒ the base-c expansion |
+| 6 | BFS: δ(s, v) ≤ δ(s, u) + 1 for every edge (u, v); v.d ≥ δ(s, v) always | CLRS 20.2 | triangle inequality; induction on ENQUEUEs |
+| 7 | BFS queue: d values are non-decreasing and head/tail differ by ≤ 1 ⇒ Theorem: v.d = δ(s, v) at termination | CLRS 20.2 | induction on queue operations; contradiction on the first wrong vertex |
+| 8 | Parenthesis theorem: [u.d, u.f] and [v.d, v.f] are disjoint or nested; nesting ⇔ descendant | CLRS 20.3 | case on u.d < v.d |
+| 9 | White-path theorem | CLRS 20.3 | parenthesis theorem plus induction on the path |
+| 10 | Undirected DFS has only tree and back edges | CLRS 20.3 | the first exploration of an edge is from the earlier-discovered endpoint |
+| 11 | A directed graph is acyclic ⇔ DFS finds no back edges | CLRS 20.4 | a back edge closes a cycle; a cycle's first-discovered vertex gives a back edge (white path) |
+| 12 | Topological sort correct: every DAG edge has u.f > v.f | CLRS 20.4 | case on v's color |
+| 13 | G^SCC is a DAG; an edge C → C′ ⇒ f(C) > f(C′); the SCC algorithm is correct | CLRS 20.5 | finish-time lemma; second DFS on Gᵀ trapped in one SCC |
+| 14 | Bipartite ⇔ no odd cycle; BFS 2-coloring decides it | PS10 1(b) | layers alternate; a same-layer edge ⇒ an odd cycle |
+| 15 | Kahn: each vertex is enqueued ≤ 1 time; leftover vertices ⇒ a cycle | Exercise 17 | in-degree hits 0 once; every DAG has a source |
+| 16 | Union by rank: x.rank < x.p.rank for non-roots; rank r ⇒ ≥ 2ʳ nodes ⇒ rank ≤ ⌊lg n⌋ | CLRS 19.3–19.4 | induction on LINK |
+| 17 | Lemmas 19.11–19.13, Theorem 19.14: O(m α(n)) for m operations | CLRS 19.4 | potential function (statement only) |
+| 18 | Weighted-union linked lists: O(m + n lg n) | CLRS 19.2 | each element's set at least doubles when its pointer moves |
+| 19 | Safe Edge Theorem (cut property) and its corollary (light edge between components) | CLRS 21.1 | exchange: T − (x, y) + (u, v) |
+| 20 | Cycle property; distinct weights ⇒ a unique MST | CLRS 21.1 exercises | exchange |
+| 21 | Kruskal invariant: A is a forest contained in some MST | CLRS 21.2 | corollary with C = u's component |
+| 22 | Prim invariant: A = {(v, v.π) : v ∈ V − {r} − Q}; for v ∈ Q with v.π ≠ NIL, v.key is the weight of a light edge (v, v.π) to the tree | CLRS 21.2 | cut (V − Q, Q) respects A |
+| 23 | Fibonacci heap: i-th child degree ≥ i − 2; size ≥ F_(k+2) ≥ φᵏ ⇒ D(n) = O(lg n); Φ = t + 2m | CLRS 3e 19.4 | the mark rule allows ≤ 1 lost child; Fibonacci recurrence |
+| 24 | Optimal substructure of shortest paths (subpaths are shortest) | CLRS 22 intro | cut-and-paste |
+| 25 | Triangle inequality; upper-bound, no-path, convergence, path-relaxation, predecessor-subgraph properties | CLRS 22.5 | induction on relaxations |
+| 26 | Bellman-Ford: after pass i, every ≤ i-edge path bound holds ⇒ correct after V − 1; returns FALSE ⇔ a reachable negative cycle | CLRS 22.1 | path-relaxation; summing around the cycle |
+| 27 | DAG-SHORTEST-PATHS correct in Θ(V + E), negative weights OK | CLRS 22.2 | topological order relaxes each shortest path in order |
+| 28 | Dijkstra invariant: v.d = δ(s, v) for all v ∈ S at the start of each iteration (w ≥ 0) | CLRS 22.3 | contradiction on the first vertex added with v.d ≠ δ |
+| 29 | Floyd-Warshall recurrence on intermediates {1..k}; in-place safe; d[i, i] < 0 ⇔ a negative cycle | CLRS 23.2 | k used at most once on a simple path |
+| 30 | Johnson: ŵ(u, v) = w + h(u) − h(v) ≥ 0, every path shifts by h(u) − h(v), negative cycles are preserved | CLRS 23.3 | triangle inequality; telescoping |
+| 31 | Exercise 18: reverse-delete correct; arbitrary-order Kruskal incorrect; add-then-drop-max correct (invariant: T = MSF of the edges seen) | Exercise 18 | cycle property; triangle counterexample |
+
+---
+
+## 9. Pathways: how to attack a problem you've never seen
+
+### 9.1 Step 0: read the problem like the professor wrote it
 1. **What's the input?** A set of items or intervals points to greedy or sorting. Pairwise relations, grids or prerequisites point to a **graph**. A distance matrix means a **dense** graph.
 2. **What's the output?** An order, a set of edges, distances, yes/no, or a count.
-3. **What's the objective?** "fewest steps" means BFS. "Cheapest total" means shortest paths or MST (see 8.3). "Maximum number of compatible…" points to greedy, but prove it.
+3. **What's the objective?** "fewest steps" means BFS. "Cheapest total" means shortest paths or MST (see 9.3). "Maximum number of compatible…" points to greedy, but prove it.
 4. **What do the constraints hint at?** "All weights equal", "dense", "weights ≥ 0", "DAG", "powers of c" are each a **signal** for which algorithm the professor wants (PS9, PS11).
 5. **What's the efficiency target?** Θ(V + E) means one BFS/DFS. Θ(n²) on a matrix means array-Prim. "As efficiently as possible" means: don't add a log factor you don't need.
 
-### 8.2 Decision tree: which algorithm?
+### 9.2 Decision tree: which algorithm?
 ```
 Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices, moves = edges)
 │
@@ -610,12 +648,12 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
      unweighted ........................ V × BFS
 ```
 
-### 8.3 MST vs shortest path: the #1 confusion
+### 9.3 MST vs shortest path: the #1 confusion
 - **MST:** no source vertex. Connect *everyone* at minimum *total* cost. The answer is a set of V − 1 edges.
 - **SSSP:** has a source. Minimize the cost of each *individual* path from s. The answer is distances plus a π-tree.
 - Quick check: "build roads/bridges/cables so all cities connect" → MST. "Fastest route from the depot to each city" → shortest paths.
 
-### 8.4 Graph-modeling tricks (for "design an algorithm" questions)
+### 9.4 Graph-modeling tricks (for "design an algorithm" questions)
 | Situation | Transform |
 |---|---|
 | Grid / puzzle / maze | each cell or state is a vertex, legal moves are edges, then BFS (PS10 Number Maze) |
@@ -628,7 +666,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 | Edge weights only 0 or 1 | 0-1 BFS with a deque, Θ(V+E) |
 | Difference constraints xⱼ − xᵢ ≤ b | edge i→j with weight b plus a super-source; Bellman-Ford (CLRS 22.4). A negative cycle means infeasible |
 
-### 8.5 "Is this greedy algorithm correct?" pathway (Exercises 15 and 18 style)
+### 9.5 "Is this greedy algorithm correct?" pathway (Exercises 15 and 18 style)
 1. **Try to break it first**, on 2–4 items. Typical counterexample shapes:
    - Intervals: one short interval in the middle, or one long early one.
    - Coins: {1, 3, 4} with target 6.
@@ -638,7 +676,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 3. **State the running time.** It's usually a sort plus one linear pass.
 4. If the problem has weights or profits and no swap works, say **"greedy-choice property fails, use DP"**, as with weighted intervals.
 
-### 8.6 Proof templates (keep these on the sheet)
+### 9.6 Proof templates (keep these on the sheet)
 - **Exchange argument:** for greedy algorithms, Huffman, and the Safe Edge Theorem.
 - **Loop invariant: Initialization / Maintenance / Termination.** Examples:
   - BFS: queue in d-order.
@@ -654,7 +692,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 - **Cut and paste** (optimal substructure): subpaths of shortest paths are shortest.
 - **Counterexample:** the smallest instance where the claimed rule fails. Draw it.
 
-### 8.7 Hand-trace protocol (the professor tests bookkeeping)
+### 9.7 Hand-trace protocol (the professor tests bookkeeping)
 1. **Tie-break exactly as told.** The default is alphabetical or numeric. Write down the adjacency order before starting.
 2. Keep a **table**: vertex | d | f | π (DFS), d | π (BFS, Dijkstra, Bellman-Ford), key | π (Prim), or parent | rank (Union-Find).
 3. **DFS:** increment time on discovery *and* finish. When you see an edge to a gray vertex, write "back edge ⇒ cycle."
@@ -664,7 +702,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 7. **Union-Find:** always FIND both roots first, then compare **ranks**. On a tie the second root becomes the parent and its rank goes up.
 8. **Sanity checks:** an MST has V − 1 edges. Topo order has every edge pointing forward. Σ Prim keys = MST weight. Parenthesis intervals nest.
 
-### 8.8 Writing pseudocode the grader rewards (Correctness 40 / Modularity 30 / Efficiency 30)
+### 9.8 Writing pseudocode the grader rewards (Correctness 40 / Modularity 30 / Efficiency 30)
 - Define each **required procedure by name** (e.g., `MST-KRUSKAL`, `IS-BIPARTITE`, `NUMBER-MAZE`, `GREEDY-CHANGE`).
 - **Call ADT operations** rather than inlining them: `MAKE-SET`, `FIND-SET`, `UNION`, `ENQUEUE`, `DEQUEUE`, `EXTRACT-MIN`, `DECREASE-KEY`, `RELAX`, `INITIALIZE-SINGLE-SOURCE`. Factor out helpers like `INSIDE(x,y,n)`, `CLOSEST-ISLAND`, `TOTAL-WEIGHT`.
 - Keep procedures ≤ 20 lines with ≤ 4 nesting levels, use descriptive names, and include **at least one comment**, ideally `// Θ(...)` plus the invariant.
@@ -679,7 +717,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 
 ---
 
-## 9. Practice map: what to drill and where (Question Hub)
+## 10. Practice map: what to drill and where (Question Hub)
 
 | Skill | Site resources |
 |---|---|
@@ -693,11 +731,11 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 | Cuts and light edges | arena **`mst-cut`**; 🎲 light-edge-across-cut generator; Exercise 18 MC set (maybe-MST A/B/C) |
 | Kruskal | arena **`kr-mst`**, **`kr-weight`**; 🎲 total-weight and first-rejected-edge generators; Kruskal visualizer |
 | Prim | arena **`pr-mst`**, **`pr-edges`**; 🎲 extract-order and Σkey generators; **PS11 P3 `ps11-equal`**, **PS11 P4 `ps11-bridges`** |
-| Fibonacci heaps | arena **`fib-cut`**, **`fib-deg`**; 🎲 D(n) and F_{k+2} generators |
+| Fibonacci heaps | arena **`fib-cut`**, **`fib-deg`**; 🎲 D(n) and F_(k+2) generators |
 | Dijkstra / Bellman-Ford | arena **`dijkstra`**; 🎲 Dijkstra-distance generator; SSSP visualizer (both algorithms, CLRS graphs) |
 | Floyd-Warshall / Johnson | arena **`floyd`**; Floyd-Warshall visualizer (CLRS 5-vertex example) |
 
-### 9.1 How each PS / exercise problem should be reasoned through (model pathways)
+### 10.1 How each PS / exercise problem should be reasoned through (model pathways)
 - **PS9 1(a) GREEDY-CHANGE:** denominations are powers of c ⇒ greedy is safe (the base-c argument). Loop k downto 0, take ⌊n/d⌋, set n = n mod d. **Θ(k)**.
 - **PS10 1(b) IS-BIPARTITE:** "two groups, every edge across" = 2-coloring. BFS, give each new vertex the opposite color, and a same-color edge means return false. **Θ(V+E)**.
 - **PS10 P2 NUMBER-MAZE:** "fewest moves" = unweighted shortest path. Squares are vertices and jumps are edges. BFS from (1,1) with dist = ∞ initially, and handle "no solution." **Θ(n²)**.
@@ -708,7 +746,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 - **Ex 17:** mechanical DFS tables (alphabetical), then Kahn's analysis (each vertex enqueued once, each edge scanned once).
 - **Ex 18:** judge each algorithm by the cut property or the cycle property. Correct ones get an invariant; incorrect ones get a triangle counterexample.
 
-### 9.2 Likely "curveball" questions and the one-line answer
+### 10.2 Likely "curveball" questions and the one-line answer
 - *Does BFS give shortest paths on weighted graphs?* No. Use Dijkstra or Bellman-Ford.
 - *Can Dijkstra be fixed for negatives by adding a constant?* No, that penalizes paths with more edges. Use Johnson's h-potentials.
 - *Does adding a constant change the MST?* No. *Does it change shortest paths?* Yes.
@@ -732,7 +770,7 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 
 ---
 
-## 10. Last-minute recall list (write these from memory before the exam)
+## 11. Last-minute recall list (write these from memory before the exam)
 1. Safe Edge Theorem proof (cut → path edge (x,y) → swap → w(T′) ≤ w(T)).
 2. Dijkstra correctness and where w ≥ 0 is used.
 3. Bellman-Ford |V| − 1 lemma (induction on the number of edges).
@@ -743,5 +781,5 @@ Is it a graph problem? (if not obviously, can you MAKE it one? states = vertices
 8. DFS edge-type table, parenthesis theorem, and white-path theorem.
 9. Huffman's two lemmas, plus B(T) = B(T′) + x.freq + y.freq.
 10. Union-Find code (MAKE-SET / FIND-SET with compression / LINK by rank / UNION), with the CLRS tie rule.
-11. Fibonacci heap: yᵢ.degree ≥ i − 2 ⇒ size ≥ F_{k+2} ≥ φᵏ ⇒ D(n) = O(lg n). Φ = t + 2m.
-12. The master running-time table in §0.
+11. Fibonacci heap: yᵢ.degree ≥ i − 2 ⇒ size ≥ F_(k+2) ≥ φᵏ ⇒ D(n) = O(lg n). Φ = t + 2m.
+12. The master running-time table in §0, and the lemma/invariant index in §8.
