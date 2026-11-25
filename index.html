@@ -385,8 +385,11 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .deep-item[open]>summary::before{transform:rotate(90deg)}
 .deep-item>summary h3{margin:0}
 .deep-body{margin-top:10px}
-/* skip layout/paint for off-screen heavy blocks (long topic pages) */
-.deep-item,.vcard,.diagram-card,.eli5-box{content-visibility:auto;contain-intrinsic-size:auto 200px}
+/* skip layout/paint only for the uniform-height video-card grid —
+   variable-height blocks (.deep-item, .page>.card, .diagram-card, ...)
+   must NOT use content-visibility: estimate→real size swaps during
+   scroll force layout shifts and cause jank */
+.vcard{content-visibility:auto;contain-intrinsic-size:auto 200px}
 .deep-body pre{margin:10px 0}
 .cx td:first-child{white-space:nowrap}
 .tool-out{margin-top:10px}
@@ -395,8 +398,6 @@ a.chip.link:hover{border-color:var(--accent2);text-decoration:none}
 .stp{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
 .stp>*{min-width:0}
 
-/* perf: skip rendering off-screen blocks */
-.page>.card,.page>.qa,.page>.grid,.home-group,.vcard{content-visibility:auto;contain-intrinsic-size:auto 420px}
 @media (max-width:900px){.stp{grid-template-columns:minmax(0,1fr)}}
 
 </style>
