@@ -3,7 +3,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 s = pathlib.Path('src')
 html = (s/'index.html').read_text(encoding='utf-8')
 crib = 'const CRIB_MD = ' + json.dumps({f'mt{n}': pathlib.Path(f'MT{n}-Crib-Sheet.md').read_text(encoding='utf-8') for n in range(1, 5)}, ensure_ascii=False) + ';'
-js = '\n'.join([crib] + [(s/f).read_text(encoding='utf-8') for f in ['graph.js','questions.js','grader.js','course-code.js','links.js','diagrams.js','course-mt1.js','course-mt2.js','course-mt3.js','course-after.js','course-final.js','course-learn.js','course-learn2.js','deep.js','course-w1-6.js','course-w7-11.js','course-w7-11-prof.js','course-mt4-prof.js','lecture.js','course.js','course-ps.js','crib-md.js','course-crib.js','learn-chapters.js','learn-mt4-units.js','learn-mt4-gen.js','course-learn-mt4.js','app.js']])
+js = '\n'.join([crib] + [(s/f).read_text(encoding='utf-8') for f in ['graph.js','questions.js','grader.js','course-code.js','links.js','diagrams.js','course-mt1.js','course-mt2.js','course-mt3.js','course-after.js','course-final.js','course-learn.js','course-learn2.js','deep.js','course-w1-6.js','course-w7-11.js','course-w7-11-prof.js','course-mt4-prof.js','lecture.js','course.js','course-ps.js','crib-md.js','crib-guide-mt4.js','course-crib.js','learn-chapters.js','learn-mt4-units.js','learn-mt4-gen.js','course-learn-mt4.js','app.js']])
 html = html.replace('/*__CSS__*/', (s/'styles.css').read_text(encoding='utf-8')).replace('/*__JS__*/', js.replace('</script>', '<\\/script>'))
 pathlib.Path('dist').mkdir(exist_ok=True)
 (pathlib.Path('dist')/'index.html').write_text(html, encoding='utf-8')
