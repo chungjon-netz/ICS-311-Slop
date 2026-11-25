@@ -1,11 +1,7 @@
-// ======================= MT4 LEARNING PATH PAGE (#mt4-learn) =======================
+// ======================= LEARNING PATH PAGES (#mt<n>-learn) =======================
 // Renders LEARN_MT4 (learn-mt4-units.js) as a guided lecture: lessons with dummy
 // notes, exact screencast sections (learn-chapters.js), visualizers and quick
 // checks, plus a generated pseudocode unit test (learn-mt4-gen.js) after each unit.
-const LRN_KEY = 'ics311-learn-mt4';
-const lrnState = (() => { try { return JSON.parse(localStorage.getItem(LRN_KEY)) || {}; } catch (e) { return {}; } })();
-lrnState.checks = lrnState.checks || {};
-const lrnSave = () => { try { localStorage.setItem(LRN_KEY, JSON.stringify(lrnState)); } catch (e) {} };
 const lrnTime = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 // [videoId, fromChapter?, toChapter?] → {id, start, end, label}, using the real YouTube chapters
 function lrnClip([id, from, to]){
@@ -42,39 +38,38 @@ function lrnUnitHTML(u, n){
 }
 const lrnTestIds = u => LEARN_GEN[u.id].map(f => f().id);
 const lrnPassed = u => lrnTestIds(u).some(id => (store.code[id] || 0) >= 90);
-function lrnProgress(){
-  let done = 0, total = 0, units = 0;
-  LEARN_MT4.forEach(u => {
-    const ks = u.lessons.map((l, i) => l.check ? lrnCheckId(u, i) : null).filter(Boolean), ok = ks.filter(k => lrnState.checks[k]).length, pass = lrnPassed(u);
-    done += ok; total += ks.length; units += pass;
+function lrnProgress(gid){
+  const units = LEARN_PATHS[gid], st = lrnStates[gid]; let done = 0, total = 0, passed = 0;
+  units.forEach(u => {
+    const ks = u.lessons.map((l, i) => l.check ? lrnCheckId(u, i) : null).filter(Boolean), ok = ks.filter(k => st.checks[k]).length, pass = lrnPassed(u);
+    done += ok; total += ks.length; passed += pass;
     document.querySelectorAll(`.lrn-uprog[data-u="${u.id}"]`).forEach(el => { el.textContent = `${ok}/${ks.length} checks · test ${pass ? 'passed ✓' : 'not passed'}`; el.style.color = pass && ok === ks.length ? 'var(--good)' : ''; });
   });
-  const pct = Math.round(100 * (done + units * 3) / (total + LEARN_MT4.length * 3));
-  document.querySelectorAll('.lrn-prog').forEach(el => el.innerHTML = `<div class="row" style="justify-content:space-between"><b>Your progress: ${pct}%</b><span class="stat-label">${done}/${total} knowledge checks correct · ${units}/${LEARN_MT4.length} unit tests passed</span></div><div class="meter" style="margin-top:8px"><span style="width:${pct}%;background:var(--good)"></span></div>`);
+  const pct = Math.round(100 * (done + passed * 3) / (total + units.length * 3));
+  document.querySelectorAll(`#page-${gid}-learn .lrn-prog`).forEach(el => el.innerHTML = `<div class="row" style="justify-content:space-between"><b>Your progress: ${pct}%</b><span class="stat-label">${done}/${total} knowledge checks correct · ${passed}/${units.length} unit tests passed</span></div><div class="meter" style="margin-top:8px"><span style="width:${pct}%;background:var(--good)"></span></div>`);
 }
-function lrnMountTest(box, u){
+function lrnMountTest(box, u, gid){
   const body = box.querySelector('.lrn-test-body');
   const gen = () => { const fs = LEARN_GEN[u.id], last = box.dataset.last; let f = pick(fs);
     if (fs.length > 1) while (f().id === last) f = pick(fs);
     const q = f(); box.dataset.last = q.id;
-    renderQuestion(body, {kind: 'code', topic: q.topic, q, generated: true}, () => { lrnProgress(); renderHome(); }); };
+    renderQuestion(body, {kind: 'code', topic: q.topic, q, generated: true}, () => { lrnProgress(gid); renderHome(); }); };
   box.querySelector('.lrn-new').onclick = gen;
   gen();
 }
-(function mountLearnMT4(){
-  if (typeof LEARN_MT4 === 'undefined') return;
-  const g = GROUPS.find(x => x.id === 'mt4'), nL = LEARN_MT4.reduce((s, u) => s + u.lessons.length, 0);
-  document.getElementById('page-videos').insertAdjacentHTML('beforebegin', `<section class="page hidden learn-page" id="page-mt4-learn">
-    <div class="row" style="gap:8px"><a class="eyebrow" href="#mt4" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} Midterm 4 · ${g.date}</a><span class="eyebrow">🎓 Learning path</span></div>
-    <h1>🎓 Midterm 4 <span class="grad">Learning Path</span></h1>
-    <p class="lead">A guided lecture through every MT4 topic: ${LEARN_MT4.length} units and ${nL} lessons. Each lesson gives a detailed explanation, a dummy note in plain language, the exact screencast sections that cover it, and a quick knowledge check. Each unit ends with a generated pseudocode problem that modifies the algorithm you just learned.</p>
-    <div class="row"><a class="btn" href="#mt4">← Midterm 4 overview</a><a class="btn" href="#mt4-crib">📝 Crib sheet</a><button class="btn primary" data-practice="mt4">🎯 Practice Midterm 4</button><button class="btn ghost" data-lrn-all="open">⊞ Expand all</button><button class="btn ghost" data-lrn-all="close">⊟ Collapse all</button></div>
+function mountLearnPath(g, units){
+  const gid = g.id, tag = g.name.replace('Midterm ', 'MT'), nL = units.reduce((s, u) => s + u.lessons.length, 0), st = lrnStates[gid];
+  document.getElementById('page-videos').insertAdjacentHTML('beforebegin', `<section class="page hidden learn-page" id="page-${gid}-learn">
+    <div class="row" style="gap:8px"><a class="eyebrow" href="#${gid}" style="color:${g.color};border-color:${g.color}55;background:${g.color}14">${g.icon} ${g.name} · ${g.date}</a><span class="eyebrow">🎓 Learning path</span></div>
+    <h1>🎓 ${g.name} <span class="grad">Learning Path</span></h1>
+    <p class="lead">A guided lecture through every ${tag} topic: ${units.length} units and ${nL} lessons. Each lesson gives a detailed explanation, a dummy note in plain language, the exact screencast sections that cover it, and a quick knowledge check. Each unit ends with a generated pseudocode problem that modifies the algorithm you just learned.</p>
+    <div class="row"><a class="btn" href="#${gid}">← ${g.name} overview</a><a class="btn" href="#${gid}-crib">📝 Crib sheet</a><button class="btn primary" data-practice="${gid}">🎯 Practice ${g.name}</button><button class="btn ghost" data-lrn-all="open">⊞ Expand all</button><button class="btn ghost" data-lrn-all="close">⊟ Collapse all</button></div>
     <div class="card lrn-prog" style="margin-top:16px"></div>
-    <div class="callout cyan"><b>How to use it:</b> read the lesson, then watch only the screencast section listed under it (clips start and stop at the right chapter). Answer the knowledge check before moving on. Finish each unit by writing the generated pseudocode problem from memory, and use 🎲 for a new variant until you can score 90%+.</div>
-    <div class="card"><h3 style="margin-top:0">📑 Units</h3><div class="crib-toc-grid">${LEARN_MT4.map((u, i) => `<a href="javascript:void 0" data-jump="lrn-${u.id}">Unit ${i + 1} · ${u.title}</a>`).join('')}</div></div>
-    ${LEARN_MT4.map((u, i) => lrnUnitHTML(u, i + 1)).join('')}
+    <div class="callout cyan"><b>How to use it:</b> read the lesson, then watch only the screencast section listed under it (clips start and stop at the right chapter; videos without chapter markers play in full). Answer the knowledge check before moving on. Finish each unit by writing the generated pseudocode problem from memory, and use 🎲 for a new variant until you can score 90%+.</div>
+    <div class="card"><h3 style="margin-top:0">📑 Units</h3><div class="crib-toc-grid">${units.map((u, i) => `<a href="javascript:void 0" data-jump="lrn-${u.id}">Unit ${i + 1} · ${u.title}</a>`).join('')}</div></div>
+    ${units.map((u, i) => lrnUnitHTML(u, i + 1)).join('')}
     <div class="card lrn-prog" style="margin-top:16px"></div></section>`);
-  const pg = document.getElementById('page-mt4-learn');
+  const pg = document.getElementById(`page-${gid}-learn`);
   pg.addEventListener('click', e => {
     const j = e.target.closest('[data-jump]');
     if (j){ const t = document.getElementById(j.dataset.jump); if (t.tagName === 'DETAILS') t.open = true; t.scrollIntoView({behavior: 'smooth', block: 'start'}); return; }
@@ -86,18 +81,26 @@ function lrnMountTest(box, u){
     box.querySelectorAll('.opt').forEach(x => { x.disabled = true; if (+x.dataset.i === ans) x.classList.add('correct'); });
     if (!ok) b.classList.add('wrong');
     box.querySelector('.lrn-why').innerHTML = `<div class="explain ${ok ? 'good' : 'bad'} fade"><b>${ok ? '✓ Correct!' : '✗ Not quite.'}</b> ${box.dataset.why}${ok ? '' : ' <span class="stat-label">Reread the lesson above, then try the 🎯 practice quiz.</span>'}</div>`;
-    if (ok){ lrnState.checks[box.dataset.k] = 1; lrnSave(); }
-    record(box.dataset.topic, ok ? 1 : 0); lrnProgress();
+    if (ok){ st.checks[box.dataset.k] = 1; lrnSave(gid); }
+    record(box.dataset.topic, ok ? 1 : 0); lrnProgress(gid);
   });
-  LEARN_MT4.forEach(u => lrnMountTest(pg.querySelector(`.lrn-test[data-u="${u.id}"]`), u));
-  // ---- entry points: sidebar link under Midterm 4 + a container on the MT4 overview ----
-  const nav = document.querySelector('#nav a.gover[href="#mt4"]');
-  if (nav) nav.insertAdjacentHTML('afterend', `<a href="#mt4-learn" data-page="mt4-learn" class="gover"><span class="dot" style="background:linear-gradient(135deg,${g.color},#22d3ee)"></span>🎓 Learning path</a>`);
-  const ov = document.querySelector('#page-mt4 .crib-link') || document.querySelector('#page-mt4 > .row');
+  units.forEach(u => lrnMountTest(pg.querySelector(`.lrn-test[data-u="${u.id}"]`), u, gid));
+  const nav = document.querySelector(`#nav a.gover[href="#${gid}"]`);
+  if (nav) nav.insertAdjacentHTML('afterend', `<a href="#${gid}-learn" data-page="${gid}-learn" class="gover"><span class="dot" style="background:linear-gradient(135deg,${g.color},#22d3ee)"></span>🎓 Learning path</a>`);
+  const ov = document.querySelector(`#page-${gid} .crib-link`) || document.querySelector(`#page-${gid} > .row`);
   if (ov) ov.insertAdjacentHTML('afterend', `<div class="card crib-link" style="margin-top:18px;border-color:${g.color}66">
-    <div class="row" style="justify-content:space-between;gap:12px"><h2 style="margin:0">🎓 Midterm 4 Learning Path</h2><span class="pill" style="color:${g.color}">${LEARN_MT4.length} units · ${nL} lessons</span></div>
-    <p class="stat-label" style="margin:10px 0 12px">Learn every MT4 topic in order: detailed lessons with dummy notes, the exact screencast sections and MIT lectures, knowledge checks between lessons, and a generated pseudocode test after every unit.</p>
-    <div class="chips">${LEARN_MT4.map((u, i) => `<span class="pill">Unit ${i + 1} · ${u.title}</span>`).join(' ')}</div>
-    <div class="row" style="margin-top:14px"><a class="btn primary" href="#mt4-learn">🎓 Start the learning path →</a></div></div>`);
-  setTimeout(lrnProgress, 0);   // `store` (app.js) is initialized after this file runs
-})();
+    <div class="row" style="justify-content:space-between;gap:12px"><h2 style="margin:0">🎓 ${g.name} Learning Path</h2><span class="pill" style="color:${g.color}">${units.length} units · ${nL} lessons</span></div>
+    <p class="stat-label" style="margin:10px 0 12px">Learn every ${tag} topic in order: detailed lessons with dummy notes, the exact screencast sections and MIT lectures, knowledge checks between lessons, and a generated pseudocode test after every unit.</p>
+    <div class="chips">${units.map((u, i) => `<span class="pill">Unit ${i + 1} · ${u.title}</span>`).join(' ')}</div>
+    <div class="row" style="margin-top:14px"><a class="btn primary" href="#${gid}-learn">🎓 Start the learning path →</a></div></div>`);
+  setTimeout(() => lrnProgress(gid), 0);   // `store` (app.js) is initialized after this file runs
+}
+const LEARN_PATHS = {};
+[['mt1', 'LEARN_MT1'], ['mt2', 'LEARN_MT2'], ['mt3', 'LEARN_MT3'], ['mt4', 'LEARN_MT4']].forEach(([id, v]) => { try { LEARN_PATHS[id] = eval(v); } catch (e) {} });
+const lrnStates = {};
+const lrnSave = gid => { try { localStorage.setItem('ics311-learn-' + gid, JSON.stringify(lrnStates[gid])); } catch (e) {} };
+GROUPS.filter(g => LEARN_PATHS[g.id]).forEach(g => {
+  try { lrnStates[g.id] = JSON.parse(localStorage.getItem('ics311-learn-' + g.id)) || {}; } catch (e) { lrnStates[g.id] = {}; }
+  lrnStates[g.id].checks = lrnStates[g.id].checks || {};
+  mountLearnPath(g, LEARN_PATHS[g.id]);
+});
